@@ -1,0 +1,1404 @@
+<relml>
+	<tecml filename="model/tecml/RungeKutta.tecml" />
+	<cellml filename="model/iyer_mazhari_winslow_2004/iyer_mazhari_winslow_2004.cellml" />
+
+	<variable component="environment" name="time" type="timevar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="time" type="timevar" />
+	<variable component="I_stimulus" name="time" type="timevar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="time" type="timevar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="time" type="timevar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="time" type="timevar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="time" type="timevar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="time" type="timevar" />
+	<variable component="INa" name="time" type="timevar" />
+	<variable component="IKr" name="time" type="timevar" />
+	<variable component="IKs" name="time" type="timevar" />
+
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Nai" type="diffvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Ki" type="diffvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Cai" type="diffvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="CaSS" type="diffvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="CaJSR" type="diffvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="CaNSR" type="diffvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="V" type="diffvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="LTRPNCa" type="diffvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="HTRPNCa" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="C1_RyR" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="O2_RyR" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="C2_RyR" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="O1_RyR" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C0" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C1" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C2" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C3" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C4" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="Open" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa0" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa1" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa2" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa3" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa4" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="yCa" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C0Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C1Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C2Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C3Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="OKv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI0Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI1Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI2Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI3Kv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="OIKv43" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C0Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C1Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C2Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C3Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="OKv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI0Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI1Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI2Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI3Kv14" type="diffvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="OIKv14" type="diffvar" />
+	<variable component="INa" name="na1" type="diffvar" />
+	<variable component="INa" name="na2" type="diffvar" />
+	<variable component="INa" name="na3" type="diffvar" />
+	<variable component="INa" name="na4" type="diffvar" />
+	<variable component="INa" name="na5" type="diffvar" />
+	<variable component="INa" name="na6" type="diffvar" />
+	<variable component="INa" name="na7" type="diffvar" />
+	<variable component="INa" name="na8" type="diffvar" />
+	<variable component="INa" name="na9" type="diffvar" />
+	<variable component="INa" name="na10" type="diffvar" />
+	<variable component="INa" name="na11" type="diffvar" />
+	<variable component="INa" name="na12" type="diffvar" />
+	<variable component="INa" name="na13" type="diffvar" />
+	<variable component="IKr" name="C1Herg" type="diffvar" />
+	<variable component="IKr" name="C2Herg" type="diffvar" />
+	<variable component="IKr" name="C3Herg" type="diffvar" />
+	<variable component="IKr" name="OHerg" type="diffvar" />
+	<variable component="IKr" name="IHerg" type="diffvar" />
+	<variable component="IKs" name="C0ks" type="diffvar" />
+	<variable component="IKs" name="C1ks" type="diffvar" />
+	<variable component="IKs" name="O1ks" type="diffvar" />
+	<variable component="IKs" name="O2ks" type="diffvar" />
+
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="RT_over_F" type="arithvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="C" type="arithvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="a1" type="arithvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="a2" type="arithvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="i_tot" type="arithvar" />
+	<variable component="I_stimulus" name="past" type="arithvar" />
+	<variable component="I_stimulus" name="i_Stim" type="arithvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="fb" type="arithvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="rb" type="arithvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Jup" type="arithvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Jrel" type="arithvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Jtr" type="arithvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Jxfer" type="arithvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="dLTRPNCa" type="arithvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="dHTRPNCa" type="arithvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="Jtrpn" type="arithvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="beta_SS" type="arithvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="beta_JSR" type="arithvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="beta_i" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="dC1_RyR" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="dO2_RyR" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="dC2_RyR" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="dO1_RyR" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="alpha" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="beta" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="alpha_prime" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="beta_prime" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="gamma" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="omega" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C0_to_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C1_to_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C2_to_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C3_to_C4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa0_to_CCa1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa1_to_CCa2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa2_to_CCa3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa3_to_CCa4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C1_to_C0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C2_to_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C3_to_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C4_to_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa1_to_CCa0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa2_to_CCa1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa3_to_CCa2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa4_to_CCa3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C0_to_CCa0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C1_to_CCa1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C2_to_CCa2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C3_to_CCa3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="C4_to_CCa4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa0_to_C0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa1_to_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa2_to_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa3_to_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CCa4_to_C4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_C0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_C0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_C4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_C4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_Ca0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_Ca0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_Ca1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_Ca1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_Ca2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_Ca2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_Ca3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_Ca3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_Ca4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a2_Ca4" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="a1_Cainf" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="yCa_inf" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="tau_yCa" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="alpha_act43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="beta_act43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="alpha_inact43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="beta_inact43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C0Kv43_to_C1Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C1Kv43_to_C2Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C2Kv43_to_C3Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C3Kv43_to_OKv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI0Kv43_to_CI1Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI1Kv43_to_CI2Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI2Kv43_to_CI3Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI3Kv43_to_OIKv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C1Kv43_to_C0Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C2Kv43_to_C1Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C3Kv43_to_C2Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="OKv43_to_C3Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI1Kv43_to_CI0Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI2Kv43_to_CI1Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI3Kv43_to_CI2Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="OIKv43_to_CI3Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C0Kv43_to_CI0Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C1Kv43_to_CI1Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C2Kv43_to_CI2Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="C3Kv43_to_CI3Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="OKv43_to_OIKv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI0Kv43_to_C0Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI1Kv43_to_C1Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI2Kv43_to_C2Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="CI3Kv43_to_C3Kv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="OIKv43_to_OKv43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_C043" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_C043" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_C143" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_C143" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_C243" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_C243" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_C343" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_C343" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_O43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_O43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_I043" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_I043" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_I143" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_I143" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_I243" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_I243" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_I343" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_I343" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a1_OI43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="a2_OI43" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="alpha_act14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="beta_act14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="alpha_inact14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="beta_inact14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C0Kv14_to_C1Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C1Kv14_to_C2Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C2Kv14_to_C3Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C3Kv14_to_OKv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI0Kv14_to_CI1Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI1Kv14_to_CI2Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI2Kv14_to_CI3Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI3Kv14_to_OIKv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C1Kv14_to_C0Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C2Kv14_to_C1Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C3Kv14_to_C2Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="OKv14_to_C3Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI1Kv14_to_CI0Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI2Kv14_to_CI1Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI3Kv14_to_CI2Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="OIKv14_to_CI3Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C0Kv14_to_CI0Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C1Kv14_to_CI1Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C2Kv14_to_CI2Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="C3Kv14_to_CI3Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="OKv14_to_OIKv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI0Kv14_to_C0Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI1Kv14_to_C1Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI2Kv14_to_C2Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="CI3Kv14_to_C3Kv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="OIKv14_to_OKv14" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_C0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_C0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_C1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_C2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_C3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_O" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_O" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_CI0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_CI0" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_CI1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_CI1" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_CI2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_CI2" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_CI3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_CI3" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a1_OI" type="arithvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="a2_OI" type="arithvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="ENa" type="arithvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="EK" type="arithvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="a1" type="arithvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="a2" type="arithvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="EKs" type="arithvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="ECa" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="PKv14" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="GKv43" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="INa" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="fKo" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IKr" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IKs" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IKv43" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="VF_over_RT" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="VFsq_over_RT" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="a1_K" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="a2" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IKv14_K" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="a1_Na" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IKv14_Na" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IKv14" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Ito1" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="K1_inf" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="IK1" type="arithvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="INab" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="ICab" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="IpCa" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="VF_over_RT" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="sigma" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a1_Na" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a2_Na" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="fNaK" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a1_K" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a2_K" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="INaK" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a1_ncx" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a2_ncx" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a3_ncx" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a4_ncx" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="a5_ncx" type="arithvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="INaCa" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="PK" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="PCa" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="VF_over_RT" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="VFsq_over_RT" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="a1_Ca" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="a2_Ca" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="ICamax" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="ICa" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Icabar" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="PKprime" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="a1_K" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="a2_K" type="arithvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="ICaK" type="arithvar" />
+	<variable component="INa" name="FoverRT" type="arithvar" />
+	<variable component="INa" name="KToverH" type="arithvar" />
+	<variable component="INa" name="RTNa" type="arithvar" />
+	<variable component="INa" name="RTNaF" type="arithvar" />
+	<variable component="INa" name="Temp_Scale" type="arithvar" />
+	<variable component="INa" name="alpha1" type="arithvar" />
+	<variable component="INa" name="beta1" type="arithvar" />
+	<variable component="INa" name="gamma1" type="arithvar" />
+	<variable component="INa" name="Delta1" type="arithvar" />
+	<variable component="INa" name="On" type="arithvar" />
+	<variable component="INa" name="Of" type="arithvar" />
+	<variable component="INa" name="GammaGamma" type="arithvar" />
+	<variable component="INa" name="DeltaDelta" type="arithvar" />
+	<variable component="INa" name="epsilon" type="arithvar" />
+	<variable component="INa" name="omega_na" type="arithvar" />
+	<variable component="INa" name="rho" type="arithvar" />
+	<variable component="INa" name="mu" type="arithvar" />
+	<variable component="INa" name="Cn" type="arithvar" />
+	<variable component="INa" name="Cf" type="arithvar" />
+	<variable component="INa" name="parameter_a" type="arithvar" />
+	<variable component="INa" name="k12" type="arithvar" />
+	<variable component="INa" name="k23" type="arithvar" />
+	<variable component="INa" name="k34" type="arithvar" />
+	<variable component="INa" name="k45" type="arithvar" />
+	<variable component="INa" name="k56" type="arithvar" />
+	<variable component="INa" name="k67" type="arithvar" />
+	<variable component="INa" name="k89" type="arithvar" />
+	<variable component="INa" name="k910" type="arithvar" />
+	<variable component="INa" name="k1011" type="arithvar" />
+	<variable component="INa" name="k1112" type="arithvar" />
+	<variable component="INa" name="k1213" type="arithvar" />
+	<variable component="INa" name="k57" type="arithvar" />
+	<variable component="INa" name="k21" type="arithvar" />
+	<variable component="INa" name="k32" type="arithvar" />
+	<variable component="INa" name="k43" type="arithvar" />
+	<variable component="INa" name="k54" type="arithvar" />
+	<variable component="INa" name="k65" type="arithvar" />
+	<variable component="INa" name="k76" type="arithvar" />
+	<variable component="INa" name="k98" type="arithvar" />
+	<variable component="INa" name="k109" type="arithvar" />
+	<variable component="INa" name="k1110" type="arithvar" />
+	<variable component="INa" name="k1211" type="arithvar" />
+	<variable component="INa" name="k1312" type="arithvar" />
+	<variable component="INa" name="k75" type="arithvar" />
+	<variable component="INa" name="k81" type="arithvar" />
+	<variable component="INa" name="k92" type="arithvar" />
+	<variable component="INa" name="k103" type="arithvar" />
+	<variable component="INa" name="k114" type="arithvar" />
+	<variable component="INa" name="k125" type="arithvar" />
+	<variable component="INa" name="k136" type="arithvar" />
+	<variable component="INa" name="k18" type="arithvar" />
+	<variable component="INa" name="k29" type="arithvar" />
+	<variable component="INa" name="k310" type="arithvar" />
+	<variable component="INa" name="k411" type="arithvar" />
+	<variable component="INa" name="k512" type="arithvar" />
+	<variable component="INa" name="k613" type="arithvar" />
+	<variable component="IKr" name="C2H_to_C3H" type="arithvar" />
+	<variable component="IKr" name="C3H_to_C2H" type="arithvar" />
+	<variable component="IKr" name="C1H_to_C2H" type="arithvar" />
+	<variable component="IKr" name="C2H_to_C1H" type="arithvar" />
+	<variable component="IKr" name="C3H_to_OH" type="arithvar" />
+	<variable component="IKr" name="OH_to_C3H" type="arithvar" />
+	<variable component="IKr" name="OH_to_IH" type="arithvar" />
+	<variable component="IKr" name="IH_to_OH" type="arithvar" />
+	<variable component="IKr" name="C3H_to_IH" type="arithvar" />
+	<variable component="IKr" name="IH_to_C3H" type="arithvar" />
+	<variable component="IKr" name="a1_C2" type="arithvar" />
+	<variable component="IKr" name="a2_C2" type="arithvar" />
+	<variable component="IKr" name="a1_C3" type="arithvar" />
+	<variable component="IKr" name="a2_C3" type="arithvar" />
+	<variable component="IKr" name="a1_O" type="arithvar" />
+	<variable component="IKr" name="a2_O" type="arithvar" />
+	<variable component="IKr" name="a1_I" type="arithvar" />
+	<variable component="IKr" name="a2_I" type="arithvar" />
+	<variable component="IKs" name="C0ks_C1ks" type="arithvar" />
+	<variable component="IKs" name="C1ks_O1ks" type="arithvar" />
+	<variable component="IKs" name="O1ks_O2ks" type="arithvar" />
+	<variable component="IKs" name="O1ks_C1ks" type="arithvar" />
+	<variable component="IKs" name="O2ks_O1ks" type="arithvar" />
+	<variable component="IKs" name="C1ks_C0ks" type="arithvar" />
+
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Faraday" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Temp" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Rgas" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Acap" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Vmyo" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="VJSR" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="VNSR" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="VSS" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="INa" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="INab" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="INaCa" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="INaK" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IKv14_Na" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IKr" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IKs" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IK1" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="ICaK" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="ICa" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Ito1" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="i_Stim" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IKv43" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IKv14_K" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="ICab" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="IpCa" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Jxfer" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Jup" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Jtrpn" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Jrel" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Jtr" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="beta_SS" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="beta_JSR" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="beta_i" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Ko" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Nao" type="constvar" />
+	<variable component="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES" name="Cao" type="constvar" />
+	<variable component="I_stimulus" name="stim_period" type="constvar" />
+	<variable component="I_stimulus" name="stim_duration" type="constvar" />
+	<variable component="I_stimulus" name="stim_amplitude" type="constvar" />
+	<variable component="I_stimulus" name="stim_offset" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Cai" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Kfb" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Nfb" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="CaNSR" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Krb" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="Nrb" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="KSR" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="vmaxf" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="vmaxr" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="v1" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="O1_RyR" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="O2_RyR" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="CaJSR" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="CaSS" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="tautr" type="constvar" />
+	<variable component="COMPUTE_INTRACELLULAR_CALCIUM_FLUXES" name="tauxfer" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="LTRPNtot" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="HTRPNtot" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="khtrpn_plus" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="khtrpn_minus" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="kltrpn_plus" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="kltrpn_minus" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="CMDNtot" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="CSQNtot" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="EGTAtot" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="KmCMDN" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="KmCSQN" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="KmEGTA" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="Cai" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="CaSS" type="constvar" />
+	<variable component="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS" name="CaJSR" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="kaplus" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="kaminus" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="kbplus" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="kbminus" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="kcplus" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="kcminus" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="ncoop" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="mcoop" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES" name="CaSS" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="fL" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="gL" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="bL" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="aL" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="V" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES" name="CaSS" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="V" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="alphaa0Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="aaKv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="betaa0Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="baKv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="alphai0Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="aiKv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="betai0Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="biKv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="f1Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="f2Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="f3Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="f4Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="b1Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="b2Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="b3Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES" name="b4Kv43" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="f1Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="f2Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="f3Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="f4Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="b1Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="b2Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="b3Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="b4Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="alphaa0Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="aaKv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="betaa0Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="baKv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="alphai0Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="betai0Kv14" type="constvar" />
+	<variable component="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES" name="V" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="RT_over_F" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="Nao" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="Nai" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="Ko" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="Ki" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="Cao" type="constvar" />
+	<variable component="COMPUTE_REVERSAL_POTENTIALS" name="Cai" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="GKr" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="GKs" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="GK1" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="GNa" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="GNab" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="KvScale" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Kv43Frac" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="OKv14" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="na6" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="na7" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="V" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="ENa" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Ko" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="OHerg" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="O1ks" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="O2ks" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="OKv43" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="RT_over_F" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Faraday" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Ki" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="EK" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Nai" type="constvar" />
+	<variable component="COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp" name="Nao" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="V" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="ECa" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="RT_over_F" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="Nai" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="Nao" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="Ko" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="Cai" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="Cao" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="kNaCa" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="KmNa" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="KmCa" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="ksat" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="eta" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="INaKmax" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="KmNai" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="KmKo" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="IpCamax" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="KmpCa" type="constvar" />
+	<variable component="COMPUTE_INaK_INaCa_ICab_IpCa" name="GCab" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Ko" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Ki" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="RT_over_F" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Cai" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Cao" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="V" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="yCa" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Open" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Faraday" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="ICahalf" type="constvar" />
+	<variable component="COMPUTE_ICa_ICaK" name="Pscale" type="constvar" />
+	<variable component="INa" name="V" type="constvar" />
+	<variable component="INa" name="TNa" type="constvar" />
+	<variable component="INa" name="RToverF" type="constvar" />
+	<variable component="INa" name="Faraday" type="constvar" />
+	<variable component="INa" name="Rgas" type="constvar" />
+	<variable component="IKr" name="T_Const_HERG" type="constvar" />
+	<variable component="IKr" name="A0_HERG" type="constvar" />
+	<variable component="IKr" name="B0_HERG" type="constvar" />
+	<variable component="IKr" name="A1_HERG" type="constvar" />
+	<variable component="IKr" name="B1_HERG" type="constvar" />
+	<variable component="IKr" name="A2_HERG" type="constvar" />
+	<variable component="IKr" name="B2_HERG" type="constvar" />
+	<variable component="IKr" name="A3_HERG" type="constvar" />
+	<variable component="IKr" name="B3_HERG" type="constvar" />
+	<variable component="IKr" name="A4_HERG" type="constvar" />
+	<variable component="IKr" name="B4_HERG" type="constvar" />
+	<variable component="IKr" name="A5_HERG" type="constvar" />
+	<variable component="IKr" name="B5_HERG" type="constvar" />
+	<variable component="IKr" name="A6_HERG" type="constvar" />
+	<variable component="IKr" name="B6_HERG" type="constvar" />
+	<variable component="IKr" name="V" type="constvar" />
+	<variable component="IKs" name="V" type="constvar" />
+
+	<diffequ>
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Nai</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Ki</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Cai</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CaSS</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CaJSR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CaNSR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>V</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>LTRPNCa</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>HTRPNCa</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C1_RyR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>O2_RyR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C2_RyR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>O1_RyR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C0</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C3</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C4</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Open</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CCa0</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CCa1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CCa2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CCa3</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CCa4</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>yCa</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C0Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C1Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C2Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C3Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>OKv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI0Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI1Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI2Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI3Kv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>OIKv43</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C0Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C1Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C2Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C3Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>OKv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI0Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI1Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI2Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>CI3Kv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>OIKv14</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na3</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na4</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na5</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na6</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na7</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na8</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na9</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na10</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na11</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na12</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="INa">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>na13</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKr">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C1Herg</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKr">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C2Herg</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKr">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C3Herg</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKr">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>OHerg</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKr">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>IHerg</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKs">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C0ks</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKs">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>C1ks</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKs">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>O1ks</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="IKs">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>O2ks</ci>
+				</apply>
+			</math>
+		</component>
+
+	</diffequ>
+</relml>

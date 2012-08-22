@@ -1,0 +1,421 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#define __DATA_NUM 32
+#define __DATA_NUMX 32
+#define __DATA_NUMY 1
+
+
+int main ( int argc , char** argv ) ;
+
+int main ( int argc , char** argv ) {
+
+	int __i;
+	double* xi;
+	double* xo;
+	double* x0;
+	double* x1;
+	double* k1;
+	double* y0;
+	double* z;
+	double t;
+	double d = 0.010000;
+	double** ym;
+	double zz;
+
+	xi = (double*)malloc (  ( sizeof( double ) *  ( 37 * __DATA_NUM )  )  ) ; ;
+	xo = (double*)malloc (  ( sizeof( double ) *  ( 37 * __DATA_NUM )  )  ) ; ;
+	x0 = (double*)malloc (  ( sizeof( double ) *  ( 37 * __DATA_NUM )  )  ) ; ;
+	x1 = (double*)malloc (  ( sizeof( double ) *  ( 37 * __DATA_NUM )  )  ) ; ;
+	y0 = (double*)malloc (  ( sizeof( double ) *  ( 151 * __DATA_NUM )  )  ) ; ;
+	k1 = (double*)malloc (  ( sizeof( double ) *  ( 37 * __DATA_NUM )  )  ) ; ;
+	z = (double*)malloc (  ( sizeof( double ) * 92 )  ) ; ;
+	ym = (double**)malloc (  ( sizeof( double ) * __DATA_NUMX )  ) ; ;
+	for(__i = 0; ( __i < __DATA_NUMX ) ;__i++){
+
+		ym[__i] = (double*)malloc (  ( sizeof( double ) * __DATA_NUMY )  ) ; ;
+
+	}
+
+	for(t = 0.000000; ( t <= 400.000000 ) ;t =  ( t + d ) ){
+
+		for(ix = 0; ( ix < __DATA_NUMX ) ;ix++){
+
+			for(iy = 0; ( iy < __DATA_NUMY ) ;iy++){
+
+				ym[ix][iy] =  (  ( xi[ (0 * __DATA_NUM) + (ix * __DATA_NUMX) + ( (iy - 1)%__DATA_NUMY) ]  - xi[ (0 * __DATA_NUM) + (ix * __DATA_NUMX) + iy ] )  / R ) ;
+
+			}
+
+
+		}
+
+		for(ix = 0; ( ix < __DATA_NUMX ) ;ix++){
+
+			for(iy = 0; ( iy < __DATA_NUMY ) ;iy++){
+
+				zz = 0;
+				if( (  (  (  ( ix >= 0 )  &&  ( ix < __DATA_NUMX )  )  &&  ( iy >= 0 )  )  &&  ( iy < 1 )  ) ){
+
+					zz =  // Insert action potential propagation statement here and indicate the action potential voltage;
+
+				}
+
+				zz =  ( zz + ym[ix][iy] ) ;
+				x0[ (  ( 0 * __DATA_NUM )  + __i ) ] = xi[ (  ( 0 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 1 * __DATA_NUM )  + __i ) ] = xi[ (  ( 1 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 2 * __DATA_NUM )  + __i ) ] = xi[ (  ( 2 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 3 * __DATA_NUM )  + __i ) ] = xi[ (  ( 3 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 4 * __DATA_NUM )  + __i ) ] = xi[ (  ( 4 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 5 * __DATA_NUM )  + __i ) ] = xi[ (  ( 5 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 6 * __DATA_NUM )  + __i ) ] = xi[ (  ( 6 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 7 * __DATA_NUM )  + __i ) ] = xi[ (  ( 7 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 8 * __DATA_NUM )  + __i ) ] = xi[ (  ( 8 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 9 * __DATA_NUM )  + __i ) ] = xi[ (  ( 9 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 10 * __DATA_NUM )  + __i ) ] = xi[ (  ( 10 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 11 * __DATA_NUM )  + __i ) ] = xi[ (  ( 11 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 12 * __DATA_NUM )  + __i ) ] = xi[ (  ( 12 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 13 * __DATA_NUM )  + __i ) ] = xi[ (  ( 13 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 14 * __DATA_NUM )  + __i ) ] = xi[ (  ( 14 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 15 * __DATA_NUM )  + __i ) ] = xi[ (  ( 15 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 16 * __DATA_NUM )  + __i ) ] = xi[ (  ( 16 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 17 * __DATA_NUM )  + __i ) ] = xi[ (  ( 17 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 18 * __DATA_NUM )  + __i ) ] = xi[ (  ( 18 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 19 * __DATA_NUM )  + __i ) ] = xi[ (  ( 19 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 20 * __DATA_NUM )  + __i ) ] = xi[ (  ( 20 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 21 * __DATA_NUM )  + __i ) ] = xi[ (  ( 21 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 22 * __DATA_NUM )  + __i ) ] = xi[ (  ( 22 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 23 * __DATA_NUM )  + __i ) ] = xi[ (  ( 23 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 24 * __DATA_NUM )  + __i ) ] = xi[ (  ( 24 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 25 * __DATA_NUM )  + __i ) ] = xi[ (  ( 25 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 26 * __DATA_NUM )  + __i ) ] = xi[ (  ( 26 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 27 * __DATA_NUM )  + __i ) ] = xi[ (  ( 27 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 28 * __DATA_NUM )  + __i ) ] = xi[ (  ( 28 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 29 * __DATA_NUM )  + __i ) ] = xi[ (  ( 29 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 30 * __DATA_NUM )  + __i ) ] = xi[ (  ( 30 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 31 * __DATA_NUM )  + __i ) ] = xi[ (  ( 31 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 32 * __DATA_NUM )  + __i ) ] = xi[ (  ( 32 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 33 * __DATA_NUM )  + __i ) ] = xi[ (  ( 33 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 34 * __DATA_NUM )  + __i ) ] = xi[ (  ( 34 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 35 * __DATA_NUM )  + __i ) ] = xi[ (  ( 35 * __DATA_NUM )  + __i ) ];
+				x0[ (  ( 36 * __DATA_NUM )  + __i ) ] = xi[ (  ( 36 * __DATA_NUM )  + __i ) ];
+				y0[ (  ( 0 * __DATA_NUM )  + __i ) ] =  (  (  ( t >= z[4] )  &&  ( t <= z[5] )  &&  (  (  ( t - z[4] )  -  ( floor(  (  ( t - z[4] )  / z[6] )  ) * z[6] )  )  <= z[7] )  )  ? z[8] : (double)0 ) ;
+				y0[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (  ( z[13] - x0[ (  ( 3 * __DATA_NUM )  + __i ) ] )  + z[14] ) ;
+				y0[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] == (double)0 ?  ( - z[9] )  :  (  (  (  ( z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  *  ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ] -  ( z[9] * exp( (  (  ( - z[2] )  * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) )  )  )  /  ( (double)1 - exp( (  (  ( - z[2] )  * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) )  )  ) ;
+				y0[ (  ( 3 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] == (double)0 ? x0[ (  ( 2 * __DATA_NUM )  + __i ) ] :  (  (  (  ( z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  *  ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ] -  ( z[11] * exp( (  (  ( - z[2] )  * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) )  )  )  /  ( (double)1 - exp( (  (  ( - z[2] )  * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) )  )  ) ;
+				y0[ (  ( 4 * __DATA_NUM )  + __i ) ] =  ( z[17] * y0[ (  ( 2 * __DATA_NUM )  + __i ) ] * x0[ (  ( 6 * __DATA_NUM )  + __i ) ] * x0[ (  ( 8 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 5 * __DATA_NUM )  + __i ) ] =  (  (  ( (double)1 - x0[ (  ( 5 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 6 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 7 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)26 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)17 )  ) )  +  ( (double)0.02 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)800 )  ) )  )  ) ;
+				y0[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)1300 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)20 )  ) )  +  ( (double)0.04 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)800 )  ) )  )  ) ;
+				y0[ (  ( 8 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)9000000000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)5 )  ) )  +  ( (double)8000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)100 )  ) )  )  ) ;
+				y0[ (  ( 9 * __DATA_NUM )  + __i ) ] =  (  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ] *  ( x0[ (  ( 12 * __DATA_NUM )  + __i ) ] + x0[ (  ( 13 * __DATA_NUM )  + __i ) ] )  * x0[ (  ( 15 * __DATA_NUM )  + __i ) ] )  /  ( (double)1 + pow( ( (double)1.4 / x0[ (  ( 4 * __DATA_NUM )  + __i ) ] )  , (double)3 ) )  ) ;
+				y0[ (  ( 10 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.27 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)5.9 )  ) )  +  ( (double)1.5 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)65 )  ) )  )  ) ;
+				y0[ (  ( 11 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.0018 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)7.4 )  ) )  +  ( (double)2 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)100 )  ) )  )  ) ;
+				y0[ (  ( 12 * __DATA_NUM )  + __i ) ] =  (  (  ( (double)1 - x0[ (  ( 14 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 12 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 13 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 13 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)250000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)9 )  ) )  +  ( (double)58 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)65 )  ) )  )  ) ;
+				y0[ (  ( 14 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.019 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)5.6 )  ) )  +  ( (double)0.82 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)250 )  ) )  )  ) ;
+				y0[ (  ( 15 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)62000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)10.1 )  ) )  +  ( (double)30 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)3000 )  ) )  )  ) ;
+				y0[ (  ( 16 * __DATA_NUM )  + __i ) ] =  (  (  ( z[0] * z[1] )  / z[2] )  * log(  ( z[11] / x0[ (  ( 2 * __DATA_NUM )  + __i ) ] )  ) ) ;
+				y0[ (  ( 17 * __DATA_NUM )  + __i ) ] =  (  ( (double)0.75 * exp( ( (double)0.035 *  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)10 )  )  ) )  /  ( (double)1 + exp( ( (double)0.015 *  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)140 )  )  ) )  ) ;
+				y0[ (  ( 18 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)8000 * exp( (  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)97 )  / (double)8.5 )  ) )  +  ( (double)7 * exp( (  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)97 )  / (double)300 )  ) )  )  ) ;
+				y0[ (  ( 19 * __DATA_NUM )  + __i ) ] =  ( z[31] * z[3] * pow( ( z[11] / (double)5.4 )  , (double)0.2 ) ) ;
+				y0[ (  ( 20 * __DATA_NUM )  + __i ) ] =  (  ( (double)1 /  (  ( (double)160 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)28 )  ) )  +  ( (double)200 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)1000 )  ) )  )  )  +  ( (double)1 /  ( (double)2500 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)20 )  ) )  )  ) ;
+				y0[ (  ( 21 * __DATA_NUM )  + __i ) ] =  (  ( (double)1 /  (  ( (double)1600 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)28 )  ) )  +  ( (double)2000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)1000 )  ) )  )  )  +  ( (double)1 /  ( (double)10000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)20 )  ) )  )  ) ;
+				y0[ (  ( 22 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.35 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)17 )  ) )  +  ( (double)2 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)150 )  ) )  )  ) ;
+				y0[ (  ( 23 * __DATA_NUM )  + __i ) ] =  ( z[32] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] * pow(x0[ (  ( 22 * __DATA_NUM )  + __i ) ] , (double)2 ) *  (  ( (double)0.9 * x0[ (  ( 23 * __DATA_NUM )  + __i ) ] )  + (double)0.1 )  ) ;
+				y0[ (  ( 24 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)85 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)10.5 )  ) )  +  ( (double)370 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)62 )  ) )  )  ) ;
+				y0[ (  ( 25 * __DATA_NUM )  + __i ) ] =  ( z[35] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] * pow(x0[ (  ( 24 * __DATA_NUM )  + __i ) ] , (double)3 ) * x0[ (  ( 25 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 26 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)11 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)28 )  ) )  +  ( (double)0.2 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)400 )  ) )  )  ) ;
+				y0[ (  ( 27 * __DATA_NUM )  + __i ) ] =  (  ( (double)0.0038 * exp( (  ( -  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] + (double)13.5 )  )  / (double)11.3 )  ) )  /  ( (double)1 +  ( (double)0.051335 * exp( (  ( -  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] + (double)13.5 )  )  / (double)11.3 )  ) )  )  ) ;
+				y0[ (  ( 28 * __DATA_NUM )  + __i ) ] =  ( (double)0.4 * z[37] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 29 * __DATA_NUM )  + __i ) ] =  ( (double)0.00011 * pow( ( z[11] / (double)5.4 )  , (double)0.16 ) ) ;
+				y0[ (  ( 30 * __DATA_NUM )  + __i ) ] =  ( z[39] * z[40] * pow( ( z[11] / (double)1 )  , (double)0.24 ) ) ;
+				y0[ (  ( 31 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( pow( ( z[45] / z[9] )  , (double)3 ) *  ( (double)1 +  ( z[10] / z[47] )  )  )  )  ) ;
+				y0[ (  ( 32 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  (  ( z[47] / z[10] )  *  ( (double)1 + pow( ( z[9] / z[45] )  , (double)3 ) )  )  )  ) ;
+				y0[ (  ( 33 * __DATA_NUM )  + __i ) ] =  ( (double)1 * exp( (  (  ( z[49] - (double)1 )  * z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) ) ;
+				y0[ (  ( 34 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( pow( ( z[53] / x0[ (  ( 1 * __DATA_NUM )  + __i ) ] )  , (double)1.06 ) *  ( (double)1 + pow( ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ] / z[55] )  , (double)1.12 ) )  )  )  ) ;
+				y0[ (  ( 35 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( pow( ( z[55] / x0[ (  ( 2 * __DATA_NUM )  + __i ) ] )  , (double)1.12 ) *  ( (double)1 + pow( ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ] / z[53] )  , (double)1.06 ) )  )  )  ) ;
+				y0[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( (double)0.37 /  ( (double)1 +  ( z[57] / x0[ (  ( 4 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				y0[ (  ( 37 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 36 * __DATA_NUM )  + __i ) ] * y0[ (  ( 34 * __DATA_NUM )  + __i ) ] )  +  ( z[51] * y0[ (  ( 35 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 38 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( z[62] / x0[ (  ( 32 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				y0[ (  ( 39 * __DATA_NUM )  + __i ) ] =  ( (double)1 - y0[ (  ( 38 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 40 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( z[64] / x0[ (  ( 4 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				y0[ (  ( 41 * __DATA_NUM )  + __i ) ] =  (  ( z[59] * y0[ (  ( 38 * __DATA_NUM )  + __i ) ] )  +  ( z[60] * y0[ (  ( 39 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 42 * __DATA_NUM )  + __i ) ] =  (  ( z[73] - x0[ (  ( 31 * __DATA_NUM )  + __i ) ] )  + z[74] ) ;
+				y0[ (  ( 43 * __DATA_NUM )  + __i ) ] =  ( z[85] - x0[ (  ( 36 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 44 * __DATA_NUM )  + __i ) ] = exp( (  ( - (double)20 )  * pow( ( z[85] - z[84] )  , (double)2 ) )  );
+				y0[ (  ( 45 * __DATA_NUM )  + __i ) ] =  ( z[79] * x0[ (  ( 35 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 46 * __DATA_NUM )  + __i ) ] =  (  ( - (double)0.4 )  * x0[ (  ( 34 * __DATA_NUM )  + __i ) ] * z[75] ) ;
+				y0[ (  ( 47 * __DATA_NUM )  + __i ) ] =  (  ( z[86] * pow( ( z[87] - z[85] )  , (double)5 ) )  +  ( z[88] *  ( z[87] - z[85] )  )  ) ;
+				y0[ (  ( 48 * __DATA_NUM )  + __i ) ] =  ( z[90] *  ( y0[ (  ( 43 * __DATA_NUM )  + __i ) ] - z[91] )  ) ;
+				y0[ (  ( 49 * __DATA_NUM )  + __i ) ] =  ( z[14] * x0[ (  ( 3 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 50 * __DATA_NUM )  + __i ) ] =  ( (double)0.1 * z[17] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] * x0[ (  ( 6 * __DATA_NUM )  + __i ) ] * x0[ (  ( 8 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 51 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)0.8 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)400 )  ) )  ) ;
+				y0[ (  ( 52 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.014 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)5 )  ) )  +  ( (double)4000 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)100 )  ) )  )  ) ;
+				y0[ (  ( 53 * __DATA_NUM )  + __i ) ] =  ( (double)0.0000185 * z[19] * y0[ (  ( 2 * __DATA_NUM )  + __i ) ] * y0[ (  ( 9 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 54 * __DATA_NUM )  + __i ) ] =  (  (  ( (double)1 - x0[ (  ( 10 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 9 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 11 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 55 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)2200000 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)7.4 )  ) )  +  ( (double)11 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)100 )  ) )  )  ) ;
+				y0[ (  ( 56 * __DATA_NUM )  + __i ) ] =  (  ( z[27] * z[24] * z[26] * z[23] )  /  ( z[25] * z[28] * z[22] )  ) ;
+				y0[ (  ( 57 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)40 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)6.3 )  ) )  +  ( (double)1.5 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)10000 )  ) )  )  ) ;
+				y0[ (  ( 58 * __DATA_NUM )  + __i ) ] =  ( z[30] * z[3] * pow( ( z[11] / (double)5.4 )  , (double)0.4 ) ) ;
+				y0[ (  ( 59 * __DATA_NUM )  + __i ) ] =  (  ( (double)3 * exp( (  ( - (double)0.048 )  *  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)10 )  )  ) *  ( (double)1 + exp( ( (double)0.064 *  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)38 )  )  ) )  )  /  ( (double)1 + exp( ( (double)0.03 *  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)70 )  )  ) )  ) ;
+				y0[ (  ( 60 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 19 * __DATA_NUM )  + __i ) ] *  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  *  (  ( (double)0.6 * x0[ (  ( 19 * __DATA_NUM )  + __i ) ] )  +  ( (double)0.4 * x0[ (  ( 20 * __DATA_NUM )  + __i ) ] )  )  * x0[ (  ( 21 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 61 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)200 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)13 )  ) )  +  ( (double)20 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)300 )  ) )  )  ) ;
+				y0[ (  ( 62 * __DATA_NUM )  + __i ) ] =  ( z[33] * y0[ (  ( 2 * __DATA_NUM )  + __i ) ] * pow(x0[ (  ( 22 * __DATA_NUM )  + __i ) ] , (double)2 ) *  (  ( (double)0.9 * x0[ (  ( 23 * __DATA_NUM )  + __i ) ] )  + (double)0.1 )  ) ;
+				y0[ (  ( 63 * __DATA_NUM )  + __i ) ] =  ( z[36] * y0[ (  ( 2 * __DATA_NUM )  + __i ) ] * pow(x0[ (  ( 24 * __DATA_NUM )  + __i ) ] , (double)3 ) * x0[ (  ( 25 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 64 * __DATA_NUM )  + __i ) ] =  (  ( (double)0.0038 * exp( (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] + (double)13.5 )  / (double)11.3 )  ) )  /  ( (double)1 +  ( (double)0.067083 * exp( (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] + (double)13.5 )  / (double)11.3 )  ) )  )  ) ;
+				y0[ (  ( 65 * __DATA_NUM )  + __i ) ] =  ( z[37] * y0[ (  ( 2 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 66 * __DATA_NUM )  + __i ) ] =  ( (double)0.8 /  ( (double)1 + pow( ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ] / (double)0.1 )  , (double)2 ) )  ) ;
+				y0[ (  ( 67 * __DATA_NUM )  + __i ) ] =  ( (double)1 * exp( (  ( z[49] * z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) ) ;
+				y0[ (  ( 68 * __DATA_NUM )  + __i ) ] =  ( z[9] * exp( (  (  ( - (double)0.82 )  * z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) ) ;
+				y0[ (  ( 69 * __DATA_NUM )  + __i ) ] =  ( z[74] * x0[ (  ( 31 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 70 * __DATA_NUM )  + __i ) ] =  (  (  ( (double)1 - x0[ (  ( 33 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 34 * __DATA_NUM )  + __i ) ] )  - x0[ (  ( 35 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 71 * __DATA_NUM )  + __i ) ] =  (  ( z[77] * x0[ (  ( 33 * __DATA_NUM )  + __i ) ] * y0[ (  ( 44 * __DATA_NUM )  + __i ) ] )  -  ( z[82] * x0[ (  ( 34 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 72 * __DATA_NUM )  + __i ) ] =  ( z[80] * pow(y0[ (  ( 48 * __DATA_NUM )  + __i ) ] , (double)2 ) * x0[ (  ( 35 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 73 * __DATA_NUM )  + __i ) ] =  ( z[75] *  ( x0[ (  ( 34 * __DATA_NUM )  + __i ) ] + x0[ (  ( 35 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 74 * __DATA_NUM )  + __i ) ] =  (  ( sqrt(  ( pow(y0[ (  ( 1 * __DATA_NUM )  + __i ) ] , (double)2 ) +  ( (double)4 * y0[ (  ( 49 * __DATA_NUM )  + __i ) ] )  )  ) - y0[ (  ( 1 * __DATA_NUM )  + __i ) ] )  / (double)2 ) ;
+				y0[ (  ( 75 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] == (double)0 ?  ( - z[10] )  :  (  (  (  ( (double)2 * z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  *  ( y0[ (  ( 74 * __DATA_NUM )  + __i ) ] -  ( z[10] * exp( (  (  ( - (double)2 )  * z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) )  )  )  /  ( (double)1 - exp( (  (  ( - (double)2 )  * z[2] * x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  /  ( z[0] * z[1] )  )  ) )  )  ) ;
+				y0[ (  ( 76 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.1027 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)8 )  ) )  +  ( (double)0.25 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)50 )  ) )  )  ) ;
+				y0[ (  ( 77 * __DATA_NUM )  + __i ) ] =  ( z[19] * y0[ (  ( 75 * __DATA_NUM )  + __i ) ] * y0[ (  ( 9 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 78 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)480 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)7 )  ) )  +  ( (double)2.2 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)65 )  ) )  )  ) ;
+				y0[ (  ( 79 * __DATA_NUM )  + __i ) ] =  ( (double)0.0676 * y0[ (  ( 75 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 80 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 74 * __DATA_NUM )  + __i ) ] -  ( (double)0.3 * y0[ (  ( 79 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 81 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)1800 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)14 )  ) )  +  ( (double)66 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)65 )  ) )  )  ) ;
+				y0[ (  ( 82 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.0006 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)6.7 )  ) )  +  ( (double)1.2 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)25 )  ) )  )  ) ;
+				y0[ (  ( 83 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 17 * __DATA_NUM )  + __i ) ] /  ( y0[ (  ( 17 * __DATA_NUM )  + __i ) ] + y0[ (  ( 59 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 84 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)20 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)11.5 )  ) )  +  ( (double)5 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)300 )  ) )  )  ) ;
+				y0[ (  ( 85 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 62 * __DATA_NUM )  + __i ) ] + y0[ (  ( 23 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 86 * __DATA_NUM )  + __i ) ] =  ( (double)3.7 * y0[ (  ( 74 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 87 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)4.4 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)16 )  ) )  +  ( (double)0.2 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)500 )  ) )  )  ) ;
+				y0[ (  ( 88 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] ==  ( - (double)3 )  ?  ( y0[ (  ( 29 * __DATA_NUM )  + __i ) ] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] * (double)13.0077 )  :  (  ( y0[ (  ( 29 * __DATA_NUM )  + __i ) ] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] *  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] + (double)3 )  )  /  ( (double)1 - exp( (  ( -  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] + (double)3 )  )  / (double)13 )  ) )  )  ) ;
+				y0[ (  ( 89 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 + pow( ( (double)0.0012 / y0[ (  ( 74 * __DATA_NUM )  + __i ) ] )  , (double)3 ) )  ) ;
+				y0[ (  ( 90 * __DATA_NUM )  + __i ) ] =  ( z[41] * y0[ (  ( 75 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 91 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( pow( ( z[44] / x0[ (  ( 1 * __DATA_NUM )  + __i ) ] )  , (double)3 ) *  ( (double)1 +  ( y0[ (  ( 74 * __DATA_NUM )  + __i ) ] / z[46] )  )  )  )  ) ;
+				y0[ (  ( 92 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 33 * __DATA_NUM )  + __i ) ] * y0[ (  ( 31 * __DATA_NUM )  + __i ) ] )  +  ( z[43] * y0[ (  ( 32 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 93 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( pow( ( z[54] / y0[ (  ( 68 * __DATA_NUM )  + __i ) ] )  , (double)1.06 ) *  ( (double)1 + pow( ( z[11] / z[56] )  , (double)1.12 ) )  )  )  ) ;
+				y0[ (  ( 94 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( z[63] / y0[ (  ( 74 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				y0[ (  ( 95 * __DATA_NUM )  + __i ) ] =  ( z[70] *  ( x0[ (  ( 32 * __DATA_NUM )  + __i ) ] - y0[ (  ( 74 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 96 * __DATA_NUM )  + __i ) ] =  (  ( z[76] * y0[ (  ( 74 * __DATA_NUM )  + __i ) ] * y0[ (  ( 70 * __DATA_NUM )  + __i ) ] )  -  ( z[81] * x0[ (  ( 33 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 97 * __DATA_NUM )  + __i ) ] =  ( z[80] * pow(y0[ (  ( 48 * __DATA_NUM )  + __i ) ] , (double)2 ) * x0[ (  ( 34 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 98 * __DATA_NUM )  + __i ) ] =  ( z[89] * y0[ (  ( 73 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 99 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 4 * __DATA_NUM )  + __i ) ] + y0[ (  ( 50 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 100 * __DATA_NUM )  + __i ) ] =  ( (double)0.000365 * z[19] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] * y0[ (  ( 9 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 101 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 79 * __DATA_NUM )  + __i ) ] * y0[ (  ( 9 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 102 * __DATA_NUM )  + __i ) ] =  ( z[29] * y0[ (  ( 75 * __DATA_NUM )  + __i ) ] * x0[ (  ( 16 * __DATA_NUM )  + __i ) ] * x0[ (  ( 17 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 103 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 59 * __DATA_NUM )  + __i ) ] /  ( y0[ (  ( 17 * __DATA_NUM )  + __i ) ] + y0[ (  ( 59 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 104 * __DATA_NUM )  + __i ) ] =  (  ( (double)8 / (double)3 )  * pow(y0[ (  ( 103 * __DATA_NUM )  + __i ) ] , (double)3 ) * y0[ (  ( 83 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 105 * __DATA_NUM )  + __i ) ] =  (  ( pow(y0[ (  ( 103 * __DATA_NUM )  + __i ) ] , (double)4 ) * (double)1 )  /  (  ( (double)0.00014 * exp( (  ( -  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)97 )  )  / (double)9.1 )  ) )  +  ( (double)0.2 * exp( (  ( -  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  - (double)97 )  )  / (double)500 )  ) )  )  ) ;
+				y0[ (  ( 106 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)1450 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)20 )  ) )  +  ( (double)260 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)100 )  ) )  )  ) ;
+				y0[ (  ( 107 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 28 * __DATA_NUM )  + __i ) ] + y0[ (  ( 65 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 108 * __DATA_NUM )  + __i ) ] =  ( z[38] * y0[ (  ( 3 * __DATA_NUM )  + __i ) ] * y0[ (  ( 89 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 109 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 30 * __DATA_NUM )  + __i ) ] *  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  * y0[ (  ( 66 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 110 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  (  ( z[46] / y0[ (  ( 74 * __DATA_NUM )  + __i ) ] )  *  ( (double)1 + pow( ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ] / z[44] )  , (double)3 ) )  )  )  ) ;
+				y0[ (  ( 111 * __DATA_NUM )  + __i ) ] =  ( z[58] * z[3] * (double)1 *  (  ( y0[ (  ( 36 * __DATA_NUM )  + __i ) ] * y0[ (  ( 34 * __DATA_NUM )  + __i ) ] * x0[ (  ( 27 * __DATA_NUM )  + __i ) ] )  -  ( z[50] * y0[ (  ( 93 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 27 * __DATA_NUM )  + __i ) ] )  )  )  ) ;
+				y0[ (  ( 112 * __DATA_NUM )  + __i ) ] =  ( z[65] * (double)1 *  (  ( z[59] * y0[ (  ( 38 * __DATA_NUM )  + __i ) ] * x0[ (  ( 28 * __DATA_NUM )  + __i ) ] )  -  ( y0[ (  ( 40 * __DATA_NUM )  + __i ) ] * y0[ (  ( 94 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 28 * __DATA_NUM )  + __i ) ] )  )  )  ) ;
+				y0[ (  ( 113 * __DATA_NUM )  + __i ) ] =  (  ( (double)280000 * pow( ( y0[ (  ( 74 * __DATA_NUM )  + __i ) ] / (double)1 )  , (double)2 ) )  +  ( z[68] * y0[ (  ( 101 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 114 * __DATA_NUM )  + __i ) ] =  (  ( sqrt(  ( pow(y0[ (  ( 42 * __DATA_NUM )  + __i ) ] , (double)2 ) +  ( (double)4 * y0[ (  ( 69 * __DATA_NUM )  + __i ) ] )  )  ) - y0[ (  ( 42 * __DATA_NUM )  + __i ) ] )  / (double)2 ) ;
+				y0[ (  ( 115 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 98 * __DATA_NUM )  + __i ) ] * y0[ (  ( 43 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 116 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)0.0001027 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)8 )  ) )  +  ( (double)5 * exp( (  ( - x0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  / (double)400 )  ) )  )  ) ;
+				y0[ (  ( 117 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 53 * __DATA_NUM )  + __i ) ] + y0[ (  ( 77 * __DATA_NUM )  + __i ) ] + y0[ (  ( 100 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 118 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 80 * __DATA_NUM )  + __i ) ] * x0[ (  ( 10 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 119 * __DATA_NUM )  + __i ) ] =  ( z[28] * y0[ (  ( 118 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 120 * __DATA_NUM )  + __i ) ] =  ( (double)2 * pow(y0[ (  ( 103 * __DATA_NUM )  + __i ) ] , (double)2 ) * pow(y0[ (  ( 83 * __DATA_NUM )  + __i ) ] , (double)2 ) ) ;
+				y0[ (  ( 121 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  (  ( (double)10 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)17 )  ) )  +  ( (double)2.5 * exp( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)300 )  ) )  )  ) ;
+				y0[ (  ( 122 * __DATA_NUM )  + __i ) ] =  ( z[38] * y0[ (  ( 2 * __DATA_NUM )  + __i ) ] * y0[ (  ( 89 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 123 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 67 * __DATA_NUM )  + __i ) ] * y0[ (  ( 91 * __DATA_NUM )  + __i ) ] )  +  ( z[42] * y0[ (  ( 110 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 124 * __DATA_NUM )  + __i ) ] =  ( (double)1 - y0[ (  ( 94 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 125 * __DATA_NUM )  + __i ) ] =  ( z[66] *  ( y0[ (  ( 114 * __DATA_NUM )  + __i ) ] - y0[ (  ( 74 * __DATA_NUM )  + __i ) ] )  * x0[ (  ( 29 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 126 * __DATA_NUM )  + __i ) ] =  ( (double)0.000377 * pow( ( y0[ (  ( 114 * __DATA_NUM )  + __i ) ] / (double)1 )  , (double)2 ) ) ;
+				y0[ (  ( 127 * __DATA_NUM )  + __i ) ] =  (  ( z[78] * x0[ (  ( 34 * __DATA_NUM )  + __i ) ] )  -  ( z[83] * x0[ (  ( 35 * __DATA_NUM )  + __i ) ] * y0[ (  ( 74 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 128 * __DATA_NUM )  + __i ) ] =  (  ( - y0[ (  ( 47 * __DATA_NUM )  + __i ) ] )  + y0[ (  ( 115 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 129 * __DATA_NUM )  + __i ) ] =  ( (double)0.01 /  ( (double)1 +  (  ( z[18] * y0[ (  ( 6 * __DATA_NUM )  + __i ) ] * y0[ (  ( 116 * __DATA_NUM )  + __i ) ] )  /  ( y0[ (  ( 51 * __DATA_NUM )  + __i ) ] * y0[ (  ( 76 * __DATA_NUM )  + __i ) ] * y0[ (  ( 7 * __DATA_NUM )  + __i ) ] )  )  )  ) ;
+				y0[ (  ( 130 * __DATA_NUM )  + __i ) ] =  ( (double)0.04 /  ( (double)1 +  (  ( z[21] * y0[ (  ( 78 * __DATA_NUM )  + __i ) ] * y0[ (  ( 11 * __DATA_NUM )  + __i ) ] )  /  ( z[20] * y0[ (  ( 10 * __DATA_NUM )  + __i ) ] * y0[ (  ( 55 * __DATA_NUM )  + __i ) ] )  )  )  ) ;
+				y0[ (  ( 131 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 118 * __DATA_NUM )  + __i ) ] +  ( y0[ (  ( 74 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 10 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				y0[ (  ( 132 * __DATA_NUM )  + __i ) ] = pow(y0[ (  ( 103 * __DATA_NUM )  + __i ) ] , (double)4 );
+				y0[ (  ( 133 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 108 * __DATA_NUM )  + __i ) ] + y0[ (  ( 122 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 134 * __DATA_NUM )  + __i ) ] =  ( (double)1 /  ( (double)1 +  ( pow( ( z[56] / z[11] )  , (double)1.12 ) *  ( (double)1 + pow( ( y0[ (  ( 68 * __DATA_NUM )  + __i ) ] / z[54] )  , (double)1.06 ) )  )  )  ) ;
+				y0[ (  ( 135 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 40 * __DATA_NUM )  + __i ) ] * y0[ (  ( 94 * __DATA_NUM )  + __i ) ] )  +  ( z[61] * y0[ (  ( 124 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 136 * __DATA_NUM )  + __i ) ] =  ( z[69] *  ( x0[ (  ( 32 * __DATA_NUM )  + __i ) ] - y0[ (  ( 114 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 137 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 107 * __DATA_NUM )  + __i ) ] + y0[ (  ( 90 * __DATA_NUM )  + __i ) ] + y0[ (  ( 88 * __DATA_NUM )  + __i ) ] + y0[ (  ( 133 * __DATA_NUM )  + __i ) ] + y0[ (  ( 109 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 138 * __DATA_NUM )  + __i ) ] =  ( (double)0.01 - y0[ (  ( 129 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 139 * __DATA_NUM )  + __i ) ] =  ( z[26] * y0[ (  ( 131 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 140 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 63 * __DATA_NUM )  + __i ) ] + y0[ (  ( 25 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 141 * __DATA_NUM )  + __i ) ] =  (  ( z[50] * y0[ (  ( 93 * __DATA_NUM )  + __i ) ] )  +  ( z[52] * y0[ (  ( 134 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 142 * __DATA_NUM )  + __i ) ] =  ( z[75] *  (  ( y0[ (  ( 97 * __DATA_NUM )  + __i ) ] + y0[ (  ( 127 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 96 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 143 * __DATA_NUM )  + __i ) ] =  ( (double)0.04 - y0[ (  ( 130 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 144 * __DATA_NUM )  + __i ) ] =  ( z[48] * z[3] * (double)1 *  (  ( y0[ (  ( 67 * __DATA_NUM )  + __i ) ] * y0[ (  ( 91 * __DATA_NUM )  + __i ) ] * x0[ (  ( 26 * __DATA_NUM )  + __i ) ] )  -  ( y0[ (  ( 33 * __DATA_NUM )  + __i ) ] * y0[ (  ( 31 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 26 * __DATA_NUM )  + __i ) ] )  )  )  ) ;
+				y0[ (  ( 145 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 4 * __DATA_NUM )  + __i ) ] + y0[ (  ( 62 * __DATA_NUM )  + __i ) ] + y0[ (  ( 63 * __DATA_NUM )  + __i ) ] + y0[ (  ( 53 * __DATA_NUM )  + __i ) ] + y0[ (  ( 65 * __DATA_NUM )  + __i ) ] + y0[ (  ( 122 * __DATA_NUM )  + __i ) ] +  ( (double)3 * y0[ (  ( 111 * __DATA_NUM )  + __i ) ] )  +  ( (double)3 * y0[ (  ( 144 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 146 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 77 * __DATA_NUM )  + __i ) ] + y0[ (  ( 102 * __DATA_NUM )  + __i ) ] + y0[ (  ( 90 * __DATA_NUM )  + __i ) ] )  -  ( (double)2 * y0[ (  ( 144 * __DATA_NUM )  + __i ) ] )  ) ;
+				y0[ (  ( 147 * __DATA_NUM )  + __i ) ] =  ( (double)0.08 /  ( (double)1 +  ( (double)0.36 / y0[ (  ( 114 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				y0[ (  ( 148 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 58 * __DATA_NUM )  + __i ) ] *  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] - y0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  *  ( y0[ (  ( 132 * __DATA_NUM )  + __i ) ] + y0[ (  ( 104 * __DATA_NUM )  + __i ) ] + y0[ (  ( 120 * __DATA_NUM )  + __i ) ] )  * x0[ (  ( 18 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 149 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 99 * __DATA_NUM )  + __i ) ] + y0[ (  ( 117 * __DATA_NUM )  + __i ) ] + y0[ (  ( 102 * __DATA_NUM )  + __i ) ] + y0[ (  ( 148 * __DATA_NUM )  + __i ) ] + y0[ (  ( 60 * __DATA_NUM )  + __i ) ] + y0[ (  ( 85 * __DATA_NUM )  + __i ) ] + y0[ (  ( 140 * __DATA_NUM )  + __i ) ] + y0[ (  ( 137 * __DATA_NUM )  + __i ) ] + y0[ (  ( 111 * __DATA_NUM )  + __i ) ] + y0[ (  ( 144 * __DATA_NUM )  + __i ) ] ) ;
+				y0[ (  ( 150 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 148 * __DATA_NUM )  + __i ) ] + y0[ (  ( 60 * __DATA_NUM )  + __i ) ] + y0[ (  ( 25 * __DATA_NUM )  + __i ) ] + y0[ (  ( 109 * __DATA_NUM )  + __i ) ] + y0[ (  ( 23 * __DATA_NUM )  + __i ) ] + y0[ (  ( 50 * __DATA_NUM )  + __i ) ] + y0[ (  ( 100 * __DATA_NUM )  + __i ) ] + y0[ (  ( 28 * __DATA_NUM )  + __i ) ] + y0[ (  ( 108 * __DATA_NUM )  + __i ) ] + y0[ (  ( 88 * __DATA_NUM )  + __i ) ] )  -  ( (double)2 * y0[ (  ( 111 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 0 * __DATA_NUM )  + __i ) ] =  (  ( -  ( y0[ (  ( 149 * __DATA_NUM )  + __i ) ] + y0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  )  / z[3] ) ;
+				k1[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (  ( - y0[ (  ( 145 * __DATA_NUM )  + __i ) ] )  /  ( z[2] * z[12] )  ) ;
+				k1[ (  ( 2 * __DATA_NUM )  + __i ) ] =  (  ( -  ( y0[ (  ( 150 * __DATA_NUM )  + __i ) ] + y0[ (  ( 0 * __DATA_NUM )  + __i ) ] )  )  /  ( z[2] * z[12] )  ) ;
+				k1[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  (  ( -  (  (  ( y0[ (  ( 146 * __DATA_NUM )  + __i ) ] - y0[ (  ( 112 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 125 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 95 * __DATA_NUM )  + __i ) ] )  )  /  ( (double)2 * z[2] * z[12] )  )  + y0[ (  ( 142 * __DATA_NUM )  + __i ) ] ) ;
+				k1[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  (  (  ( z[15] *  ( z[16] - x0[ (  ( 4 * __DATA_NUM )  + __i ) ] )  )  + y0[ (  ( 46 * __DATA_NUM )  + __i ) ] )  -  ( y0[ (  ( 111 * __DATA_NUM )  + __i ) ] /  ( z[2] * z[12] )  )  )  +  ( y0[ (  ( 112 * __DATA_NUM )  + __i ) ] /  ( (double)4 * z[2] * z[12] )  )  ) ;
+				k1[ (  ( 5 * __DATA_NUM )  + __i ) ] =  (  (  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ] * y0[ (  ( 6 * __DATA_NUM )  + __i ) ] )  +  ( y0[ (  ( 5 * __DATA_NUM )  + __i ) ] * y0[ (  ( 138 * __DATA_NUM )  + __i ) ] )  )  -  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 129 * __DATA_NUM )  + __i ) ] + y0[ (  ( 76 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				k1[ (  ( 6 * __DATA_NUM )  + __i ) ] =  (  (  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ] * y0[ (  ( 76 * __DATA_NUM )  + __i ) ] )  +  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ] * z[18] )  )  -  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 6 * __DATA_NUM )  + __i ) ] + y0[ (  ( 51 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				k1[ (  ( 7 * __DATA_NUM )  + __i ) ] =  (  (  ( y0[ (  ( 5 * __DATA_NUM )  + __i ) ] * y0[ (  ( 116 * __DATA_NUM )  + __i ) ] )  +  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ] * y0[ (  ( 51 * __DATA_NUM )  + __i ) ] )  )  -  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 7 * __DATA_NUM )  + __i ) ] + z[18] )  )  ) ;
+				k1[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 8 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 8 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 52 * __DATA_NUM )  + __i ) ] * x0[ (  ( 8 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 9 * __DATA_NUM )  + __i ) ] =  (  (  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ] * y0[ (  ( 78 * __DATA_NUM )  + __i ) ] )  +  ( y0[ (  ( 54 * __DATA_NUM )  + __i ) ] * y0[ (  ( 143 * __DATA_NUM )  + __i ) ] )  )  -  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 130 * __DATA_NUM )  + __i ) ] + y0[ (  ( 10 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				k1[ (  ( 10 * __DATA_NUM )  + __i ) ] =  (  (  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ] * y0[ (  ( 10 * __DATA_NUM )  + __i ) ] )  +  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ] * z[21] )  )  -  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 78 * __DATA_NUM )  + __i ) ] + z[20] )  )  ) ;
+				k1[ (  ( 11 * __DATA_NUM )  + __i ) ] =  (  (  ( y0[ (  ( 54 * __DATA_NUM )  + __i ) ] * y0[ (  ( 11 * __DATA_NUM )  + __i ) ] )  +  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ] * z[20] )  )  -  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 55 * __DATA_NUM )  + __i ) ] + z[21] )  )  ) ;
+				k1[ (  ( 12 * __DATA_NUM )  + __i ) ] =  (  (  ( x0[ (  ( 14 * __DATA_NUM )  + __i ) ] * z[24] )  +  ( x0[ (  ( 13 * __DATA_NUM )  + __i ) ] * y0[ (  ( 56 * __DATA_NUM )  + __i ) ] )  )  -  ( x0[ (  ( 12 * __DATA_NUM )  + __i ) ] *  ( y0[ (  ( 139 * __DATA_NUM )  + __i ) ] + z[25] )  )  ) ;
+				k1[ (  ( 13 * __DATA_NUM )  + __i ) ] =  (  (  ( x0[ (  ( 12 * __DATA_NUM )  + __i ) ] * y0[ (  ( 139 * __DATA_NUM )  + __i ) ] )  +  ( y0[ (  ( 12 * __DATA_NUM )  + __i ) ] * z[22] )  )  -  ( x0[ (  ( 13 * __DATA_NUM )  + __i ) ] *  ( z[23] + y0[ (  ( 56 * __DATA_NUM )  + __i ) ] )  )  ) ;
+				k1[ (  ( 14 * __DATA_NUM )  + __i ) ] =  (  (  ( y0[ (  ( 12 * __DATA_NUM )  + __i ) ] * z[27] )  +  ( x0[ (  ( 12 * __DATA_NUM )  + __i ) ] * z[25] )  )  -  ( x0[ (  ( 14 * __DATA_NUM )  + __i ) ] *  ( z[24] +  ( z[28] * y0[ (  ( 80 * __DATA_NUM )  + __i ) ] * x0[ (  ( 10 * __DATA_NUM )  + __i ) ] )  )  )  ) ;
+				k1[ (  ( 15 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 13 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 15 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 81 * __DATA_NUM )  + __i ) ] * x0[ (  ( 15 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 16 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 14 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 57 * __DATA_NUM )  + __i ) ] * x0[ (  ( 16 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 17 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 15 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 17 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 82 * __DATA_NUM )  + __i ) ] * x0[ (  ( 17 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 18 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 18 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 18 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 105 * __DATA_NUM )  + __i ) ] * x0[ (  ( 18 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 19 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 84 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 19 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 20 * __DATA_NUM )  + __i ) ] * x0[ (  ( 19 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 20 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 61 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 20 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 21 * __DATA_NUM )  + __i ) ] * x0[ (  ( 20 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 21 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 121 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 21 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 22 * __DATA_NUM )  + __i ) ] * x0[ (  ( 21 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 22 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 24 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 22 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 106 * __DATA_NUM )  + __i ) ] * x0[ (  ( 22 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 23 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 86 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 23 * __DATA_NUM )  + __i ) ] )  )  -  ( z[34] * x0[ (  ( 23 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 24 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 26 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 24 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 87 * __DATA_NUM )  + __i ) ] * x0[ (  ( 24 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 25 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 27 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 25 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 64 * __DATA_NUM )  + __i ) ] * x0[ (  ( 25 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 26 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 92 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 26 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 123 * __DATA_NUM )  + __i ) ] * x0[ (  ( 26 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 27 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 141 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 27 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 37 * __DATA_NUM )  + __i ) ] * x0[ (  ( 27 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 28 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 135 * __DATA_NUM )  + __i ) ] *  ( (double)1 - x0[ (  ( 28 * __DATA_NUM )  + __i ) ] )  )  -  ( y0[ (  ( 41 * __DATA_NUM )  + __i ) ] * x0[ (  ( 28 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 29 * __DATA_NUM )  + __i ) ] =  (  ( x0[ (  ( 30 * __DATA_NUM )  + __i ) ] * y0[ (  ( 113 * __DATA_NUM )  + __i ) ] )  -  ( x0[ (  ( 29 * __DATA_NUM )  + __i ) ] * y0[ (  ( 147 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 30 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 126 * __DATA_NUM )  + __i ) ] *  ( (double)1 -  ( x0[ (  ( 29 * __DATA_NUM )  + __i ) ] + x0[ (  ( 30 * __DATA_NUM )  + __i ) ] )  )  )  -  (  ( y0[ (  ( 113 * __DATA_NUM )  + __i ) ] + z[67] )  * x0[ (  ( 30 * __DATA_NUM )  + __i ) ] )  ) ;
+				k1[ (  ( 31 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 136 * __DATA_NUM )  + __i ) ] - y0[ (  ( 125 * __DATA_NUM )  + __i ) ] )  /  ( (double)2 * z[2] * z[71] )  ) ;
+				k1[ (  ( 32 * __DATA_NUM )  + __i ) ] =  (  (  (  ( - y0[ (  ( 112 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 136 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 95 * __DATA_NUM )  + __i ) ] )  /  ( (double)2 * z[2] * z[72] )  ) ;
+				k1[ (  ( 33 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 96 * __DATA_NUM )  + __i ) ] - y0[ (  ( 71 * __DATA_NUM )  + __i ) ] ) ;
+				k1[ (  ( 34 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 71 * __DATA_NUM )  + __i ) ] - y0[ (  ( 127 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 97 * __DATA_NUM )  + __i ) ] ) ;
+				k1[ (  ( 35 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 127 * __DATA_NUM )  + __i ) ] - y0[ (  ( 45 * __DATA_NUM )  + __i ) ] )  - y0[ (  ( 72 * __DATA_NUM )  + __i ) ] ) ;
+				k1[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( z[90] *  ( y0[ (  ( 43 * __DATA_NUM )  + __i ) ] - z[91] )  ) ;
+				x1[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 0 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 1 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 2 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 3 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 3 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 3 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 4 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 4 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 5 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 6 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 7 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 8 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 8 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 8 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 9 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 10 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 10 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 11 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 11 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 12 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 12 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 12 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 13 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 13 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 13 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 14 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 14 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 14 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 15 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 15 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 15 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 16 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 16 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 16 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 17 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 17 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 17 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 18 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 18 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 18 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 19 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 19 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 19 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 20 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 20 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 20 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 21 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 21 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 21 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 22 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 22 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 22 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 23 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 23 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 23 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 24 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 24 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 24 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 25 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 25 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 25 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 26 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 26 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 26 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 27 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 27 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 27 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 28 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 28 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 28 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 29 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 29 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 29 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 30 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 30 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 30 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 31 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 31 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 31 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 32 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 32 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 32 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 33 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 33 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 33 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 34 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 34 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 34 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 35 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 35 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 35 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				x1[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 36 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 36 * __DATA_NUM )  + __i ) ] * d )  ) ;
+				xo[ (  ( 0 * __DATA_NUM )  + __i ) ] = x1[ (  ( 0 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 1 * __DATA_NUM )  + __i ) ] = x1[ (  ( 1 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 2 * __DATA_NUM )  + __i ) ] = x1[ (  ( 2 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 3 * __DATA_NUM )  + __i ) ] = x1[ (  ( 3 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 4 * __DATA_NUM )  + __i ) ] = x1[ (  ( 4 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 5 * __DATA_NUM )  + __i ) ] = x1[ (  ( 5 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 6 * __DATA_NUM )  + __i ) ] = x1[ (  ( 6 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 7 * __DATA_NUM )  + __i ) ] = x1[ (  ( 7 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 8 * __DATA_NUM )  + __i ) ] = x1[ (  ( 8 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 9 * __DATA_NUM )  + __i ) ] = x1[ (  ( 9 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 10 * __DATA_NUM )  + __i ) ] = x1[ (  ( 10 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 11 * __DATA_NUM )  + __i ) ] = x1[ (  ( 11 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 12 * __DATA_NUM )  + __i ) ] = x1[ (  ( 12 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 13 * __DATA_NUM )  + __i ) ] = x1[ (  ( 13 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 14 * __DATA_NUM )  + __i ) ] = x1[ (  ( 14 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 15 * __DATA_NUM )  + __i ) ] = x1[ (  ( 15 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 16 * __DATA_NUM )  + __i ) ] = x1[ (  ( 16 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 17 * __DATA_NUM )  + __i ) ] = x1[ (  ( 17 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 18 * __DATA_NUM )  + __i ) ] = x1[ (  ( 18 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 19 * __DATA_NUM )  + __i ) ] = x1[ (  ( 19 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 20 * __DATA_NUM )  + __i ) ] = x1[ (  ( 20 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 21 * __DATA_NUM )  + __i ) ] = x1[ (  ( 21 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 22 * __DATA_NUM )  + __i ) ] = x1[ (  ( 22 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 23 * __DATA_NUM )  + __i ) ] = x1[ (  ( 23 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 24 * __DATA_NUM )  + __i ) ] = x1[ (  ( 24 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 25 * __DATA_NUM )  + __i ) ] = x1[ (  ( 25 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 26 * __DATA_NUM )  + __i ) ] = x1[ (  ( 26 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 27 * __DATA_NUM )  + __i ) ] = x1[ (  ( 27 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 28 * __DATA_NUM )  + __i ) ] = x1[ (  ( 28 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 29 * __DATA_NUM )  + __i ) ] = x1[ (  ( 29 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 30 * __DATA_NUM )  + __i ) ] = x1[ (  ( 30 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 31 * __DATA_NUM )  + __i ) ] = x1[ (  ( 31 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 32 * __DATA_NUM )  + __i ) ] = x1[ (  ( 32 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 33 * __DATA_NUM )  + __i ) ] = x1[ (  ( 33 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 34 * __DATA_NUM )  + __i ) ] = x1[ (  ( 34 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 35 * __DATA_NUM )  + __i ) ] = x1[ (  ( 35 * __DATA_NUM )  + __i ) ];
+				xo[ (  ( 36 * __DATA_NUM )  + __i ) ] = x1[ (  ( 36 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 0 * __DATA_NUM )  + __i ) ] = xo[ (  ( 0 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 1 * __DATA_NUM )  + __i ) ] = xo[ (  ( 1 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 2 * __DATA_NUM )  + __i ) ] = xo[ (  ( 2 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 3 * __DATA_NUM )  + __i ) ] = xo[ (  ( 3 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 4 * __DATA_NUM )  + __i ) ] = xo[ (  ( 4 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 5 * __DATA_NUM )  + __i ) ] = xo[ (  ( 5 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 6 * __DATA_NUM )  + __i ) ] = xo[ (  ( 6 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 7 * __DATA_NUM )  + __i ) ] = xo[ (  ( 7 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 8 * __DATA_NUM )  + __i ) ] = xo[ (  ( 8 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 9 * __DATA_NUM )  + __i ) ] = xo[ (  ( 9 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 10 * __DATA_NUM )  + __i ) ] = xo[ (  ( 10 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 11 * __DATA_NUM )  + __i ) ] = xo[ (  ( 11 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 12 * __DATA_NUM )  + __i ) ] = xo[ (  ( 12 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 13 * __DATA_NUM )  + __i ) ] = xo[ (  ( 13 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 14 * __DATA_NUM )  + __i ) ] = xo[ (  ( 14 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 15 * __DATA_NUM )  + __i ) ] = xo[ (  ( 15 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 16 * __DATA_NUM )  + __i ) ] = xo[ (  ( 16 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 17 * __DATA_NUM )  + __i ) ] = xo[ (  ( 17 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 18 * __DATA_NUM )  + __i ) ] = xo[ (  ( 18 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 19 * __DATA_NUM )  + __i ) ] = xo[ (  ( 19 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 20 * __DATA_NUM )  + __i ) ] = xo[ (  ( 20 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 21 * __DATA_NUM )  + __i ) ] = xo[ (  ( 21 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 22 * __DATA_NUM )  + __i ) ] = xo[ (  ( 22 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 23 * __DATA_NUM )  + __i ) ] = xo[ (  ( 23 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 24 * __DATA_NUM )  + __i ) ] = xo[ (  ( 24 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 25 * __DATA_NUM )  + __i ) ] = xo[ (  ( 25 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 26 * __DATA_NUM )  + __i ) ] = xo[ (  ( 26 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 27 * __DATA_NUM )  + __i ) ] = xo[ (  ( 27 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 28 * __DATA_NUM )  + __i ) ] = xo[ (  ( 28 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 29 * __DATA_NUM )  + __i ) ] = xo[ (  ( 29 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 30 * __DATA_NUM )  + __i ) ] = xo[ (  ( 30 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 31 * __DATA_NUM )  + __i ) ] = xo[ (  ( 31 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 32 * __DATA_NUM )  + __i ) ] = xo[ (  ( 32 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 33 * __DATA_NUM )  + __i ) ] = xo[ (  ( 33 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 34 * __DATA_NUM )  + __i ) ] = xo[ (  ( 34 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 35 * __DATA_NUM )  + __i ) ] = xo[ (  ( 35 * __DATA_NUM )  + __i ) ];
+				xi[ (  ( 36 * __DATA_NUM )  + __i ) ] = xo[ (  ( 36 * __DATA_NUM )  + __i ) ];
+
+			}
+
+
+		}
+
+
+	}
+
+	free ( xi ) ; 
+	free ( xo ) ; 
+	free ( x0 ) ; 
+	free ( x1 ) ; 
+	free ( y0 ) ; 
+	free ( k1 ) ; 
+	free ( z ) ; 
+	free ( ym ) ; 
+}
+
+
+

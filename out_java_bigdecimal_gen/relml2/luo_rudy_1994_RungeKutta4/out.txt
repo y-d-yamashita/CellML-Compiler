@@ -1,0 +1,788 @@
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
+
+public final class JavaBigDecimalProgram{
+public static void main ( String args[] ) {
+
+	int __i;
+	BigDecimal xi[];
+	BigDecimal xo[];
+	BigDecimal x0[];
+	BigDecimal x1[];
+	BigDecimal x2[];
+	BigDecimal x3[];
+	BigDecimal x4[];
+	BigDecimal k1[];
+	BigDecimal k2[];
+	BigDecimal k3[];
+	BigDecimal k4[];
+	BigDecimal y0[];
+	BigDecimal y1[];
+	BigDecimal y2[];
+	BigDecimal y3[];
+	BigDecimal z[];
+	BigDecimal t;
+	BigDecimal d = new BigDecimal( 0.010000);
+	int __DATA_NUM = 32;
+	int __SCALE = 80;
+
+	xi = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	xo = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	x0 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	x1 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	x2 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	x3 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	x4 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	y0 = new BigDecimal[ ( 64 * __DATA_NUM ) ];
+	y1 = new BigDecimal[ ( 64 * __DATA_NUM ) ];
+	y2 = new BigDecimal[ ( 64 * __DATA_NUM ) ];
+	y3 = new BigDecimal[ ( 64 * __DATA_NUM ) ];
+	k1 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	k2 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	k3 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	k4 = new BigDecimal[ ( 12 * __DATA_NUM ) ];
+	z = new BigDecimal[52];
+	for(t = new BigDecimal(0.000000); ( t.compareTo(new BigDecimal(400.000000))<=0) ;t =  ( t .add( d) ) ){
+
+		for(__i = 0; ( __i < __DATA_NUM ) ;__i++){
+
+			x0[ (  ( 0 * __DATA_NUM )  + __i ) ] = xi[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 1 * __DATA_NUM )  + __i ) ] = xi[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 2 * __DATA_NUM )  + __i ) ] = xi[ (  ( 2 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 3 * __DATA_NUM )  + __i ) ] = xi[ (  ( 3 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 4 * __DATA_NUM )  + __i ) ] = xi[ (  ( 4 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 5 * __DATA_NUM )  + __i ) ] = xi[ (  ( 5 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 6 * __DATA_NUM )  + __i ) ] = xi[ (  ( 6 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 7 * __DATA_NUM )  + __i ) ] = xi[ (  ( 7 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 8 * __DATA_NUM )  + __i ) ] = xi[ (  ( 8 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 9 * __DATA_NUM )  + __i ) ] = xi[ (  ( 9 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 10 * __DATA_NUM )  + __i ) ] = xi[ (  ( 10 * __DATA_NUM )  + __i ) ];
+			x0[ (  ( 11 * __DATA_NUM )  + __i ) ] = xi[ (  ( 11 * __DATA_NUM )  + __i ) ];
+			y0[ (  ( 0 * __DATA_NUM )  + __i ) ] = z[4];
+			y0[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[6].divide(x0[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( new BigDecimal(0.08).multiply(exp(  (x0[ (  ( 0 * __DATA_NUM )  + __i ) ]).negate() .divide(new BigDecimal(11.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  ( new BigDecimal(3.56).multiply(exp( ( new BigDecimal(0.079).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add( ( new BigDecimal(310000.0).multiply(exp( ( new BigDecimal(0.35).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  :   new BigDecimal(1.0).divide( ( new BigDecimal(0.13).multiply( ( new BigDecimal(1.0).add(exp(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.66)) ) .divide(new BigDecimal(-11.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y0[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?    ( new BigDecimal(0.1212).multiply(exp( ( new BigDecimal(-0.01052).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1378).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(40.14)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  :    ( new BigDecimal(0.3).multiply(exp( ( new BigDecimal(-0.0000002535).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(32.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y0[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( z[11].multiply((new BigDecimal(2.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[14].multiply(x0[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(2.0).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[15].multiply(z[16], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(2.0).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( z[13].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x0[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 7 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp((   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(35.06)) ) .divide(new BigDecimal(8.6) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) .add(  new BigDecimal(0.6).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(50.0).subtract(x0[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(20.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ) ) ;
+			y0[ (  ( 9 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  x0[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(z[18] ,128,BigDecimal.ROUND_HALF_UP) .pow(2.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 10 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17].add( ( z[20].multiply(z[6], MathContext.DECIMAL128) ) ) ) .divide( ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( z[20].multiply(x0[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 11 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.0000719).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.148).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 12 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(new BigDecimal(56.26))) .divide(new BigDecimal(32.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 13 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[17].divide(x0[ (  ( 9 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 14 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.02).divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.2385).multiply( (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 13 * __DATA_NUM )  + __i ) ])) .subtract(new BigDecimal(59.215))) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 15 * __DATA_NUM )  + __i ) ] = y0[ (  ( 13 * __DATA_NUM )  + __i ) ];
+			y0[ (  ( 16 * __DATA_NUM )  + __i ) ] =  ( z[24].multiply(  x0[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( z[23] .add( x0[ (  ( 8 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 17 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide( ( new BigDecimal(2.0).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[16].divide(x0[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 18 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide(new BigDecimal(7.0) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( exp(  z[6].divide(new BigDecimal(67.3) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0))) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 19 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17] .add( z[6]) ) .divide( ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ] .add( x0[ (  ( 7 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 20 * __DATA_NUM )  + __i ) ] =  ( z[32].multiply(  new BigDecimal(1.0).divide( ( (z[33].pow(3.0 )).add((z[6].pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( z[34] .add( z[16]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add( ( z[35].multiply(exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( (  ( exp( ( z[36].multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((x0[ (  ( 7 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(z[16], MathContext.DECIMAL128) ) .subtract( ( exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((z[6].pow(3.0 )), MathContext.DECIMAL128).multiply(x0[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 21 * __DATA_NUM )  + __i ) ] =  (  ( z[46] .compareTo(z[47])<0)  ? new BigDecimal(0.0) : z[37] ) ;
+			y0[ (  ( 22 * __DATA_NUM )  + __i ) ] =   z[44].divide(z[45] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 23 * __DATA_NUM )  + __i ) ] =  ( z[5].multiply((x0[ (  ( 1 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(x0[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(x0[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 24 * __DATA_NUM )  + __i ) ] =  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  ( new BigDecimal(0.135).multiply(exp(   ( new BigDecimal(80.0) .add( x0[ (  ( 0 * __DATA_NUM )  + __i ) ]) ) .divide(new BigDecimal(-6.8) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y0[ (  ( 25 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y0[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y0[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y0[ (  ( 26 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y0[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y0[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y0[ (  ( 27 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(   ( new BigDecimal(1.0).subtract(exp((   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) .divide( ( new BigDecimal(0.035).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 28 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(0.0197).multiply(exp((( ( new BigDecimal(0.0337).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) ) .pow(2.0 ))).negate() ,__SCALE), MathContext.DECIMAL128) ) .add(new BigDecimal(0.02)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 29 * __DATA_NUM )  + __i ) ] =  ( z[19].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 30 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.000131).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(-1.0).add(exp( ( new BigDecimal(0.0687).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 31 * __DATA_NUM )  + __i ) ] =    (  ( new BigDecimal(0.49124).multiply(exp( ( new BigDecimal(0.08032).multiply( (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(5.476)) ) .subtract(y0[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add(exp( ( new BigDecimal(0.06175).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract( ( y0[ (  ( 13 * __DATA_NUM )  + __i ) ].add(new BigDecimal(594.31)) ) )) , MathContext.DECIMAL128) ) ,__SCALE)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.5143).multiply( (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 13 * __DATA_NUM )  + __i ) ])) .add(new BigDecimal(4.753)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 32 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(7.488).subtract(x0[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(5.98) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 33 * __DATA_NUM )  + __i ) ] = y0[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			y0[ (  ( 34 * __DATA_NUM )  + __i ) ] =  ( z[26].multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 17 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 35 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 19 * __DATA_NUM )  + __i ) ])) ;
+			y0[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y0[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x0[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y0[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y0[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 37 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 21 * __DATA_NUM )  + __i ) ].multiply(   ( z[46].subtract(z[47])) .divide( (  ( z[42] .add( z[46]) ) .subtract(z[47]))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( ( new BigDecimal(1.0).subtract(exp((  z[40].divide(z[38] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) , MathContext.DECIMAL128).multiply(exp((  z[40].divide(z[39] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 38 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 22 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 11 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y0[ (  ( 39 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.32).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.1).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 40 * __DATA_NUM )  + __i ) ] =  ( z[12].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x0[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 41 * __DATA_NUM )  + __i ) ] =   y0[ (  ( 7 * __DATA_NUM )  + __i ) ].divide(y0[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 42 * __DATA_NUM )  + __i ) ] =   y0[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(y0[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 43 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 29 * __DATA_NUM )  + __i ) ].multiply((x0[ (  ( 6 * __DATA_NUM )  + __i ) ].pow(2.0 )), MathContext.DECIMAL128).multiply(y0[ (  ( 12 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 10 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 44 * __DATA_NUM )  + __i ) ] =   y0[ (  ( 14 * __DATA_NUM )  + __i ) ].divide( ( y0[ (  ( 14 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 31 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 45 * __DATA_NUM )  + __i ) ] =  ( z[25].multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 33 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 46 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 36 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x0[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 47 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y0[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x0[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y0[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y0[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 48 * __DATA_NUM )  + __i ) ] =  ( z[44].multiply(  x0[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( x0[ (  ( 8 * __DATA_NUM )  + __i ) ] .add( z[43]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 49 * __DATA_NUM )  + __i ) ] =  (  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  (  ( new BigDecimal(-127140.0).multiply(exp( ( new BigDecimal(0.2444).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( new BigDecimal(0.00003474).multiply(exp( ( new BigDecimal(-0.04391).multiply(x0[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) )) .multiply(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(37.78)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.311).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(79.23)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y0[ (  ( 50 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y0[ (  ( 7 * __DATA_NUM )  + __i ) ])) .divide(y0[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 51 * __DATA_NUM )  + __i ) ] =  ( z[21].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y0[ (  ( 52 * __DATA_NUM )  + __i ) ] =  ( z[22].multiply(y0[ (  ( 32 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 15 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 53 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 47 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x0[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 54 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 37 * __DATA_NUM )  + __i ) ].multiply( ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ].subtract(x0[ (  ( 8 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 55 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y0[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y0[ (  ( 40 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y0[ (  ( 56 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y0[ (  ( 8 * __DATA_NUM )  + __i ) ])) .divide(y0[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 57 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(1.0).add( ( new BigDecimal(0.1245).multiply(exp( ( new BigDecimal(-0.1).multiply(   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) ) .add( ( new BigDecimal(0.0365).multiply(y0[ (  ( 18 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp((   ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 58 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 46 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 53 * __DATA_NUM )  + __i ) ]) ) ;
+			y0[ (  ( 59 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 26 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 55 * __DATA_NUM )  + __i ) ]) ) ;
+			y0[ (  ( 60 * __DATA_NUM )  + __i ) ] =  ( z[27].multiply(y0[ (  ( 57 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[28].divide(x0[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(1.5 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  z[17].divide( ( z[17] .add( z[29]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 61 * __DATA_NUM )  + __i ) ] =  ( y0[ (  ( 51 * __DATA_NUM )  + __i ) ].multiply(y0[ (  ( 44 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y0[ (  ( 62 * __DATA_NUM )  + __i ) ] =    ( z[4].subtract( ( y0[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 59 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 20 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 34 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 60 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 58 * __DATA_NUM )  + __i ) ]) ) )) .divide(z[3] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y0[ (  ( 63 * __DATA_NUM )  + __i ) ] =    ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ].subtract(x0[ (  ( 10 * __DATA_NUM )  + __i ) ])) .divide(z[41] ,128,BigDecimal.ROUND_HALF_UP) ;
+			k1[ (  ( 0 * __DATA_NUM )  + __i ) ] = y0[ (  ( 62 * __DATA_NUM )  + __i ) ];
+			k1[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 39 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x0[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y0[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 1 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k1[ (  ( 2 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 24 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x0[ (  ( 2 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y0[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k1[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 49 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x0[ (  ( 3 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y0[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k1[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 41 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x0[ (  ( 4 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y0[ (  ( 50 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 4 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k1[ (  ( 5 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 42 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x0[ (  ( 5 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y0[ (  ( 56 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k1[ (  ( 6 * __DATA_NUM )  + __i ) ] =  (  ( y0[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x0[ (  ( 6 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y0[ (  ( 30 * __DATA_NUM )  + __i ) ].multiply(x0[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k1[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( ( ( y0[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 55 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 46 * __DATA_NUM )  + __i ) ]).add( ( y0[ (  ( 20 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ).add( ( y0[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k1[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (  ( ( (  ( y0[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 34 * __DATA_NUM )  + __i ) ]) ) .subtract(y0[ (  ( 20 * __DATA_NUM )  + __i ) ])) ).negate() .multiply(  z[48].divide( ( new BigDecimal(2.0).multiply(z[49], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) .add( ( y0[ (  ( 54 * __DATA_NUM )  + __i ) ].multiply(  z[50].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ).add( (  ( y0[ (  ( 38 * __DATA_NUM )  + __i ) ].subtract(y0[ (  ( 48 * __DATA_NUM )  + __i ) ])) .multiply(  z[51].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			k1[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( ( ( y0[ (  ( 26 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y0[ (  ( 53 * __DATA_NUM )  + __i ) ]).add(( ( y0[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(2.0), MathContext.DECIMAL128) ) ).negate() ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k1[ (  ( 10 * __DATA_NUM )  + __i ) ] = ( ( y0[ (  ( 54 * __DATA_NUM )  + __i ) ].subtract( ( y0[ (  ( 63 * __DATA_NUM )  + __i ) ].multiply(  z[51].divide(z[50] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) )) ).negate() ;
+			k1[ (  ( 11 * __DATA_NUM )  + __i ) ] = ( (  ( y0[ (  ( 38 * __DATA_NUM )  + __i ) ] .add( y0[ (  ( 63 * __DATA_NUM )  + __i ) ]) ) .subtract(y0[ (  ( 48 * __DATA_NUM )  + __i ) ])) ).negate() ;
+			x1[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 1 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 3 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 3 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 4 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 5 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 6 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 8 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 8 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 8 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 9 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 10 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 10 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x1[ (  ( 11 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ].add( ( k1[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			y1[ (  ( 0 * __DATA_NUM )  + __i ) ] = z[4];
+			y1[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[6].divide(x1[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( new BigDecimal(0.08).multiply(exp(  (x1[ (  ( 0 * __DATA_NUM )  + __i ) ]).negate() .divide(new BigDecimal(11.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  ( new BigDecimal(3.56).multiply(exp( ( new BigDecimal(0.079).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add( ( new BigDecimal(310000.0).multiply(exp( ( new BigDecimal(0.35).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  :   new BigDecimal(1.0).divide( ( new BigDecimal(0.13).multiply( ( new BigDecimal(1.0).add(exp(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.66)) ) .divide(new BigDecimal(-11.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y1[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?    ( new BigDecimal(0.1212).multiply(exp( ( new BigDecimal(-0.01052).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1378).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(40.14)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  :    ( new BigDecimal(0.3).multiply(exp( ( new BigDecimal(-0.0000002535).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(32.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y1[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( z[11].multiply((new BigDecimal(2.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[14].multiply(x1[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(2.0).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[15].multiply(z[16], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(2.0).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( z[13].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x1[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 7 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp((   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(35.06)) ) .divide(new BigDecimal(8.6) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) .add(  new BigDecimal(0.6).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(50.0).subtract(x1[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(20.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ) ) ;
+			y1[ (  ( 9 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  x1[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(z[18] ,128,BigDecimal.ROUND_HALF_UP) .pow(2.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 10 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17].add( ( z[20].multiply(z[6], MathContext.DECIMAL128) ) ) ) .divide( ( x1[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( z[20].multiply(x1[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 11 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.0000719).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.148).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 12 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(new BigDecimal(56.26))) .divide(new BigDecimal(32.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 13 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[17].divide(x1[ (  ( 9 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 14 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.02).divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.2385).multiply( (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 13 * __DATA_NUM )  + __i ) ])) .subtract(new BigDecimal(59.215))) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 15 * __DATA_NUM )  + __i ) ] = y1[ (  ( 13 * __DATA_NUM )  + __i ) ];
+			y1[ (  ( 16 * __DATA_NUM )  + __i ) ] =  ( z[24].multiply(  x1[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( z[23] .add( x1[ (  ( 8 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 17 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide( ( new BigDecimal(2.0).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[16].divide(x1[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 18 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide(new BigDecimal(7.0) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( exp(  z[6].divide(new BigDecimal(67.3) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0))) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 19 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17] .add( z[6]) ) .divide( ( x1[ (  ( 9 * __DATA_NUM )  + __i ) ] .add( x1[ (  ( 7 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 20 * __DATA_NUM )  + __i ) ] =  ( z[32].multiply(  new BigDecimal(1.0).divide( ( (z[33].pow(3.0 )).add((z[6].pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( z[34] .add( z[16]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add( ( z[35].multiply(exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( (  ( exp( ( z[36].multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((x1[ (  ( 7 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(z[16], MathContext.DECIMAL128) ) .subtract( ( exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((z[6].pow(3.0 )), MathContext.DECIMAL128).multiply(x1[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 21 * __DATA_NUM )  + __i ) ] =  (  ( z[46] .compareTo(z[47])<0)  ? new BigDecimal(0.0) : z[37] ) ;
+			y1[ (  ( 22 * __DATA_NUM )  + __i ) ] =   z[44].divide(z[45] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 23 * __DATA_NUM )  + __i ) ] =  ( z[5].multiply((x1[ (  ( 1 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(x1[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(x1[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 24 * __DATA_NUM )  + __i ) ] =  (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  ( new BigDecimal(0.135).multiply(exp(   ( new BigDecimal(80.0) .add( x1[ (  ( 0 * __DATA_NUM )  + __i ) ]) ) .divide(new BigDecimal(-6.8) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y1[ (  ( 25 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y1[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y1[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y1[ (  ( 26 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y1[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y1[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y1[ (  ( 27 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(   ( new BigDecimal(1.0).subtract(exp((   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) .divide( ( new BigDecimal(0.035).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 28 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(0.0197).multiply(exp((( ( new BigDecimal(0.0337).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) ) .pow(2.0 ))).negate() ,__SCALE), MathContext.DECIMAL128) ) .add(new BigDecimal(0.02)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 29 * __DATA_NUM )  + __i ) ] =  ( z[19].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 30 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.000131).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(-1.0).add(exp( ( new BigDecimal(0.0687).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 31 * __DATA_NUM )  + __i ) ] =    (  ( new BigDecimal(0.49124).multiply(exp( ( new BigDecimal(0.08032).multiply( (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(5.476)) ) .subtract(y1[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add(exp( ( new BigDecimal(0.06175).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract( ( y1[ (  ( 13 * __DATA_NUM )  + __i ) ].add(new BigDecimal(594.31)) ) )) , MathContext.DECIMAL128) ) ,__SCALE)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.5143).multiply( (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 13 * __DATA_NUM )  + __i ) ])) .add(new BigDecimal(4.753)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 32 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(7.488).subtract(x1[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(5.98) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 33 * __DATA_NUM )  + __i ) ] = y1[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			y1[ (  ( 34 * __DATA_NUM )  + __i ) ] =  ( z[26].multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 17 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 35 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 19 * __DATA_NUM )  + __i ) ])) ;
+			y1[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y1[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x1[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y1[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y1[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 37 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 21 * __DATA_NUM )  + __i ) ].multiply(   ( z[46].subtract(z[47])) .divide( (  ( z[42] .add( z[46]) ) .subtract(z[47]))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( ( new BigDecimal(1.0).subtract(exp((  z[40].divide(z[38] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) , MathContext.DECIMAL128).multiply(exp((  z[40].divide(z[39] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 38 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 22 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 11 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y1[ (  ( 39 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.32).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.1).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 40 * __DATA_NUM )  + __i ) ] =  ( z[12].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x1[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 41 * __DATA_NUM )  + __i ) ] =   y1[ (  ( 7 * __DATA_NUM )  + __i ) ].divide(y1[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 42 * __DATA_NUM )  + __i ) ] =   y1[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(y1[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 43 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 29 * __DATA_NUM )  + __i ) ].multiply((x1[ (  ( 6 * __DATA_NUM )  + __i ) ].pow(2.0 )), MathContext.DECIMAL128).multiply(y1[ (  ( 12 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 10 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 44 * __DATA_NUM )  + __i ) ] =   y1[ (  ( 14 * __DATA_NUM )  + __i ) ].divide( ( y1[ (  ( 14 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 31 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 45 * __DATA_NUM )  + __i ) ] =  ( z[25].multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 33 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 46 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 36 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x1[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 47 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y1[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x1[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y1[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y1[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 48 * __DATA_NUM )  + __i ) ] =  ( z[44].multiply(  x1[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( x1[ (  ( 8 * __DATA_NUM )  + __i ) ] .add( z[43]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 49 * __DATA_NUM )  + __i ) ] =  (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  (  ( new BigDecimal(-127140.0).multiply(exp( ( new BigDecimal(0.2444).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( new BigDecimal(0.00003474).multiply(exp( ( new BigDecimal(-0.04391).multiply(x1[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) )) .multiply(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(37.78)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.311).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(79.23)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y1[ (  ( 50 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y1[ (  ( 7 * __DATA_NUM )  + __i ) ])) .divide(y1[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 51 * __DATA_NUM )  + __i ) ] =  ( z[21].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y1[ (  ( 52 * __DATA_NUM )  + __i ) ] =  ( z[22].multiply(y1[ (  ( 32 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 15 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 53 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 47 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x1[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 54 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 37 * __DATA_NUM )  + __i ) ].multiply( ( x1[ (  ( 10 * __DATA_NUM )  + __i ) ].subtract(x1[ (  ( 8 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 55 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y1[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y1[ (  ( 40 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y1[ (  ( 56 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y1[ (  ( 8 * __DATA_NUM )  + __i ) ])) .divide(y1[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 57 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(1.0).add( ( new BigDecimal(0.1245).multiply(exp( ( new BigDecimal(-0.1).multiply(   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) ) .add( ( new BigDecimal(0.0365).multiply(y1[ (  ( 18 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp((   ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 58 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 46 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 53 * __DATA_NUM )  + __i ) ]) ) ;
+			y1[ (  ( 59 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 26 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 55 * __DATA_NUM )  + __i ) ]) ) ;
+			y1[ (  ( 60 * __DATA_NUM )  + __i ) ] =  ( z[27].multiply(y1[ (  ( 57 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[28].divide(x1[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(1.5 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  z[17].divide( ( z[17] .add( z[29]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 61 * __DATA_NUM )  + __i ) ] =  ( y1[ (  ( 51 * __DATA_NUM )  + __i ) ].multiply(y1[ (  ( 44 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y1[ (  ( 62 * __DATA_NUM )  + __i ) ] =    ( z[4].subtract( ( y1[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 59 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 20 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 34 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 60 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 58 * __DATA_NUM )  + __i ) ]) ) )) .divide(z[3] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y1[ (  ( 63 * __DATA_NUM )  + __i ) ] =    ( x1[ (  ( 11 * __DATA_NUM )  + __i ) ].subtract(x1[ (  ( 10 * __DATA_NUM )  + __i ) ])) .divide(z[41] ,128,BigDecimal.ROUND_HALF_UP) ;
+			k2[ (  ( 0 * __DATA_NUM )  + __i ) ] = y1[ (  ( 62 * __DATA_NUM )  + __i ) ];
+			k2[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (  ( y1[ (  ( 39 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x1[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y1[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 1 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k2[ (  ( 2 * __DATA_NUM )  + __i ) ] =  (  ( y1[ (  ( 24 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x1[ (  ( 2 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y1[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k2[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( y1[ (  ( 49 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x1[ (  ( 3 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y1[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k2[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( y1[ (  ( 41 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x1[ (  ( 4 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y1[ (  ( 50 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 4 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k2[ (  ( 5 * __DATA_NUM )  + __i ) ] =  (  ( y1[ (  ( 42 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x1[ (  ( 5 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y1[ (  ( 56 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k2[ (  ( 6 * __DATA_NUM )  + __i ) ] =  (  ( y1[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x1[ (  ( 6 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y1[ (  ( 30 * __DATA_NUM )  + __i ) ].multiply(x1[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k2[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( ( ( y1[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 55 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 46 * __DATA_NUM )  + __i ) ]).add( ( y1[ (  ( 20 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ).add( ( y1[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k2[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (  ( ( (  ( y1[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 34 * __DATA_NUM )  + __i ) ]) ) .subtract(y1[ (  ( 20 * __DATA_NUM )  + __i ) ])) ).negate() .multiply(  z[48].divide( ( new BigDecimal(2.0).multiply(z[49], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) .add( ( y1[ (  ( 54 * __DATA_NUM )  + __i ) ].multiply(  z[50].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ).add( (  ( y1[ (  ( 38 * __DATA_NUM )  + __i ) ].subtract(y1[ (  ( 48 * __DATA_NUM )  + __i ) ])) .multiply(  z[51].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			k2[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( ( ( y1[ (  ( 26 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y1[ (  ( 53 * __DATA_NUM )  + __i ) ]).add(( ( y1[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(2.0), MathContext.DECIMAL128) ) ).negate() ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k2[ (  ( 10 * __DATA_NUM )  + __i ) ] = ( ( y1[ (  ( 54 * __DATA_NUM )  + __i ) ].subtract( ( y1[ (  ( 63 * __DATA_NUM )  + __i ) ].multiply(  z[51].divide(z[50] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) )) ).negate() ;
+			k2[ (  ( 11 * __DATA_NUM )  + __i ) ] = ( (  ( y1[ (  ( 38 * __DATA_NUM )  + __i ) ] .add( y1[ (  ( 63 * __DATA_NUM )  + __i ) ]) ) .subtract(y1[ (  ( 48 * __DATA_NUM )  + __i ) ])) ).negate() ;
+			x2[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 1 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 3 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 3 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 4 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 5 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 6 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 8 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 8 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 8 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 9 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 10 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 10 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			x2[ (  ( 11 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ].add( ( k2[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply(  d.divide(new BigDecimal(2) ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			y2[ (  ( 0 * __DATA_NUM )  + __i ) ] = z[4];
+			y2[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[6].divide(x2[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( new BigDecimal(0.08).multiply(exp(  (x2[ (  ( 0 * __DATA_NUM )  + __i ) ]).negate() .divide(new BigDecimal(11.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  ( new BigDecimal(3.56).multiply(exp( ( new BigDecimal(0.079).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add( ( new BigDecimal(310000.0).multiply(exp( ( new BigDecimal(0.35).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  :   new BigDecimal(1.0).divide( ( new BigDecimal(0.13).multiply( ( new BigDecimal(1.0).add(exp(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.66)) ) .divide(new BigDecimal(-11.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y2[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?    ( new BigDecimal(0.1212).multiply(exp( ( new BigDecimal(-0.01052).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1378).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(40.14)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  :    ( new BigDecimal(0.3).multiply(exp( ( new BigDecimal(-0.0000002535).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(32.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y2[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( z[11].multiply((new BigDecimal(2.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[14].multiply(x2[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(2.0).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[15].multiply(z[16], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(2.0).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( z[13].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x2[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 7 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp((   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(35.06)) ) .divide(new BigDecimal(8.6) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) .add(  new BigDecimal(0.6).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(50.0).subtract(x2[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(20.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ) ) ;
+			y2[ (  ( 9 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  x2[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(z[18] ,128,BigDecimal.ROUND_HALF_UP) .pow(2.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 10 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17].add( ( z[20].multiply(z[6], MathContext.DECIMAL128) ) ) ) .divide( ( x2[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( z[20].multiply(x2[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 11 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.0000719).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.148).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 12 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(new BigDecimal(56.26))) .divide(new BigDecimal(32.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 13 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[17].divide(x2[ (  ( 9 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 14 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.02).divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.2385).multiply( (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 13 * __DATA_NUM )  + __i ) ])) .subtract(new BigDecimal(59.215))) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 15 * __DATA_NUM )  + __i ) ] = y2[ (  ( 13 * __DATA_NUM )  + __i ) ];
+			y2[ (  ( 16 * __DATA_NUM )  + __i ) ] =  ( z[24].multiply(  x2[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( z[23] .add( x2[ (  ( 8 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 17 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide( ( new BigDecimal(2.0).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[16].divide(x2[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 18 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide(new BigDecimal(7.0) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( exp(  z[6].divide(new BigDecimal(67.3) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0))) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 19 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17] .add( z[6]) ) .divide( ( x2[ (  ( 9 * __DATA_NUM )  + __i ) ] .add( x2[ (  ( 7 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 20 * __DATA_NUM )  + __i ) ] =  ( z[32].multiply(  new BigDecimal(1.0).divide( ( (z[33].pow(3.0 )).add((z[6].pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( z[34] .add( z[16]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add( ( z[35].multiply(exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( (  ( exp( ( z[36].multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((x2[ (  ( 7 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(z[16], MathContext.DECIMAL128) ) .subtract( ( exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((z[6].pow(3.0 )), MathContext.DECIMAL128).multiply(x2[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 21 * __DATA_NUM )  + __i ) ] =  (  ( z[46] .compareTo(z[47])<0)  ? new BigDecimal(0.0) : z[37] ) ;
+			y2[ (  ( 22 * __DATA_NUM )  + __i ) ] =   z[44].divide(z[45] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 23 * __DATA_NUM )  + __i ) ] =  ( z[5].multiply((x2[ (  ( 1 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(x2[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(x2[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 24 * __DATA_NUM )  + __i ) ] =  (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  ( new BigDecimal(0.135).multiply(exp(   ( new BigDecimal(80.0) .add( x2[ (  ( 0 * __DATA_NUM )  + __i ) ]) ) .divide(new BigDecimal(-6.8) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y2[ (  ( 25 * __DATA_NUM )  + __i ) ] =  ( x2[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y2[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y2[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y2[ (  ( 26 * __DATA_NUM )  + __i ) ] =  ( x2[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y2[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y2[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y2[ (  ( 27 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(   ( new BigDecimal(1.0).subtract(exp((   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) .divide( ( new BigDecimal(0.035).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 28 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(0.0197).multiply(exp((( ( new BigDecimal(0.0337).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) ) .pow(2.0 ))).negate() ,__SCALE), MathContext.DECIMAL128) ) .add(new BigDecimal(0.02)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 29 * __DATA_NUM )  + __i ) ] =  ( z[19].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 30 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.000131).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(-1.0).add(exp( ( new BigDecimal(0.0687).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 31 * __DATA_NUM )  + __i ) ] =    (  ( new BigDecimal(0.49124).multiply(exp( ( new BigDecimal(0.08032).multiply( (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(5.476)) ) .subtract(y2[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add(exp( ( new BigDecimal(0.06175).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract( ( y2[ (  ( 13 * __DATA_NUM )  + __i ) ].add(new BigDecimal(594.31)) ) )) , MathContext.DECIMAL128) ) ,__SCALE)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.5143).multiply( (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 13 * __DATA_NUM )  + __i ) ])) .add(new BigDecimal(4.753)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 32 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(7.488).subtract(x2[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(5.98) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 33 * __DATA_NUM )  + __i ) ] = y2[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			y2[ (  ( 34 * __DATA_NUM )  + __i ) ] =  ( z[26].multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 17 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 35 * __DATA_NUM )  + __i ) ] =  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 19 * __DATA_NUM )  + __i ) ])) ;
+			y2[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y2[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x2[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y2[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y2[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 37 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 21 * __DATA_NUM )  + __i ) ].multiply(   ( z[46].subtract(z[47])) .divide( (  ( z[42] .add( z[46]) ) .subtract(z[47]))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( ( new BigDecimal(1.0).subtract(exp((  z[40].divide(z[38] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) , MathContext.DECIMAL128).multiply(exp((  z[40].divide(z[39] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 38 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 22 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 11 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y2[ (  ( 39 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.32).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.1).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 40 * __DATA_NUM )  + __i ) ] =  ( z[12].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x2[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 41 * __DATA_NUM )  + __i ) ] =   y2[ (  ( 7 * __DATA_NUM )  + __i ) ].divide(y2[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 42 * __DATA_NUM )  + __i ) ] =   y2[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(y2[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 43 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 29 * __DATA_NUM )  + __i ) ].multiply((x2[ (  ( 6 * __DATA_NUM )  + __i ) ].pow(2.0 )), MathContext.DECIMAL128).multiply(y2[ (  ( 12 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 10 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 44 * __DATA_NUM )  + __i ) ] =   y2[ (  ( 14 * __DATA_NUM )  + __i ) ].divide( ( y2[ (  ( 14 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 31 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 45 * __DATA_NUM )  + __i ) ] =  ( z[25].multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 33 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 46 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 36 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x2[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 47 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y2[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x2[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y2[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y2[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 48 * __DATA_NUM )  + __i ) ] =  ( z[44].multiply(  x2[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( x2[ (  ( 8 * __DATA_NUM )  + __i ) ] .add( z[43]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 49 * __DATA_NUM )  + __i ) ] =  (  ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  (  ( new BigDecimal(-127140.0).multiply(exp( ( new BigDecimal(0.2444).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( new BigDecimal(0.00003474).multiply(exp( ( new BigDecimal(-0.04391).multiply(x2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) )) .multiply(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(37.78)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.311).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(79.23)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y2[ (  ( 50 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y2[ (  ( 7 * __DATA_NUM )  + __i ) ])) .divide(y2[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 51 * __DATA_NUM )  + __i ) ] =  ( z[21].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y2[ (  ( 52 * __DATA_NUM )  + __i ) ] =  ( z[22].multiply(y2[ (  ( 32 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 15 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 53 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 47 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x2[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 54 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 37 * __DATA_NUM )  + __i ) ].multiply( ( x2[ (  ( 10 * __DATA_NUM )  + __i ) ].subtract(x2[ (  ( 8 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 55 * __DATA_NUM )  + __i ) ] =  ( x2[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y2[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y2[ (  ( 40 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y2[ (  ( 56 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y2[ (  ( 8 * __DATA_NUM )  + __i ) ])) .divide(y2[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 57 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(1.0).add( ( new BigDecimal(0.1245).multiply(exp( ( new BigDecimal(-0.1).multiply(   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) ) .add( ( new BigDecimal(0.0365).multiply(y2[ (  ( 18 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp((   ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 58 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 46 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 53 * __DATA_NUM )  + __i ) ]) ) ;
+			y2[ (  ( 59 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 26 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 55 * __DATA_NUM )  + __i ) ]) ) ;
+			y2[ (  ( 60 * __DATA_NUM )  + __i ) ] =  ( z[27].multiply(y2[ (  ( 57 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[28].divide(x2[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(1.5 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  z[17].divide( ( z[17] .add( z[29]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 61 * __DATA_NUM )  + __i ) ] =  ( y2[ (  ( 51 * __DATA_NUM )  + __i ) ].multiply(y2[ (  ( 44 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x2[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y2[ (  ( 62 * __DATA_NUM )  + __i ) ] =    ( z[4].subtract( ( y2[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 59 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 20 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 34 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 60 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 58 * __DATA_NUM )  + __i ) ]) ) )) .divide(z[3] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y2[ (  ( 63 * __DATA_NUM )  + __i ) ] =    ( x2[ (  ( 11 * __DATA_NUM )  + __i ) ].subtract(x2[ (  ( 10 * __DATA_NUM )  + __i ) ])) .divide(z[41] ,128,BigDecimal.ROUND_HALF_UP) ;
+			k3[ (  ( 0 * __DATA_NUM )  + __i ) ] = y2[ (  ( 62 * __DATA_NUM )  + __i ) ];
+			k3[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (  ( y2[ (  ( 39 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x2[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y2[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 1 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k3[ (  ( 2 * __DATA_NUM )  + __i ) ] =  (  ( y2[ (  ( 24 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x2[ (  ( 2 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y2[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k3[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( y2[ (  ( 49 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x2[ (  ( 3 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y2[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k3[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( y2[ (  ( 41 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x2[ (  ( 4 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y2[ (  ( 50 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 4 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k3[ (  ( 5 * __DATA_NUM )  + __i ) ] =  (  ( y2[ (  ( 42 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x2[ (  ( 5 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y2[ (  ( 56 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k3[ (  ( 6 * __DATA_NUM )  + __i ) ] =  (  ( y2[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x2[ (  ( 6 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y2[ (  ( 30 * __DATA_NUM )  + __i ) ].multiply(x2[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k3[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( ( ( y2[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 55 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 46 * __DATA_NUM )  + __i ) ]).add( ( y2[ (  ( 20 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ).add( ( y2[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k3[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (  ( ( (  ( y2[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 34 * __DATA_NUM )  + __i ) ]) ) .subtract(y2[ (  ( 20 * __DATA_NUM )  + __i ) ])) ).negate() .multiply(  z[48].divide( ( new BigDecimal(2.0).multiply(z[49], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) .add( ( y2[ (  ( 54 * __DATA_NUM )  + __i ) ].multiply(  z[50].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ).add( (  ( y2[ (  ( 38 * __DATA_NUM )  + __i ) ].subtract(y2[ (  ( 48 * __DATA_NUM )  + __i ) ])) .multiply(  z[51].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			k3[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( ( ( y2[ (  ( 26 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y2[ (  ( 53 * __DATA_NUM )  + __i ) ]).add(( ( y2[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(2.0), MathContext.DECIMAL128) ) ).negate() ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k3[ (  ( 10 * __DATA_NUM )  + __i ) ] = ( ( y2[ (  ( 54 * __DATA_NUM )  + __i ) ].subtract( ( y2[ (  ( 63 * __DATA_NUM )  + __i ) ].multiply(  z[51].divide(z[50] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) )) ).negate() ;
+			k3[ (  ( 11 * __DATA_NUM )  + __i ) ] = ( (  ( y2[ (  ( 38 * __DATA_NUM )  + __i ) ] .add( y2[ (  ( 63 * __DATA_NUM )  + __i ) ]) ) .subtract(y2[ (  ( 48 * __DATA_NUM )  + __i ) ])) ).negate() ;
+			x3[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 1 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 3 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 3 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 4 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 5 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 6 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 8 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 8 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 8 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 9 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 10 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 10 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			x3[ (  ( 11 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ].add( ( k3[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply(d, MathContext.DECIMAL128) ) ) ) ;
+			y3[ (  ( 0 * __DATA_NUM )  + __i ) ] = z[4];
+			y3[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[6].divide(x3[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( new BigDecimal(0.08).multiply(exp(  (x3[ (  ( 0 * __DATA_NUM )  + __i ) ]).negate() .divide(new BigDecimal(11.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  ( new BigDecimal(3.56).multiply(exp( ( new BigDecimal(0.079).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add( ( new BigDecimal(310000.0).multiply(exp( ( new BigDecimal(0.35).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  :   new BigDecimal(1.0).divide( ( new BigDecimal(0.13).multiply( ( new BigDecimal(1.0).add(exp(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.66)) ) .divide(new BigDecimal(-11.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y3[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?    ( new BigDecimal(0.1212).multiply(exp( ( new BigDecimal(-0.01052).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1378).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(40.14)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  :    ( new BigDecimal(0.3).multiply(exp( ( new BigDecimal(-0.0000002535).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.1).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(32.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP)  ) ;
+			y3[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( z[11].multiply((new BigDecimal(2.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[14].multiply(x3[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(2.0).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[15].multiply(z[16], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(2.0).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( z[13].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x3[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 7 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp((   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(35.06)) ) .divide(new BigDecimal(8.6) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) .add(  new BigDecimal(0.6).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(50.0).subtract(x3[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(20.0) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ) ) ;
+			y3[ (  ( 9 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  x3[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(z[18] ,128,BigDecimal.ROUND_HALF_UP) .pow(2.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 10 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17].add( ( z[20].multiply(z[6], MathContext.DECIMAL128) ) ) ) .divide( ( x3[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( z[20].multiply(x3[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 11 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.0000719).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.148).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 12 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(new BigDecimal(56.26))) .divide(new BigDecimal(32.1) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 13 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[17].divide(x3[ (  ( 9 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 14 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.02).divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.2385).multiply( (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 13 * __DATA_NUM )  + __i ) ])) .subtract(new BigDecimal(59.215))) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 15 * __DATA_NUM )  + __i ) ] = y3[ (  ( 13 * __DATA_NUM )  + __i ) ];
+			y3[ (  ( 16 * __DATA_NUM )  + __i ) ] =  ( z[24].multiply(  x3[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( z[23] .add( x3[ (  ( 8 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 17 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide( ( new BigDecimal(2.0).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(   z[16].divide(x3[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 18 * __DATA_NUM )  + __i ) ] =  (   new BigDecimal(1.0).divide(new BigDecimal(7.0) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( exp(  z[6].divide(new BigDecimal(67.3) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0))) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 19 * __DATA_NUM )  + __i ) ] =  (    ( z[0].multiply(z[1], MathContext.DECIMAL128) ) .divide(z[2] ,128,BigDecimal.ROUND_HALF_UP) .multiply(ln(    ( z[17] .add( z[6]) ) .divide( ( x3[ (  ( 9 * __DATA_NUM )  + __i ) ] .add( x3[ (  ( 7 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 20 * __DATA_NUM )  + __i ) ] =  ( z[32].multiply(  new BigDecimal(1.0).divide( ( (z[33].pow(3.0 )).add((z[6].pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( z[34] .add( z[16]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add( ( z[35].multiply(exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( (  ( exp( ( z[36].multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((x3[ (  ( 7 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(z[16], MathContext.DECIMAL128) ) .subtract( ( exp( (  ( z[36].subtract(new BigDecimal(1.0))) .multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  z[2].divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE).multiply((z[6].pow(3.0 )), MathContext.DECIMAL128).multiply(x3[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 21 * __DATA_NUM )  + __i ) ] =  (  ( z[46] .compareTo(z[47])<0)  ? new BigDecimal(0.0) : z[37] ) ;
+			y3[ (  ( 22 * __DATA_NUM )  + __i ) ] =   z[44].divide(z[45] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 23 * __DATA_NUM )  + __i ) ] =  ( z[5].multiply((x3[ (  ( 1 * __DATA_NUM )  + __i ) ].pow(3.0 )), MathContext.DECIMAL128).multiply(x3[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(x3[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 24 * __DATA_NUM )  + __i ) ] =  (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  ( new BigDecimal(0.135).multiply(exp(   ( new BigDecimal(80.0) .add( x3[ (  ( 0 * __DATA_NUM )  + __i ) ]) ) .divide(new BigDecimal(-6.8) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y3[ (  ( 25 * __DATA_NUM )  + __i ) ] =  ( x3[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y3[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y3[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y3[ (  ( 26 * __DATA_NUM )  + __i ) ] =  ( x3[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y3[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y3[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y3[ (  ( 27 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 7 * __DATA_NUM )  + __i ) ].multiply(   ( new BigDecimal(1.0).subtract(exp((   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) .divide(new BigDecimal(6.24) ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) .divide( ( new BigDecimal(0.035).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 28 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(0.0197).multiply(exp((( ( new BigDecimal(0.0337).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(10.0)) ) , MathContext.DECIMAL128) ) .pow(2.0 ))).negate() ,__SCALE), MathContext.DECIMAL128) ) .add(new BigDecimal(0.02)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 29 * __DATA_NUM )  + __i ) ] =  ( z[19].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 30 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.000131).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(-1.0).add(exp( ( new BigDecimal(0.0687).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(30.0)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 31 * __DATA_NUM )  + __i ) ] =    (  ( new BigDecimal(0.49124).multiply(exp( ( new BigDecimal(0.08032).multiply( (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(5.476)) ) .subtract(y3[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .add(exp( ( new BigDecimal(0.06175).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract( ( y3[ (  ( 13 * __DATA_NUM )  + __i ) ].add(new BigDecimal(594.31)) ) )) , MathContext.DECIMAL128) ) ,__SCALE)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(-0.5143).multiply( (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 13 * __DATA_NUM )  + __i ) ])) .add(new BigDecimal(4.753)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 32 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add(exp(   ( new BigDecimal(7.488).subtract(x3[ (  ( 0 * __DATA_NUM )  + __i ) ])) .divide(new BigDecimal(5.98) ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 33 * __DATA_NUM )  + __i ) ] = y3[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			y3[ (  ( 34 * __DATA_NUM )  + __i ) ] =  ( z[26].multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 17 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 35 * __DATA_NUM )  + __i ) ] =  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 19 * __DATA_NUM )  + __i ) ])) ;
+			y3[ (  ( 36 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y3[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x3[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y3[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y3[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 37 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 21 * __DATA_NUM )  + __i ) ].multiply(   ( z[46].subtract(z[47])) .divide( (  ( z[42] .add( z[46]) ) .subtract(z[47]))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply( ( new BigDecimal(1.0).subtract(exp((  z[40].divide(z[38] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE))) , MathContext.DECIMAL128).multiply(exp((  z[40].divide(z[39] ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 38 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 22 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 11 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y3[ (  ( 39 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(0.32).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) .divide( ( new BigDecimal(1.0).subtract(exp( ( new BigDecimal(-0.1).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(47.13)) ) , MathContext.DECIMAL128) ) ,__SCALE)))  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 40 * __DATA_NUM )  + __i ) ] =  ( z[12].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[7].multiply(x3[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[8].multiply(z[6], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 41 * __DATA_NUM )  + __i ) ] =   y3[ (  ( 7 * __DATA_NUM )  + __i ) ].divide(y3[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 42 * __DATA_NUM )  + __i ) ] =   y3[ (  ( 8 * __DATA_NUM )  + __i ) ].divide(y3[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 43 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 29 * __DATA_NUM )  + __i ) ].multiply((x3[ (  ( 6 * __DATA_NUM )  + __i ) ].pow(2.0 )), MathContext.DECIMAL128).multiply(y3[ (  ( 12 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 10 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 44 * __DATA_NUM )  + __i ) ] =   y3[ (  ( 14 * __DATA_NUM )  + __i ) ].divide( ( y3[ (  ( 14 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 31 * __DATA_NUM )  + __i ) ]) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 45 * __DATA_NUM )  + __i ) ] =  ( z[25].multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 33 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 46 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 36 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x3[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 47 * __DATA_NUM )  + __i ) ] =  ( z[30].multiply((new BigDecimal(1.0).pow(2.0 )), MathContext.DECIMAL128).multiply(   ( y3[ (  ( 35 * __DATA_NUM )  + __i ) ].multiply((z[2].pow(2.0 )), MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(   (  ( z[9].multiply(x3[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp(   ( new BigDecimal(1.0).multiply(y3[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( z[10].multiply(z[17], MathContext.DECIMAL128) ) )) .divide( ( exp(   ( new BigDecimal(1.0).multiply(y3[ (  ( 35 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ,__SCALE).subtract(new BigDecimal(1.0)))  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 48 * __DATA_NUM )  + __i ) ] =  ( z[44].multiply(  x3[ (  ( 8 * __DATA_NUM )  + __i ) ].divide( ( x3[ (  ( 8 * __DATA_NUM )  + __i ) ] .add( z[43]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 49 * __DATA_NUM )  + __i ) ] =  (  ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ] .compareTo(new BigDecimal(-40.0))<0)  ?  (  (  ( new BigDecimal(-127140.0).multiply(exp( ( new BigDecimal(0.2444).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) .subtract( ( new BigDecimal(0.00003474).multiply(exp( ( new BigDecimal(-0.04391).multiply(x3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) )) .multiply(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(37.78)) ) .divide( ( new BigDecimal(1.0).add(exp( ( new BigDecimal(0.311).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].add(new BigDecimal(79.23)) ) , MathContext.DECIMAL128) ) ,__SCALE)) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) )  : new BigDecimal(0.0) ) ;
+			y3[ (  ( 50 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y3[ (  ( 7 * __DATA_NUM )  + __i ) ])) .divide(y3[ (  ( 27 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 51 * __DATA_NUM )  + __i ) ] =  ( z[21].multiply(sqrt(   z[17].divide(new BigDecimal(5.4) ,128,BigDecimal.ROUND_HALF_UP)  ,__SCALE), MathContext.DECIMAL128) ) ;
+			y3[ (  ( 52 * __DATA_NUM )  + __i ) ] =  ( z[22].multiply(y3[ (  ( 32 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 15 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 53 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 47 * __DATA_NUM )  + __i ) ].multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[31].divide(x3[ (  ( 8 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(3.0 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 54 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 37 * __DATA_NUM )  + __i ) ].multiply( ( x3[ (  ( 10 * __DATA_NUM )  + __i ) ].subtract(x3[ (  ( 8 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 55 * __DATA_NUM )  + __i ) ] =  ( x3[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y3[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(y3[ (  ( 40 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ;
+			y3[ (  ( 56 * __DATA_NUM )  + __i ) ] =    ( new BigDecimal(1.0).subtract(y3[ (  ( 8 * __DATA_NUM )  + __i ) ])) .divide(y3[ (  ( 28 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 57 * __DATA_NUM )  + __i ) ] =   new BigDecimal(1.0).divide( (  ( new BigDecimal(1.0).add( ( new BigDecimal(0.1245).multiply(exp( ( new BigDecimal(-0.1).multiply(   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ,__SCALE), MathContext.DECIMAL128) ) ) ) .add( ( new BigDecimal(0.0365).multiply(y3[ (  ( 18 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(exp((   ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].multiply(z[2], MathContext.DECIMAL128) ) .divide( ( z[0].multiply(z[1], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) ).negate() ,__SCALE), MathContext.DECIMAL128) ) ) )  ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 58 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 46 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 53 * __DATA_NUM )  + __i ) ]) ) ;
+			y3[ (  ( 59 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 26 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 55 * __DATA_NUM )  + __i ) ]) ) ;
+			y3[ (  ( 60 * __DATA_NUM )  + __i ) ] =  ( z[27].multiply(y3[ (  ( 57 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply(  new BigDecimal(1.0).divide( ( new BigDecimal(1.0).add((  z[28].divide(x3[ (  ( 7 * __DATA_NUM )  + __i ) ] ,128,BigDecimal.ROUND_HALF_UP) .pow(1.5 ))) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128).multiply(  z[17].divide( ( z[17] .add( z[29]) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 61 * __DATA_NUM )  + __i ) ] =  ( y3[ (  ( 51 * __DATA_NUM )  + __i ) ].multiply(y3[ (  ( 44 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128).multiply( ( x3[ (  ( 0 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 13 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) ;
+			y3[ (  ( 62 * __DATA_NUM )  + __i ) ] =    ( z[4].subtract( ( y3[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 59 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 20 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 34 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 60 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 58 * __DATA_NUM )  + __i ) ]) ) )) .divide(z[3] ,128,BigDecimal.ROUND_HALF_UP) ;
+			y3[ (  ( 63 * __DATA_NUM )  + __i ) ] =    ( x3[ (  ( 11 * __DATA_NUM )  + __i ) ].subtract(x3[ (  ( 10 * __DATA_NUM )  + __i ) ])) .divide(z[41] ,128,BigDecimal.ROUND_HALF_UP) ;
+			k4[ (  ( 0 * __DATA_NUM )  + __i ) ] = y3[ (  ( 62 * __DATA_NUM )  + __i ) ];
+			k4[ (  ( 1 * __DATA_NUM )  + __i ) ] =  (  ( y3[ (  ( 39 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x3[ (  ( 1 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y3[ (  ( 2 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 1 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k4[ (  ( 2 * __DATA_NUM )  + __i ) ] =  (  ( y3[ (  ( 24 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x3[ (  ( 2 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y3[ (  ( 3 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k4[ (  ( 3 * __DATA_NUM )  + __i ) ] =  (  ( y3[ (  ( 49 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x3[ (  ( 3 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y3[ (  ( 4 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k4[ (  ( 4 * __DATA_NUM )  + __i ) ] =  (  ( y3[ (  ( 41 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x3[ (  ( 4 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y3[ (  ( 50 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 4 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k4[ (  ( 5 * __DATA_NUM )  + __i ) ] =  (  ( y3[ (  ( 42 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x3[ (  ( 5 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y3[ (  ( 56 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k4[ (  ( 6 * __DATA_NUM )  + __i ) ] =  (  ( y3[ (  ( 11 * __DATA_NUM )  + __i ) ].multiply( ( new BigDecimal(1.0).subtract(x3[ (  ( 6 * __DATA_NUM )  + __i ) ])) , MathContext.DECIMAL128) ) .subtract( ( y3[ (  ( 30 * __DATA_NUM )  + __i ) ].multiply(x3[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) )) ;
+			k4[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( ( ( y3[ (  ( 23 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 55 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 45 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 46 * __DATA_NUM )  + __i ) ]).add( ( y3[ (  ( 20 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ).add( ( y3[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(3.0), MathContext.DECIMAL128) ) ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k4[ (  ( 8 * __DATA_NUM )  + __i ) ] =  (  ( ( (  ( y3[ (  ( 25 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 16 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 34 * __DATA_NUM )  + __i ) ]) ) .subtract(y3[ (  ( 20 * __DATA_NUM )  + __i ) ])) ).negate() .multiply(  z[48].divide( ( new BigDecimal(2.0).multiply(z[49], MathContext.DECIMAL128).multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) .add( ( y3[ (  ( 54 * __DATA_NUM )  + __i ) ].multiply(  z[50].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ).add( (  ( y3[ (  ( 38 * __DATA_NUM )  + __i ) ].subtract(y3[ (  ( 48 * __DATA_NUM )  + __i ) ])) .multiply(  z[51].divide(z[49] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ) ) ;
+			k4[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( ( ( y3[ (  ( 26 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 43 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 61 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 52 * __DATA_NUM )  + __i ) ]) .add( y3[ (  ( 53 * __DATA_NUM )  + __i ) ]).add(( ( y3[ (  ( 60 * __DATA_NUM )  + __i ) ].multiply(new BigDecimal(2.0), MathContext.DECIMAL128) ) ).negate() ) ) ).negate() .multiply(  z[48].divide( ( z[49].multiply(z[2], MathContext.DECIMAL128) )  ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) ;
+			k4[ (  ( 10 * __DATA_NUM )  + __i ) ] = ( ( y3[ (  ( 54 * __DATA_NUM )  + __i ) ].subtract( ( y3[ (  ( 63 * __DATA_NUM )  + __i ) ].multiply(  z[51].divide(z[50] ,128,BigDecimal.ROUND_HALF_UP) , MathContext.DECIMAL128) ) )) ).negate() ;
+			k4[ (  ( 11 * __DATA_NUM )  + __i ) ] = ( (  ( y3[ (  ( 38 * __DATA_NUM )  + __i ) ] .add( y3[ (  ( 63 * __DATA_NUM )  + __i ) ]) ) .subtract(y3[ (  ( 48 * __DATA_NUM )  + __i ) ])) ).negate() ;
+			x4[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 0 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 0 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 0 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 1 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 1 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 1 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 1 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 1 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 2 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 2 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 2 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 2 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 2 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 3 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 3 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 3 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 3 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 3 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 4 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 4 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 4 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 4 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 4 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 4 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 5 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 5 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 5 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 5 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 5 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 6 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 6 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 6 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 6 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 6 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 7 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 7 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 7 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 7 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 7 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 8 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 8 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 8 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 8 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 8 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 9 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 9 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 9 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 9 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 9 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 10 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 10 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 10 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 10 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 10 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 10 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			x4[ (  ( 11 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 11 * __DATA_NUM )  + __i ) ].add( (   d.divide(new BigDecimal(6) ,128,BigDecimal.ROUND_HALF_UP) .multiply( ( k1[ (  ( 11 * __DATA_NUM )  + __i ) ].add( ( new BigDecimal(2).multiply(k2[ (  ( 11 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ).add( ( new BigDecimal(2).multiply(k3[ (  ( 11 * __DATA_NUM )  + __i ) ], MathContext.DECIMAL128) ) ) .add( k4[ (  ( 11 * __DATA_NUM )  + __i ) ]) ) , MathContext.DECIMAL128) ) ) ) ;
+			xo[ (  ( 0 * __DATA_NUM )  + __i ) ] = x4[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 1 * __DATA_NUM )  + __i ) ] = x4[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 2 * __DATA_NUM )  + __i ) ] = x4[ (  ( 2 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 3 * __DATA_NUM )  + __i ) ] = x4[ (  ( 3 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 4 * __DATA_NUM )  + __i ) ] = x4[ (  ( 4 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 5 * __DATA_NUM )  + __i ) ] = x4[ (  ( 5 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 6 * __DATA_NUM )  + __i ) ] = x4[ (  ( 6 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 7 * __DATA_NUM )  + __i ) ] = x4[ (  ( 7 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 8 * __DATA_NUM )  + __i ) ] = x4[ (  ( 8 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 9 * __DATA_NUM )  + __i ) ] = x4[ (  ( 9 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 10 * __DATA_NUM )  + __i ) ] = x4[ (  ( 10 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 11 * __DATA_NUM )  + __i ) ] = x4[ (  ( 11 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 0 * __DATA_NUM )  + __i ) ] = xo[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 1 * __DATA_NUM )  + __i ) ] = xo[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 2 * __DATA_NUM )  + __i ) ] = xo[ (  ( 2 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 3 * __DATA_NUM )  + __i ) ] = xo[ (  ( 3 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 4 * __DATA_NUM )  + __i ) ] = xo[ (  ( 4 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 5 * __DATA_NUM )  + __i ) ] = xo[ (  ( 5 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 6 * __DATA_NUM )  + __i ) ] = xo[ (  ( 6 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 7 * __DATA_NUM )  + __i ) ] = xo[ (  ( 7 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 8 * __DATA_NUM )  + __i ) ] = xo[ (  ( 8 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 9 * __DATA_NUM )  + __i ) ] = xo[ (  ( 9 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 10 * __DATA_NUM )  + __i ) ] = xo[ (  ( 10 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 11 * __DATA_NUM )  + __i ) ] = xo[ (  ( 11 * __DATA_NUM )  + __i ) ];
+
+		}
+
+
+	}
+
+}
+
+
+/**
+* Compute x^exponent to a given scale.  Uses the same
+* algorithm as class numbercruncher.mathutils.IntPower.
+* @param x the value x
+* @param exponent the exponent value
+* @param scale the desired scale of the result
+* @return the result value
+*/
+public static BigDecimal intPower(BigDecimal x, long exponent,int scale)
+{
+   if (exponent < 0) {
+      return BigDecimal.valueOf(1).divide(intPower(x, -exponent, scale), scale,BigDecimal.ROUND_HALF_EVEN);
+   }
+
+   BigDecimal power = BigDecimal.valueOf(1);
+   // Loop to compute value^exponent.
+   while (exponent > 0) {
+       // Is the rightmost bit a 1?
+       if ((exponent & 1) == 1) {
+           power = power.multiply(x).setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+       }
+
+       // Square x and shift exponent 1 bit to the right.
+	x = x.multiply(x).setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+       exponent >>= 1;
+
+       Thread.yield();
+   }
+
+   return power;
+}
+/**
+ * Compute the integral root of x to a given scale, x >= 0.
+ * Use Newton's algorithm.
+ * @param x the value of x
+ * @param index the integral root value
+ * @param scale the desired scale of the result
+ * @return the result value
+ */
+public static BigDecimal intRoot(BigDecimal x, long index,int scale)
+{
+   // Check that x >= 0.
+   if (x.signum() < 0) {
+       throw new IllegalArgumentException("x < 0");
+   }
+   int        sp1 = scale + 1;
+   BigDecimal n   = x;
+   BigDecimal i   = BigDecimal.valueOf(index);
+   BigDecimal im1 = BigDecimal.valueOf(index-1);
+   BigDecimal tolerance = BigDecimal.valueOf(5).movePointLeft(sp1);
+   BigDecimal xPrev;
+   // The initial approximation is x/index.
+   x = x.divide(i, scale, BigDecimal.ROUND_HALF_EVEN);
+   // Loop until the approximations converge
+   // (two successive approximations are equal after rounding).
+   do {
+       // x^(index-1)
+       BigDecimal xToIm1 = intPower(x, index-1, sp1);
+       // x^index
+       BigDecimal xToI = x.multiply(xToIm1).setScale(sp1, BigDecimal.ROUND_HALF_EVEN);
+       // n + (index-1)*(x^index)
+       BigDecimal numerator = n.add(im1.multiply(xToI)).setScale(sp1, BigDecimal.ROUND_HALF_EVEN);
+       // (index*(x^(index-1))
+       BigDecimal denominator = i.multiply(xToIm1).setScale(sp1, BigDecimal.ROUND_HALF_EVEN);
+
+       // x = (n + (index-1)*(x^index)) / (index*(x^(index-1)))
+       xPrev = x;
+       x = numerator.divide(denominator, sp1, BigDecimal.ROUND_DOWN);
+
+       Thread.yield();
+   } while (x.subtract(xPrev).abs().compareTo(tolerance) > 0);
+   return x;
+}
+
+/**
+ * Compute e^x to a given scale.
+ * Break x into its whole and fraction parts and
+ * compute (e^(1 + fraction/whole))^whole using Taylor's formula.
+ * @param x the value of x
+ * @param scale the desired scale of the result
+ * @return the result value
+ */
+public static BigDecimal exp(BigDecimal x, int scale)
+{
+   // e^0 = 1
+   if (x.signum() == 0) {
+       return BigDecimal.valueOf(1);
+   }
+   // If x is negative, return 1/(e^-x).
+   else if (x.signum() == -1) {
+       return BigDecimal.valueOf(1).divide(exp(x.negate(), scale), scale,BigDecimal.ROUND_HALF_EVEN);
+   }
+
+   // Compute the whole part of x.
+   BigDecimal xWhole = x.setScale(0, BigDecimal.ROUND_DOWN);
+
+   // If there isn't a whole part, compute and return e^x.
+   if (xWhole.signum() == 0) return expTaylor(x, scale);
+
+   // Compute the fraction part of x.
+   BigDecimal xFraction = x.subtract(xWhole);
+
+   // z = 1 + fraction/whole
+   BigDecimal z = BigDecimal.valueOf(1).add(xFraction.divide(
+                               xWhole, scale,
+                               BigDecimal.ROUND_HALF_EVEN));
+
+   // t = e^z
+   BigDecimal t = expTaylor(z, scale);
+
+   BigDecimal maxLong = BigDecimal.valueOf(Long.MAX_VALUE);
+   BigDecimal result  = BigDecimal.valueOf(1);
+
+   // Compute and return t^whole using intPower().
+   // If whole > Long.MAX_VALUE, then first compute products
+   // of e^Long.MAX_VALUE.
+   while (xWhole.compareTo(maxLong) >= 0) {
+       result = result.multiply(
+                           intPower(t, Long.MAX_VALUE, scale))
+                   .setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+       xWhole = xWhole.subtract(maxLong);
+
+       Thread.yield();
+   }
+   return result.multiply(intPower(t, xWhole.longValue(), scale))
+                   .setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+}
+
+/**
+ * Compute e^x to a given scale by the Taylor series.
+ * @param x the value of x
+ * @param scale the desired scale of the result
+ * @return the result value
+ */
+private static BigDecimal expTaylor(BigDecimal x, int scale)
+{
+   BigDecimal factorial = BigDecimal.valueOf(1);
+   BigDecimal xPower    = x;
+   BigDecimal sumPrev;
+
+   // 1 + x
+   BigDecimal sum  = x.add(BigDecimal.valueOf(1));
+
+   // Loop until the sums converge
+   // (two successive sums are equal after rounding).
+   int i = 2;
+   do {
+       // x^i
+       xPower = xPower.multiply(x)
+                   .setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+
+       // i!
+       factorial = factorial.multiply(BigDecimal.valueOf(i));
+
+       // x^i/i!
+       BigDecimal term = xPower
+                           .divide(factorial, scale,
+                                   BigDecimal.ROUND_HALF_EVEN);
+
+       // sum = sum + x^i/i!
+       sumPrev = sum;
+       sum = sum.add(term);
+
+       ++i;
+       Thread.yield();
+   } while (sum.compareTo(sumPrev) != 0);
+
+   return sum;
+}
+
+/**
+ * Compute the natural logarithm of x to a given scale, x > 0.
+ */
+public static BigDecimal ln(BigDecimal x, int scale)
+{
+   // Check that x > 0.
+   if (x.signum() <= 0) {
+       throw new IllegalArgumentException("x <= 0");
+   }
+
+   // The number of digits to the left of the decimal point.
+   int magnitude = x.toString().length() - x.scale() - 1;
+
+   if (magnitude < 3) {
+       return lnNewton(x, scale);
+   }
+
+   // Compute magnitude*ln(x^(1/magnitude)).
+   else {
+
+       // x^(1/magnitude)
+       BigDecimal root = intRoot(x, magnitude, scale);
+
+       // ln(x^(1/magnitude))
+       BigDecimal lnRoot = lnNewton(root, scale);
+
+       // magnitude*ln(x^(1/magnitude))
+       return BigDecimal.valueOf(magnitude).multiply(lnRoot)
+                   .setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+   }
+}
+
+/**
+ * Compute the natural logarithm of x to a given scale, x > 0.
+ * Use Newton's algorithm.
+ */
+private static BigDecimal lnNewton(BigDecimal x, int scale)
+{
+   int        sp1 = scale + 1;
+   BigDecimal n   = x;
+   BigDecimal term;
+
+   // Convergence tolerance = 5*(10^-(scale+1))
+   BigDecimal tolerance = BigDecimal.valueOf(5)
+                                       .movePointLeft(sp1);
+
+   // Loop until the approximations converge
+   // (two successive approximations are within the tolerance).
+   do {
+
+       // e^x
+       BigDecimal eToX = exp(x, sp1);
+
+       // (e^x - n)/e^x
+       term = eToX.subtract(n)
+                   .divide(eToX, sp1, BigDecimal.ROUND_DOWN);
+
+       // x - (e^x - n)/e^x
+       x = x.subtract(term);
+
+       Thread.yield();
+   } while (term.compareTo(tolerance) > 0);
+
+   return x.setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+}
+
+/**
+ * Compute the arctangent of x to a given scale, |x| < 1
+ * @param x the value of x
+ * @param scale the desired scale of the result
+ * @return the result value
+ */
+public static BigDecimal arctan(BigDecimal x, int scale)
+{
+   // Check that |x| < 1.
+   if (x.abs().compareTo(BigDecimal.valueOf(1)) >= 0) {
+       throw new IllegalArgumentException("|x| >= 1");
+   }
+
+   // If x is negative, return -arctan(-x).
+   if (x.signum() == -1) {
+       return arctan(x.negate(), scale).negate();
+   }
+   else {
+       return arctanTaylor(x, scale);
+   }
+}
+
+/**
+ * Compute the arctangent of x to a given scale
+ * by the Taylor series, |x| < 1 
+ * @param x the value of x
+ * @param scale the desired scale of the result
+ * @return the result value 
+ */
+private static BigDecimal arctanTaylor(BigDecimal x, int scale)
+{
+   int     sp1     = scale + 1;
+   int     i       = 3;
+   boolean addFlag = false;
+
+   BigDecimal power = x;
+   BigDecimal sum   = x;
+   BigDecimal term;
+
+   // Convergence tolerance = 5*(10^-(scale+1))
+   BigDecimal tolerance = BigDecimal.valueOf(5)
+                                       .movePointLeft(sp1);
+
+   // Loop until the approximations converge
+   // (two successive approximations are within the tolerance).
+   do {
+       // x^i
+       power = power.multiply(x).multiply(x)
+                   .setScale(sp1, BigDecimal.ROUND_HALF_EVEN);
+
+       // (x^i)/i
+       term = power.divide(BigDecimal.valueOf(i), sp1,
+                            BigDecimal.ROUND_HALF_EVEN);
+
+       // sum = sum +- (x^i)/i
+       sum = addFlag ? sum.add(term)
+                     : sum.subtract(term);
+
+       i += 2;
+       addFlag = !addFlag;
+
+       Thread.yield();
+   } while (term.compareTo(tolerance) > 0);
+
+   return sum;
+}
+
+/**
+ * Compute the square root of x to a given scale, x >= 0.
+ * Use Newton's algorithm.
+ * @param x the value of x
+ * @param scale the desired scale of the result2
+ * @return the result value
+ */
+public static BigDecimal sqrt(BigDecimal x, int scale)
+{
+   // Check that x >= 0.
+   if (x.signum() < 0) {
+       throw new IllegalArgumentException("x < 0");
+   }
+
+   // n = x*(10^(2*scale))
+   BigInteger n = x.movePointRight(scale << 1).toBigInteger();
+
+  // The first approximation is the upper half of n.
+   int bits = (n.bitLength() + 1) >> 1;
+   BigInteger ix = n.shiftRight(bits);
+   BigInteger ixPrev;
+
+   // Loop until the approximations converge
+   // (two successive approximations are equal after rounding).
+   do {
+       ixPrev = ix;
+
+       // x = (x + n/x)/2
+       ix = ix.add(n.divide(ix)).shiftRight(1);
+
+       Thread.yield();
+   } while (ix.compareTo(ixPrev) != 0);
+
+   return new BigDecimal(ix, scale);
+}
+}
+

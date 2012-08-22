@@ -1,0 +1,980 @@
+<relml>
+
+	<variable component="environment" name="time" type="timevar" />
+	<variable component="membrane" name="time" type="timevar" />
+	<variable component="internal_ion_concentrations" name="time" type="timevar" />
+	<variable component="ATP_production" name="time" type="timevar" />
+	<variable component="sodium_current" name="time" type="timevar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="time" type="timevar" />
+	<variable component="sodium_current_ultra_slow_gate" name="time" type="timevar" />
+	<variable component="L_type_Ca_channel" name="time" type="timevar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="time" type="timevar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="time" type="timevar" />
+	<variable component="L_type_Ca_channel_ultra_slow_gate" name="time" type="timevar" />
+	<variable component="T_type_Ca_channel" name="time" type="timevar" />
+	<variable component="T_type_Ca_channel_y1_gate" name="time" type="timevar" />
+	<variable component="T_type_Ca_channel_y2_gate" name="time" type="timevar" />
+	<variable component="time_independent_potassium_current" name="time" type="timevar" />
+	<variable component="time_independent_potassium_current_y_gate" name="time" type="timevar" />
+	<variable component="rapid_time_dependent_potassium_current" name="time" type="timevar" />
+	<variable component="rapid_time_dependent_potassium_current_y1_gate" name="time" type="timevar" />
+	<variable component="rapid_time_dependent_potassium_current_y2_gate" name="time" type="timevar" />
+	<variable component="rapid_time_dependent_potassium_current_y3_gate" name="time" type="timevar" />
+	<variable component="slow_time_dependent_potassium_current" name="time" type="timevar" />
+	<variable component="slow_time_dependent_potassium_current_y1_gate" name="time" type="timevar" />
+	<variable component="slow_time_dependent_potassium_current_y2_gate" name="time" type="timevar" />
+	<variable component="transient_outward_current" name="time" type="timevar" />
+	<variable component="transient_outward_current_y1_gate" name="time" type="timevar" />
+	<variable component="transient_outward_current_y2_gate" name="time" type="timevar" />
+	<variable component="background_NSC_current" name="time" type="timevar" />
+	<variable component="background_Kpl_current" name="time" type="timevar" />
+	<variable component="background_lCa_current" name="time" type="timevar" />
+	<variable component="background_KATP_current" name="time" type="timevar" />
+	<variable component="background_Cab_current" name="time" type="timevar" />
+	<variable component="sodium_calcium_exchanger" name="time" type="timevar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="time" type="timevar" />
+	<variable component="sodium_potassium_pump" name="time" type="timevar" />
+	<variable component="sodium_potassium_pump_y_gate" name="time" type="timevar" />
+	<variable component="SR_calcium_pump" name="time" type="timevar" />
+	<variable component="SR_calcium_pump_y_gate" name="time" type="timevar" />
+	<variable component="RyR_channel" name="time" type="timevar" />
+	<variable component="SR_T_current" name="time" type="timevar" />
+	<variable component="SR_L_current" name="time" type="timevar" />
+	<variable component="Ca_concentrations_in_SR" name="time" type="timevar" />
+	<variable component="NL_model" name="time" type="timevar" />
+
+	<variable component="membrane" name="Vm" type="diffvar" />
+	<variable component="internal_ion_concentrations" name="Nai" type="diffvar" />
+	<variable component="internal_ion_concentrations" name="Ki" type="diffvar" />
+	<variable component="internal_ion_concentrations" name="Ca_Total" type="diffvar" />
+	<variable component="ATP_production" name="ATPi" type="diffvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="p_RP_Na" type="diffvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="p_AP_Na" type="diffvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="p_AI_Na" type="diffvar" />
+	<variable component="sodium_current_ultra_slow_gate" name="y" type="diffvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="p_RP_CaL" type="diffvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="p_AP_CaL" type="diffvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="p_AI_CaL" type="diffvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="p_U" type="diffvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="p_UCa" type="diffvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="p_C" type="diffvar" />
+	<variable component="L_type_Ca_channel_ultra_slow_gate" name="y" type="diffvar" />
+	<variable component="T_type_Ca_channel_y1_gate" name="y1" type="diffvar" />
+	<variable component="T_type_Ca_channel_y2_gate" name="y2" type="diffvar" />
+	<variable component="time_independent_potassium_current_y_gate" name="y" type="diffvar" />
+	<variable component="rapid_time_dependent_potassium_current_y1_gate" name="y1" type="diffvar" />
+	<variable component="rapid_time_dependent_potassium_current_y2_gate" name="y2" type="diffvar" />
+	<variable component="rapid_time_dependent_potassium_current_y3_gate" name="y3" type="diffvar" />
+	<variable component="slow_time_dependent_potassium_current_y1_gate" name="y1" type="diffvar" />
+	<variable component="slow_time_dependent_potassium_current_y2_gate" name="y2" type="diffvar" />
+	<variable component="transient_outward_current_y1_gate" name="y1" type="diffvar" />
+	<variable component="transient_outward_current_y2_gate" name="y2" type="diffvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="y" type="diffvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="y" type="diffvar" />
+	<variable component="SR_calcium_pump_y_gate" name="y" type="diffvar" />
+	<variable component="RyR_channel" name="p_open_RyR" type="diffvar" />
+	<variable component="RyR_channel" name="p_close_RyR" type="diffvar" />
+	<variable component="Ca_concentrations_in_SR" name="Ca_Total" type="diffvar" />
+	<variable component="Ca_concentrations_in_SR" name="Caup" type="diffvar" />
+	<variable component="NL_model" name="pCa" type="diffvar" />
+	<variable component="NL_model" name="pCaCB" type="diffvar" />
+	<variable component="NL_model" name="pCB" type="diffvar" />
+	<variable component="NL_model" name="X" type="diffvar" />
+
+	<variable component="membrane" name="i_ext" type="arithvar" />
+	<variable component="membrane" name="i_tot" type="arithvar" />
+	<variable component="membrane" name="i_I" type="arithvar" />
+	<variable component="internal_ion_concentrations" name="b1" type="arithvar" />
+	<variable component="internal_ion_concentrations" name="c1" type="arithvar" />
+	<variable component="internal_ion_concentrations" name="Cai" type="arithvar" />
+	<variable component="internal_ion_concentrations" name="i_net_Na" type="arithvar" />
+	<variable component="internal_ion_concentrations" name="i_net_K" type="arithvar" />
+	<variable component="internal_ion_concentrations" name="i_net_Ca" type="arithvar" />
+	<variable component="constant_field_equations" name="CF_Na" type="arithvar" />
+	<variable component="constant_field_equations" name="CF_Ca" type="arithvar" />
+	<variable component="constant_field_equations" name="CF_K" type="arithvar" />
+	<variable component="sodium_current" name="i_Na" type="arithvar" />
+	<variable component="sodium_current" name="i_Na_Na" type="arithvar" />
+	<variable component="sodium_current" name="i_Na_K" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="p_RI_Na" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_RP_AP" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_AP_RP" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_AP_AI" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_AI_RI" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_RI_AI" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_RP_RI" type="arithvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_RI_RP" type="arithvar" />
+	<variable component="sodium_current_ultra_slow_gate" name="alpha_y" type="arithvar" />
+	<variable component="sodium_current_ultra_slow_gate" name="beta_y" type="arithvar" />
+	<variable component="L_type_Ca_channel" name="i_Ca_L" type="arithvar" />
+	<variable component="L_type_Ca_channel" name="i_CaL_Ca" type="arithvar" />
+	<variable component="L_type_Ca_channel" name="i_CaL_Na" type="arithvar" />
+	<variable component="L_type_Ca_channel" name="i_CaL_K" type="arithvar" />
+	<variable component="L_type_Ca_channel" name="p_open_CaL" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="p_RI_CaL" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_RP_AP" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_AP_RP" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_RI_AI" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_AI_RI" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_RP_RI" type="arithvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_RI_RP" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="iCaL" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="CaDiadic" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="Cacm" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="CaEffC" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="CaEffU" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_UUCa_Ca" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_CCCa_Ca" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="p_CCa" type="arithvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_UCa_U" type="arithvar" />
+	<variable component="L_type_Ca_channel_ultra_slow_gate" name="alpha_y" type="arithvar" />
+	<variable component="L_type_Ca_channel_ultra_slow_gate" name="beta_y" type="arithvar" />
+	<variable component="T_type_Ca_channel" name="i_Ca_T" type="arithvar" />
+	<variable component="T_type_Ca_channel_y1_gate" name="alpha_y1" type="arithvar" />
+	<variable component="T_type_Ca_channel_y1_gate" name="beta_y1" type="arithvar" />
+	<variable component="T_type_Ca_channel_y2_gate" name="alpha_y2" type="arithvar" />
+	<variable component="T_type_Ca_channel_y2_gate" name="beta_y2" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="i_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="E_K" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="g_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="fB" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="fO" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="fO2" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="fO3" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="fO4" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="mu" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="lambda" type="arithvar" />
+	<variable component="time_independent_potassium_current_y_gate" name="alpha_y" type="arithvar" />
+	<variable component="time_independent_potassium_current_y_gate" name="beta_y" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="i_Kr" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="g_Kr" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current_y1_gate" name="alpha_y1" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current_y1_gate" name="beta_y1" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current_y2_gate" name="alpha_y2" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current_y2_gate" name="beta_y2" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current_y3_gate" name="alpha_y3" type="arithvar" />
+	<variable component="rapid_time_dependent_potassium_current_y3_gate" name="beta_y3" type="arithvar" />
+	<variable component="slow_time_dependent_potassium_current" name="i_Ks" type="arithvar" />
+	<variable component="slow_time_dependent_potassium_current" name="i_Ks_K" type="arithvar" />
+	<variable component="slow_time_dependent_potassium_current" name="i_Ks_Na" type="arithvar" />
+	<variable component="slow_time_dependent_potassium_current_y1_gate" name="alpha_y1" type="arithvar" />
+	<variable component="slow_time_dependent_potassium_current_y1_gate" name="beta_y1" type="arithvar" />
+	<variable component="slow_time_dependent_potassium_current_y2_gate" name="alpha_y2" type="arithvar" />
+	<variable component="transient_outward_current" name="i_to" type="arithvar" />
+	<variable component="transient_outward_current" name="i_to_K" type="arithvar" />
+	<variable component="transient_outward_current" name="i_to_Na" type="arithvar" />
+	<variable component="transient_outward_current_y1_gate" name="alpha_y1" type="arithvar" />
+	<variable component="transient_outward_current_y1_gate" name="beta_y1" type="arithvar" />
+	<variable component="transient_outward_current_y2_gate" name="alpha_y2" type="arithvar" />
+	<variable component="transient_outward_current_y2_gate" name="beta_y2" type="arithvar" />
+	<variable component="background_NSC_current" name="i_bNSC" type="arithvar" />
+	<variable component="background_NSC_current" name="i_bNSC_K" type="arithvar" />
+	<variable component="background_NSC_current" name="i_bNSC_Na" type="arithvar" />
+	<variable component="background_Kpl_current" name="i_Kpl" type="arithvar" />
+	<variable component="background_Kpl_current" name="P_Kpl" type="arithvar" />
+	<variable component="background_lCa_current" name="i_lCa" type="arithvar" />
+	<variable component="background_lCa_current" name="i_lCa_K" type="arithvar" />
+	<variable component="background_lCa_current" name="i_lCa_Na" type="arithvar" />
+	<variable component="background_lCa_current" name="p_open" type="arithvar" />
+	<variable component="background_KATP_current" name="i_KATP" type="arithvar" />
+	<variable component="background_KATP_current" name="gamma" type="arithvar" />
+	<variable component="background_KATP_current" name="p_open" type="arithvar" />
+	<variable component="background_Cab_current" name="i_Cab" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="i_NaCa" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="p_E1Na" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="p_E2Na" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="p_E1Ca" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="p_E2Ca" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="k1" type="arithvar" />
+	<variable component="sodium_calcium_exchanger" name="k2" type="arithvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="alpha_y" type="arithvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="beta_y" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="i_NaK" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="p_E1Na" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="p_E2Na" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="p_E1K" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="p_E2K" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="k1" type="arithvar" />
+	<variable component="sodium_potassium_pump" name="Nao_Eff" type="arithvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="alpha_y" type="arithvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="beta_y" type="arithvar" />
+	<variable component="SR_calcium_pump" name="i_SR_U" type="arithvar" />
+	<variable component="SR_calcium_pump" name="p_E1Ca" type="arithvar" />
+	<variable component="SR_calcium_pump" name="p_E2Ca" type="arithvar" />
+	<variable component="SR_calcium_pump" name="p_E1" type="arithvar" />
+	<variable component="SR_calcium_pump" name="p_E2" type="arithvar" />
+	<variable component="SR_calcium_pump" name="k2" type="arithvar" />
+	<variable component="SR_calcium_pump_y_gate" name="alpha_y" type="arithvar" />
+	<variable component="SR_calcium_pump_y_gate" name="beta_y" type="arithvar" />
+	<variable component="RyR_channel" name="i_RyR" type="arithvar" />
+	<variable component="RyR_channel" name="k1" type="arithvar" />
+	<variable component="RyR_channel" name="k2" type="arithvar" />
+	<variable component="RyR_channel" name="k3" type="arithvar" />
+	<variable component="SR_T_current" name="i_SR_T" type="arithvar" />
+	<variable component="SR_L_current" name="i_SR_L" type="arithvar" />
+	<variable component="Ca_concentrations_in_SR" name="b1" type="arithvar" />
+	<variable component="Ca_concentrations_in_SR" name="c1" type="arithvar" />
+	<variable component="Ca_concentrations_in_SR" name="Carel" type="arithvar" />
+	<variable component="NL_model" name="h" type="arithvar" />
+	<variable component="NL_model" name="p" type="arithvar" />
+	<variable component="NL_model" name="Q_b" type="arithvar" />
+	<variable component="NL_model" name="EffFraction" type="arithvar" />
+	<variable component="NL_model" name="Q_a" type="arithvar" />
+	<variable component="NL_model" name="Q_r" type="arithvar" />
+	<variable component="NL_model" name="Q_d" type="arithvar" />
+	<variable component="NL_model" name="Q_d1" type="arithvar" />
+	<variable component="NL_model" name="Q_d2" type="arithvar" />
+	<variable component="NL_model" name="dCaidt" type="arithvar" />
+	<variable component="NL_model" name="dATPdt" type="arithvar" />
+	<variable component="NL_model" name="CBBound" type="arithvar" />
+	<variable component="NL_model" name="NewCBF" type="arithvar" />
+	<variable component="NL_model" name="ForceEcomp" type="arithvar" />
+	<variable component="NL_model" name="ForceCB" type="arithvar" />
+	<variable component="NL_model" name="ForceExt" type="arithvar" />
+	<variable component="NL_model" name="_X" type="arithvar" />
+
+	<variable component="membrane" name="R" type="constvar" />
+	<variable component="membrane" name="T" type="constvar" />
+	<variable component="membrane" name="F" type="constvar" />
+	<variable component="membrane" name="Cm" type="constvar" />
+	<variable component="membrane" name="i_Na" type="constvar" />
+	<variable component="membrane" name="i_Ca_L" type="constvar" />
+	<variable component="membrane" name="i_Ca_T" type="constvar" />
+	<variable component="membrane" name="i_K1" type="constvar" />
+	<variable component="membrane" name="i_Kr" type="constvar" />
+	<variable component="membrane" name="i_Ks" type="constvar" />
+	<variable component="membrane" name="i_to" type="constvar" />
+	<variable component="membrane" name="i_NaK" type="constvar" />
+	<variable component="membrane" name="i_NaCa" type="constvar" />
+	<variable component="membrane" name="i_bNSC" type="constvar" />
+	<variable component="membrane" name="i_Cab" type="constvar" />
+	<variable component="membrane" name="i_Kpl" type="constvar" />
+	<variable component="membrane" name="i_lCa" type="constvar" />
+	<variable component="membrane" name="i_KATP" type="constvar" />
+	<variable component="membrane" name="stim_start" type="constvar" />
+	<variable component="membrane" name="stim_end" type="constvar" />
+	<variable component="membrane" name="stim_period" type="constvar" />
+	<variable component="membrane" name="stim_duration" type="constvar" />
+	<variable component="membrane" name="stim_amplitude" type="constvar" />
+	<variable component="external_ion_concentrations" name="Nao" type="constvar" />
+	<variable component="external_ion_concentrations" name="Cao" type="constvar" />
+	<variable component="external_ion_concentrations" name="Ko" type="constvar" />
+	<variable component="internal_ion_concentrations" name="Vi" type="constvar" />
+	<variable component="internal_ion_concentrations" name="F" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Na_Na" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_CaL_Na" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_bNSC_Na" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_lCa_Na" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_NaK" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_K1" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Kr" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_to_K" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_to_Na" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Ks_K" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Ks_Na" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_KATP" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Na_K" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_CaL_K" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_bNSC_K" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_lCa_K" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Kpl" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_CaL_Ca" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Ca_T" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_NaCa" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_bNSC" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_Cab" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_ext" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_RyR" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_SR_U" type="constvar" />
+	<variable component="internal_ion_concentrations" name="i_SR_L" type="constvar" />
+	<variable component="internal_ion_concentrations" name="dCaidt_NL" type="constvar" />
+	<variable component="internal_ion_concentrations" name="CMDN_max" type="constvar" />
+	<variable component="internal_ion_concentrations" name="K_mCMDN" type="constvar" />
+	<variable component="constant_field_equations" name="Nai" type="constvar" />
+	<variable component="constant_field_equations" name="Nao" type="constvar" />
+	<variable component="constant_field_equations" name="Cai" type="constvar" />
+	<variable component="constant_field_equations" name="Cao" type="constvar" />
+	<variable component="constant_field_equations" name="Ki" type="constvar" />
+	<variable component="constant_field_equations" name="Ko" type="constvar" />
+	<variable component="constant_field_equations" name="R" type="constvar" />
+	<variable component="constant_field_equations" name="T" type="constvar" />
+	<variable component="constant_field_equations" name="F" type="constvar" />
+	<variable component="constant_field_equations" name="Vm" type="constvar" />
+	<variable component="ATP_production" name="Vm" type="constvar" />
+	<variable component="ATP_production" name="dATPdt_NL" type="constvar" />
+	<variable component="ATP_production" name="F" type="constvar" />
+	<variable component="ATP_production" name="Vi" type="constvar" />
+	<variable component="ATP_production" name="i_NaK" type="constvar" />
+	<variable component="ATP_production" name="i_SR_U" type="constvar" />
+	<variable component="ATP_production" name="ProducingRate_Max" type="constvar" />
+	<variable component="ATP_production" name="Adenosine_Total" type="constvar" />
+	<variable component="sodium_current" name="P_Na" type="constvar" />
+	<variable component="sodium_current" name="Vm" type="constvar" />
+	<variable component="sodium_current" name="CF_Na" type="constvar" />
+	<variable component="sodium_current" name="CF_K" type="constvar" />
+	<variable component="sodium_current" name="p_AP_Na" type="constvar" />
+	<variable component="sodium_current" name="y" type="constvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="k_AI_AP" type="constvar" />
+	<variable component="sodium_current_voltage_dependent_gate" name="Vm" type="constvar" />
+	<variable component="sodium_current_ultra_slow_gate" name="Vm" type="constvar" />
+	<variable component="L_type_Ca_channel" name="CaDiadic" type="constvar" />
+	<variable component="L_type_Ca_channel" name="P_CaL" type="constvar" />
+	<variable component="L_type_Ca_channel" name="Vm" type="constvar" />
+	<variable component="L_type_Ca_channel" name="CF_Na" type="constvar" />
+	<variable component="L_type_Ca_channel" name="CF_Ca" type="constvar" />
+	<variable component="L_type_Ca_channel" name="Cai" type="constvar" />
+	<variable component="L_type_Ca_channel" name="CF_K" type="constvar" />
+	<variable component="L_type_Ca_channel" name="ATPi" type="constvar" />
+	<variable component="L_type_Ca_channel" name="p_AP_CaL" type="constvar" />
+	<variable component="L_type_Ca_channel" name="p_U" type="constvar" />
+	<variable component="L_type_Ca_channel" name="p_UCa" type="constvar" />
+	<variable component="L_type_Ca_channel" name="y" type="constvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_AP_AI" type="constvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="k_AI_AP" type="constvar" />
+	<variable component="L_type_Ca_channel_voltage_dependent_gate" name="Vm" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_CCa_UCa" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_UCa_CCa" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_C_U" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_U_C" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_U_UCa" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_CCa_C" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="k_C_CCa" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="Vm" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="Cai" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="CF_Ca" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="p_AP_CaL" type="constvar" />
+	<variable component="L_type_Ca_channel_Ca_dependent_gate" name="p_open_CaL" type="constvar" />
+	<variable component="L_type_Ca_channel_ultra_slow_gate" name="Vm" type="constvar" />
+	<variable component="T_type_Ca_channel" name="P_CaT" type="constvar" />
+	<variable component="T_type_Ca_channel" name="Vm" type="constvar" />
+	<variable component="T_type_Ca_channel" name="CF_Ca" type="constvar" />
+	<variable component="T_type_Ca_channel" name="y1" type="constvar" />
+	<variable component="T_type_Ca_channel" name="y2" type="constvar" />
+	<variable component="T_type_Ca_channel_y1_gate" name="Vm" type="constvar" />
+	<variable component="T_type_Ca_channel_y2_gate" name="Vm" type="constvar" />
+	<variable component="time_independent_potassium_current" name="P_K1_0" type="constvar" />
+	<variable component="time_independent_potassium_current" name="Vm" type="constvar" />
+	<variable component="time_independent_potassium_current" name="Cm" type="constvar" />
+	<variable component="time_independent_potassium_current" name="Ko" type="constvar" />
+	<variable component="time_independent_potassium_current" name="Ki" type="constvar" />
+	<variable component="time_independent_potassium_current" name="R" type="constvar" />
+	<variable component="time_independent_potassium_current" name="T" type="constvar" />
+	<variable component="time_independent_potassium_current" name="F" type="constvar" />
+	<variable component="time_independent_potassium_current" name="y" type="constvar" />
+	<variable component="time_independent_potassium_current_y_gate" name="fO" type="constvar" />
+	<variable component="time_independent_potassium_current_y_gate" name="Vm" type="constvar" />
+	<variable component="time_independent_potassium_current_y_gate" name="E_K" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="P_Kr" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="Vm" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="Cm" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="E_K" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="Ko" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="y1" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="y2" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current" name="y3" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current_y1_gate" name="Vm" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current_y1_gate" name="E_K" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current_y2_gate" name="Vm" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current_y2_gate" name="E_K" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current_y3_gate" name="Vm" type="constvar" />
+	<variable component="rapid_time_dependent_potassium_current_y3_gate" name="E_K" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="Vm" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="Cai" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="CF_K" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="CF_Na" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="y1" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="y2" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="P_Ks_K" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current" name="P_Ks_Na" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current_y1_gate" name="Vm" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current_y2_gate" name="beta_y2" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current_y2_gate" name="Cai" type="constvar" />
+	<variable component="slow_time_dependent_potassium_current_y2_gate" name="Vm" type="constvar" />
+	<variable component="transient_outward_current" name="Vm" type="constvar" />
+	<variable component="transient_outward_current" name="CF_K" type="constvar" />
+	<variable component="transient_outward_current" name="CF_Na" type="constvar" />
+	<variable component="transient_outward_current" name="y1" type="constvar" />
+	<variable component="transient_outward_current" name="y2" type="constvar" />
+	<variable component="transient_outward_current" name="P_to_K" type="constvar" />
+	<variable component="transient_outward_current" name="P_to_Na" type="constvar" />
+	<variable component="transient_outward_current_y1_gate" name="Vm" type="constvar" />
+	<variable component="transient_outward_current_y2_gate" name="Vm" type="constvar" />
+	<variable component="background_NSC_current" name="P_bNSC" type="constvar" />
+	<variable component="background_NSC_current" name="CF_K" type="constvar" />
+	<variable component="background_NSC_current" name="CF_Na" type="constvar" />
+	<variable component="background_Kpl_current" name="Vm" type="constvar" />
+	<variable component="background_Kpl_current" name="CF_K" type="constvar" />
+	<variable component="background_Kpl_current" name="Ko" type="constvar" />
+	<variable component="background_lCa_current" name="P_lCa" type="constvar" />
+	<variable component="background_lCa_current" name="CF_K" type="constvar" />
+	<variable component="background_lCa_current" name="CF_Na" type="constvar" />
+	<variable component="background_lCa_current" name="Cai" type="constvar" />
+	<variable component="background_KATP_current" name="Vm" type="constvar" />
+	<variable component="background_KATP_current" name="E_K" type="constvar" />
+	<variable component="background_KATP_current" name="Ko" type="constvar" />
+	<variable component="background_KATP_current" name="ATPi" type="constvar" />
+	<variable component="background_KATP_current" name="P_KATP" type="constvar" />
+	<variable component="background_KATP_current" name="N" type="constvar" />
+	<variable component="background_Cab_current" name="P_Cab" type="constvar" />
+	<variable component="background_Cab_current" name="CF_Ca" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="k3" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="k4" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Km_Nai" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Km_Nao" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Km_Cai" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Km_Cao" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Nai" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Nao" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Cai" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Cao" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="R" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="F" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="T" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Vm" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Cm" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="y" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="P_NaCa" type="constvar" />
+	<variable component="sodium_calcium_exchanger" name="Partition" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="p_E1Na" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="p_E2Na" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="p_E1Ca" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="p_E2Ca" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="k1" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="k2" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="k3" type="constvar" />
+	<variable component="sodium_calcium_exchanger_y_gate" name="k4" type="constvar" />
+	<variable component="sodium_potassium_pump" name="k2" type="constvar" />
+	<variable component="sodium_potassium_pump" name="k3" type="constvar" />
+	<variable component="sodium_potassium_pump" name="k4" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Km_Nai" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Km_Nao" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Km_Ki" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Km_Ko" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Km_ATP" type="constvar" />
+	<variable component="sodium_potassium_pump" name="ATPi" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Nai" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Nao" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Ki" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Ko" type="constvar" />
+	<variable component="sodium_potassium_pump" name="R" type="constvar" />
+	<variable component="sodium_potassium_pump" name="F" type="constvar" />
+	<variable component="sodium_potassium_pump" name="T" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Vm" type="constvar" />
+	<variable component="sodium_potassium_pump" name="Cm" type="constvar" />
+	<variable component="sodium_potassium_pump" name="y" type="constvar" />
+	<variable component="sodium_potassium_pump" name="P_NaK" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="p_E1Na" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="p_E2Na" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="p_E1K" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="p_E2K" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="k1" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="k2" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="k3" type="constvar" />
+	<variable component="sodium_potassium_pump_y_gate" name="k4" type="constvar" />
+	<variable component="SR_calcium_pump" name="k1" type="constvar" />
+	<variable component="SR_calcium_pump" name="k3" type="constvar" />
+	<variable component="SR_calcium_pump" name="k4" type="constvar" />
+	<variable component="SR_calcium_pump" name="Km_CaSR" type="constvar" />
+	<variable component="SR_calcium_pump" name="Km_CaCyto" type="constvar" />
+	<variable component="SR_calcium_pump" name="Km_ATP" type="constvar" />
+	<variable component="SR_calcium_pump" name="i_max" type="constvar" />
+	<variable component="SR_calcium_pump" name="ATPi" type="constvar" />
+	<variable component="SR_calcium_pump" name="Cai" type="constvar" />
+	<variable component="SR_calcium_pump" name="Caup" type="constvar" />
+	<variable component="SR_calcium_pump" name="y" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="p_E1Ca" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="p_E2Ca" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="p_E1" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="p_E2" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="k1" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="k2" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="k3" type="constvar" />
+	<variable component="SR_calcium_pump_y_gate" name="k4" type="constvar" />
+	<variable component="RyR_channel" name="P_RyR" type="constvar" />
+	<variable component="RyR_channel" name="k4" type="constvar" />
+	<variable component="RyR_channel" name="p_open_CaL" type="constvar" />
+	<variable component="RyR_channel" name="Cai" type="constvar" />
+	<variable component="RyR_channel" name="Carel" type="constvar" />
+	<variable component="RyR_channel" name="Diadid_Factor" type="constvar" />
+	<variable component="RyR_channel" name="CaDiadic" type="constvar" />
+	<variable component="SR_T_current" name="P_SR_T" type="constvar" />
+	<variable component="SR_T_current" name="Carel" type="constvar" />
+	<variable component="SR_T_current" name="Caup" type="constvar" />
+	<variable component="SR_L_current" name="P_SR_L" type="constvar" />
+	<variable component="SR_L_current" name="Cai" type="constvar" />
+	<variable component="SR_L_current" name="Caup" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="V_rel" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="V_up" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="F" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="i_SR_L" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="i_SR_T" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="i_RyR" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="i_SR_U" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="CSQN_max" type="constvar" />
+	<variable component="Ca_concentrations_in_SR" name="K_mCSQN" type="constvar" />
+	<variable component="NL_model" name="T_t" type="constvar" />
+	<variable component="NL_model" name="Y_1" type="constvar" />
+	<variable component="NL_model" name="Y_2" type="constvar" />
+	<variable component="NL_model" name="Y_3" type="constvar" />
+	<variable component="NL_model" name="Y_4" type="constvar" />
+	<variable component="NL_model" name="Y_d" type="constvar" />
+	<variable component="NL_model" name="Z_1" type="constvar" />
+	<variable component="NL_model" name="Z_2" type="constvar" />
+	<variable component="NL_model" name="Z_3" type="constvar" />
+	<variable component="NL_model" name="L_a" type="constvar" />
+	<variable component="NL_model" name="L" type="constvar" />
+	<variable component="NL_model" name="Cai" type="constvar" />
+	<variable component="NL_model" name="KForceEC" type="constvar" />
+	<variable component="NL_model" name="ZeroForceEL" type="constvar" />
+	<variable component="NL_model" name="KForceLinearEc" type="constvar" />
+	<variable component="NL_model" name="ForceFactor" type="constvar" />
+	<variable component="NL_model" name="B" type="constvar" />
+	<variable component="NL_model" name="h_c" type="constvar" />
+
+	<diffequ>
+		<component name="membrane">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Vm</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="internal_ion_concentrations">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Nai</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="internal_ion_concentrations">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Ki</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="internal_ion_concentrations">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Ca_Total</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="ATP_production">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>ATPi</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="sodium_current_voltage_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_RP_Na</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="sodium_current_voltage_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_AP_Na</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="sodium_current_voltage_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_AI_Na</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="sodium_current_ultra_slow_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_voltage_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_RP_CaL</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_voltage_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_AP_CaL</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_voltage_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_AI_CaL</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_Ca_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_U</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_Ca_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_UCa</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_Ca_dependent_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_C</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="L_type_Ca_channel_ultra_slow_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="T_type_Ca_channel_y1_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="T_type_Ca_channel_y2_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="time_independent_potassium_current_y_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="rapid_time_dependent_potassium_current_y1_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="rapid_time_dependent_potassium_current_y2_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="rapid_time_dependent_potassium_current_y3_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y3</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="slow_time_dependent_potassium_current_y1_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="slow_time_dependent_potassium_current_y2_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="transient_outward_current_y1_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y1</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="transient_outward_current_y2_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y2</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="sodium_calcium_exchanger_y_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="sodium_potassium_pump_y_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="SR_calcium_pump_y_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="RyR_channel">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_open_RyR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="RyR_channel">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>p_close_RyR</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="Ca_concentrations_in_SR">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Ca_Total</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="Ca_concentrations_in_SR">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Caup</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="NL_model">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>pCa</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="NL_model">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>pCaCB</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="NL_model">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>pCB</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="NL_model">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>X</ci>
+				</apply>
+			</math>
+		</component>
+
+	</diffequ>
+</relation>

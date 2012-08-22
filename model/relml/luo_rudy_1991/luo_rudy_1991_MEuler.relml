@@ -1,0 +1,226 @@
+<relml>
+	<tecml filename="model/tecml/ModifiedEuler.tecml"/>
+	<cellml filename="model/luo_rudy_1991/luo_rudy_1991.cellml"/>
+
+	<variable component="environment" name="time" type="timevar" />
+	<variable component="membrane" name="time" type="timevar" />
+	<variable component="fast_sodium_current" name="time" type="timevar" />
+	<variable component="fast_sodium_current_m_gate" name="time" type="timevar" />
+	<variable component="fast_sodium_current_h_gate" name="time" type="timevar" />
+	<variable component="fast_sodium_current_j_gate" name="time" type="timevar" />
+	<variable component="slow_inward_current" name="time" type="timevar" />
+	<variable component="slow_inward_current_d_gate" name="time" type="timevar" />
+	<variable component="slow_inward_current_f_gate" name="time" type="timevar" />
+	<variable component="time_dependent_potassium_current" name="time" type="timevar" />
+	<variable component="time_dependent_potassium_current_X_gate" name="time" type="timevar" />
+	<variable component="time_dependent_potassium_current_Xi_gate" name="time" type="timevar" />
+	<variable component="intracellular_calcium_concentration" name="time" type="timevar" />
+
+	<variable component="membrane" name="V" type="diffvar" />
+	<variable component="fast_sodium_current_m_gate" name="m" type="diffvar" />
+	<variable component="fast_sodium_current_h_gate" name="h" type="diffvar" />
+	<variable component="fast_sodium_current_j_gate" name="j" type="diffvar" />
+	<variable component="slow_inward_current_d_gate" name="d" type="diffvar" />
+	<variable component="slow_inward_current_f_gate" name="f" type="diffvar" />
+	<variable component="time_dependent_potassium_current_X_gate" name="X" type="diffvar" />
+	<variable component="intracellular_calcium_concentration" name="Cai" type="diffvar" />
+
+	<variable component="membrane" name="I_stim" type="arithvar" />
+	<variable component="fast_sodium_current" name="E_Na" type="arithvar" />
+	<variable component="fast_sodium_current" name="i_Na" type="arithvar" />
+	<variable component="fast_sodium_current_m_gate" name="alpha_m" type="arithvar" />
+	<variable component="fast_sodium_current_m_gate" name="beta_m" type="arithvar" />
+	<variable component="fast_sodium_current_h_gate" name="alpha_h" type="arithvar" />
+	<variable component="fast_sodium_current_h_gate" name="beta_h" type="arithvar" />
+	<variable component="fast_sodium_current_j_gate" name="alpha_j" type="arithvar" />
+	<variable component="fast_sodium_current_j_gate" name="beta_j" type="arithvar" />
+	<variable component="slow_inward_current" name="E_si" type="arithvar" />
+	<variable component="slow_inward_current" name="i_si" type="arithvar" />
+	<variable component="slow_inward_current_d_gate" name="alpha_d" type="arithvar" />
+	<variable component="slow_inward_current_d_gate" name="beta_d" type="arithvar" />
+	<variable component="slow_inward_current_f_gate" name="alpha_f" type="arithvar" />
+	<variable component="slow_inward_current_f_gate" name="beta_f" type="arithvar" />
+	<variable component="time_dependent_potassium_current" name="g_K" type="arithvar" />
+	<variable component="time_dependent_potassium_current" name="E_K" type="arithvar" />
+	<variable component="time_dependent_potassium_current" name="i_K" type="arithvar" />
+	<variable component="time_dependent_potassium_current_X_gate" name="alpha_X" type="arithvar" />
+	<variable component="time_dependent_potassium_current_X_gate" name="beta_X" type="arithvar" />
+	<variable component="time_dependent_potassium_current_Xi_gate" name="Xi" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="g_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="E_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current" name="i_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current_K1_gate" name="alpha_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current_K1_gate" name="beta_K1" type="arithvar" />
+	<variable component="time_independent_potassium_current_K1_gate" name="K1_infinity" type="arithvar" />
+	<variable component="plateau_potassium_current" name="E_Kp" type="arithvar" />
+	<variable component="plateau_potassium_current" name="Kp" type="arithvar" />
+	<variable component="plateau_potassium_current" name="i_Kp" type="arithvar" />
+	<variable component="background_current" name="i_b" type="arithvar" />
+
+	<variable component="membrane" name="R" type="constvar" />
+	<variable component="membrane" name="T" type="constvar" />
+	<variable component="membrane" name="F" type="constvar" />
+	<variable component="membrane" name="C" type="constvar" />
+	<variable component="membrane" name="i_Na" type="constvar" />
+	<variable component="membrane" name="i_si" type="constvar" />
+	<variable component="membrane" name="i_K" type="constvar" />
+	<variable component="membrane" name="i_K1" type="constvar" />
+	<variable component="membrane" name="i_Kp" type="constvar" />
+	<variable component="membrane" name="i_b" type="constvar" />
+	<variable component="membrane" name="stim_start" type="constvar" />
+	<variable component="membrane" name="stim_end" type="constvar" />
+	<variable component="membrane" name="stim_period" type="constvar" />
+	<variable component="membrane" name="stim_duration" type="constvar" />
+	<variable component="membrane" name="stim_amplitude" type="constvar" />
+	<variable component="fast_sodium_current" name="g_Na" type="constvar" />
+	<variable component="fast_sodium_current" name="R" type="constvar" />
+	<variable component="fast_sodium_current" name="T" type="constvar" />
+	<variable component="fast_sodium_current" name="F" type="constvar" />
+	<variable component="fast_sodium_current" name="Nao" type="constvar" />
+	<variable component="fast_sodium_current" name="Nai" type="constvar" />
+	<variable component="fast_sodium_current" name="V" type="constvar" />
+	<variable component="fast_sodium_current" name="m" type="constvar" />
+	<variable component="fast_sodium_current" name="h" type="constvar" />
+	<variable component="fast_sodium_current" name="j" type="constvar" />
+	<variable component="fast_sodium_current_m_gate" name="V" type="constvar" />
+	<variable component="fast_sodium_current_h_gate" name="V" type="constvar" />
+	<variable component="fast_sodium_current_j_gate" name="V" type="constvar" />
+	<variable component="slow_inward_current" name="V" type="constvar" />
+	<variable component="slow_inward_current" name="Cai" type="constvar" />
+	<variable component="slow_inward_current" name="d" type="constvar" />
+	<variable component="slow_inward_current" name="f" type="constvar" />
+	<variable component="slow_inward_current_d_gate" name="V" type="constvar" />
+	<variable component="slow_inward_current_f_gate" name="V" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="PR_NaK" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="V" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="R" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="T" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="F" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="Ko" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="Ki" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="Nao" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="Nai" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="X" type="constvar" />
+	<variable component="time_dependent_potassium_current" name="Xi" type="constvar" />
+	<variable component="time_dependent_potassium_current_X_gate" name="V" type="constvar" />
+	<variable component="time_dependent_potassium_current_Xi_gate" name="V" type="constvar" />
+	<variable component="time_independent_potassium_current" name="V" type="constvar" />
+	<variable component="time_independent_potassium_current" name="Ko" type="constvar" />
+	<variable component="time_independent_potassium_current" name="Ki" type="constvar" />
+	<variable component="time_independent_potassium_current" name="R" type="constvar" />
+	<variable component="time_independent_potassium_current" name="T" type="constvar" />
+	<variable component="time_independent_potassium_current" name="F" type="constvar" />
+	<variable component="time_independent_potassium_current" name="K1_infinity" type="constvar" />
+	<variable component="time_independent_potassium_current_K1_gate" name="V" type="constvar" />
+	<variable component="time_independent_potassium_current_K1_gate" name="E_K1" type="constvar" />
+	<variable component="plateau_potassium_current" name="g_Kp" type="constvar" />
+	<variable component="plateau_potassium_current" name="V" type="constvar" />
+	<variable component="plateau_potassium_current" name="E_K1" type="constvar" />
+	<variable component="background_current" name="E_b" type="constvar" />
+	<variable component="background_current" name="g_b" type="constvar" />
+	<variable component="background_current" name="V" type="constvar" />
+	<variable component="ionic_concentrations" name="Nao" type="constvar" />
+	<variable component="ionic_concentrations" name="Nai" type="constvar" />
+	<variable component="ionic_concentrations" name="Ki" type="constvar" />
+	<variable component="ionic_concentrations" name="Ko" type="constvar" />
+	<variable component="intracellular_calcium_concentration" name="i_si" type="constvar" />
+
+	<diffequ>
+		<component name="membrane">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>V</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="fast_sodium_current_m_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>m</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="fast_sodium_current_h_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>h</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="fast_sodium_current_j_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>j</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="slow_inward_current_d_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>d</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="slow_inward_current_f_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>f</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="time_dependent_potassium_current_X_gate">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>X</ci>
+				</apply>
+			</math>
+		</component>
+
+		<component name="intracellular_calcium_concentration">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>Cai</ci>
+				</apply>
+			</math>
+		</component>
+
+	</diffequ>
+</relml>

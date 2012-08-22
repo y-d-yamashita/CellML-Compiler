@@ -1,0 +1,92 @@
+<recml>
+<!-- double loop -->
+<!-- loop1="inner"のなかにloop2 がある -->
+	<loopstruct num="0">
+		<position name="inner">
+		</position>
+	</loopstruct>
+
+	<loopindex num="0" name="n1" />
+	
+	<variable name="loop1" type="recurvar" loopcomponent1="1" />
+	<variable name="loop1_init" type="constvar" loopcomponent1="1" />
+	<variable name="kloop1" type="arithvar" loopcomponent1="1" />
+	<variable name="loop1_inner" type="constvar" loopcomponent1="1" />
+	<variable name="loop1end" type="output" loopcomponent1="1" />
+	
+	<variable name="loop2" type="recurvar" loopcomponent1="1" loopcomponent2="2"/>
+	<variable name="loop2_init" type="constvar" loopcomponent1="1" loopcomponent2="2"/>
+	<variable name="kloop2" type="arithvar" loopcomponent1="1" loopcomponent2="2"/>
+	<variable name="loop2_inner" type="constvar" loopcomponent1="1" loopcomponent2="2"/>
+	<variable name="loop2end" type="output" loopcomponent1="1" loopcomponent2="2"/>
+	
+	<math>
+		<apply loop1 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop1</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>loop1_init</ci>
+		</apply>
+
+		<apply loop1 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kloop1</ci>
+				<ci>n1</ci>
+			</apply>
+			<ci>loop1_inner</ci>
+		</apply>
+		
+		<apply loop1 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>loop1</ci>
+					<ci>n1</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kloop1</ci>
+						<ci>n1</ci>
+					</apply>
+					<cn>0.05</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<condition loop1 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>n1</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+		
+		<apply loop1 = "final">
+			<eq/>
+			<ci>loop1end</ci>
+			<apply>
+				<selector/>
+				<ci>loop1</ci>
+				<ci>n1</ci>
+			</apply>
+		</apply>
+	</math>
+</recml>

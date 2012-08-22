@@ -1,0 +1,51 @@
+import java.lang.Math;
+
+
+public final class JavaProgramGenerator{
+public static void main ( String args[] ) {
+
+	int __i;
+	double xi[];
+	double xo[];
+	double x1[];
+	double x2[];
+	double k1[];
+	double y1[];
+	double z[];
+	double t;
+	double d = 0.010000;
+	int __DATA_NUM = 32;
+
+	xi = new double[ ( 2 * __DATA_NUM ) ];
+	xo = new double[ ( 2 * __DATA_NUM ) ];
+	x1 = new double[ ( 2 * __DATA_NUM ) ];
+	x2 = new double[ ( 2 * __DATA_NUM ) ];
+	y1 = new double[ ( 1 * __DATA_NUM ) ];
+	k1 = new double[ ( 2 * __DATA_NUM ) ];
+	z = new double[4];
+	for(t = 0.000000; ( t <= 400.000000 ) ;t =  ( t + d ) ){
+
+		for(__i = 0; ( __i < __DATA_NUM ) ;__i++){
+
+			x1[ (  ( 0 * __DATA_NUM )  + __i ) ] = xi[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			x1[ (  ( 1 * __DATA_NUM )  + __i ) ] = xi[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			y1[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] * x1[ (  ( 0 * __DATA_NUM )  + __i ) ] * x1[ (  ( 0 * __DATA_NUM )  + __i ) ] ) ;
+			k1[ (  ( 0 * __DATA_NUM )  + __i ) ] =  (  (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] -  ( y1[ (  ( 0 * __DATA_NUM )  + __i ) ] / (double)3 )  )  - x1[ (  ( 1 * __DATA_NUM )  + __i ) ] )  + z[0] ) ;
+			k1[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( z[1] *  (  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] + z[2] )  -  ( z[3] * x1[ (  ( 1 * __DATA_NUM )  + __i ) ] )  )  ) ;
+			x2[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 0 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 0 * __DATA_NUM )  + __i ) ] * d )  ) ;
+			x2[ (  ( 1 * __DATA_NUM )  + __i ) ] =  ( x1[ (  ( 1 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 1 * __DATA_NUM )  + __i ) ] * d )  ) ;
+			xo[ (  ( 0 * __DATA_NUM )  + __i ) ] = x2[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			xo[ (  ( 1 * __DATA_NUM )  + __i ) ] = x2[ (  ( 1 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 0 * __DATA_NUM )  + __i ) ] = xo[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 1 * __DATA_NUM )  + __i ) ] = xo[ (  ( 1 * __DATA_NUM )  + __i ) ];
+
+		}
+
+
+	}
+
+}
+
+
+}
+

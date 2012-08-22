@@ -1,0 +1,39 @@
+<relml>
+	<tecml filename="model/tecml/Euler.tecml"/>
+	<cellml filename="model/sample/sample.cellml"/>
+
+	<variable component="membrane" name="time" type="timevar" />
+	
+	<variable component="membrane" name="V" type="diffvar" />
+	
+	<variable component="membrane" name="I_stim" type="arithvar" />
+	
+	<variable component="membrane" name="R" type="constvar" />
+	<variable component="membrane" name="T" type="constvar" />
+	<variable component="membrane" name="F" type="constvar" />
+	<variable component="membrane" name="C" type="constvar" />
+	<variable component="membrane" name="i_Na" type="constvar" />
+	<variable component="membrane" name="i_si" type="constvar" />
+	<variable component="membrane" name="i_K" type="constvar" />
+	<variable component="membrane" name="i_K1" type="constvar" />
+	<variable component="membrane" name="i_Kp" type="constvar" />
+	<variable component="membrane" name="i_b" type="constvar" />
+	<variable component="membrane" name="stim_start" type="constvar" />
+  <variable component="membrane" name="stim_amplitude" type="constvar" />
+
+
+  <diffequ>
+    <component name="membrane">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>V</ci>
+        </apply>
+      </math>
+    </component>
+
+  </diffequ>
+  </relml>

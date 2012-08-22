@@ -1,0 +1,198 @@
+<recml>
+<!-- double loop -->
+<!-- loop1="inner"のなかにloop2 がある -->
+
+	<loopindex num="0" name="n1" />
+	<loopindex num="1" name="n2" />
+	
+	<variable name="y" type="recurvar" />
+	<variable name="x" type="arithvar" />
+	<variable name="ky" type="arithvar" />
+	<variable name="yend" type="output" />
+	
+	<variable name="xr" type="recurvar" />
+	<variable name="kxr" type="arithvar" />
+	
+	<math>
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>xr</ci>
+				<ci>n1</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>xrinit</ci>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kxr</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<minus/>
+					<apply>
+						<selector/>
+						<ci>xr</ci>
+						<ci>n1</ci>
+						<ci>n2</ci>
+					</apply>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>y</ci>
+					<ci>n1</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>xr</ci>
+				<ci>n1</ci>
+				<apply>
+					<plus/>
+					<ci>n2</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>xr</ci>
+					<ci>n1</ci>
+					<ci>n2</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kxr</ci>
+						<ci>n1</ci>
+						<ci>n2</ci>
+					</apply>
+					<ci>d</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<condition>
+			<apply>
+				<eq/>
+				<ci>n2</ci>
+				<cn>100</cn>
+			</apply>
+		</condition>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>x</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>xr</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>y</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>yinit</ci>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>ky</ci>
+				<ci>n1</ci>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<minus/>
+					<apply>
+						<selector/>
+						<ci>y</ci>
+						<ci>n1</ci>
+					</apply>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>x</ci>
+					<ci>n1</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>y</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>y</ci>
+					<ci>n1</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>ky</ci>
+						<ci>n1</ci>
+					</apply>
+					<ci>d</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<condition>
+			<apply>
+				<eq/>
+				<ci>n1</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+
+		<apply>
+			<eq/>
+			<ci>yend</ci>
+			<apply>
+				<selector/>
+				<ci>y</ci>
+				<ci>n1</ci>
+			</apply>
+		</apply>
+	</math>
+</recml>

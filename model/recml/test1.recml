@@ -1,0 +1,23 @@
+<recml>
+  <math>
+    <apply loop1 = "init">
+      <eq/>
+      <ci>x</ci>
+      <ci>y</ci>
+    </apply>
+    <apply>
+      <selector/>
+      <ci>x</ci>
+      <ci>tn</ci>
+      <cn>3</cn>
+    </apply>
+    <condition>
+		<apply>
+			<eq/>
+			<ci>tn</ci>
+			<cn>1000</cn>
+		</apply>
+	</condition>
+  </math>
+</recml>
+  

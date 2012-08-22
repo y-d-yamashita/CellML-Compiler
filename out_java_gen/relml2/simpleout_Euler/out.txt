@@ -1,0 +1,45 @@
+import java.lang.Math;
+
+
+public final class JavaProgramGenerator{
+public static void main ( String args[] ) {
+
+	int __i;
+	double xi[];
+	double xo[];
+	double x0[];
+	double x1[];
+	double k1[];
+	double y0[];
+	double z[];
+	double t;
+	double d = 0.010000;
+	int __DATA_NUM = 32;
+
+	xi = new double[ ( 1 * __DATA_NUM ) ];
+	xo = new double[ ( 1 * __DATA_NUM ) ];
+	x0 = new double[ ( 1 * __DATA_NUM ) ];
+	x1 = new double[ ( 1 * __DATA_NUM ) ];
+	y0 = new double[ ( 0 * __DATA_NUM ) ];
+	k1 = new double[ ( 1 * __DATA_NUM ) ];
+	z = new double[0];
+	for(t = 0.000000; ( t <= 400.000000 ) ;t =  ( t + d ) ){
+
+		for(__i = 0; ( __i < __DATA_NUM ) ;__i++){
+
+			x0[ (  ( 0 * __DATA_NUM )  + __i ) ] = xi[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			k1[ (  ( 0 * __DATA_NUM )  + __i ) ] = Math.exp( t );
+			x1[ (  ( 0 * __DATA_NUM )  + __i ) ] =  ( x0[ (  ( 0 * __DATA_NUM )  + __i ) ] +  ( k1[ (  ( 0 * __DATA_NUM )  + __i ) ] * d )  ) ;
+			xo[ (  ( 0 * __DATA_NUM )  + __i ) ] = x1[ (  ( 0 * __DATA_NUM )  + __i ) ];
+			xi[ (  ( 0 * __DATA_NUM )  + __i ) ] = xo[ (  ( 0 * __DATA_NUM )  + __i ) ];
+
+		}
+
+
+	}
+
+}
+
+
+}
+

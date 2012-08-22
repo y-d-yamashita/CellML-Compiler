@@ -1,0 +1,322 @@
+<recml>
+<!-- double loop -->
+<!-- loop1="inner"のなかにloop2 がある -->
+<!-- loop2="inner"のなかにloop3 がある -->
+	<loopstruct num="0">
+		<position name="inner">
+			<loopstruct num="1">
+				<position name="inner">
+					<loopstruct num="2"/>
+				</position>
+			</loopstruct>
+		</position>
+		<position name="final">
+			<loopstruct num="3"/>
+		</position>
+	</loopstruct>
+
+	<loopindex num="0" name="n1" />
+	<loopindex num="1" name="n2" />
+	<loopindex num="2" name="n3" />
+	<loopindex num="3" name="n4" />
+	
+	<math>
+		<apply loop1 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop1</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>loop1_init</ci>
+		</apply>
+	
+		<apply loop1 = "inner" loop2 = "pre">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kloop1</ci>
+				<ci>n1</ci>
+			</apply>
+			<ci>loop1_inner</ci>
+		</apply>
+		
+		<apply loop1 = "inner" loop2 = "pre">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>loop1</ci>
+					<ci>n1</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kloop1</ci>
+						<ci>n1</ci>
+					</apply>
+					<cn>0.05</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply loop1 = "inner" loop2 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop2</ci>
+				<ci>n1</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>loop2_init</ci>
+		</apply>
+	
+		<apply loop1 = "inner" loop2 = "inner" loop3 = "pre">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kloop2</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+			</apply>
+			<ci>loop2_inner</ci>
+		</apply>
+
+		<apply loop1 = "inner" loop2 = "inner" loop3 = "pre">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop2</ci>
+				<ci>n1</ci>
+				<apply>
+					<plus/>
+					<ci>n2</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>loop2</ci>
+					<ci>n1</ci>
+					<ci>n2</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kloop2</ci>
+						<ci>n1</ci>
+						<ci>n2</ci>
+					</apply>
+					<cn>0.05</cn>
+				</apply>
+			</apply>
+		</apply>	
+		
+		<apply loop1 = "inner" loop2 = "inner" loop3 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop3</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+				<ci>0</ci>
+			</apply>
+			<ci>loop3_init</ci>
+		</apply>
+	
+		<apply loop1 = "inner" loop2 = "inner" loop3 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kloop3</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+				<ci>n3</ci>
+			</apply>
+			<ci>loop3_inner</ci>
+		</apply>
+
+		<apply loop1 = "inner" loop2 = "inner" loop3 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop3</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+				<apply>
+					<plus/>
+					<ci>n3</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>loop3</ci>
+					<ci>n1</ci>
+					<ci>n2</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kloop3</ci>
+						<ci>n1</ci>
+						<ci>n2</ci>
+						<ci>n3</ci>
+					</apply>
+					<cn>0.05</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<condition loop1 = "inner" loop2 = "inner" loop3 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>n3</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+		
+		<apply loop1 = "inner" loop2 = "inner" loop3 = "final">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop3_final</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>loop3</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+				<ci>n3</ci>
+			</apply>
+		</apply>
+
+		<condition loop1 = "inner" loop2 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>n2</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+		
+		<apply loop1 = "inner" loop2 = "final">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop2_final</ci>
+				<ci>n1</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>loop2</ci>
+				<ci>n1</ci>
+				<ci>n2</ci>
+			</apply>	
+		</apply>
+
+		<condition loop1 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>n1</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+		
+		<apply loop1 = "final" loop4 = "pre">
+			<eq/>
+			<ci>loop1_final</ci>
+			<apply>
+				<selector/>
+				<ci>loop1</ci>
+				<ci>n1</ci>
+			</apply>
+		</apply>
+		
+		<apply loop1 = "final" loop4 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop4</ci>
+				<ci>0</ci>
+			</apply>
+			<ci>loop4_init</ci>
+		</apply>
+	
+		<apply loop1 = "final" loop4 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kloop4</ci>
+				<ci>n4</ci>
+			</apply>
+			<ci>loop4_inner</ci>
+		</apply>
+
+		<apply loop1 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>loop4</ci>
+				<apply>
+					<plus/>
+					<ci>n4</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>loop1</ci>
+					<ci>n4</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kloop1</ci>
+						<ci>n4</ci>
+					</apply>
+					<cn>0.05</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<condition loop1 = "final" loop4 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>n4</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+		
+		<apply loop1 = "final" loop4 = "final">
+			<eq/>
+			<ci>loop4_final</ci>
+			<apply>
+				<selector/>
+				<ci>loop4</ci>
+				<ci>n4</ci>
+			</apply>
+		</apply>
+	</math>
+</recml>

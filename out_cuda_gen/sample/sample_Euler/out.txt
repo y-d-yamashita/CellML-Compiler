@@ -1,0 +1,132 @@
+#include<stdio.h>
+#include<math.h>
+#include<cutil.h>
+#include<cuda.h>
+#define __DATA_NUM 32
+#define __DATA_NUMX 32
+#define __DATA_NUMY 1
+#define __THREADS_X 256
+#define __THREADS_Y 1
+#define __THREADS_Z 1
+#define __BLOCKS_X ( __DATA_NUM /  ( __THREADS_X * __THREADS_Y * __THREADS_Z ) ) 
+#define __BLOCKS_Y 1
+
+
+int main ( int argc , char** argv ) ;
+__global__ void __init_kernel ( double* xi ) ;
+__global__ void __calc_kernel ( double* xi , double* xo , double* x1 , double* x2 , double* k1 , double* y1 , double* z , double t , double d , double R ) ;
+
+int main ( int argc , char** argv ) {
+
+	double* __host_xi;
+	double* __dev_xi;
+	double* __host_xo;
+	double* __dev_xo;
+	double* __host_x1;
+	double* __dev_x1;
+	double* __host_x2;
+	double* __dev_x2;
+	double* __host_k1;
+	double* __dev_k1;
+	double* __host_y1;
+	double* __dev_y1;
+	double* __host_z;
+	double* __dev_z;
+	double t;
+	double d = 0.010000;
+	dim3 __block ( __THREADS_X , __THREADS_Y , __THREADS_Z ) ;
+	dim3 __grid ( __BLOCKS_X , __BLOCKS_Y ) ;
+
+	CUT_DEVICE_INIT ( argc , argv ) ; 
+	__host_xi = (double*)malloc (  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; ;
+	__host_xo = (double*)malloc (  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; ;
+	__host_x1 = (double*)malloc (  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; ;
+	__host_x2 = (double*)malloc (  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; ;
+	__host_k1 = (double*)malloc (  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; ;
+	__host_y1 = (double*)malloc (  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; ;
+	__host_z = (double*)malloc (  ( sizeof( double ) * 12 )  ) ; ;
+	memset ( __host_xi , 0 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	memset ( __host_xo , 0 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	memset ( __host_x1 , 0 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	memset ( __host_x2 , 0 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	memset ( __host_k1 , 0 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	memset ( __host_y1 , 0 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	memset ( __host_z , 0 ,  ( sizeof( double ) * 12 )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_xi ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_xo ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_x1 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_x2 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_k1 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_y1 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  ) ; 
+	cudaMalloc ( ( void** ) &__dev_z ,  ( sizeof( double ) * 12 )  ) ; 
+	cudaMemcpy ( __dev_xi , __host_xi ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  , cudaMemcpyHostToDevice ) ; 
+	cudaMemcpy ( __dev_xo , __host_xo ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  , cudaMemcpyHostToDevice ) ; 
+	cudaMemcpy ( __dev_x1 , __host_x1 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  , cudaMemcpyHostToDevice ) ; 
+	cudaMemcpy ( __dev_x2 , __host_x2 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  , cudaMemcpyHostToDevice ) ; 
+	cudaMemcpy ( __dev_k1 , __host_k1 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  , cudaMemcpyHostToDevice ) ; 
+	cudaMemcpy ( __dev_y1 , __host_y1 ,  ( sizeof( double ) *  ( __DATA_NUM * 1 )  )  , cudaMemcpyHostToDevice ) ; 
+	cudaMemcpy ( __dev_z , __host_z ,  ( sizeof( double ) * 12 )  , cudaMemcpyHostToDevice ) ; 
+	__init_kernel <<< __grid , __block >>>  ( __dev_xi ) ; 
+	for(t = 0.000000; ( t <= 400.000000 ) ;t =  ( t + d ) ){
+
+		for(ix = 0; ( ix < __DATA_NUMX ) ;ix++){
+
+			for(iy = 0; ( iy < __DATA_NUMY ) ;iy++){
+
+				__calc_kernel <<< __grid , __block >>>  ( __dev_xi , __dev_xo , __dev_x1 , __dev_x2 , __dev_k1 , __dev_y1 , __dev_z , t , d ) ; 
+
+			}
+
+
+		}
+
+
+	}
+
+	free ( __host_xi ) ; 
+	free ( __host_xo ) ; 
+	free ( __host_x1 ) ; 
+	free ( __host_x2 ) ; 
+	free ( __host_k1 ) ; 
+	free ( __host_y1 ) ; 
+	free ( __host_z ) ; 
+	cudaFree ( __dev_xi ) ; 
+	cudaFree ( __dev_xo ) ; 
+	cudaFree ( __dev_x1 ) ; 
+	cudaFree ( __dev_x2 ) ; 
+	cudaFree ( __dev_k1 ) ; 
+	cudaFree ( __dev_y1 ) ; 
+	cudaFree ( __dev_z ) ; 
+	CUT_EXIT ( argc , argv ) ; 
+}
+
+
+__global__ void __init_kernel ( double* xi ) {
+
+	const unsigned int __tmp_idx_x =  ( threadIdx.x +  ( blockDim.x * blockIdx.x )  ) ;
+	const unsigned int __tmp_idx_y =  ( threadIdx.y +  ( blockDim.y * blockIdx.y )  ) ;
+	const unsigned int __tmp_size_x =  ( blockDim.x * gridDim.x ) ;
+	const unsigned int __tid =  ( __tmp_idx_x +  ( __tmp_idx_y * __tmp_size_x )  ) ;
+
+}
+
+
+__global__ void __calc_kernel ( double* xi , double* xo , double* x1 , double* x2 , double* k1 , double* y1 , double* z , double t , double d , double R ) {
+
+	const unsigned int __tmp_idx_x =  ( threadIdx.x +  ( blockDim.x * blockIdx.x )  ) ;
+	const unsigned int __tmp_idx_y =  ( threadIdx.y +  ( blockDim.y * blockIdx.y )  ) ;
+	const unsigned int __tmp_size_x =  ( blockDim.x * gridDim.x ) ;
+	const unsigned int __tid =  ( __tmp_idx_x +  ( __tmp_idx_y * __tmp_size_x )  ) ;
+	double ym;
+
+	ym = (__tmp_idx_y!=0)?(xi[ (0 * __DATA_NUM) + (__tmp_idx_x + ( (__tmp_idx_y - 1)  *  __tmp_size_x) ) ] - xi[ (0 * __DATA_NUM) + __tid ])/R:(double)0.0;
+	x1[ (  ( 0 * __DATA_NUM )  + __tid ) ] = xi[ (  ( 0 * __DATA_NUM )  + __tid ) ];
+	y1[ (  ( 0 * __DATA_NUM )  + __tid ) ] =  (  ( t >= z[10] )  ? z[11] : (double)0 ) ;
+	k1[ (  ( 0 * __DATA_NUM )  + __tid ) ] =  (  (  ( - (double)1 )  / z[3] )  *  ( y1[ (  ( 0 * __DATA_NUM )  + __tid ) ] + z[4] + z[5] + z[6] + z[7] + z[8] + z[9] )  ) ;
+	x2[ (  ( 0 * __DATA_NUM )  + __tid ) ] =  ( x1[ (  ( 0 * __DATA_NUM )  + __tid ) ] +  ( k1[ (  ( 0 * __DATA_NUM )  + __tid ) ] * d )  ) ;
+	xo[ (  ( 0 * __DATA_NUM )  + __tid ) ] = x2[ (  ( 0 * __DATA_NUM )  + __tid ) ];
+	xi[ (  ( 0 * __DATA_NUM )  + __tid ) ] = xo[ (  ( 0 * __DATA_NUM )  + __tid ) ];
+}
+
+
+

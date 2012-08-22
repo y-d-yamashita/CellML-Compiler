@@ -1,0 +1,184 @@
+<recml>
+	<math>
+		<apply loop1 = "inner" loop2 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>xr</ci>
+				<ci>tn</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>xrinit</ci>
+		</apply>
+
+		<apply loop1 = "inner" loop2 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>dxdtr</ci>
+				<ci>tn</ci>
+				<ci>tm</ci>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<minus/>
+					<apply>
+						<selector/>
+						<ci>xr</ci>
+						<ci>tn</ci>
+						<ci>tm</ci>
+					</apply>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>y</ci>
+					<ci>tn</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply loop1 = "inner" loop2 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>xr</ci>
+				<ci>tn</ci>
+				<apply>
+					<plus/>
+					<ci>tm</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>xr</ci>
+					<ci>tn</ci>
+					<ci>tm</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>dxdtr</ci>
+						<ci>tn</ci>
+						<ci>tm</ci>
+					</apply>
+					<ci>d</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<condition loop1 = "inner" loop2 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>tm</ci>
+				<cn>100</cn>
+			</apply>
+		</condition>
+
+		<apply loop1 = "inner" loop2 = "final">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>x</ci>
+				<apply>
+					<plus/>
+					<ci>tn</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>xr</ci>
+				<ci>tn</ci>
+				<ci>tm</ci>
+			</apply>
+		</apply>
+
+		<apply loop1 = "init">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>y</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>yinit</ci>
+		</apply>
+
+		<apply loop1 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>dydt0</ci>
+				<ci>tn</ci>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<minus/>
+					<apply>
+						<selector/>
+						<ci>y</ci>
+						<ci>tn</ci>
+					</apply>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>x</ci>
+					<ci>tn</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply loop1 = "inner">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>y</ci>
+				<apply>
+					<plus/>
+					<ci>tn</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>y</ci>
+					<ci>tn</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>dydt0</ci>
+						<ci>tn</ci>
+					</apply>
+					<ci>d</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<condition loop1 = "loopcond">
+			<apply>
+				<eq/>
+				<ci>tn</ci>
+				<cn>1000</cn>
+			</apply>
+		</condition>
+
+		<apply loop1 = "final">
+			<eq/>
+			<ci>yend</ci>
+			<apply>
+				<selector/>
+				<ci>y</ci>
+				<ci>tn</ci>
+			</apply>
+		</apply>
+	</math>
+</recml>

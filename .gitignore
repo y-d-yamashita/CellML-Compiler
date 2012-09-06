@@ -1,6 +1,6 @@
 *.class
 
 # Package Files #
-*.jar
+# Permit  *.jar #
 *.war
 *.ear

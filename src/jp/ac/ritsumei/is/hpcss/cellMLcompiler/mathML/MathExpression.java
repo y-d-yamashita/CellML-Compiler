@@ -98,7 +98,6 @@ public class MathExpression {
 		if (m_pCurFuncOperator != null
 		    && m_stackCurOperator.peek() == m_pFuncParentOperand) {
 			/*関数引数として要素追加*/
-			m_pCurFuncOperator.addFactor(pOperand);
 		}
 
 		/*関数演算子fnの場合*/
@@ -244,6 +243,17 @@ public class MathExpression {
 		return m_vecVariables.get(dVariableId);
 	}
 
+	/**
+	 * 変数を取得する.
+	 * @param dVariableId 変数id
+	 * @return 引数指定idの変数
+	 * @author y-yamashita
+	 */
+	public Vector<MathOperand> getVariables() {
+		return m_vecVariables;
+	}
+
+	
 	/**
 	 * 数式中の変数の数を取得する.
 	 * @return 変数の数

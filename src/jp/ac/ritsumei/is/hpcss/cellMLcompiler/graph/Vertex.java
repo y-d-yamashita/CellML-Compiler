@@ -1,24 +1,24 @@
-package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.edge;
+package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph;
 
 /**
- * Edge class is abstract class for graph.
- * When you create a new edge class,
+ * Vertex class is abstract class for graph.
+ * When you create a new vertex class,
  * you have to extends this class.
  * This class set id of vertices to control order of vertices.
  *  
  * @author y-yamashita
  *
  */
-public abstract class Edge implements Comparable<Edge>{
+public abstract class Vertex implements Comparable<Vertex>{
 	
-	/** New ID is given to new edge */
+	/** New ID is given to new Vertex */
 	private static long newID=-1;
 	
-	/** ID of edge */
+	/** ID of vertex */
 	private long id;
 	
 	/** Constructor */
-	public Edge(){
+	public Vertex(){
 		id=getNewID();
 	}
 	
@@ -28,11 +28,11 @@ public abstract class Edge implements Comparable<Edge>{
 	}
 	
 	/**
-	 * This method is used to sort a set (or array) of edge.
+	 * This method is used to sort a set (or array) of vertexes.
 	 * @return result of compared
 	 */
 	@Override
-	public int compareTo(Edge n) {
+	public int compareTo(Vertex n) {
 		if(this.id < n.id)	return -1;
 		else if(this.id > n.id) return 1;
 		else return 0;

@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
 
 /**
  * Topological sort class using Tarjan's algorithm
@@ -27,8 +29,8 @@ public class Tarjan {
 	 * @param graph
 	 * @return Sorted vertexes list. Strongly connected components is presented as Set of vertex. 
 	 */
-	public List<Set<RecMLVertex>> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
-		List<Set<RecMLVertex>> result = new ArrayList<Set<RecMLVertex>>();
+	public SetList<RecMLVertex> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
+		SetList<RecMLVertex> result = new SetList<RecMLVertex>();
 		Stack<RecMLVertex> stack = new Stack<RecMLVertex>();
 	
 		index = -1;	
@@ -39,7 +41,7 @@ public class Tarjan {
 		return result;
 	}
 	private void travarse(RecMLVertex v, Stack<RecMLVertex> stack,
-			List<Set<RecMLVertex>> result, DirectedGraph<RecMLVertex, RecMLEdge> graph) {
+			SetList<RecMLVertex> result, DirectedGraph<RecMLVertex, RecMLEdge> graph) {
 		index++;
 		v.number=index;
 		v.lowpt=index;

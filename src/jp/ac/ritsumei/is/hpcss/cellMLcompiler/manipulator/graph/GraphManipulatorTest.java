@@ -17,6 +17,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
 
 import org.junit.Test;
 
@@ -107,9 +108,10 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		List<Set<RecMLVertex>> t = gm.tarjan(dg);
+		SetList<RecMLVertex> t = gm.tarjan(dg);
 		System.out.println("Tarjan-----------------------");
 		System.out.println(t.toString());
+		System.out.println(gm.toXMLString(dg, t));
 	}
 
 	BipartiteGraph<RecMLVertex, RecMLEdge>createBipartieGraph() throws GraphException{

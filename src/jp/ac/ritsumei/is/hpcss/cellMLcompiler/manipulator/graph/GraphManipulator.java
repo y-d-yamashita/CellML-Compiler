@@ -1,15 +1,13 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.manipulator.graph;
 
 
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
+import java.util.TreeSet;
+
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
@@ -24,6 +22,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
 	
 /**
  * Graph Manipulator
@@ -93,7 +92,53 @@ public class GraphManipulator {
 	 * @param graph
 	 * @return Reverse calculation order including strongly connected components
 	 */
-	public List<Set<RecMLVertex>> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
+	public SetList<RecMLVertex> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
 		return tarjan.tarjan(graph);
 	}
+	
+	 /**
+     * toXMLString method
+     * @param indent
+     * @return XML string
+     */
+    public String toXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,SetList sl){
+    	/***** Dependency graph XML  *****/
+    	String indent="		";
+    	StringBuilder sb= new StringBuilder().
+    			append("<!----- Dependency graph ---->\n").
+    			append("<graph type=\"dependency\">\n").
+    			append("	<nodes>\n");
+    	List<RecMLVertex> vl = new ArrayList<RecMLVertex>(graph.getVertexes());
+    	for(RecMLVertex v:vl)
+    		sb.append(v.toXMLString(vl.indexOf(v), indent));
+    	sb.append("	</nodes>\n").
+    	append("	<edges>\n");
+    	List<RecMLEdge> el = new ArrayList<RecMLEdge>(graph.getEdges());
+    	for(RecMLEdge e:el)
+    		sb.append(e.toXMLString(
+    				vl.indexOf(graph.getSourceVertex(e)),
+    				vl.indexOf(graph.getDestVertex(e)),
+    				el.indexOf(e), indent));
+    	sb.append("	</edges>\n").
+    	append("</graph>\n");
+    	
+    	
+    	/*** Simultaneous equation XML ***/
+    	sb.append("<!----- Simultaneous equations ---->\n")
+    	.append("<simulequs>\n");
+    	for(Object obj:sl.toArray()){
+    	if(obj instanceof Set){
+    		Set<RecMLVertex> s = (Set<RecMLVertex>)obj;
+    		sb.append("	<gourp id=").append(sl.indexOf(obj)).append(">\n");
+    		for(RecMLVertex v:s)
+    			sb.append("		<node>").append(vl.indexOf(v)).append("</node>\n");
+    		sb.append("	</group>\n");
+    	}
+    	}
+    	sb.append("</simulequs>\n");
+    	return sb.toString();
+    	
+    	
+    	
+    }
 }

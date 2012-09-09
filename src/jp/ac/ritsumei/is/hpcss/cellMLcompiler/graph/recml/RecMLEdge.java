@@ -21,5 +21,18 @@ public class RecMLEdge extends Edge{
       public String toString(){
             return "";
      }
+	
+    /**
+     * toXMLString method
+     * @param indent
+     * @return XML string
+     */
+    public String toXMLString(int srcID,int dstID,int id,String indent){
+    	return new StringBuilder().append(indent).append("<edge id="+id+">\n").
+    			append(indent+"	").append("<source>").append(srcID).append("</source>\n").
+    			append(indent+"	").append("<dest>").append(dstID).append("</dest>\n").
+    			append(indent).append("</edge>\n").toString();
+    }
+
 
 }

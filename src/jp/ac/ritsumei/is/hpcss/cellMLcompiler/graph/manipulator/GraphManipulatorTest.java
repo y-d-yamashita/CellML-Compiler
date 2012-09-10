@@ -1,4 +1,4 @@
-package jp.ac.ritsumei.is.hpcss.cellMLcompiler.manipulator.graph;
+package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 
 import static org.junit.Assert.*;
 

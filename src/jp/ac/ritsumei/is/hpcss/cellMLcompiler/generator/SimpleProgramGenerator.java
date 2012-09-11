@@ -363,7 +363,6 @@ public class SimpleProgramGenerator extends ProgramGenerator {
 			Math_ci pArgVar =
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 						pFunction.getArgumentsVector().get(nTimeArgIdx).toLegalString());
-
 			/*配列インデックスを追加*/
 			//pArgVar.addArrayIndexToBack(i);
 			//時間にインデックスを付けず，共通の変数として扱う
@@ -396,7 +395,6 @@ public class SimpleProgramGenerator extends ProgramGenerator {
 			Math_ci pArgVar =
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 						pFunction.getArgumentsVector().get(nVarArgIdx).toLegalString());
-
 			/*配列インデックスを追加*/
 			pArgVar.addArrayIndexToBack(i);
 

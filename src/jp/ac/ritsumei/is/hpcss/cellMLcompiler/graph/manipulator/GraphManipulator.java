@@ -1,4 +1,4 @@
-package jp.ac.ritsumei.is.hpcss.cellMLcompiler.manipulator.graph;
+package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 
 
 
@@ -12,10 +12,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.MaximumMatching;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.Tarjan;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.manipulator.graph.algorithm.MaximumMatching;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.manipulator.graph.algorithm.Tarjan;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;

@@ -1,4 +1,4 @@
-package jp.ac.ritsumei.is.hpcss.cellMLcompiler.manipulator.graph.algorithm;
+package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm;
 
 import java.util.ArrayList;
 import java.util.List;

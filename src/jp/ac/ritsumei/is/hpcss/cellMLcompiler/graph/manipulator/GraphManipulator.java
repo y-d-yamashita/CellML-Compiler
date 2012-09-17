@@ -101,7 +101,7 @@ public class GraphManipulator {
      * @param indent
      * @return XML string
      */
-    public String toXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,SetList sl){
+    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,SetList sl){
     	/***** Dependency graph XML  *****/
     	String indent="		";
     	StringBuilder sb= new StringBuilder().

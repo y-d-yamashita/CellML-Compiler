@@ -2,9 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph;
 
 import org.junit.Test;
 
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.edge.Edge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.vertex.Vertex;
 
 
 
@@ -71,7 +69,7 @@ public class DirectedGraphTest {
           System. out.println(g.toString());
           
           System.out.print("Nodes:");
-          for(MyNode n:g.getVertices()){
+          for(MyNode n:g.getVertexes()){
         	  System.out.print(n.toString()+",");
           }
           System.out.println();

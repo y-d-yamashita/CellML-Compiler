@@ -115,6 +115,15 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 //			}
 //		}
 		
+		/** 内容確認 ***/
+		try {
+			pRecMLAnalyzer.printContents();
+		} catch (MathException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
 		//---------------------------------------------------
 		//目的プログラム生成
 		//---------------------------------------------------

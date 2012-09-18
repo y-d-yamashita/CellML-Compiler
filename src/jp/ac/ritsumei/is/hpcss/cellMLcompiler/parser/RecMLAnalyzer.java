@@ -476,12 +476,135 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	public void printContents() throws MathException {
 		/*開始線出力*/
 		System.out.println("[RecML]------------------------------------");
+		
+		//private HashMap<Integer, String> indexHashMapList;
+		System.out.println("<indexHashMapList>--------------------------");
+		for(Integer key:indexHashMapList.keySet())
+			System.out.print("("+key+","+indexHashMapList.get(key)+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		
+		//private HashMap<Math_ci, Integer> m_HashMapRecurList;
+		System.out.println("<m_HashMapRecurList>--------------------------");
+		if(m_HashMapRecurList.isEmpty())
+			System.out.print("None");
+		for(Math_ci key:m_HashMapRecurList.keySet())
+			System.out.print("("+key.toLegalString()+","+m_HashMapRecurList.get(key)+"),");
+		System.out.println("\n -----------------------------------------");
 
+		
+		//private HashMap<Math_ci, Integer> m_HashMapArithList;
+		System.out.println("<m_HashMapArithList>--------------------------");
+		if(m_HashMapArithList.isEmpty())
+			System.out.print("None");
+		for(Math_ci key:m_HashMapArithList.keySet())
+			System.out.print("("+key.toLegalString()+","+m_HashMapArithList.get(key)+"),");
+		System.out.println("\n -----------------------------------------");
+
+		
+		//private HashMap<Math_ci, Integer> m_HashMapConstList;
+		System.out.println("<m_HashMapConstList>--------------------------");
+		if(m_HashMapConstList.isEmpty())
+			System.out.print("None");
+		for(Math_ci key:m_HashMapConstList.keySet())
+			System.out.print("("+key.toLegalString()+","+m_HashMapConstList.get(key)+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//private HashMap<Math_ci, Integer> m_HashMapOutputList;
+		System.out.println("<m_HashMapOutputList>--------------------------");
+		if(m_HashMapOutputList.isEmpty())
+			System.out.print("None");
+		for(Math_ci key:m_HashMapOutputList.keySet())
+			System.out.print("("+key.toLegalString()+","+m_HashMapOutputList.get(key)+"),");
+		System.out.println("\n -----------------------------------------");
+
+		
+		//private ArrayList<Math_ci> m_ArrayListRecurList;
+		System.out.println("<m_ArrayListRecurList>--------------------------");
+		if(m_ArrayListRecurList.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_ArrayListRecurList)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//private ArrayList<Math_ci> m_ArrayListArithList;
+		System.out.println("<m_ArrayListArithList>--------------------------");
+		if(m_ArrayListArithList.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_ArrayListArithList)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//private ArrayList<Math_ci> m_ArrayListConstList;
+		System.out.println("<m_ArrayListConstList>--------------------------");
+		if(m_ArrayListConstList.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_ArrayListConstList)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//private ArrayList<Math_ci> m_ArrayListOutputList;
+		System.out.println("<m_ArrayListOutputList>--------------------------");
+		if(m_ArrayListOutputList.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_ArrayListOutputList)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		
+		
+		/*式中の変数*/
+		//Vector<Math_ci> m_vecRecurVar;
+		System.out.println("<m_vecRecurVar>--------------------------");
+		if(m_vecRecurVar.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_vecRecurVar)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//Vector<Math_ci> m_vecArithVar;
+		System.out.println("<m_vecArithVar>--------------------------");
+		if(m_vecArithVar.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_vecArithVar)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+
+		
+		//Vector<Math_ci> m_vecConstVar;
+		System.out.println("<m_vecConstVar>--------------------------");
+		if(m_vecConstVar.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_vecConstVar)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//Vector<Math_ci> m_vecCondition;
+		System.out.println("<m_vecCondition>--------------------------");
+		if(m_vecCondition.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_vecCondition)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		//Vector<Math_ci> m_vecOutput;
+		System.out.println("<m_vecOutput>--------------------------");
+		if(m_vecOutput.isEmpty())
+			System.out.print("None");
+		for(Math_ci value:m_vecOutput)
+			System.out.print("("+value.toLegalString()+"),");
+		System.out.println("\n -----------------------------------------");
+		
+		
+		//root.printString(" ");
+		
 		/*数式出力*/
-		super.printExpressions();
-
+		System.out.println("<Print expressions>-------------------------");
+		//super.printExpressions();
+		root.printString(m_vecMathExpression, "    ");
 		/*改行*/
 		System.out.println();
+		System.out.println("----------------------------------------------");
 	}
 	
 	//========================================================

@@ -111,7 +111,8 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 		SetList<RecMLVertex> t = gm.tarjan(dg);
 		System.out.println("Tarjan-----------------------");
 		System.out.println(t.toString());
-		System.out.println(gm.toXMLString(dg, t));
+
+		System.out.println(gm.toRecMLXMLString(dg, t));
 	}
 
 	BipartiteGraph<RecMLVertex, RecMLEdge>createBipartieGraph() throws GraphException{

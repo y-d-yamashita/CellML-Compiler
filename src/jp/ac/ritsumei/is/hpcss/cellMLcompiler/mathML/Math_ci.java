@@ -136,5 +136,25 @@ public class Math_ci extends MathOperand {
 		return newOperand;
 	}
 	
-
+	/**
+	 * 比較メソッド
+	 */
+	public boolean equals(Object obj){
+		if(obj instanceof Math_ci){
+			Math_ci that = (Math_ci) obj;
+			String thisStr=null;
+			String thatStr=null;
+				try {
+					thisStr=this.toLegalString();
+					thatStr=that.toLegalString();
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(thisStr.equals(thatStr)){
+					return true;
+				}
+		}	
+		return false;
+	}
 }

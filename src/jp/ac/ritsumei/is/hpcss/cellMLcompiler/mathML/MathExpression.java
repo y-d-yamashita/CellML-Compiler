@@ -7,6 +7,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML数式クラス.
@@ -488,4 +489,11 @@ public class MathExpression {
 		return m_pRootFactor.toLegalString();
 	}
 
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+		m_pRootFactor.traverse(v);
+	}
 }

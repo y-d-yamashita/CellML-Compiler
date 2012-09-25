@@ -7,6 +7,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML演算子クラス.
@@ -594,5 +595,16 @@ public abstract class MathOperator extends MathFactor {
 	 * @throws MathException
 	 */
 	public abstract double calculate() throws MathException;
+
+	
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+		v.visit(this);
+		for(MathFactor f:m_vecFactor)
+			f.traverse(v);
+	}
 
 }

@@ -24,9 +24,12 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.CreateRecMLVariableTableVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SetAssignRefRecMLVariableTypeVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLVarType;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 
 
 /**
@@ -38,7 +41,8 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	private boolean m_bMathParsing;
 	private boolean m_bAttrParsing;
 	
-
+	private RecMLVariableTable recMLVariableTable;
+	
 	// loop index variable name list (initialized in constructor)
 	// just for test
 	// should be implemented as hashmap or new class
@@ -596,12 +600,17 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		System.out.println("\n -----------------------------------------");
 		
 		
+		System.out.println(recMLVariableTable.toString());
+		
 		//root.printString(" ");
 		
 		/*数式出力*/
 		System.out.println("<Print expressions>-------------------------");
-		//super.printExpressions();
-		root.printString(m_vecMathExpression, "    ");
+		if(root!=null)
+			root.printString(m_vecMathExpression, "    ");
+		else
+			super.printExpressions();
+		
 		/*改行*/
 		System.out.println();
 		System.out.println("----------------------------------------------");
@@ -754,4 +763,25 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		} 
 		return childLoopNum;
 	}
+
+	public void createVariableTable() {
+		CreateRecMLVariableTableVisitor visitor = new CreateRecMLVariableTableVisitor();
+		
+		 for(MathExpression expr :m_vecMathExpression)
+			 expr.getRootFactor().traverse(visitor);
+		 recMLVariableTable=visitor.getTable();
+	}
+
+	public void setAssignRefRecVariableType(){
+		SetAssignRefRecMLVariableTypeVisitor visitor = new SetAssignRefRecMLVariableTypeVisitor(recMLVariableTable);
+		 for(MathExpression expr :m_vecMathExpression){
+			 expr.getRootFactor().traverse(visitor);
+			 visitor.reset();
+		 }
+		 recMLVariableTable=visitor.getTable();
+	}
+	public RecMLVariableTable getRecMLVariableTable() {
+		return recMLVariableTable;
+	}
+
 }

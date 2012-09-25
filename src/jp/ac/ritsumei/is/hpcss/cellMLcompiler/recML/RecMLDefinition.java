@@ -24,7 +24,7 @@ public class RecMLDefinition {
 	public static final String RECML_VARTYPE_STR_ARITHVAR = "arithvar";
 	public static final String RECML_VARTYPE_STR_CONSTVAR = "constvar";
 	public static final String RECML_VARTYPE_STR_OUTPUT = "output";
-
+	public static final String RECML_VARTYPE_STR_DOUBLE = "double";
 
 	/* RecML attribute names */
 	public static final String RECML_ATTR_LOOP1 = "loop1";
@@ -62,6 +62,7 @@ public class RecMLDefinition {
 		CVAR_TYPE_ARITHVAR	(RECML_VARTYPE_STR_ARITHVAR),
 		CVAR_TYPE_CONSTVAR	(RECML_VARTYPE_STR_CONSTVAR),
 		CVAR_TYPE_OUTPUT	(RECML_VARTYPE_STR_OUTPUT),
+		CVAR_TYPE_DOUBLE	(RECML_VARTYPE_STR_DOUBLE),
 			;
 		private final String operatorStr;
 		private eRecMLVarType(String operatorstr) {

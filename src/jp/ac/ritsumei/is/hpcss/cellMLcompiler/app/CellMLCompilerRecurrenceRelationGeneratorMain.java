@@ -29,6 +29,8 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+
 public class CellMLCompilerRecurrenceRelationGeneratorMain {
 
 	//========================================================
@@ -93,10 +95,25 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 			e.printStackTrace();
 		}
 		
+		
+	
 //		/*selector内cnのInteger*/
 		pRecMLAnalyzer.changeAllSelectorInteger();
+		
 		/*selector削除*/
 		pRecMLAnalyzer.removeAllSelector();
+		
+		
+		pRecMLAnalyzer.createVariableTable();
+		pRecMLAnalyzer.setAssignRefRecVariableType();
+		/** 内容確認 ***/
+		try {
+			pRecMLAnalyzer.printContents();
+		} catch (MathException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 //		/*variable取得*/
 //		Vector<Math_ci> pRecMLVariables = new Vector<Math_ci>();
 //		try {
@@ -115,13 +132,6 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 //			}
 //		}
 		
-		/** 内容確認 ***/
-		try {
-			pRecMLAnalyzer.printContents();
-		} catch (MathException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 		
 		
 		//---------------------------------------------------
@@ -196,8 +206,9 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 		try {
 			pProgramGenerator =
 			//new RecurrenceRelationGenerator(pRecMLAnalyzer);
+			//new RecurrenceRelationGeneratorStatementList(pRecMLAnalyzer);
 			new RecurrenceRelationGeneratorStatementList(pRecMLAnalyzer);
-		} catch (MathException e1) {
+			} catch (MathException e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
 		}
@@ -341,5 +352,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
         System.err.println("default:");
         System.err.println("  Generator:  "+DEFALUT_GENERATOR);
 	}
+	
+	private static Graph<RecMLVertex,ReMLEdge> createBipatieGraph()
 	
 }

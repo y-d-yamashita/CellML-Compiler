@@ -16,7 +16,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLCla
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathSepType;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.CreateRecMLVariableTableVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SimpleVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 
 /**
  * MathML解析クラス.
@@ -313,14 +316,17 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		/*すべての数式を出力*/
 		for (MathExpression it: m_vecMathExpression) {
 
+			
 			/*数式標準出力*/
-			System.out.println(it.toLegalString());
+	//		System.out.println(it.toLegalString());
+			System.out.println("Expression["+m_vecMathExpression.indexOf(it)+"]: "+it.toLegalString());
 
-//			//変数一覧表示（デバッグ用）
-//			int nVariableCount = it.getVariableCount();
-//			for (int j = 0; j < nVariableCount; j++) {
-//				System.out.println(it.getVariable(j).toLegalString());
-//			}
+			//変数一覧表示（デバッグ用）
+			//int nVariableCount = it.getVariableCount();
+		//	System.out.println("variablecount:"+nVariableCount);
+		//	for (int j = 0; j < nVariableCount; j++) {
+		//		System.out.println(it.getVariable(j).toLegalString());
+		//	}
 
 		}
 	}

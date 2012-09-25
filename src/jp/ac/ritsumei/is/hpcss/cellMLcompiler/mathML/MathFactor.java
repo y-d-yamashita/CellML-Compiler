@@ -2,6 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML演算要素クラス.
@@ -85,4 +86,9 @@ public abstract class MathFactor {
 	 */
 	public abstract boolean matchesExpression(MathFactor pFactor);
 
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public abstract void traverse(Visitor v);
 }

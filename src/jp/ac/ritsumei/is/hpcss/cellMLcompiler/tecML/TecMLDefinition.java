@@ -29,6 +29,12 @@ public class TecMLDefinition {
 	public static final String TECML_VARTYPE_STR_DELTATIMEVAR = "deltatimevar";
 	/**TecML変数型文字列定義 timevar*/
 	public static final String TECML_VARTYPE_STR_TIMEVAR = "timevar";
+	/**TecML変数型文字列定義 dimensionvar (includes timevar and spatial var*/
+	public static final String TECML_VARTYPE_STR_DIMENSIONVAR = "dimensionvar";
+	/**TecML変数型文字列定義 deltavar (includes delta t and x)*/
+	public static final String TECML_VARTYPE_STR_DELTAVAR = "deltavar";
+	/**TecML変数型文字列定義 indexvar (includes indices for discretization)*/
+	public static final String TECML_VARTYPE_STR_INDEXVAR = "indexvar";
 	/**TecML変数型文字列定義 diffvar*/
 	public static final String TECML_VARTYPE_STR_DIFFVAR = "diffvar";
 	/**TecML変数型文字列定義 derivativevar*/
@@ -74,6 +80,9 @@ public class TecMLDefinition {
 	public enum eTecMLVarType {
 		TVAR_TYPE_DELTATIMEVAR	(TECML_VARTYPE_STR_DELTATIMEVAR),
 		TVAR_TYPE_TIMEVAR		(TECML_VARTYPE_STR_TIMEVAR),
+		TVAR_TYPE_DIMENSIONVAR	(TECML_VARTYPE_STR_DIMENSIONVAR),
+		TVAR_TYPE_DELTAVAR		(TECML_VARTYPE_STR_DELTAVAR),
+		TVAR_TYPE_INDEXVAR		(TECML_VARTYPE_STR_INDEXVAR),
 		TVAR_TYPE_DIFFVAR		(TECML_VARTYPE_STR_DIFFVAR),
 		TVAR_TYPE_DERIVATIVEVAR	(TECML_VARTYPE_STR_DERIVATIVEVAR),
 		TVAR_TYPE_ARITHVAR		(TECML_VARTYPE_STR_ARITHVAR),

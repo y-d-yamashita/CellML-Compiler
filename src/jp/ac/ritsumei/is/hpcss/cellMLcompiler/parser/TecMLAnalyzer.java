@@ -67,6 +67,24 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 		return m_pTimeVar;
 	}
 
+	/**Return the dimension variables involve in the discretization*/
+	Vector<Math_ci> m_vecDimensionVar;
+	public Vector<Math_ci> getM_vecDimensionVar() {
+		return m_vecDimensionVar;
+	}
+	
+	/**Return the delta variables in the discretization*/
+	Vector<Math_ci> m_vecDeltaVar;
+	public Vector<Math_ci> getM_vecDeltaVar() {
+		return m_vecDeltaVar;
+	}
+
+	/**Return the indices involve in the discretization*/
+	Vector<Math_ci> m_vecIndexVar;
+	public Vector<Math_ci> getM_vecIndexVar() {
+		return m_vecIndexVar;
+	}
+	
 	/**式中の微係数変数*/
 	Vector<Math_ci> m_vecDerivativeVar;
 	/**
@@ -148,6 +166,9 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 		m_pNonDiffFuncVar = null;
 		m_bFunctionAnalyzing = false;
 
+		m_vecDimensionVar = new Vector<Math_ci>();
+		m_vecDeltaVar = new Vector<Math_ci>();
+		m_vecIndexVar = new Vector<Math_ci>();
 		m_vecDerivativeVar = new Vector<Math_ci>();
 		m_vecDiffVar = new Vector<Math_ci>();
 		m_vecArithVar = new Vector<Math_ci>();
@@ -221,6 +242,21 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 						//----------------------------------時間変数型
 					case TVAR_TYPE_TIMEVAR:
 						m_pTimeVar = pVariable;
+						break;
+						
+					//----------------------------------dimension variables (TODO: should include timevar)
+					case TVAR_TYPE_DIMENSIONVAR:
+						m_vecDimensionVar.add(pVariable);
+						break;
+						
+						//----------------------------------delta variables (for delta_x and delta_t)
+					case TVAR_TYPE_DELTAVAR:
+						m_vecDeltaVar.add(pVariable);
+						break;
+						
+						//----------------------------------indices variables for discretization
+					case TVAR_TYPE_INDEXVAR:
+						m_vecIndexVar.add(pVariable);
 						break;
 
 						//----------------------------------微分変数型
@@ -468,6 +504,25 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	public boolean isConstVar(MathOperand pVariable) {
 		/*すべての要素を比較*/
 		for (Math_ci it: m_vecConstVar) {
+
+			/*一致判定*/
+			if (it.matches(pVariable)) {
+				return true;
+			}
+		}
+
+		/*不一致*/
+		return false;
+	}
+	
+	/**
+	 * Check if the variable is a dimension variable (t, x, etc).
+	 * @param pVariable 判定する数式
+	 * @return 一致判定
+	 */
+	public boolean isDimensionVar(MathOperand pVariable) {
+		/*すべての要素を比較*/
+		for (Math_ci it: m_vecDimensionVar) {
 
 			/*一致判定*/
 			if (it.matches(pVariable)) {

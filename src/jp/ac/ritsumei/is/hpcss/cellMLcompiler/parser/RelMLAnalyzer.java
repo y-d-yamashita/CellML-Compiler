@@ -14,6 +14,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.relML.RelMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.relML.RelMLDefinition.eRelMLTag;
@@ -44,6 +45,59 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	/*微分方程式の左辺式記述の解析用変数*/
 	boolean m_bDiffEquListParsing;
 	String m_strCurComponent;
+	String m_strMeshType;   	// mesh type (currently regular rectilinear grid only)
+	String m_morphologyName; 	// name for morphology grid
+
+	/* return differential variables vector */
+	public Vector<Math_ci> getM_vecDiffVar() {
+		return m_vecDiffVar;
+	}
+	
+	/* return arithmetic variables vector */
+	public Vector<Math_ci> getM_vecArithVar() {
+		return m_vecArithVar;
+	}
+	
+	/* return constants vector */
+	public Vector<Math_ci> getM_vecConstVar() {
+		return m_vecConstVar;
+	}
+	
+	/* return variable dimension vector */
+	Vector<Math_ci> m_vecDimensionVar;
+	public Vector<Math_ci> getM_vecDimensionVar() {
+		return m_vecDimensionVar;
+	}
+	
+	/* return index names vector */
+	Vector<Math_ci> m_vecIndexVar;
+	public Vector<Math_ci> getM_vecIndexVar() {
+		return m_vecIndexVar;
+	}
+	
+	/* return delta time and space vector */
+	Vector<Math_ci> m_vecDeltaVar;
+	public Vector<Math_ci> getM_vecDeltaVar() {
+		return m_vecDeltaVar;
+	}
+	
+	/* return mesh dimensions vector */
+	Vector<Math_cn> m_vecDimensions;
+	public Vector<Math_cn> getM_vecDimensions() {
+		return m_vecDimensions;
+	}
+	
+	/* mesh grid spacing (for regular grids) vector */
+	Vector<Math_cn> m_vecSpacing;
+	public Vector<Math_cn> getM_vecSpacing() {
+		return m_vecSpacing;
+	}
+	
+	/* boundary condition equation vector */
+	Vector<MathExpression> m_vecExpression;
+	public Vector<MathExpression> getM_vecExpression() {
+		return m_vecExpression;
+	}
 
 	/**
 	 * RelML解析インスタンスを作成する.
@@ -52,6 +106,11 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		m_bMathParsing = false;
 		m_bDiffEquListParsing = false;
 		m_vecTimeVar = new Vector<Math_ci>();
+		m_vecDimensionVar = new Vector<Math_ci>();
+		m_vecIndexVar = new Vector<Math_ci>();
+		m_vecDeltaVar = new Vector<Math_ci>();
+		m_vecDimensions = new Vector<Math_cn>();
+		m_vecSpacing = new Vector<Math_cn>();
 		m_vecDiffVar = new Vector<Math_ci>();
 		m_vecArithVar = new Vector<Math_ci>();
 		m_vecConstVar = new Vector<Math_ci>();
@@ -83,6 +142,69 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			/*タグ種別ごとの処理*/
 			switch(tagId){
 
+				//--------------------------------------Morphology information from RelML
+			case RTAG_MORPHOLOGY:
+			{
+				/* Get the attributes values for morphology tag*/
+				String strName = pXMLAttr.getValue("name");
+				
+				break;
+			}
+			
+				//--------------------------------------Morphology information from RelML
+			case RTAG_GEOMETRY:
+			{
+				/* Get the attributes values for geometry tags*/
+				String m_strGeometryID = pXMLAttr.getValue("geometry-id");
+				String m_strType = pXMLAttr.getValue("type");
+				String m_strDimension = pXMLAttr.getValue("dimension");
+				Math_cn pGeometryID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strGeometryID);
+				
+				break;
+			}
+				
+				//--------------------------------------Mesh information from RelML
+			case RTAG_MESH:
+			{
+				/* Get the attributes values for mesh tag*/
+				m_strMeshType = pXMLAttr.getValue("type");
+				String m_strDimensions = pXMLAttr.getValue("dimensions");
+				String m_strSpacing = pXMLAttr.getValue("spacing");
+
+				/* remove white spaces in the dimensions and spacing string and store as Math_cn vectors */ 
+				String[] arrDimensions = m_strDimensions.split("\\s");
+				String[] arrSpacing = m_strSpacing.split("\\s");
+				for (int i=0; i<arrDimensions.length; i++){
+					Math_cn pDimension = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrDimensions[i]);
+					m_vecDimensions.add(pDimension);
+					
+					Math_cn pSpacing = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrSpacing[i]);
+					m_vecSpacing.add(pSpacing);
+				}
+				
+				break;
+			}
+			
+				//--------------------------------------Boundary condition information from RelML
+			case RTAG_BOUNDARY:
+			{
+				/* Get the attributes values for boundary condition tag*/
+				String m_strBoundaryID = pXMLAttr.getValue("boundary-id");
+				Math_cn pBoundID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strBoundaryID);
+				
+				break;
+			}
+			
+			//--------------------------------------Distributed parameters information from RelML
+			case RTAG_PARAMETER:
+			{
+				/* Get the attributes values for boundary condition tag*/
+				String m_strParameterID = pXMLAttr.getValue("parameter-id");
+				Math_cn pParameterID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strParameterID);
+				
+				break;
+			}
+			
 				//-----------------------------------TecMLファイルの指定
 			case RTAG_TECML:
 				{
@@ -139,6 +261,21 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 					case RVAR_TYPE_TIMEVAR:
 						m_vecTimeVar.add(pVariable);
 						break;
+						
+						//----------------------------------space and time variable name
+					case RVAR_TYPE_DIMENSIONVAR:
+						m_vecDimensionVar.add(pVariable);
+						break;
+						
+						//----------------------------------matrix/vector index 変数型
+					case RVAR_TYPE_INDEXVAR:
+						m_vecIndexVar.add(pVariable);
+						break;
+						
+						//----------------------------------delta valriable name 変数型
+					case RVAR_TYPE_DELTAVAR:
+						m_vecDeltaVar.add(pVariable);
+						break;
 
 						//-------------------------------微分変数型
 					case RVAR_TYPE_DIFFVAR:
@@ -153,11 +290,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 						//-------------------------------定数型
 					case RVAR_TYPE_CONSTVAR:
 						m_vecConstVar.add(pVariable);
-						break;
-						
-						//-------------------------------if partial differential variable
-					case RVAR_TYPE_PARTIALDIFFVAR:
-						m_vecPartialDiffVar.add(pVariable);
 						break;
 
 						//---------------------------------その他の型
@@ -536,16 +668,61 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	}
 	
 	//========================================================
-	// getPartialDiffVarCount
-	// 	return the number of propagating variables in the simulation
+	//getExpression
+	// get the mathExpression from m_vecExpression
 	//
 	//========================================================
-	/* TODO: get the number of propagating variables */
-	public int getPartialDiffVarCount() throws MathException{
-		//int PartialDiffVarNum = m_vecPartialDiffVar.size();
-		int PartialDiffVarNum = 1;
-		
-		return PartialDiffVarNum;
+	/*-----解析結果表示メソッド-----*/
+	public MathExpression getExpression(int index){
+		/*数式出力*/
+		return super.getExpression(index);
+	}
+	
+	//========================================================
+	//	getDimensions
+	// 		get the dimensions of the matrix as specified in the PdesML file
+	//
+	//	@return
+	// 		int array containing dimensions [nx ny nz]
+	//
+	//========================================================
+	// 
+	public int[] getDimensions() {
+		//int[] arrDimensions = new int[m_vecDimensions.size()];
+		int[] intDimensions = new int[m_vecDimensions.size()];
+		for (int i=0; i<m_vecDimensions.size(); i++){
+			try{
+			intDimensions[i] = Integer.parseInt((m_vecDimensions.get(i)).toLegalString());
+			} catch (MathException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return intDimensions;
+	}
+
+	
+	//========================================================
+	//	getSpacing (only for rectilinear grid)
+	// 		get the spacings for each dimension of the rectilinear grid
+	//
+	//	@return
+	// 		int array containing spacing [sx sy sz]
+	//
+	//========================================================
+	// 
+	public int[] getSpacing() {
+		//int[] arrDimensions = new int[m_vecDimensions.size()];
+		int[] intSpacing = new int[m_vecSpacing.size()];
+		for (int i=0; i<m_vecSpacing.size(); i++){
+			try{
+			intSpacing[i] = Integer.parseInt((m_vecSpacing.get(i)).toLegalString());
+			} catch (MathException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return intSpacing;
 	}
 
 }

@@ -25,6 +25,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.CreateRecMLVariableTableVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.ReplacePartOfVariableNameVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SetAssignRefRecMLVariableTypeVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLTag;
@@ -603,12 +604,15 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		System.out.println(recMLVariableTable.toString());
 		
 		//root.printString(" ");
+		//for(String[] strArray:getAttribute())			
+		//System.out.println(strArray[0]+strArray[1]+strArray[2]+strArray[3]+strArray[4]);
 		
 		/*数式出力*/
 		System.out.println("<Print expressions>-------------------------");
-		if(root!=null)
-			root.printString(m_vecMathExpression, "    ");
-		else
+		if(root!=null){
+			root.printString("   ");
+			printExpressions();
+		}else
 			super.printExpressions();
 		
 		/*改行*/
@@ -784,4 +788,53 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		return recMLVariableTable;
 	}
 
+	/**
+	 * 数式を標準出力する.
+	 * @throws MathException
+	 */
+	public void printExpressions() throws MathException {
+		/*すべての数式を出力*/
+		for (MathExpression it: m_vecMathExpression) {
+
+			System.out.print("Expression["+m_vecMathExpression.indexOf(it)+"]: ");
+			/*数式標準出力*/
+	//		System.out.println(it.toLegalString());
+			String[] strArray=getAttribute(m_vecMathExpression.indexOf(it));
+				for(int i=0;strArray[i]!=null;i++)
+					System.out.print("Loop["+i+"]<"+strArray[i]+">:");
+			
+				System.out.println(it.toLegalString());
+			
+			//変数一覧表示（デバッグ用）
+			//int nVariableCount = it.getVariableCount();
+		//	System.out.println("variablecount:"+nVariableCount);
+		//	for (int j = 0; j < nVariableCount; j++) {
+		//		System.out.println(it.getVariable(j).toLegalString());
+		//	}
+
+		}
+	}
+	
+	
+	public void replaceAllVariable(String regex,String replacement){
+		ReplacePartOfVariableNameVisitor visitor = new ReplacePartOfVariableNameVisitor(regex, replacement);
+		
+		for(Math_ci var: m_ArrayListRecurList){
+			var.replaceStrPresentExt(regex,replacement);
+		}
+		for(Math_ci var: m_ArrayListArithList){
+			var.replaceStrPresentExt(regex,replacement);
+			
+		}
+		for(Math_ci var: m_ArrayListConstList){
+			var.replaceStrPresentExt(regex,replacement);
+			
+		}
+		for(Math_ci var: m_ArrayListOutputList){
+			var.replaceStrPresentExt(regex,replacement);
+		}
+		for(MathExpression expr:this.m_vecMathExpression){
+			expr.traverse(visitor);
+		}
+	}
 }

@@ -10,7 +10,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 public abstract class MathFactor {
 
 	/**表示用文字列*/
-	protected String m_strPresentText;
+	private String m_strPresentText;
 
 	/**要素分類*/
 	protected eMathMLClassification m_classification;
@@ -21,7 +21,7 @@ public abstract class MathFactor {
 	 * @param classification 要素分類
 	 */
 	public MathFactor(String strPresentText,eMathMLClassification classification) {
-		m_strPresentText = strPresentText;
+		setM_strPresentText(strPresentText);
 		m_classification = classification;
 	}
 
@@ -91,4 +91,15 @@ public abstract class MathFactor {
 	 * @param v
 	 */
 	public abstract void traverse(Visitor v);
+
+	public String getM_strPresentText() {
+		return m_strPresentText;
+	}
+
+	public void setM_strPresentText(String m_strPresentText) {
+		this.m_strPresentText = m_strPresentText;
+	}
+	public void replaceStrPresentExt(String regex,String replacement){
+		m_strPresentText=m_strPresentText.replaceAll(regex, replacement);
+	}
 }

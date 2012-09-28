@@ -40,6 +40,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.*;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.SyntaxControl.eControlKind;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.SyntaxDataType.eDataType;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.SyntaxDeclaration.eDeclarationSpecifier;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.SyntaxPreprocessor.ePreprocessorKind;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.tecML.TecMLDefinition.eTecMLVarType;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.StringUtil;
@@ -60,24 +61,97 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * 逐次プログラム構文生成クラス
  */
-public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerator {
+public class CudaRecurrenceProgramGenerator extends ProgramGenerator {
 
 	//========================================================
 	//DEFINE
 	//========================================================
-	private static final String COMPROG_LOOP_INDEX_NAME1 = "__i";
-	private static final String COMPROG_DEFINE_DATANUM_NAME = "__DATA_NUM";
-	private static final String COMPROG_DEFINE_MAXARRAYNUM_NAME = "__MAX_ARRAY_NUM";
+	/**生成CUDAプログラム構文 __i*/
+	public static final String CUPROG_LOOP_INDEX_NAME1 = "__i";
+	/**生成CUDAプログラム構文 __tid*/
+	public static final String CUPROG_KERNEL_INDEX = "__tid";
+	/**生成CUDAプログラム構文 __tmp_idx_x*/
+	public static final String CUPROG_KERNEL_TMP_INDEX1 = "__tmp_idx_x";
+	/**生成CUDAプログラム構文 __tmp_idx_y*/
+	public static final String CUPROG_KERNEL_TMP_INDEX2 = "__tmp_idx_y";
+	/**生成CUDAプログラム構文 __tmp_size_x*/
+	public static final String CUPROG_KERNEL_TMP_INDEX3 = "__tmp_size_x";
+
+	/**生成CUDAプログラム構文 cudaMalloc*/
+	public static final String CUDA_FUNC_STR_CUDAMALLOC = "cudaMalloc";
+	/**生成CUDAプログラム構文 cudaMemcpy*/
+	public static final String CUDA_FUNC_STR_CUDAMEMCPY = "cudaMemcpy";
+	/**生成CUDAプログラム構文 cudaHostAlloc*/
+	public static final String CUDA_FUNC_STR_CUDAHOSTALLOC = "cudaHostAlloc";
+	/**生成CUDAプログラム構文 cudaHostAlloc*/
+	public static final String CUDA_FUNC_STR_CUDAHOSTGETDEVICEPOINTER = "cudaHostGetDevicePointer";
+	/**生成CUDAプログラム構文 cudaMemcpyToSymbol*/
+	public static final String CUDA_FUNC_STR_CUDAMEMCPYTOSYMBOL = "cudaMemcpyToSymbol";
+	/**生成CUDAプログラム構文 cudaFree*/
+	public static final String CUDA_FUNC_STR_CUDAFREE = "cudaFree";
+	/**生成CUDAプログラム構文 cudaFreeHost*/
+	public static final String CUDA_FUNC_STR_CUDAFREEHOST = "cudaFreeHost";
+	/**生成CUDAプログラム構文 CUT_DEVICE_INIT*/
+	public static final String CUDA_FUNC_STR_CUTDEVICEINIT = "CUT_DEVICE_INIT";
+	/**生成CUDAプログラム構文 CUT_EXIT*/
+	public static final String CUDA_FUNC_STR_CUTEXIT = "CUT_EXIT";
+	/**生成CUDAプログラム構文 cudaMemcpyHostToDevice*/
+	public static final String CUDA_CONST_CUDAMEMCPYHOSTTODEVICE = "cudaMemcpyHostToDevice";
+	/**生成CUDAプログラム構文 cudaMemcpyDeviceToHost*/
+	public static final String CUDA_CONST_CUDAMEMCPYDEVICETOHOST = "cudaMemcpyDeviceToHost";
+	/**生成CUDAプログラム構文 cudaMemcpyToSymbol*/
+	public static final String CUDA_CONST_CUDAMEMCPYTOSYMBOL = "cudaMemcpyToSymbol";
+	/**生成CUDAプログラム構文 cudaMemcpyToSymbol*/
+	public static final String CUDA_CONST_CUDAHOSTALLOCMAPPED = "cudaHostAllocMapped";
+	/**生成CUDAプログラム構文 cudaMemcpyToSymbol*/
+	public static final String CUDA_CONST_CUDAHOSTALLOCDEFAULT = "cudaHostAllocDefault";
+	/**生成CUDAプログラム構文 __DATA_NUM*/
+	public static final String CUPROG_DEFINE_DATANUM_NAME = "__DATA_NUM";
+	/**生成CUDAプログラム構文 __DATA_NUMX*/
+	public static final String CUPROG_DEFINE_DATANUM_NAMEX = "__DATA_NUMX";
+	/**生成CUDAプログラム構文 __DATA_NUMY*/
+	public static final String CUPROG_DEFINE_DATANUM_NAMEY = "__DATA_NUMY";
+	/**生成CUDAプログラム構文 __THREADS_X*/
+	public static final String CUPROG_DEFINE_THREADS_SIZE_X_NAME = "__THREADS_X";
+	/**生成CUDAプログラム構文 __THREADS_X*/
+	public static final String CUPROG_DEFINE_THREADS_SIZE_Y_NAME = "__THREADS_Y";
+	/**生成CUDAプログラム構文 __THREADS_Z*/
+	public static final String CUPROG_DEFINE_THREADS_SIZE_Z_NAME = "__THREADS_Z";
+	/**生成CUDAプログラム構文 __BLOCKS_X*/
+	public static final String CUPROG_DEFINE_BLOCKS_SIZE_X_NAME = "__BLOCKS_X";
+	/**生成CUDAプログラム構文 __BLOCKS_Y*/
+	public static final String CUPROG_DEFINE_BLOCKS_SIZE_Y_NAME = "__BLOCKS_Y";
+	/**生成CUDAプログラム構文 __BLOCKS_Z*/
+	public static final String CUPROG_DEFINE_BLOCKS_SIZE_Z_NAME = "__BLOCKS_Z";
+
+	/**生成CUDAプログラム構文 スレッド数X*/
+	public static final int CUPROG_THREAD_SIZE_X = 256;
+	/**生成CUDAプログラム構文 スレッド数Y*/
+	public static final int CUPROG_THREAD_SIZE_Y = 1;
+	/**生成CUDAプログラム構文 スレッド数Z*/
+	public static final int CUPROG_THREAD_SIZE_Z = 1;
+
+	/**生成CUDAプログラム構文 argc*/
+	public static final String CUPROG_VAR_STR_ARGC = "argc";
+	/**生成CUDAプログラム構文 argv*/
+	public static final String CUPROG_VAR_STR_ARGV = "argv";
+	protected static final String CUPROG_DEFINE_MAXARRAYNUM_NAME = "__MAX_ARRAY_NUM";
 
 	/*共通変数*/
-	protected Math_ci m_pDefinedDataSizeVar;		//データ数として#defineされる定数
+	protected Math_ci m_pDefinedDataSizeVar;	//データ数として#defineされる定数
+	protected Math_ci m_pDefinedDataSizeVarX;
+	protected Math_ci m_pDefinedDataSizeVarY;
+	protected Math_ci m_pKernelIndexVar;		//カーネル中のスレッドインデックスを表す変数
 
 	/*-----コンストラクタ-----*/
-	public CudaRecurrenceRelationGeneratorStatementList(RecMLAnalyzer pRecMLAnalyzer)
+	public CudaRecurrenceProgramGenerator(RecMLAnalyzer pRecMLAnalyzer)
 	throws MathException 	{
 		super(pRecMLAnalyzer);
+		m_pKernelIndexVar = null;
 		m_pDefinedDataSizeVar = null;
-		initialize();
+		m_pDefinedDataSizeVarX = null;
+		m_pDefinedDataSizeVarY = null;
+			initialize();
 	}
 
 	//========================================================
@@ -101,19 +175,68 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 		/*プログラム構文生成*/
 		SyntaxProgram pSynProgram = this.createNewProgram();
 
-		/*プリプロセッサ構文生成・追加*/
+		/*include構文生成・追加*/
 		SyntaxPreprocessor pSynInclude1 =
 			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "stdio.h");
 		SyntaxPreprocessor pSynInclude2 =
-			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "stdlib.h");
-		SyntaxPreprocessor pSynInclude3 =
 			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "math.h");
+		SyntaxPreprocessor pSynInclude3 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "cutil.h");
+		SyntaxPreprocessor pSynInclude4 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "cuda.h");
 		pSynProgram.addPreprocessor(pSynInclude1);
 		pSynProgram.addPreprocessor(pSynInclude2);
 		pSynProgram.addPreprocessor(pSynInclude3);
+		pSynProgram.addPreprocessor(pSynInclude4);
 		
-		SyntaxFunction pSynMainFunc = this.createMainFunction();
+		
+		
+		/*データ数定義defineの追加*/
+		String strElementNum = String.valueOf(m_unElementNum);
+		String strElementNumX = String.valueOf(m_unElementNumX);
+		String strElementNumY = String.valueOf(m_unElementNumY);
+		SyntaxPreprocessor pSynDefine1 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					CUPROG_DEFINE_DATANUM_NAME + " " + strElementNum);
+		SyntaxPreprocessor pSynDefineX =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					CUPROG_DEFINE_DATANUM_NAMEX + " " + strElementNumX);
+		SyntaxPreprocessor pSynDefineY =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					CUPROG_DEFINE_DATANUM_NAMEY + " " + strElementNumY);
+		pSynProgram.addPreprocessor(pSynDefine1);
+		pSynProgram.addPreprocessor(pSynDefineX);
+		pSynProgram.addPreprocessor(pSynDefineY);
+
+		/*グリッド定義defineの追加*/
+		this.addGridDefinitionToProgram(pSynProgram);
+
+
+		/*メイン関数の生成*/
+	
+		CudaRecurrenceMainFuncGenerator pCudaMainFuncGenerator =
+			new CudaRecurrenceMainFuncGenerator(m_pRecMLAnalyzer);
+		pCudaMainFuncGenerator.setElementNum(m_unElementNum);
+		pCudaMainFuncGenerator.setTimeParam(m_dStartTime, m_dEndTime, m_dDeltaTime);
+
+		SyntaxFunction pSynMainFunc = pCudaMainFuncGenerator.getSyntaxMainFunction();
 		pSynProgram.addFunction(pSynMainFunc);
+
+		/*初期カーネル生成・追加*/
+		//CudaRecurrenceInitKernelGenerator pCudaInitKernelGenerator =
+		//	new CudaRecurrenceInitKernelGenerator(m_pCellMLAnalyzer, m_pRelMLAnalyzer, m_pTecMLAnalyzer);
+		//SyntaxFunction pSynInitKernel = pCudaInitKernelGenerator.getSyntaxInitKernel();
+		//pSynProgram.addFunction(pSynInitKernel);
+
+		/*計算カーネル生成・追加*/
+		CudaRecurrenceCalcKernelGenerator pCudaCalcKernelGenerator =
+			new CudaRecurrenceCalcKernelGenerator(m_pRecMLAnalyzer);
+		SyntaxFunction  pSynCalcKernel = pCudaCalcKernelGenerator.getSyntaxCalcKernel();
+	
+		pSynProgram.addFunction(pSynCalcKernel);
+		
+//		SyntaxFunction pSynMainFunc = this.createMainFunction();
+//		pSynProgram.addFunction(pSynMainFunc);
 		
 		//String[] strAttr_Original = new String[] {null, null, null};
 		//pSynMainFunc = this.MainFunc1(pSynMainFunc, strAttr_Original);
@@ -122,384 +245,14 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 		//String[] strAttr_Original = new String[] {null, null, null};
 		//pSynMainFunc = this.MainFunc(pSynMainFunc, LoopNumber, strAttr_Original, null);
 				
-		/*RecurVar変数の宣言*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
-
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
-			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapRecurVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
-			String parenthesis = "";
-			for(int j = 0; j < parenthesisnum-1; j++){
-				parenthesis += "[" + COMPROG_DEFINE_MAXARRAYNUM_NAME + "]";
-			}
-			
-			/*宣言用変数の生成*/
-			Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-					m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i).toLegalString()+ parenthesis);
-
-			/*宣言の生成*/
-			SyntaxDeclaration pSynVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynVarDec);
-		}
-		
-		/*ArithVar変数の宣言*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
-
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
-			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
-			String parenthesis = "";
-			for(int j = 0; j < parenthesisnum-1; j++){
-				parenthesis += "[" + COMPROG_DEFINE_MAXARRAYNUM_NAME + "]";
-			}
-			
-			/*宣言用変数の生成*/
-			Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-					m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i).toLegalString()+ parenthesis);
-
-			/*宣言の生成*/
-			SyntaxDeclaration pSynVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynVarDec);
-		}
-		
-		/*Constの宣言*/
-		for (int i = 0; i <m_pRecMLAnalyzer.getM_ArrayListConstVar().size(); i++) {
-
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
-			/*宣言用変数の生成*/
-			Math_ci pDecVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i).toLegalString());
-
-			/*宣言の生成*/
-			SyntaxDeclaration pSynConstVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynConstVarDec);
-		}
-		
-		/*OutputVar変数の宣言*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
-			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
-
-			if(parenthesisnum < 2){
-				/*double型ポインタ配列構文生成*/
-				SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
-				/*宣言用変数の生成*/
-				Math_ci pDecVar =
-					(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-							m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalString());
-
-				/*宣言の生成*/
-				SyntaxDeclaration pSynConstVarDec =
-					new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-				/*宣言の追加*/
-				pSynMainFunc.addDeclaration(pSynConstVarDec);
-			}else{
-				/*double型ポインタ配列構文生成*/
-				SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
-				String parenthesis = "";
-				for(int j = 0; j < parenthesisnum-2; j++){
-					parenthesis += "[" + COMPROG_DEFINE_MAXARRAYNUM_NAME + "]";
-				}
-				
-				/*宣言用変数の生成*/
-				Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalString()+ parenthesis);
 	
-				/*宣言の生成*/
-				SyntaxDeclaration pSynVarDec =
-					new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-	
-				/*宣言の追加*/
-				pSynMainFunc.addDeclaration(pSynVarDec);
-			}
-		}
 		
-		/*RecurVar変数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
-
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapRecurVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
-			if(parenthesisnum ==1 ){
-				Math_ci pMathRecurSize =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_DEFINE_MAXARRAYNUM_NAME);
-				
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i),
-						pMathRecurSize));
-				
-			}else if(1 < parenthesisnum){
-				Math_times pMathTimes =
-					(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-				for(int j = 0; j < parenthesisnum; j++){
-					Math_ci pMathRecurSize =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								COMPROG_DEFINE_MAXARRAYNUM_NAME);
-					pMathTimes.addFactor(pMathRecurSize);
-				}
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i),
-						pMathTimes));
-			}
-		}
-			
-		/*ArithVar変数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
-
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
-			if(parenthesisnum ==1 ){
-				Math_ci pMathRecurSize =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_DEFINE_MAXARRAYNUM_NAME);
-				
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i),
-						pMathRecurSize));
-				
-			}else if(1 < parenthesisnum){
-				Math_times pMathTimes =
-					(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-				for(int j = 0; j < parenthesisnum; j++){
-					Math_ci pMathRecurSize =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								COMPROG_DEFINE_MAXARRAYNUM_NAME);
-					pMathTimes.addFactor(pMathRecurSize);
-				}
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i),
-						pMathTimes));
-			}
-		}
-		
-		/*OutputVar変数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
-			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
-
-			if(parenthesisnum-1 == 1 ){
-				Math_ci pMathRecurSize =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_DEFINE_MAXARRAYNUM_NAME);
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i),
-						pMathRecurSize));
-				
-			}else if(1 < parenthesisnum-1){
-				Math_times pMathTimes =
-					(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-				for(int j = 0; j < parenthesisnum; j++){
-					Math_ci pMathRecurSize =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								COMPROG_DEFINE_MAXARRAYNUM_NAME);
-					pMathTimes.addFactor(pMathRecurSize);
-				}
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i),
-						pMathTimes));
-			}
-		}
-		
-		
-		
-		int MaxLoopNumber = 1;
-		pSynMainFunc.addStatement(this.MainFuncSyntaxStatementList(MaxLoopNumber));
-		
-		
-//		----------------------------------------------
-		//free関数呼び出しの追加
-		//----------------------------------------------
-		/*RecurVar変数のfree*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createFree( m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i)));
-		}
-		/*ArithVar変数のfree*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createFree( m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i)));
-		}
-		/*OutputVar変数のfree*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
-			/*宣言の追加*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
-			if(1 < parenthesisnum){
-				pSynMainFunc.addStatement(createFree( m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i)));
-			}
-		}
 
 		/*プログラム構文を返す*/
 		return pSynProgram;
 	}
 	
-	protected SyntaxStatementList MainFuncSyntaxStatementList(int MaxLoopNumber) throws SyntaxException {
-		SyntaxStatementList aStatementList = null;
-
-		// add declaration for main function
-
-		// add first do-while loop structure
-		// for debug
-		//String[] strAttr_Now = new String[] {"pre", null, null};
-		String[] strAttr_Now = new String[] {null, null, null, null, null};
-		try {
-			// for debug
-			//aStatementList = MakeDowhileLoop(MaxLoopNumber, 1, strAttr_Now);
-			aStatementList = MakeDowhileLoop(MaxLoopNumber, 0, strAttr_Now);
-		} catch (TranslateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return aStatementList;
-	}
 	
-	protected SyntaxStatementList MakeDowhileLoop(int MaxLoopNumber, int LoopNumber, String[] strAttr_Now) throws TranslateException, MathException, SyntaxException {
-		SyntaxStatementList aStatementList = new SyntaxStatementList();
-		
-		/*----- process "pre" -----*/
-		String[] strAttr_pre = strAttr_Now.clone();
-		strAttr_pre[LoopNumber] = "pre";
-		SyntaxStatementList aStatementList_pre = new SyntaxStatementList();
-		if (m_pRecMLAnalyzer.hasChild(strAttr_pre)) {
-			// strAttr[LoopNumber] = "pre" has inner loopStructure
-			aStatementList_pre.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_pre), strAttr_pre));
-		}
-		else {
-			// strAttr[LoopNumber] = "pre" has no inner loop
-			aStatementList_pre.addStatement(createStatementList(strAttr_pre));
-		}
-		aStatementList.addStatement(aStatementList_pre);
-		// for debug
-		String strNow = null;
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
-		
-		/*----- process init -----*/
-		String[] strAttr_init = strAttr_Now.clone();
-		SyntaxStatementList aStatementList_init = new SyntaxStatementList();
-		strAttr_init[LoopNumber] = "init";
-		if (m_pRecMLAnalyzer.hasChild(strAttr_init)) {
-			// strAttr[LoopNumber] = "init" has inner loopStructure
-			aStatementList_init.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_init), strAttr_init));
-		} else {
-			// strAttr[LoopNumber] = "init" has no inner loop
-			aStatementList_init.addStatement(createStatementList(strAttr_init));
-		}
-		aStatementList.addStatement(aStatementList_init);
-		// for debug
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
-
-		/*----- process loop structure -----*/
-		// strAttr[LoopNumber] has 
-		if( m_pRecMLAnalyzer.hasInner(LoopNumber) ){
-			/* create loop structure */
-			/*----- create "tn" = 0 (loop index string = RecMLAnalyzer.getIndexString(LoopNumber)) -----*/
-			aStatementList.addStatement(createInitEqu(LoopNumber));
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
-
-			/*----- create loop condition -----*/
-			SyntaxControl pSynDowhile = createSyntaxDowhile(LoopNumber, strAttr_Now);
-			aStatementList.addStatement(pSynDowhile);
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
-
-			/*----- create inner Statements and add to Do While loop -----*/
-			String[] strAttr_inner = strAttr_Now.clone();
-			strAttr_inner[LoopNumber] = "inner";
-			SyntaxStatementList aStatementList_inner = new SyntaxStatementList();
-			if (m_pRecMLAnalyzer.hasChild(strAttr_inner)) {
-				//strAttr[LoopNumber] = "inner" has inner loop structure
-				aStatementList_inner.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_inner), strAttr_inner));
-			} else {
-				//strAttr[LoopNumber] = "inner" has no inner loop
-				aStatementList_inner.addStatement(createStatementList(strAttr_inner));
-			}
-			pSynDowhile.addStatement(aStatementList_inner);
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
-
-			/*----- insert loop counter increment -----*/
-			pSynDowhile.addStatement(createIndexIncrementEqu(LoopNumber));
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
-		}
-		
-		/*----- process final -----*/
-		String[] strAttr_final = strAttr_Now.clone();
-		strAttr_final[LoopNumber] = "final";
-		SyntaxStatementList aStatementList_final = new SyntaxStatementList();
-		if (m_pRecMLAnalyzer.hasChild(strAttr_final)) {
-			// strAttr[LoopNumber] = "final" has inner loopStructure
-			aStatementList_final.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_final), strAttr_final));
-		} else {
-			// strAttr[LoopNumber] = "final" has no inner loop
-			aStatementList_final.addStatement(createStatementList(strAttr_final));
-		}
-		aStatementList.addStatement(aStatementList_final);
-		// for debug
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
-		
-		/*----- process post -----*/
-		String[] strAttr_post = strAttr_Now.clone();
-		strAttr_post[LoopNumber] = "post";
-		SyntaxStatementList aStatementList_post = new SyntaxStatementList();
-		if (m_pRecMLAnalyzer.hasChild(strAttr_post)) {
-			// strAttr[LoopNumber] = "post" has inner loopStructure
-			aStatementList_post.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_post), strAttr_post));
-		} else {
-			// strAttr[LoopNumber] = "post" has no inner loop
-			aStatementList_post.addStatement(createStatementList(strAttr_post));
-		}
-		aStatementList.addStatement(aStatementList_post);
-		// for debug
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
-		
-		return aStatementList;
-	}
 			
 	//========================================================
 	//initialize
@@ -507,11 +260,26 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 	//
 	//========================================================
 	/*-----初期化・終了処理メソッド-----*/
+	/**
+	 * 初期化する.
+	 * @throws MathException
+	 */
 	protected void initialize() throws MathException {
+		/*共通変数生成*/
+		m_pKernelIndexVar =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					CUPROG_KERNEL_INDEX);
 		m_pDefinedDataSizeVar =
 			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-							   COMPROG_DEFINE_DATANUM_NAME);
+					CUPROG_DEFINE_DATANUM_NAME);
+		m_pDefinedDataSizeVarX =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					CUPROG_DEFINE_DATANUM_NAMEX);
+		m_pDefinedDataSizeVarY =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					CUPROG_DEFINE_DATANUM_NAMEY);
 	}
+
 
 	//========================================================
 	//createExpressions
@@ -958,7 +726,7 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 								   String.valueOf(i));
 			Math_ci pLoopIndexVar =
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_LOOP_INDEX_NAME1);
+						CUPROG_LOOP_INDEX_NAME1);
 
 			Math_times pMathTimes =
 				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
@@ -992,7 +760,7 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 								   String.valueOf(i));
 			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
+				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,CUPROG_LOOP_INDEX_NAME1);
 
 			Math_times pMathTimes =
 				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
@@ -1054,7 +822,7 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 								   String.valueOf(nIndex));
 			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
+				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,CUPROG_LOOP_INDEX_NAME1);
 
 			Math_times pMathTimes =
 				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
@@ -1088,7 +856,7 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 								   String.valueOf(nIndex));
 			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
+				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,CUPROG_LOOP_INDEX_NAME1);
 
 			Math_times pMathTimes =
 				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
@@ -1122,7 +890,7 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 								   String.valueOf(nIndex));
 			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
+				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,CUPROG_LOOP_INDEX_NAME1);
 
 			Math_times pMathTimes =
 				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
@@ -1226,5 +994,163 @@ public class CudaRecurrenceRelationGeneratorStatementList extends ProgramGenerat
 		return pSynDowhile;
 	}
 	
-	
+	/*-----定型構文生成系メソッド-----*/
+
+	/**
+	 * グリッドプリプロセッサ定義を追加する.
+	 * @param pSynDstProgram 追加先のプログラム構文
+	 */
+	protected void addGridDefinitionToProgram(SyntaxProgram pSynDstProgram) {
+
+		/*スレッド数・ブロック数の初期化*/
+		int nThreadsX = CUPROG_THREAD_SIZE_X;
+		int nThreadsY = CUPROG_THREAD_SIZE_Y;
+		int nThreadsZ = CUPROG_THREAD_SIZE_Z;
+
+		int nBlocksY = 1;
+
+		/*文字列を生成*/
+		String strThreadsX = String.valueOf(nThreadsX);
+		String strThreadsY = String.valueOf(nThreadsY);
+		String strThreadsZ = String.valueOf(nThreadsZ);
+		String strBlocksY = String.valueOf(nBlocksY);
+
+		/*define構文の生成*/
+		SyntaxPreprocessor pSynDefine1 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					       CUPROG_DEFINE_THREADS_SIZE_X_NAME + " " + strThreadsX);
+		SyntaxPreprocessor pSynDefine2 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					       CUPROG_DEFINE_THREADS_SIZE_Y_NAME + " " + strThreadsY);
+		SyntaxPreprocessor pSynDefine3 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					       CUPROG_DEFINE_THREADS_SIZE_Z_NAME + " " + strThreadsZ);
+		SyntaxPreprocessor pSynDefine4 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					       CUPROG_DEFINE_BLOCKS_SIZE_X_NAME +
+					       " ( " + CUPROG_DEFINE_DATANUM_NAME + " / " + " ( " +
+					       CUPROG_DEFINE_THREADS_SIZE_X_NAME + " * " +
+					       CUPROG_DEFINE_THREADS_SIZE_Y_NAME + " * " +
+					       CUPROG_DEFINE_THREADS_SIZE_Z_NAME + " ) ) ");
+		SyntaxPreprocessor pSynDefine5 =
+			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
+					       CUPROG_DEFINE_BLOCKS_SIZE_Y_NAME + " " + strBlocksY);
+
+		/*生成したdefine構文の追加*/
+		pSynDstProgram.addPreprocessor(pSynDefine1);
+		pSynDstProgram.addPreprocessor(pSynDefine2);
+		pSynDstProgram.addPreprocessor(pSynDefine3);
+		pSynDstProgram.addPreprocessor(pSynDefine4);
+		pSynDstProgram.addPreprocessor(pSynDefine5);
+	}
+
+	/**
+	 * カーネルを生成する.
+	 * @param strKernelName カーネルの名前
+	 * @return 生成したカーネル構文インスタンス
+	 * @throws MathException
+	 */
+	protected SyntaxFunction createKernel(String strKernelName)
+	throws MathException {
+		/*カーネルインスタンス生成*/
+		SyntaxDataType pSynVoidType = new SyntaxDataType(eDataType.DT_VOID, 0);
+		SyntaxFunction pSynKernelFunc = new SyntaxFunction(strKernelName, pSynVoidType);
+		pSynKernelFunc.addDeclarationSpecifier(eDeclarationSpecifier.DS_CUDA_GLOBAL);
+
+		/*カーネルインデックス変数の宣言追加*/
+		SyntaxDataType SynIntType = new SyntaxDataType(eDataType.DT_UINT, 0);
+
+		Math_ci pTmpIndexVar1 =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					CUPROG_KERNEL_TMP_INDEX1);
+		Math_ci pTmpIndexVar2 =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					CUPROG_KERNEL_TMP_INDEX2);
+		Math_ci pTmpIndexVar3 =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					CUPROG_KERNEL_TMP_INDEX3);
+
+		SyntaxDeclaration pSynKernelTempIndexVarDec1 =
+			new SyntaxDeclaration(SynIntType, pTmpIndexVar1);
+		SyntaxDeclaration pSynKernelTempIndexVarDec2 =
+			new SyntaxDeclaration(SynIntType, pTmpIndexVar2);
+		SyntaxDeclaration pSynKernelTempIndexVarDec3 =
+			new SyntaxDeclaration(SynIntType, pTmpIndexVar3);
+		SyntaxDeclaration pSynKernelIndexVarDec =
+			new SyntaxDeclaration(SynIntType, m_pKernelIndexVar);
+
+		/*宣言修飾子の追加*/
+		pSynKernelTempIndexVarDec1.addDeclarationSpecifier(eDeclarationSpecifier.DS_CONST);
+		pSynKernelTempIndexVarDec2.addDeclarationSpecifier(eDeclarationSpecifier.DS_CONST);
+		pSynKernelTempIndexVarDec3.addDeclarationSpecifier(eDeclarationSpecifier.DS_CONST);
+		pSynKernelIndexVarDec.addDeclarationSpecifier(eDeclarationSpecifier.DS_CONST);
+
+		/*宣言をカーネルに追加*/
+		pSynKernelFunc.addDeclaration(pSynKernelTempIndexVarDec1);
+		pSynKernelFunc.addDeclaration(pSynKernelTempIndexVarDec2);
+		pSynKernelFunc.addDeclaration(pSynKernelTempIndexVarDec3);
+		pSynKernelFunc.addDeclaration(pSynKernelIndexVarDec);
+
+		/*初期化式に用いるオペランドと演算子の生成*/
+		Math_ci pVarThreadIdxX =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "threadIdx.x");
+		Math_ci pVarThreadIdxY =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "threadIdx.y");
+		Math_ci pVarBlockIdxX =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "blockIdx.x");
+		Math_ci pVarBlockIdxY =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "blockIdx.y");
+		Math_ci pVarBlockDimX =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "blockDim.x");
+		Math_ci pVarBlockDimY =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "blockDim.y");
+		Math_ci pVarGridDimX =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "gridDim.x");
+		Math_plus pMathPlus1 =
+			(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
+		Math_plus pMathPlus2 =
+			(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
+		Math_plus pMathPlus3 =
+			(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
+		Math_times pMathTimes1 =
+			(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
+		Math_times pMathTimes2 =
+			(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
+		Math_times pMathTimes3 =
+			(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
+		Math_times pMathTimes4 =
+			(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
+
+		/*初期化式構築*/
+		pMathTimes1.addFactor(pVarBlockDimX);
+		pMathTimes1.addFactor(pVarBlockIdxX);
+		pMathPlus1.addFactor(pVarThreadIdxX);
+		pMathPlus1.addFactor(pMathTimes1);
+		MathExpression pInitExp1 = new MathExpression(pMathPlus1);
+
+		pMathTimes2.addFactor(pVarBlockDimY);
+		pMathTimes2.addFactor(pVarBlockIdxY);
+		pMathPlus2.addFactor(pVarThreadIdxY);
+		pMathPlus2.addFactor(pMathTimes2);
+		MathExpression pInitExp2 = new MathExpression(pMathPlus2);
+
+		pMathTimes3.addFactor(pVarBlockDimX);
+		pMathTimes3.addFactor(pVarGridDimX);
+		MathExpression pInitExp3 = new MathExpression(pMathTimes3);
+
+		pMathTimes4.addFactor(pTmpIndexVar2);
+		pMathTimes4.addFactor(pTmpIndexVar3);
+		pMathPlus3.addFactor(pTmpIndexVar1);
+		pMathPlus3.addFactor(pMathTimes4);
+		MathExpression pInitExp4 = new MathExpression(pMathPlus3);
+
+		/*初期化式の追加*/
+		pSynKernelTempIndexVarDec1.addInitExpression(pInitExp1);
+		pSynKernelTempIndexVarDec2.addInitExpression(pInitExp2);
+		pSynKernelTempIndexVarDec3.addInitExpression(pInitExp3);
+		pSynKernelIndexVarDec.addInitExpression(pInitExp4);
+
+		return pSynKernelFunc;
+	}
+
 }

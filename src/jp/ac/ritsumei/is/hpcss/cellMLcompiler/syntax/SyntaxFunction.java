@@ -128,6 +128,7 @@ public class SyntaxFunction extends Syntax {
 		//宣言構文追加
 		//------------------------------------------
 		{
+			
 			/*順次追加*/
 			for (SyntaxDeclaration it: m_vecSynDeclaration) {
 				strPresentText.append(getIndentString() + it.toLegalString() + StringUtil.lineSep);

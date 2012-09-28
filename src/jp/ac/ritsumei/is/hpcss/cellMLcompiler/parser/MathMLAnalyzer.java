@@ -350,4 +350,14 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	public String[] getAttribute(int mathExpIndex) {
 		return m_vecAttrList.get(mathExpIndex);
 	}
+	//========================================================
+	// getAttribute
+	//  get the values of the MathOperator attributes from the attribute list
+	//
+	// return
+	//	Vector<String[]> strAttributes
+	//========================================================
+	public Vector<String[]> getAttribute() {
+		return m_vecAttrList;
+	}
 }

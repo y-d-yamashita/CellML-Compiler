@@ -55,7 +55,7 @@ public class Math_cn extends MathOperand {
 
 	/*-----数式複製メソッド-----*/
 	public MathFactor createCopy() throws MathException {
-		MathFactor newFactor = MathFactory.createOperand(m_operandKind,m_strPresentText,
+		MathFactor newFactor = MathFactory.createOperand(m_operandKind,getM_strPresentText(),
 				m_sepType,m_strSepValue);
 		
 		((Math_cn)newFactor).m_Type = this.m_Type;
@@ -79,7 +79,7 @@ public class Math_cn extends MathOperand {
 
 				//------------------------指数表記
 				case MSEP_E_NOTATION:
-					return m_strPresentText + "E" + m_strSepValue;
+					return getM_strPresentText() + "E" + m_strSepValue;
 
 				//------------------------定義されないタイプ
 				default:
@@ -91,9 +91,9 @@ public class Math_cn extends MathOperand {
 		/*sepのない場合*/
 		else{
 			if(m_Type == "double"){
-				return "(double)" + m_strPresentText;
+				return "(double)" + getM_strPresentText();
 			}else{
-				return m_strPresentText;
+				return getM_strPresentText();
 			}
 		}
 	}
@@ -101,7 +101,7 @@ public class Math_cn extends MathOperand {
 	/*-----文字列変換メソッド-----*/
 	public String toSelectorLegalString() throws MathException {
 
-		return m_strPresentText.substring(8);
+		return getM_strPresentText().substring(8);
 		
 	}
 }

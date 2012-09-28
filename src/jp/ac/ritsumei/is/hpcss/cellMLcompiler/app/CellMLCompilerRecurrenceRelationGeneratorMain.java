@@ -208,6 +208,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 			//new RecurrenceRelationGenerator(pRecMLAnalyzer);
 			//new RecurrenceRelationGeneratorStatementList(pRecMLAnalyzer);
 			new RecurrenceRelationGeneratorStatementList(pRecMLAnalyzer);
+	//		new CudaRecurrenceRelationGeneratorStatementList(pRecMLAnalyzer);
 			} catch (MathException e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
@@ -353,6 +354,6 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
         System.err.println("  Generator:  "+DEFALUT_GENERATOR);
 	}
 	
-	private static Graph<RecMLVertex,ReMLEdge> createBipatieGraph()
+//	private static Graph<RecMLVertex,ReMLEdge> createBipatieGraph()
 	
 }

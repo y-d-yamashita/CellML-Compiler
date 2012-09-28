@@ -24,6 +24,16 @@ public class RelMLDefinition {
 	public static final String RELML_TAG_STR_COMPONENT = "component";
 	/**RelMLタグ文字列定義 math*/
 	public static final String RELML_TAG_STR_MATH = "math";
+	/**RelMLタグ文字列定義 morphology*/
+	public static final String RELML_TAG_STR_MORPHOLOGY = "morphology";
+	/**RelMLタグ文字列定義 geometry*/
+	public static final String RELML_TAG_STR_GEOMETRY = "geometry";
+	/**RelMLタグ文字列定義 mesh*/
+	public static final String RELML_TAG_STR_MESH = "mesh";
+	/**RelMLタグ文字列定義 boundary conditions*/
+	public static final String RELML_TAG_STR_BOUNDARY = "boundary-cond";
+	/**RelMLタグ文字列定義 distributed parameters*/
+	public static final String RELML_TAG_STR_PARAMETER = "parameter-cond";
 
 	/**RelML変数型文字列定義 timevar*/
 	public static final String RELML_VARTYPE_STR_TIMEVAR = "timevar";
@@ -33,8 +43,12 @@ public class RelMLDefinition {
 	public static final String RELML_VARTYPE_STR_ARITHVAR = "arithvar";
 	/**RelML変数型文字列定義 constvar*/
 	public static final String RELML_VARTYPE_STR_CONSTVAR = "constvar";
-	/**RelML variable for partial differential equations */
-	public static final String RELML_VARTYPE_STR_PARTIALDIFFVAR = "partialdiffvar";
+	/**RelML temporal and spatial dimension variable names*/
+	public static final String RELML_VARTYPE_STR_DIMENSIONVAR = "dimensionvar";
+	/**RelML variable for discretization indices */
+	public static final String RELML_VARTYPE_STR_INDEXVAR = "indexvar";
+	/**RelML variable for delta time and delta space */
+	public static final String RELML_VARTYPE_STR_DELTAVAR = "deltavar";
 
 
 	//========================================================
@@ -52,6 +66,11 @@ public class RelMLDefinition {
 		RTAG_DIFFEQU	(RELML_TAG_STR_DIFFEQU),
 		RTAG_COMPONENT	(RELML_TAG_STR_COMPONENT),
 		RTAG_MATH		(RELML_TAG_STR_MATH),
+		RTAG_MORPHOLOGY	(RELML_TAG_STR_MORPHOLOGY),
+		RTAG_GEOMETRY	(RELML_TAG_STR_GEOMETRY),
+		RTAG_MESH		(RELML_TAG_STR_MESH),
+		RTAG_BOUNDARY	(RELML_TAG_STR_BOUNDARY),
+		RTAG_PARAMETER	(RELML_TAG_STR_PARAMETER),
 			;
 		private final String operatorStr;
 		private eRelMLTag(String operatorstr) {
@@ -70,7 +89,9 @@ public class RelMLDefinition {
 		RVAR_TYPE_DIFFVAR	(RELML_VARTYPE_STR_DIFFVAR),
 		RVAR_TYPE_ARITHVAR	(RELML_VARTYPE_STR_ARITHVAR),
 		RVAR_TYPE_CONSTVAR	(RELML_VARTYPE_STR_CONSTVAR),
-		RVAR_TYPE_PARTIALDIFFVAR	(RELML_VARTYPE_STR_PARTIALDIFFVAR),
+		RVAR_TYPE_DIMENSIONVAR	(RELML_VARTYPE_STR_DIMENSIONVAR),
+		RVAR_TYPE_INDEXVAR		(RELML_VARTYPE_STR_INDEXVAR),
+		RVAR_TYPE_DELTAVAR		(RELML_VARTYPE_STR_DELTAVAR),
 			;
 		private final String operatorStr;
 		private eRelMLVarType(String operatorstr) {

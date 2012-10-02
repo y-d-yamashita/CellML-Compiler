@@ -30,6 +30,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SetAssignRefRecMLVa
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLVarType;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 
 
@@ -603,10 +604,12 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		
 		System.out.println(recMLVariableTable.toString());
 		
+		System.out.println(new RecMLEquationAndVariableContener(this,recMLVariableTable).toString());
 		//root.printString(" ");
 		//for(String[] strArray:getAttribute())			
 		//System.out.println(strArray[0]+strArray[1]+strArray[2]+strArray[3]+strArray[4]);
 		
+		System.out.println();
 		/*数式出力*/
 		System.out.println("<Print expressions>-------------------------");
 		if(root!=null){
@@ -614,6 +617,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			printExpressions();
 		}else
 			super.printExpressions();
+		
 		
 		/*改行*/
 		System.out.println();

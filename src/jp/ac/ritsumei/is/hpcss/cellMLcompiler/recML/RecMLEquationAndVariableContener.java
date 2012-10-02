@@ -18,22 +18,46 @@ public class RecMLEquationAndVariableContener {
 
 	private RecMLVariableTable recMLVariableTable;
 	private RecMLAnalyzer recMLAnalyzer;
+	private List<Integer> equationIdList;
+	private List<Integer> variableIdList;
+	private List<RecMLVariableReference> varRefList;
+
 	
 	public RecMLEquationAndVariableContener(RecMLAnalyzer analyzer,RecMLVariableTable table){
 		recMLVariableTable=table;
 		recMLAnalyzer=analyzer;
+		setEquationIDs();
+		setVarRefList();
+		setVariableIDs();
+
 	}
+	
+	private void setEquationIDs(){
+		equationIdList = new ArrayList<Integer>();
+		for(int i =0;i<recMLAnalyzer.getExpressionCount();i++)
+			equationIdList.add(i);
+		
+	}
+	
+	private void setVariableIDs(){
+		variableIdList = new ArrayList<Integer>();
+		for(RecMLVariableReference r:varRefList)
+			variableIdList.add(r.getID());
+		
+	}
+	
+	private void setVarRefList(){
+		varRefList = recMLVariableTable.getSortedRecMLVariableReferencesList();
+		
+	}
+	
 	/**
 	 * Get equations IDs
 	 * @return equation ID list
 	 */
 	public List<Integer> getEquationIDs(){
-		List<Integer> idList = new ArrayList<Integer>();
-		
-		for(int i =0;i<recMLAnalyzer.getExpressionCount();i++)
-			idList.add(i);
 			
-		return idList;
+		return equationIdList;
 	}
 	
 	
@@ -42,12 +66,8 @@ public class RecMLEquationAndVariableContener {
 	 * @return variable ID list
 	 */
 	public List<Integer> getVariableIDs(){
-		List<Integer> idList = new ArrayList<Integer>();
 		
-		for(int i=0;i<recMLVariableTable.getVariableCount();i++)
-			idList.add(i);
-		
-		return idList;
+		return variableIdList;
 	}
 	
 	
@@ -56,17 +76,22 @@ public class RecMLEquationAndVariableContener {
 	 * @param equationID
 	 * @return variable ID list
 	 */
-	public List<List<Integer>> getVariableIDsOfEquation(int equationID){
-		List<List<Integer>> idListList = new ArrayList<List<Integer>>();
-		List<RecMLVariableReference> m_mapList = new ArrayList<RecMLVariableReference>();
-		m_mapList.addAll(recMLVariableTable.values());
-		Collections.sort( m_mapList);
-		for(RecMLVariableReference r : m_mapList){
-			List<Integer> idList = new ArrayList<Integer>();
-	
-		}
-		
-		return idList;		
+	public List<Integer> getEqautionIDsOfVariable(int variableID){
+		List<Integer> equIdList = new ArrayList<Integer>();
+		equIdList.addAll(varRefList.get(variableID).getLeftHandSideExpressionIDs());
+		equIdList.addAll(varRefList.get(variableID).getRightHandSideExpressionIDs());
+
+		return equIdList;		
 	}
 
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("<RecMLEquationAndVariableContener>---------------\n");
+		sb.append("Equation IDs:").append(getEquationIDs()).append("\n");
+		sb.append("Variable IDs:").append(getVariableIDs()).append("\n");
+		for(Integer i:getVariableIDs())
+			sb.append("Variable[").append(i).append("]:").append(getEqautionIDsOfVariable(i)).append("\n");
+		
+		return sb.toString();
+	}
 }

@@ -28,14 +28,14 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 	//List<MathExpression> assignExpressions;
 
 	
-	List<Integer> refExpressions;
-	List<Integer> assignExpressions;
+	List<Integer> rightHandSideExpressions;
+	List<Integer> leftHandSideExpressions;
 
 	public RecMLVariableReference(){
 		strVariableName=null;
 		variable=null;
-		refExpressions=new ArrayList<Integer>();
-		assignExpressions=new ArrayList<Integer>();
+		rightHandSideExpressions=new ArrayList<Integer>();
+		leftHandSideExpressions=new ArrayList<Integer>();
 	}
 	
 	public String toString(){
@@ -43,19 +43,19 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 		sb.append("Name: ").append(strVariableName);
 
 		sb.append("  ").append("AssignExpr: ");
-		if(assignExpressions.isEmpty()){
+		if(leftHandSideExpressions.isEmpty()){
 			sb.append("None");
 		}else{
-			for(Integer id:assignExpressions)
+			for(Integer id:leftHandSideExpressions)
 				sb.append(id).append(", ");
 			sb.setLength(sb.length()-2);
 		}
 		
 		sb.append("  ").append("RefExpr: ");
-		if(refExpressions.isEmpty()){
+		if(rightHandSideExpressions.isEmpty()){
 			sb.append("None");
 		}else{
-			for(Integer id:refExpressions)
+			for(Integer id:rightHandSideExpressions)
 			sb.append(id).append(", ");
 		sb.setLength(sb.length()-2);
 		}
@@ -63,11 +63,20 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 		sb.append("\n");
 		return sb.toString();
 	}
-	public void addRefExpression(int expr){
-		refExpressions.add(expr);
+	
+	public List<Integer> getRightHandSideExpressionIDs(){
+		return rightHandSideExpressions;
 	}
-	public void addAssignExpression(int expr){
-		assignExpressions.add(expr);
+	public List<Integer> getLeftHandSideExpressionIDs(){
+		return leftHandSideExpressions;
+	}
+
+	
+	public void addRightHandSideExpression(int expr){
+		rightHandSideExpressions.add(expr);
+	}
+	public void addLeftHandSideExpression(int expr){
+		leftHandSideExpressions.add(expr);
 	}
 	public void setID(int id){
 		this.id=id;

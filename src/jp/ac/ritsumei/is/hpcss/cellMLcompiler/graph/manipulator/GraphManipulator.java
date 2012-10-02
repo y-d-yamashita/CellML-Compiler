@@ -21,6 +21,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
@@ -70,9 +72,9 @@ public class GraphManipulator {
 	 * @return Bipartite graph
 	 * @throws GraphException
 	 */
-	public Graph<RecMLVertex,RecMLEdge> createBipartiteGraph(
-			RecMLAnalyzer recmlAnalyzer) throws GraphException{
-		return graphCreator.createBipartiteGraph(recmlAnalyzer);
+	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph(
+			RecMLEquationAndVariableContener contener) throws GraphException{
+		return graphCreator.createBipartiteGraph(contener);
 	}
 	
 	/**

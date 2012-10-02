@@ -20,6 +20,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 
@@ -48,7 +49,9 @@ public class GraphCreator {
 		
 		//Add new vertex of variable and expression
 		for(Pair<RecMLVertex,RecMLVertex> p:pairList){
-			RecMLVertex v = new RecMLVertex(p.getFirst().getVariable(),p.getSecond().getExpression());
+			RecMLVertex v = new RecMLVertex();
+			v.setVariable(p.getFirst().getVariable());
+			v.setExpression(p.getSecond().getExpression());
 			dependencyGraph.addVertex(v);
 			oldSrcMap.put(p.getFirst(), v);
 			oldDstMap.put(p.getSecond(), v);
@@ -71,17 +74,17 @@ public class GraphCreator {
 	 * @throws GraphException
 	 * @attention No at all test
 	 */
-	public Graph<RecMLVertex,RecMLEdge> createBipartiteGraph(RecMLAnalyzer recmlAnalyzer) throws GraphException{
+	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph(RecMLEquationAndVariableContener contener) throws GraphException{
 		BipartiteGraph<RecMLVertex,RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
 		
 		//Add src side vertexes
-		addRecMLVariableVertex(graph,recmlAnalyzer);
+		addRecMLVariableVertex(graph,contener);
 		
 		//Add dst side vertexes
-		addRecMLExpressionVertex(graph,recmlAnalyzer);
+		addRecMLExpressionVertex(graph,contener);
 		
 		//Add edges
-		addRecMLEdges(graph,recmlAnalyzer);
+		addRecMLEdges(graph,contener);
 		
 		//Remove not connected vertexes
 		removeNotConnectedVertexes(graph);
@@ -109,13 +112,15 @@ public class GraphCreator {
 	 * @param recmlAnalyzer
 	 * @throws GraphException
 	 */
-	private void addRecMLEdges(Graph<RecMLVertex, RecMLEdge> graph,
-			RecMLAnalyzer recmlAnalyzer) throws GraphException {
-		for(MathExpression expr: recmlAnalyzer.getM_vecExpression())
-			for(MathOperand var:expr.getVariables()){
+	private void addRecMLEdges(
+			Graph<RecMLVertex, RecMLEdge> graph,
+			RecMLEquationAndVariableContener contener
+			) throws GraphException {
+		for(Integer varID:contener.getVariableIDs())
+			for(Integer exprID:contener.getEqautionIDsOfVariable(varID)){
 				RecMLEdge edge = new RecMLEdge();
-				RecMLVertex src = findRecMLVertexes((Math_ci) var, graph);
-				RecMLVertex dst = findRecMLVertexes(expr, graph);
+				RecMLVertex src = findVarRecMLVertexes(varID, graph);
+				RecMLVertex dst = findExpRecMLVertexes(exprID, graph);
 				graph.addEdge(edge, src, dst);
 				
 			}
@@ -127,11 +132,11 @@ public class GraphCreator {
 	 * @param graph
 	 * @throws GraphException 
 	 */
-	private RecMLVertex findRecMLVertexes(Math_ci ci,Graph<RecMLVertex,RecMLEdge> graph) throws GraphException{
+	private RecMLVertex findVarRecMLVertexes(Integer varID,Graph<RecMLVertex,RecMLEdge> graph) throws GraphException{
 		for(RecMLVertex v: graph.getVertexes())
-			if(v.equals(ci)) return v;
+			if(v.equalsVarID(varID)) return v;
 		
-		throw new GraphException();
+				throw new GraphException();
 	}
 
 	/**
@@ -140,9 +145,9 @@ public class GraphCreator {
 	 * @param graph
 	 * @throws GraphException 
 	 */
-	private  RecMLVertex findRecMLVertexes(MathExpression expr,Graph<RecMLVertex,RecMLEdge> graph) throws GraphException{
+	private  RecMLVertex findExpRecMLVertexes(Integer exprID,Graph<RecMLVertex,RecMLEdge> graph) throws GraphException{
 		for(RecMLVertex v: graph.getVertexes())
-			if(v.equals(expr)) return v;
+			if(v.equalsExpID(exprID)) return v;
 		
 		throw new GraphException();
 	}
@@ -155,9 +160,14 @@ public class GraphCreator {
 	 * @throws GraphException
 	 */
 	private void addRecMLExpressionVertex(
-			BipartiteGraph<RecMLVertex, RecMLEdge> graph, RecMLAnalyzer recmlAnalyzer) throws GraphException {
-		for(MathExpression expr: recmlAnalyzer.getM_vecExpression())
-			graph.addDestVertex(new RecMLVertex(expr));
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph,
+			RecMLEquationAndVariableContener contener
+			)throws GraphException {
+		for(Integer exprID: contener.getEquationIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setExpression(exprID);
+			graph.addDestVertex(v);
+		}
 		
 	}
 
@@ -168,14 +178,15 @@ public class GraphCreator {
 	 * @throws GraphException
 	 */
 	private void addRecMLVariableVertex(
-			BipartiteGraph<RecMLVertex, RecMLEdge> graph, RecMLAnalyzer recmlAnalyzer) throws GraphException {
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph, 
+			RecMLEquationAndVariableContener contener
+			) throws GraphException {
 		/* Add new vertexes of recvar*/
-		for(Math_ci var: recmlAnalyzer.getM_vecRecurVar())
-			graph.addSourceVertex(new RecMLVertex(var));
-		
-		/* Add new vertexes of arithvar*/
-		for(Math_ci var: recmlAnalyzer.getM_vecArithVar())
-			graph.addSourceVertex(new RecMLVertex(var));
+		for(Integer varID: contener.getVariableIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setVariable(varID);
+			graph.addSourceVertex(v);
+		}
 	}
 	
 	

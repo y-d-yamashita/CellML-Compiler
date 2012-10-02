@@ -51,10 +51,10 @@ public class SetAssignRefRecMLVariableTypeVisitor implements Visitor {
 			}
 				switch(mode){
 				case Refer:
-					variable.addRefExpression(exprID);
+					variable.addRightHandSideExpression(exprID);
 					break;
 				case Assign:
-					variable.addAssignExpression(exprID);
+					variable.addLeftHandSideExpression(exprID);
 					break;
 				}
 		}

@@ -2,6 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -15,11 +16,16 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.XMLHandler;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public class GraphManipulatorTest {
 
@@ -30,8 +36,10 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 	public void testCretateDependencyGraph() {
 		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
 		PairList<RecMLVertex,RecMLVertex> pairList=null;
+		RecMLAnalyzer recmlAnalyzer = parse();
 		try {
-			graph = createBipartieGraph();
+			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
+			graph = gm.createBipartiteGraph(contener);
 		} catch (GraphException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,8 +72,10 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 	public void testMaximumMatching() {
 		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
 		PairList<RecMLVertex,RecMLVertex> pairList=null;
+		RecMLAnalyzer recmlAnalyzer = parse();
 		try {
-			graph = createBipartieGraph();
+			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
+			graph = gm.createBipartiteGraph(contener);
 		} catch (GraphException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,8 +97,10 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 	public void testTarjan() {
 		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
 		PairList<RecMLVertex,RecMLVertex> pairList=null;
+		RecMLAnalyzer recmlAnalyzer = parse();
 		try {
-			graph = createBipartieGraph();
+			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
+			graph = gm.createBipartiteGraph(contener);
 		} catch (GraphException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,20 +127,81 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 		System.out.println(gm.toRecMLXMLString(dg, t));
 	}
 
+private static RecMLAnalyzer parse(){
+	RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
+	
+	String xml = "";
+	xml = "./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml";
+
+	//---------------------------------------------------
+	//XMLパーサ初期化
+	//---------------------------------------------------
+	// create parser
+	XMLReader parser = null;
+	try {
+		parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+		parser.setProperty("http://apache.org/xml/properties/input-buffer-size",
+				new Integer(16 * 0x1000));
+	} catch (Exception e) {
+		System.err.println("error: Unable to instantiate parser ("
+				+ "org.apache.xerces.parsers.SAXParser" + ")");
+		System.exit(1);
+	}
+
+	XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
+	parser.setContentHandler(handler);
+	try {
+		parser.parse(xml);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SAXException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
+
+//	/*selector内cnのInteger*/
+	pRecMLAnalyzer.changeAllSelectorInteger();
+	
+	/*selector削除*/
+	pRecMLAnalyzer.removeAllSelector();
+	
+	
+	pRecMLAnalyzer.createVariableTable();
+	pRecMLAnalyzer.setAssignRefRecVariableType();
+	/** 内容確認 ***/
+
+	try {
+		pRecMLAnalyzer.printContents();
+	} catch (MathException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	
+	return pRecMLAnalyzer;
+}
 	BipartiteGraph<RecMLVertex, RecMLEdge>createBipartieGraph() throws GraphException{
 		BipartiteGraph<RecMLVertex, RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
 		
-		RecMLVertex var1 = new RecMLVertex(new Math_ci("1"));
-		RecMLVertex var2 = new RecMLVertex(new Math_ci("2"));
-		RecMLVertex var3 = new RecMLVertex(new Math_ci("3"));
+		RecMLVertex var1 = new RecMLVertex();
+		var1.setVariable(1);
+		RecMLVertex var2 = new RecMLVertex();
+		var2.setVariable(2);
+		RecMLVertex var3 = new RecMLVertex();
+		var3.setVariable(3);
 		graph.addSourceVertex(var1);
 		graph.addSourceVertex(var2);
 		graph.addSourceVertex(var3);
 			
 
-		RecMLVertex expr1 = new RecMLVertex(new MathExpression(var1.getVariable()));
-		RecMLVertex expr2 = new RecMLVertex(new MathExpression(var2.getVariable()));
-		RecMLVertex expr3 = new RecMLVertex(new MathExpression(var3.getVariable()));
+		RecMLVertex expr1 = new RecMLVertex();
+		expr1.setExpression(1);
+		RecMLVertex expr2 = new RecMLVertex();
+		expr2.setExpression(2);
+		RecMLVertex expr3 = new RecMLVertex();
+		expr3.setExpression(3);
 		graph.addDestVertex(expr1);
 		graph.addDestVertex(expr2);
 		graph.addDestVertex(expr3);

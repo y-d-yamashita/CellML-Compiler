@@ -61,7 +61,7 @@ public abstract class MathOperand extends MathFactor {
 	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#createCopy()
 	 */
 	public MathFactor createCopy() throws MathException{
-		return MathFactory.createOperand(m_operandKind, m_strPresentText, m_dValue);
+		return MathFactory.createOperand(m_operandKind, getM_strPresentText(), m_dValue);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public abstract class MathOperand extends MathFactor {
 	 * @return 同一判定
 	 */
 	public boolean matches(MathOperand pOperand){
-		return m_strPresentText.equals(pOperand.m_strPresentText);
+		return getM_strPresentText().equals(pOperand.getM_strPresentText());
 	}
 
 	/**

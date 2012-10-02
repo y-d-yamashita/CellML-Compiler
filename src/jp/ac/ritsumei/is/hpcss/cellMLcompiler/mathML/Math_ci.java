@@ -16,10 +16,10 @@ public class Math_ci extends MathOperand {
 	Vector<MathFactor> m_vecArrayIndexFactor;
 	
 	/*Selector追加要素*/
-	Vector<MathFactor> m_vecIndexListFactor;
+	private Vector<MathFactor> m_vecIndexListFactor;
 	public void addIndexList(MathFactor pFactor){
 		/*オペランドをベクタに追加*/
-		m_vecIndexListFactor.add(pFactor);
+		getM_vecIndexListFactor().add(pFactor);
 	}
 
 	/*ポインタ演算子数(マイナスの場合は&演算子)*/
@@ -29,13 +29,13 @@ public class Math_ci extends MathOperand {
 	public Math_ci(String strVariableName,double dValue) {
 		super(strVariableName, dValue, eMathOperand.MOPD_CI);
 		m_vecArrayIndexFactor = new Vector<MathFactor>();
-		m_vecIndexListFactor = new Vector<MathFactor>();
+		setM_vecIndexListFactor(new Vector<MathFactor>());
 		m_nPointerNum = 0;
 	}
 	public Math_ci(String strVariableName) {
 		super(strVariableName, eMathOperand.MOPD_CI);
 		m_vecArrayIndexFactor = new Vector<MathFactor>();
-		m_vecIndexListFactor = new Vector<MathFactor>();
+		setM_vecIndexListFactor(new Vector<MathFactor>());
 		m_nPointerNum = 0;
 	}
 
@@ -104,7 +104,7 @@ public class Math_ci extends MathOperand {
 		}
 
 		/*変数名を追加*/
-		strVariable += m_strPresentText;
+		strVariable += getM_strPresentText();
 
 		/*配列インデックスの追加*/
 		for (MathFactor it: m_vecArrayIndexFactor) {
@@ -114,7 +114,7 @@ public class Math_ci extends MathOperand {
 
 		/*Selector要素*/
 		/*配列インデックスの追加*/
-		for (MathFactor it: m_vecIndexListFactor) {
+		for (MathFactor it: getM_vecIndexListFactor()) {
 			/*項を追加*/
 //			strVariable += "[" + it.toSelectorLegalString() + "]";
 			/*項を追加*/
@@ -126,10 +126,10 @@ public class Math_ci extends MathOperand {
 	
 	/*-----数式複製メソッド-----*/
 	public MathFactor createCopy() throws MathException {
-		MathOperand newOperand =  MathFactory.createOperand(m_operandKind,m_strPresentText);
+		MathOperand newOperand =  MathFactory.createOperand(m_operandKind,getM_strPresentText());
 		
 		/*すべての子要素を複製*/
-		for (MathFactor it: m_vecIndexListFactor) {
+		for (MathFactor it: getM_vecIndexListFactor()) {
 			((Math_ci)newOperand).addIndexList(it.createCopy());
 		}
 		
@@ -156,5 +156,11 @@ public class Math_ci extends MathOperand {
 				}
 		}	
 		return false;
+	}
+	public Vector<MathFactor> getM_vecIndexListFactor() {
+		return m_vecIndexListFactor;
+	}
+	public void setM_vecIndexListFactor(Vector<MathFactor> m_vecIndexListFactor) {
+		this.m_vecIndexListFactor = m_vecIndexListFactor;
 	}
 }

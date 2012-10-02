@@ -151,6 +151,13 @@ public class RecMLVariableTable extends Table<RecMLVariableReference> {
 	public int getVariableCount(){
 		return super.m_mapElements.size();
 	}
+	
+	public List<RecMLVariableReference> getSortedRecMLVariableReferencesList(){
+		List<RecMLVariableReference> m_mapList = new ArrayList<RecMLVariableReference>();
+		m_mapList.addAll(m_mapElements.values());
+		Collections.sort( m_mapList);
+		return m_mapList;
+	}
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();

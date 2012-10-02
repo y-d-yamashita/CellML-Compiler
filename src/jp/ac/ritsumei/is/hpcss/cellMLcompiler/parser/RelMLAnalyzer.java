@@ -1,7 +1,13 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
@@ -21,6 +27,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.relML.RelMLDefinition.eRelMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.relML.RelMLDefinition.eRelMLVarType;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.ComponentTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.VariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RelMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.XMLHandler;
 
 /**
  * RelML解析クラス.
@@ -35,7 +43,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	Vector<Math_ci> m_vecDiffVar;
 	Vector<Math_ci> m_vecArithVar;
 	Vector<Math_ci> m_vecConstVar;
-	Vector<Math_ci> m_vecPartialDiffVar;
 
 	/**読み込みファイル名*/
 	String m_strFileNameCellML;
@@ -114,7 +121,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		m_vecDiffVar = new Vector<Math_ci>();
 		m_vecArithVar = new Vector<Math_ci>();
 		m_vecConstVar = new Vector<Math_ci>();
-		m_vecPartialDiffVar = new Vector<Math_ci>();
+		m_vecExpression = new Vector<MathExpression>();
 	}
 
 	/* (非 Javadoc)
@@ -176,9 +183,11 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 				String[] arrSpacing = m_strSpacing.split("\\s");
 				for (int i=0; i<arrDimensions.length; i++){
 					Math_cn pDimension = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrDimensions[i]);
+					pDimension.changeType();
 					m_vecDimensions.add(pDimension);
 					
 					Math_cn pSpacing = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrSpacing[i]);
+					pSpacing.changeType();
 					m_vecSpacing.add(pSpacing);
 				}
 				
@@ -248,7 +257,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 					}
 
 					/*コンポーネント名をつなげる*/
-					strName = strComponent + "." + strName;
+					//strName = strComponent + "." + strName;
 
 					/*変数名から変数インスタンス生成*/
 					Math_ci pVariable =
@@ -394,9 +403,9 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		//数式部の解析
 		//-----------------------------------------------------
 		if (m_bMathParsing && m_NextOperandKind != null) {
-			/*コンポーネント名をつなげる*/
+			/*コンポーネント名をつなげる TODO: component name was removed for variables and equations*/
 			if(m_NextOperandKind==eMathOperand.MOPD_CI){
-				strText = m_strCurComponent + "." + strText;
+//				strText = m_strCurComponent + "." + strText;
 			}
 
 			/*MathML解析器に投げる*/
@@ -454,30 +463,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	public boolean isConstVar(MathOperand pVariable) {
 		/*すべての要素を比較*/
 		for (Math_ci it: m_vecConstVar) {
-			/*一致判定*/
-			if (it.matches(pVariable)) {
-				return true;
-			}
-		}
-
-		/*不一致*/
-		return false;
-	}
-
-	//========================================================
-	//isPartialDiffVar
-	// Check if the variable is a partial differential / propagating variable 
-	//
-	//@arg
-	// MathOperand*	pVariable	: 判定する数式
-	//
-	//@return
-	// 一致判定	: bool
-	//
-	//========================================================
-	public boolean isPartialDiffVar(MathOperand pVariable) {
-		/*すべての要素を比較*/
-		for (Math_ci it: m_vecPartialDiffVar) {
 			/*一致判定*/
 			if (it.matches(pVariable)) {
 				return true;
@@ -620,17 +605,21 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		//-------------------------------------------------
 		/*ベクタ配列*/
 		ArrayList<Vector<Math_ci>> vectorArray = new ArrayList<Vector<Math_ci>>();
+		vectorArray.add(m_vecDimensionVar);
+		vectorArray.add(m_vecIndexVar);
+		vectorArray.add(m_vecDeltaVar);
 		vectorArray.add(m_vecDiffVar);
 		vectorArray.add(m_vecArithVar);
 		vectorArray.add(m_vecConstVar);
-		vectorArray.add(m_vecPartialDiffVar);
 
 		/*表示タグ配列初期化*/
 		String[] strTag = {
+			"dimensionvar\t",
+			"indexvar\t",
+			"deltavar\t",
 			"diffvar\t",
 			"arithvar\t",
 			"constvar\t",
-			"partialdiffvar\t",
 		};
 
 		//-------------------------------------------------
@@ -660,6 +649,14 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			System.out.println("}");
 		}
 
+		System.out.println("[RelML] Boundary conditions------------------------------------");
+
+		/*数式出力*/
+		super.printExpressions();
+
+		/*改行*/
+		System.out.println();
+		
 		/*数式出力*/
 		//super.printExpressions();
 
@@ -723,6 +720,50 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			}
 		}
 		return intSpacing;
+	}
+	
+	/***** Main program for testing *****/
+	public static void main(String[] args) {
+		RelMLAnalyzer RelMLAnalyzer = new RelMLAnalyzer();
+		
+		XMLReader parser = null;
+		try {
+			parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+			parser.setProperty("http://apache.org/xml/properties/input-buffer-size",
+					new Integer(16 * 0x1000));
+		} catch (Exception e) {
+			System.err.println("error: Unable to instantiate parser ("
+					+ "org.apache.xerces.parsers.SAXParser" + ")");
+			System.exit(1);
+		}
+
+		XMLHandler handler = new XMLHandler(RelMLAnalyzer);
+		parser.setContentHandler(handler);
+		try {
+			parser.parse(args[0]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int[] dimension = RelMLAnalyzer.getDimensions();
+		System.out.println(Arrays.toString(dimension));
+		int[] spacing = RelMLAnalyzer.getSpacing();
+		System.out.println(Arrays.toString(spacing));
+		
+		System.out.println(Integer.toString(RelMLAnalyzer.m_vecDiffVar.size()));
+		System.out.println(Integer.toString(RelMLAnalyzer.m_vecArithVar.size()));
+		System.out.println(Integer.toString(RelMLAnalyzer.m_vecConstVar.size()));
+
+		try {
+			RelMLAnalyzer.printContents();
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

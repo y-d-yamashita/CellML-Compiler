@@ -208,6 +208,7 @@ public class CudaRecurrenceCalcKernelGenerator extends CudaRecurrenceProgramGene
 		}
 	
 
+		
 	
 		/*生成したカーネルインスタンスを返す*/
 		return pSynKernel;

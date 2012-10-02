@@ -17,7 +17,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
 
 import org.junit.Test;
 
@@ -108,7 +108,7 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		SetList<RecMLVertex> t = gm.tarjan(dg);
+		List2D<RecMLVertex> t = gm.tarjan(dg);
 		System.out.println("Tarjan-----------------------");
 		System.out.println(t.toString());
 

@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.GlobalLogger;
 
 /**
@@ -403,6 +404,12 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 				inVs.add(cGroup.get(e).src);
 				
 				return inVs;
+		}
+
+		public void changeSrcVertex(E e, V xloop) {
+			//Connection c = cGroup.get(e);
+			///c.src=xloop;
+			
 		}
 	   
 

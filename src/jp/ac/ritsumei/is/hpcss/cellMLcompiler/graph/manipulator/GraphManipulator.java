@@ -23,7 +23,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
 	
 /**
  * Graph Manipulator
@@ -93,7 +93,7 @@ public class GraphManipulator {
 	 * @param graph
 	 * @return Reverse calculation order including strongly connected components
 	 */
-	public SetList<RecMLVertex> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
+	public List2D<RecMLVertex> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
 		return tarjan.tarjan(graph);
 	}
 	
@@ -102,7 +102,7 @@ public class GraphManipulator {
      * @param indent
      * @return XML string
      */
-    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,SetList sl){
+    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,List2D sl){
 
     	/***** Dependency graph XML  *****/
     	String indent="		";

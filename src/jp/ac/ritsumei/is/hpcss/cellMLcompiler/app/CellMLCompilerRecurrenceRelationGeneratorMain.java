@@ -353,6 +353,6 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
         System.err.println("  Generator:  "+DEFALUT_GENERATOR);
 	}
 	
-	private static Graph<RecMLVertex,ReMLEdge> createBipatieGraph()
+	//private static Graph<RecMLVertex,ReMLEdge> createBipatieGraph()
 	
 }

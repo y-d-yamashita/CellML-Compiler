@@ -1,6 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,12 +12,12 @@ import java.util.TreeSet;
  * @author y-yamashita
  *
  */
-public class SetList<V> extends ArrayList<Set<V>> {
+public class List2D<V> extends ArrayList<List<V>> {
 
 	/**
 	 * Constructor
 	 */
-	public SetList() {
+	public List2D() {
 	}
 	
 	/**
@@ -24,7 +25,7 @@ public class SetList<V> extends ArrayList<Set<V>> {
 	 * @param v
 	 */
 	public void add(V v){
-		Set<V> s = new TreeSet<V>();
+		List<V> s = new ArrayList<V>();
 		s.add(v);
 		super.add(s);
 	}
@@ -32,7 +33,7 @@ public class SetList<V> extends ArrayList<Set<V>> {
 	 * Add a set of vertexes
 	 * @return 
 	 */
-	public boolean add(Set<V> s){
+	public boolean add(List<V> s){
 		return super.add(s);
 	}
 	

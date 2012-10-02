@@ -43,5 +43,19 @@ public class Math_leq extends MathOperator {
 		return " ( " + m_vecFactor.get(0).toLegalString()
 			+ " <= " + m_vecFactor.get(1).toLegalString() + " ) ";
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_LEQ) {
+			throw new MathException("Math_leq","toMathMLString","lack of operand");
+		}
+
+		return 	"<apply><leq/>" + "\n" +
+				"\t" + m_vecFactor.get(0).toMathMLString() + "\n" +
+				"\t" + m_vecFactor.get(1).toMathMLString() + "\n" +
+			    "</apply>";
+	}
 
 }

@@ -64,6 +64,38 @@ public abstract class MathOperand extends MathFactor {
 	}
 
 	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public MathFactor clone(){
+		MathFactor factor=null;
+		try {
+			factor= MathFactory.createOperand(m_operandKind, m_strPresentText, m_dValue);
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return factor;
+	}
+
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public MathFactor copy(){return this;}
+
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	@Override
+	public MathFactor semiClone(){
+		return this;}
+
+	/**
 	 * オブジェクトを比較する.
 	 * @param pOperand 比較するオブジェクト
 	 * @return 同一判定
@@ -95,5 +127,34 @@ public abstract class MathOperand extends MathFactor {
 			return false;
 		}
 	}
+
+	/**
+	 * @return
+	 * @throws MathException
+	 */
+	public MathFactor toBinOperation() throws MathException{ return this;}
+
+	/**
+	 * @return
+	 * @throws MathException
+	 */
+	public MathFactor expand(MathOperand ci) throws MathException{ return this;}
+	
+	
+	/**
+	 * Change to 0 == F(x) format
+	 * @return
+	 * @throws MathException 
+	 */
+	@Override
+	public MathFactor toZeroEqualFormat() throws MathException{return this;}
+
+
+	/**
+	 * Remove excessive arithmetic operator
+	 * @return
+	 */
+	@Override
+	public MathFactor removeExcessiveArithmeticOperator()throws MathException{return this;}
 
 }

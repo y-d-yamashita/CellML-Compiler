@@ -96,5 +96,79 @@ public class Math_piecewise extends MathOperator {
 
 		return strExpression;
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if (m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_PIECEWISE) {
+			throw new MathException("Math_piecewise","toLegalString","lack of operand");
+		}
+
+		//-----------------------------------------------------
+		//pieceとotherwiseに分類
+		//-----------------------------------------------------
+		Vector<Math_piece> vecMathPiece = new Vector<Math_piece>();
+		Math_otherwise pMathOtherWise = null;
+
+		for (MathFactor it1: m_vecFactor) {
+
+			/*オペレータの場合*/
+			if (it1.matches(eMathMLClassification.MML_OPERATOR)) {
+
+				/*piece演算子*/
+				if (((MathOperator)it1).matches(eMathOperator.MOP_PIECE)) {
+
+					/*ベクタに追加*/
+					vecMathPiece.add((Math_piece)it1);
+				}
+
+				/*otherwise演算子*/
+				else if (((MathOperator)it1).matches(eMathOperator.MOP_OTHERWISE)) {
+
+					/*重複チェック*/
+					if(pMathOtherWise != null){
+						throw new MathException("Math_piecewise","toLegalString","too many otherwise");
+					}
+					else{
+						pMathOtherWise = (Math_otherwise)it1;
+					}
+				}
+
+				/*その他の演算子は例外*/
+				else{
+					throw new MathException("Math_piecewise","toMathMLString","invalid operator");
+				}
+
+			}
+
+			/*オペレータでない場合は例外*/
+			else{
+				throw new MathException("Math_piecewise","toMatMLString","invalid operand");
+			}
+		}
+
+		//-----------------------------------------------------
+		//文字列の構築
+		//-----------------------------------------------------
+		String strExpression = "   ";
+
+		/*piece文の文字列を追加していく*/
+		for (Math_piece it2: vecMathPiece) {
+			if(it2 != vecMathPiece.firstElement()){
+				strExpression += "\n\t";
+			}
+			strExpression += it2.toMathMLString();
+		}
+
+		/*otherwise文の文字列を追加*/
+		strExpression += pMathOtherWise.toMathMLString();
+
+		return 	"<piecewise>" + "\n" +
+					strExpression + "\n" +
+			    "</piecewise>";
+	}
+	
+	
 
 }

@@ -68,5 +68,30 @@ public class Math_times extends MathOperator {
 
 		return strExpression;
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_TIMES){
+			throw new MathException("Math_times","toMathMLString","lack of operand");
+		}
+		
+		/*文字列を追加していく*/
+		String strExpression = "";
+		
+		for(int i=0; i < m_vecFactor.size(); i++) {
+			
+			if(i != 0){
+				strExpression += "\n\t";
+			}
+			
+			strExpression += (m_vecFactor.get(i)).toMathMLString();	
+		}
+			
+		return 	"<apply><times/>" + "\n" +
+					strExpression + "\n" +
+			    "</apply>";
+	}
 
 }

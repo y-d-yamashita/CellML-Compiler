@@ -39,4 +39,17 @@ public class Math_tan extends MathOperator {
 		return "tan( " + m_vecFactor.get(0).toLegalString() + " )";
 	}
 
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_TAN) {
+			throw new MathException("Math_tan","toMathMLString","lack of operand");
+		}
+
+		return 	"<apply><tan/>" + "\n" +
+				"\t" + m_vecFactor.get(0).toMathMLString() + "\n" +
+			    "</apply>";
+	}
+	
 }

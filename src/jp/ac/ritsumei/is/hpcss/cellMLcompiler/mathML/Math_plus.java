@@ -74,4 +74,29 @@ public class Math_plus extends MathOperator {
 		}
 	}
 
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_PLUS){
+			throw new MathException("Math_plus","toMathMLString","lack of operand");
+		}
+		
+		/*文字列を追加していく*/
+		String strExpression = "";
+		
+		for(int i=0; i < m_vecFactor.size(); i++) {
+			
+			if(i != 0){
+				strExpression += "\n";
+			}
+			
+			strExpression += "\t" + (m_vecFactor.get(i)).toMathMLString();	
+		}
+			
+		return 	"<apply><plus/>" + "\n" +
+					strExpression + "\n" +
+			    "</apply>";
+	}
+
 }

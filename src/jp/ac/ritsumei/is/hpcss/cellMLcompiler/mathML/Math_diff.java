@@ -31,13 +31,46 @@ public class Math_diff extends MathOperator {
 		}
 		/*2項演算子*/
 		else if(m_vecFactor.size() == 2){
-			return " ( d" + m_vecFactor.get(1).toLegalString() + " / " +
+			return " ( diff" + m_vecFactor.get(1).toLegalString() + " / " +
 				m_vecFactor.get(0).toLegalString() + " ) ";
+		}
+		/*3項演算子*/
+		else if(m_vecFactor.size() == 3){
+			return " diff" + m_vecFactor.get(1).toLegalString() + " " + m_vecFactor.get(2).toLegalString() +  
+				" / " + m_vecFactor.get(0).toLegalString() + m_vecFactor.get(1).toLegalString() + " ";
 		}
 		/*例外*/
 		else{
+			System.out.println(Integer.toString(m_vecFactor.size()) + ": " + m_vecFactor.get(1).toLegalString() );
 			throw new MathException("Math_diff","toLegalString","lack of operand");
 		}
+	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_DIFF){
+			throw new MathException("Math_diff","toMathMLString","lack of operand");
+		}
+
+		/*文字列を追加していく*/
+		String strExpression = "   ";
+
+		for(MathFactor it: m_vecFactor) {
+
+			/* &&演算子を追加 */
+			if(it != m_vecFactor.firstElement()){
+				strExpression += "\n\t";
+			}
+
+			/*項を追加*/
+			strExpression += it.toMathMLString();
+		}
+
+		return 	"<apply><diff/>" + "\n" +
+					strExpression + "\n" +
+			    "</apply>";
 	}
 
 }

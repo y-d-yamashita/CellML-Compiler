@@ -3,9 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
 
 /**
  * MathML変数被演算子ciクラス
@@ -136,5 +134,8 @@ public class Math_ci extends MathOperand {
 		return newOperand;
 	}
 	
-
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+		return 	"<ci> " + m_strPresentText + " </ci>";
+	}
 }

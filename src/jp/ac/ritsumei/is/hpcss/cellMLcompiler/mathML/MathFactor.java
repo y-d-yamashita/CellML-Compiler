@@ -45,6 +45,28 @@ public abstract class MathFactor {
 	 */
 	public abstract MathFactor createCopy() throws MathException;
 
+	
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public abstract MathFactor clone();
+
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public abstract MathFactor copy();
+
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public abstract MathFactor semiClone();
+
 	/**
 	 * 文字列に変換する.
 	 * @return 変換した文字列
@@ -61,6 +83,13 @@ public abstract class MathFactor {
 		return toLegalString();
 	}
 
+	/**
+	 * Convert MathFactor to MathML string.
+	 * @return String MathML
+	 * @throws MathException
+	 */
+	public abstract String toMathMLString() throws MathException;
+	
 	/**
 	 * オブジェクトを比較する.
 	 * @param pFactor 比較オブジェクト
@@ -84,5 +113,46 @@ public abstract class MathFactor {
 	 * @return 同一判定
 	 */
 	public abstract boolean matchesExpression(MathFactor pFactor);
+
+	/**
+	 * 
+	 * @return
+	 * @throws MathException
+	 */
+	public abstract MathFactor toBinOperation() throws MathException;
+	
+	/**
+	 * 数式を展開する．
+	 * @return 展開結果
+	 * @throws MathException 
+	 */
+	public abstract MathFactor expand(MathOperand ci) throws MathException;
+
+	/**
+	 * eMathClassficationの種類を返す
+	 * @return 要素分類
+	 */
+	public eMathMLClassification getEnumMathMLClassification(){
+		return m_classification;
+	}
+
+
+	/**
+	 * Change to 0 == F(x) format
+	 * @return
+	 * @throws MathException 
+	 * @see Math_eq
+	 */
+	
+	public abstract MathFactor toZeroEqualFormat() throws MathException;
+
+	/**
+	 * Remove excessive arithmetic operator
+	 * @return
+	 * @throws MathException 
+	 * @see MathOperator
+	 * @see MathOperand
+	 */
+	public abstract MathFactor removeExcessiveArithmeticOperator() throws MathException;
 
 }

@@ -38,5 +38,16 @@ public class Math_apply extends MathOperator {
 
 		return m_vecFactor.get(0).toLegalString();
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_APPLY){
+			throw new MathException("Math_apply","toMathMLString","lack of operand");
+		}
+		
+		 return 	m_vecFactor.get(0).toMathMLString();
+	}
 
 }

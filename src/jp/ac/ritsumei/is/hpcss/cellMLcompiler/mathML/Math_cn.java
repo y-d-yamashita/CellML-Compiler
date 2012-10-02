@@ -1,5 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathSepType;
@@ -12,7 +15,7 @@ public class Math_cn extends MathOperand {
 	eMathSepType m_sepType;
 	String m_strSepValue;
 	String m_Type;
-
+	
 	/*-----コンストラクタ-----*/
 	public Math_cn(String strValueString) {
 		super(strValueString, eMathOperand.MOPD_CN);
@@ -62,12 +65,12 @@ public class Math_cn extends MathOperand {
 		
 		return newFactor;
 	}
-	
+
 	/*(double)を消すメソッド*/
 	public void changeType(){
 		m_Type = "integer";
 	}
-
+	
 	/*-----文字列変換メソッド-----*/
 	public String toLegalString() throws MathException {
 
@@ -104,4 +107,9 @@ public class Math_cn extends MathOperand {
 		return m_strPresentText.substring(8);
 		
 	}
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+		return 	"<cn> " + m_strPresentText + " </cn>";
+	}
+	
 }

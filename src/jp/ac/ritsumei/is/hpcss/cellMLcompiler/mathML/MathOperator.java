@@ -139,7 +139,7 @@ public abstract class MathOperator extends MathFactor {
 
 			/*オペランドの場合*/
 			if (it.matches(eMathMLClassification.MML_OPERAND)) {
-
+				
 				/*オペランドの置換*/
 				if (((MathOperand)it).matches(pOldOperand)) {
 					m_vecFactor.set(i, pNewFactor);
@@ -155,7 +155,10 @@ public abstract class MathOperator extends MathFactor {
 						m_vecFactor.set(i, pNewFactor);
 					}
 				}
-
+				/* Check if the operator is a differential operator */
+				else if (((MathOperator)it).matches(eMathOperator.MOP_DIFF) || ((MathOperator)it).matches(eMathOperator.MOP_PARTIALDIFF)) {
+						// do not replace differential operators
+				}
 				/*その他の場合*/
 				else {
 					/*再帰呼び出し*/
@@ -164,7 +167,82 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+	
+	/**
+	 * Single-Step Replacement Scheme:: Replace the differential operator variables.
+	 * @param pOldOperand 置換対象のオペランド
+	 * @param pNewFactor 置換後の数式
+	 */
+	public void replaceDiffOptrVar(MathOperand pOldOperand, MathFactor pNewFactor) {
+		/*関数の場合(ここで一致する場合は置換対象ではない．*/
+		//if(this->matches(MOP_FN)){
+		//	return;
+		//}
 
+		/*すべての要素を調べる*/
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+
+			/*オペランドの場合*/
+			if (it.matches(eMathMLClassification.MML_OPERAND)) {
+				
+				/*オペランドの置換*/
+				if (((MathOperand)it).matches(pOldOperand)) {
+					m_vecFactor.set(i, pNewFactor);
+				}
+			}
+			/*オペレータの場合*/
+			else if (it.matches(eMathMLClassification.MML_OPERATOR)) {
+				/*関数の場合*/
+				if (((MathOperator)it).matches(eMathOperator.MOP_FN)) {
+
+					/*関数の置換*/
+					if (((Math_fn)it).matches(pOldOperand)) {
+						m_vecFactor.set(i, pNewFactor);
+					}
+				}
+				/*その他の場合*/
+				else {
+					/*再帰呼び出し*/
+					((MathOperator)it).replaceDiffOptrVar(pOldOperand,pNewFactor);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Single-Step Replacement Scheme: replacement of the differential variables in the MathExpression.
+	 * @param pOldOperand 置換対象のオペランド
+	 * @param pNewFactor 置換後の数式
+	 * @throws MathException
+	 */
+	public void replaceDiffOptr(MathOperator pOldOptr, MathOperator pNewOptr)
+	throws MathException {
+		/*ルートが演算子の場合*/
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			
+			/*オペランドの場合*/
+			if (it.matches(eMathMLClassification.MML_OPERAND)) {				
+				/* Proceed to the next factor */
+			}
+			/*オペレータの場合*/
+			else if (it.matches(eMathMLClassification.MML_OPERATOR)) {
+				/* Check if the operator is a differential operator */
+				if (((MathOperator)it).matches(eMathOperator.MOP_DIFF) || ((MathOperator)it).matches(eMathOperator.MOP_PARTIALDIFF)) {
+					if (it.toLegalString().equals(pOldOptr.toLegalString())) {
+						m_vecFactor.set(i, pNewOptr);
+					}
+				}
+				/*その他の場合*/
+				else {
+					/*再帰呼び出し*/
+					((MathOperator)it).replaceDiffOptr(pOldOptr, pNewOptr);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 数式を置換する.
 	 * 関数置換用オーバーロード
@@ -209,7 +287,6 @@ public abstract class MathOperator extends MathFactor {
 	public void replace(int i, MathFactor pNewFactor) {
 			m_vecFactor.set(i, pNewFactor);
 	}
-	
 	/**
 	 * Selector内探索
 	 */
@@ -305,6 +382,39 @@ public abstract class MathOperator extends MathFactor {
 		}
 		return number;
 	}
+	
+	/**
+	 * 数式中のvariablesを取得する(selectorを考慮する)
+	 */
+	public void getVariables(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariables(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					boolean flag = true;
+					/*重複判定*/
+					String string1 = it.toLegalString();
+					String string2 = null;
+					
+					for(Math_ci it2 : pVec){
+					
+						string2 = it2.toLegalString();
+						
+						if(string1.equals(string2))
+								flag = false;
+					}
+					/*重複なしなら追加*/
+					if(flag){
+						MathFactor pVariable = ((Math_ci)it).createCopy();
+						pVec.add((Math_ci)pVariable);
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 置換指定ファクタを取得する.
 	 * @param pSearchOperand 検索関数オペランド
@@ -446,7 +556,7 @@ public abstract class MathOperator extends MathFactor {
 	public boolean matches(MathOperator pOperator) {
 		return m_operatorKind == pOperator.m_operatorKind;
 	}
-
+	
 	/**
 	 * オブジェクトを比較する.
 	 * @param operatorKind 演算子種類
@@ -594,5 +704,218 @@ public abstract class MathOperator extends MathFactor {
 	 * @throws MathException
 	 */
 	public abstract double calculate() throws MathException;
+	/**
+	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
+	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
+	 * @throws MathException
+	 */
+	public MathFactor clone(){
+		/*髢｢謨ｰ縺ｮ蝣ｴ蜷�/
+		if(this.matches(eMathOperator.MOP_FN)){
+			return ((Math_fn)this).clone();
+		}
+
+		/*縺昴�莉悶�貍皮ｮ怜ｭ�/
+		else {
+
+			/*貍皮ｮ怜ｭ舌�隍�｣ｽ*/
+			MathOperator newOperator = null;
+			try {
+				newOperator = MathFactory.createOperator(m_operatorKind);
+			} catch (MathException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/*縺吶∋縺ｦ縺ｮ蟄占ｦ∫ｴ�ｒ隍�｣ｽ*/
+			for (MathFactor it: m_vecFactor) {
+				newOperator.addFactor(it.clone());
+			}
+
+			return newOperator;
+		}
+
+
+	/**
+	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
+	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
+	 * @throws MathException
+	 */
+	public MathFactor copy(){return this;}
+
+	/**
+	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
+	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
+	 * @throws MathException
+	 */
+	@Override
+	public MathFactor semiClone(){
+		/*髢｢謨ｰ縺ｮ蝣ｴ蜷*/
+		if(this.matches(eMathOperator.MOP_FN)){
+			return ((Math_fn)this).clone();
+		}
+
+		/*縺昴�莉悶�貍皮ｮ怜ｭ*/
+		else {
+
+			/*貍皮ｮ怜ｭ舌�隍�｣ｽ*/
+			MathOperator newOperator = null;
+			try {
+				newOperator = MathFactory.createOperator(m_operatorKind);
+			} catch (MathException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/*縺吶∋縺ｦ縺ｮ蟄占ｦ∫ｴ�ｒ隍�｣ｽ*/
+			for (MathFactor it: m_vecFactor) {
+				newOperator.addFactor(it.semiClone());
+			}
+
+			return newOperator;
+		}
+	}
+	/**
+	 * 謨ｰ蠑上ｒ螻暮幕縺吶ｋ��
+	 * @return 螻暮幕邨先棡
+	 * @throws MathException 
+	 */
+	public MathFactor expand(MathOperand ci) throws MathException{
+		Vector<MathFactor> new_m_VecFactor = new Vector<MathFactor>();
+		for(MathFactor it:m_vecFactor){
+			new_m_VecFactor.add(it.expand(ci));
+		}
+		
+		m_vecFactor = new_m_VecFactor;
+		
+		for(MathFactor fstChi:this.m_vecFactor){
+			/* In case of Operator*/
+			if(fstChi.matches(eMathMLClassification.MML_OPERATOR)){
+			if((((MathOperator)fstChi).matches(eMathOperator.MOP_TIMES)) || ((MathOperator)fstChi).matches(eMathOperator.MOP_DIVIDE)) {
+					MathFactor secChi_1 = ((MathOperator)fstChi).m_vecFactor.get(0);
+					MathFactor secChi_2 = ((MathOperator)fstChi).m_vecFactor.get(1);
+					if(secChi_1==ci){
+						if(secChi_2.matches(eMathMLClassification.MML_OPERATOR)&&
+								((MathOperator)secChi_2).matches(eMathOperator.MOP_APPLY)){
+							MathFactor thdChi = ((MathOperator)secChi_2).m_vecFactor.get(0);
+							if(thdChi.matches(eMathMLClassification.MML_OPERATOR)&&
+								(((MathOperator)thdChi).matches(eMathOperator.MOP_PLUS)) || ((MathOperator)thdChi).matches(eMathOperator.MOP_MINUS)) {
+								MathFactor fourChi_1= ((MathOperator)thdChi).m_vecFactor.get(0);
+								MathFactor fourChi_2= ((MathOperator)thdChi).m_vecFactor.get(1);
+								return createNewExpToExpand(ci,fourChi_1,fourChi_2,(MathOperator)fstChi,(MathOperator)thdChi);
+						}
+					}
+					}
+					
+					
+					else if(secChi_2==ci){
+						if(secChi_1.matches(eMathMLClassification.MML_OPERATOR)&&
+								((MathOperator)secChi_1).matches(eMathOperator.MOP_APPLY)){
+							MathFactor thdChi = ((MathOperator)secChi_1).m_vecFactor.get(0);
+							if(thdChi.matches(eMathMLClassification.MML_OPERATOR)&&
+								(((MathOperator)thdChi).matches(eMathOperator.MOP_PLUS)) || ((MathOperator)thdChi).matches(eMathOperator.MOP_MINUS)) {
+								MathFactor fourChi_1= ((MathOperator)thdChi).m_vecFactor.get(0);
+								MathFactor fourChi_2= ((MathOperator)thdChi).m_vecFactor.get(1);
+								return createNewExpToExpand(ci,fourChi_1,fourChi_2,(MathOperator)fstChi,(MathOperator)thdChi);
+						}
+					}
+					}}
+				}
+		}
+
+		return this;
+	}
+	
+	private MathFactor createNewExpToExpand(MathOperand ci,MathFactor f1, MathFactor f2, MathOperator fstChi,MathOperator thdChi) throws MathException{
+		MathOperator applyRoot = MathFactory.createOperator(eMathOperator.MOP_APPLY);
+		MathOperator apply1 = MathFactory.createOperator(eMathOperator.MOP_APPLY);
+		MathOperator apply2 = MathFactory.createOperator(eMathOperator.MOP_APPLY);
+		MathOperator opePlusMinus = MathFactory.createOperator(thdChi.getOperatorKind());
+		MathOperator opeTimesDvide1 = MathFactory.createOperator(fstChi.getOperatorKind());
+		MathOperator opeTimesDvide2 = MathFactory.createOperator(fstChi.getOperatorKind());
+		
+		applyRoot.addFactor(opePlusMinus);
+		opePlusMinus.addFactor(apply1);
+		opePlusMinus.addFactor(apply2);
+		
+		apply1.addFactor(opeTimesDvide1);
+		opeTimesDvide1.addFactor(ci);
+		opeTimesDvide1.addFactor(f1);
+		
+		apply2.addFactor(opeTimesDvide2);
+		opeTimesDvide2.addFactor(ci);
+		opeTimesDvide2.addFactor(f2);
+		
+		return applyRoot;
+	}
+	
+	/**
+	 * m_vecFactor繧貞叙蠕励☆繧�
+	 * @return 髱樊ｼ皮ｮ励�繧ｯ繧ｿ
+	 */
+	public Vector<MathFactor> getFactorVector(){ return m_vecFactor;}
+	
+	public MathFactor toBinOperation() throws MathException{
+		if(this.m_vecFactor.size()>2){
+			switch(m_operatorKind){
+			case MOP_TIMES:
+			case MOP_PLUS:
+			case MOP_MINUS:
+			case MOP_DIVIDE:
+				MathOperator apply = MathFactory.createOperator(eMathOperator.MOP_APPLY);
+				MathOperator ope = MathFactory.createOperator(m_operatorKind);
+				apply.addFactor(ope);
+				int size = this.getFactorVector().size();
+				for(int i=size-1;0<i;i--){
+					ope.m_vecFactor.add(this.m_vecFactor.get(i));
+					this.m_vecFactor.remove(i);
+				}
+				this.m_vecFactor.add(apply);
+			
+				
+			}
+			}
+
+			for(MathFactor f:this.m_vecFactor)
+				f.toBinOperation();
+		
+			return this;
+		
+	}
+	
+	/**
+	 * 隕∫ｴ��鬘槭ｒ蜿門ｾ励☆繧�
+	 * @return Operator縺ｮ遞ｮ鬘�
+	 */
+	public eMathOperator getOperatorKind(){return m_operatorKind;}
+	
+	/**
+	 * Change to 0 == F(x) format
+	 * @return
+	 * @throws MathException 
+	 */
+	@Override
+	public MathFactor toZeroEqualFormat() throws MathException{
+		for(MathFactor it:m_vecFactor)
+			it.toZeroEqualFormat();
+		return this;
+		}
+
+	/**
+	 * Remove excessive arithmetic operator
+	 * @return
+	 * @throws MathException 
+	 * @see Math_plus.removeExcessiveArithmeticOperator()
+	 * @see Math_minus.removeExcessiveArithmeticOperator()
+	 */
+	@Override
+	public MathFactor removeExcessiveArithmeticOperator() throws MathException{
+		for(int i=0;i<m_vecFactor.size();i++){
+			m_vecFactor.set(i, m_vecFactor.get(i).removeExcessiveArithmeticOperator());
+		}
+		return this;
+		}
+
+
 
 }

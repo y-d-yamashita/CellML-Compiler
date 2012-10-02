@@ -38,5 +38,19 @@ public class Math_root extends MathOperator {
 
 		return "sqrt( " + m_vecFactor.get(0).toLegalString() + " )";
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_ROOT) {
+			throw new MathException("Math_root","toMathMLString","lack of operand");
+		}
+
+		return 	"<apply><root/>" + "\n" +
+				"\t <degree><ci type='integer'> 2 </ci></degree>" + "\n" +
+				"\t " + m_vecFactor.get(0).toMathMLString() + "\n" +
+			    "</apply>";
+	}
 
 }

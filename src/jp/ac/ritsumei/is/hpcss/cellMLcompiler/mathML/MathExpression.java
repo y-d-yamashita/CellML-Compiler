@@ -98,6 +98,7 @@ public class MathExpression {
 		if (m_pCurFuncOperator != null
 		    && m_stackCurOperator.peek() == m_pFuncParentOperand) {
 			/*関数引数として要素追加*/
+			m_pCurFuncOperator.addFactor(pOperand);
 		}
 
 		/*関数演算子fnの場合*/
@@ -201,9 +202,8 @@ public class MathExpression {
 				m_pCurFuncOperator = null;
 				m_pFuncParentOperand = null;
 			}
-				/*一致した演算子をpop-up*/
+			/*一致した演算子をpop-up*/
 			m_stackCurOperator.pop();
-			
 		}
 	}
 	
@@ -219,6 +219,13 @@ public class MathExpression {
 	 */
 	public void changeSelectorInteger(){
 		((MathOperator) m_pRootFactor).changeSelectorInteger(m_pRootFactor);
+	}
+	/**
+	 *数式内の全てのvariableを取得する (selector考慮)
+	 * @throws MathException 
+	 */
+	public void getAllVariables(Vector<Math_ci> pVec) throws MathException{
+		((MathOperator)m_pRootFactor).getVariables(m_pRootFactor, pVec);
 	}
 	
 	/**
@@ -273,6 +280,32 @@ public class MathExpression {
 	}
 
 	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public MathExpression clone(){
+		return new MathExpression(m_pRootFactor.clone());
+	}
+
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public MathExpression copy(){return this;}
+
+	/**
+	 * 数式を複製する.
+	 * @return 複製した数式
+	 * @throws MathException
+	 */
+	public MathExpression semiClone(){
+		return new MathExpression(m_pRootFactor.semiClone());
+}
+
+	
+	/**
 	 * 置換する.
 	 * @param pOldOperand 置換対象のオペランド
 	 * @param pNewFactor 置換後の数式
@@ -282,7 +315,6 @@ public class MathExpression {
 	throws MathException {
 		/*ルートが演算子の場合*/
 		if (m_pRootFactor.matches(eMathMLClassification.MML_OPERATOR)) {
-
 			/*関数の場合*/
 			if (((MathOperator)m_pRootFactor).matches(eMathOperator.MOP_FN)) {
 
@@ -340,6 +372,38 @@ public class MathExpression {
 			throw new MathException("MathExpression","replace",
 						"invalid root factor");
 		}
+	}
+		
+	/**
+	 * Single-step replacement of the differential variables in the MathExpression: Pass to MathOperator replace().
+	 * @param pOldOptr 置換対象のオペランド
+	 * @param pNewOptr 置換後の数式
+	 * @throws MathException
+	 */
+	public void replace(MathOperator pOldOptr, MathOperator pNewOptr)
+	throws MathException {
+		
+		/*ルートが演算子の場合*/
+		if (m_pRootFactor.matches(eMathMLClassification.MML_OPERATOR)) {
+			/*関数の場合*/
+			if (((MathOperator)m_pRootFactor).matches(eMathOperator.MOP_FN)) {
+				// proceed to the next RootFactor
+			}
+			/*その他の演算子*/
+			else {
+				((MathOperator)m_pRootFactor).replaceDiffOptr(pOldOptr, pNewOptr);
+			}
+		}
+		/*オペランドの場合*/
+		else if (m_pRootFactor.matches(eMathMLClassification.MML_OPERAND)) {
+			// proceed to the next RootFactor
+		}
+		/*例外の要素*/
+		else {
+			throw new MathException("MathExpression","replace",
+						"invalid root factor");
+		}
+		
 	}
 	
 	/**
@@ -487,5 +551,55 @@ public class MathExpression {
 	public String toLegalString() throws MathException {
 		return m_pRootFactor.toLegalString();
 	}
+	
+	/**
+	 * Convert the MathExpression to MathML string.
+	 * @return String MathML
+	 * @throws MathException
+	 */
+	public String toMathMLString() throws MathException {
+		return m_pRootFactor.toMathMLString();
+	}
 
+	/**
+	 * 数式を展開する(Expand expression)
+	 * ex. a(x+y) -> ax + ay
+	 * @return 展開した数式 (Expanded expression)
+	 * @throws MathException
+	 */
+	public MathExpression expand(MathOperand ci) throws MathException{
+		MathExpression clone = this.toBinOperation();
+	clone.getRootFactor().expand(ci);
+		return clone;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws MathException
+	 */
+	public MathExpression toBinOperation() throws MathException{
+		MathExpression expr = this.semiClone();
+		expr.m_pRootFactor =  expr.m_pRootFactor.toBinOperation();
+		return expr;
+	}
+	
+	/**
+	 * Change to 0 == F(x) format
+	 * @return
+	 */
+	public MathExpression toZeroEqualFormat(){
+		try {
+			m_pRootFactor = m_pRootFactor.toZeroEqualFormat();
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this;
+	}
+	
+	public MathExpression removeExcessiveArithmeticOperator() throws MathException{
+		m_pRootFactor = m_pRootFactor.removeExcessiveArithmeticOperator();
+		return this;
+	}
 }

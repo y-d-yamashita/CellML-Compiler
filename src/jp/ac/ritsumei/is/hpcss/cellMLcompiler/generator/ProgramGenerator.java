@@ -97,6 +97,11 @@ public abstract class ProgramGenerator {
 		m_pRecMLAnalyzer = recMLAnalyzer;
 	}
 	
+	public ProgramGenerator() {
+		// TODO Remove after testing
+		
+	}
+	
 	/**
 	 * プログラム構文を生成し，返す.
 	 * @return プログラム構文インスタンス
@@ -525,7 +530,7 @@ public abstract class ProgramGenerator {
 
 		/*戻り値をキャスト*/
 		SyntaxDataType pSynPDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,1);
-		pSynMallocCall.addCastDataType(pSynPDoubleType);
+//		pSynMallocCall.addCastDataType(pSynPDoubleType); //remove casting for declaration of multidimensional arrays
 
 		/*代入式を生成*/
 		Math_assign pMathAssign =

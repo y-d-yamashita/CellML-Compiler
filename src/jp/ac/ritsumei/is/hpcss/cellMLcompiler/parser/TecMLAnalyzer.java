@@ -66,7 +66,7 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	public Math_ci getM_pTimeVar() {
 		return m_pTimeVar;
 	}
-
+	
 	/**Return the dimension variables involve in the discretization*/
 	Vector<Math_ci> m_vecDimensionVar;
 	public Vector<Math_ci> getM_vecDimensionVar() {
@@ -84,7 +84,7 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	public Vector<Math_ci> getM_vecIndexVar() {
 		return m_vecIndexVar;
 	}
-	
+
 	/**式中の微係数変数*/
 	Vector<Math_ci> m_vecDerivativeVar;
 	/**
@@ -244,7 +244,7 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 						m_pTimeVar = pVariable;
 						break;
 						
-					//----------------------------------dimension variables (TODO: should include timevar)
+						//----------------------------------dimension variables (TODO: should include timevar)
 					case TVAR_TYPE_DIMENSIONVAR:
 						m_vecDimensionVar.add(pVariable);
 						break;
@@ -403,12 +403,14 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 		/*開始線出力*/
 		System.out.println("[TecML]------------------------------------");
 
-		printContents("diffvar", m_vecDerivativeVar);
-		printContents("timevar", m_vecDiffVar);
-		printContents("var", m_vecArithVar);
+		printContents("diffvar", m_vecDiffVar);
+		printContents("arithvar", m_vecArithVar);
 		printContents("constvar", m_vecConstVar);
+		printContents("dimensionvar", m_vecDimensionVar);
+		printContents("deltavar", m_vecDeltaVar);
+		printContents("indexvar", m_vecIndexVar);
 
-		/*数式出力*/
+		/*print the math expressions*/
 		super.printExpressions();
 
 		/*改行*/
@@ -424,7 +426,7 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	private void printContents(String strTag, Vector<Math_ci> vecM)
 	throws MathException {
 		/*変数リスト出力*/
-		System.out.print(strTag + "\t= { ");
+		System.out.print(strTag + "\t= {");
 
 		boolean first = true;
 		for (Math_ci it: vecM) {
@@ -439,6 +441,24 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 		System.out.println("}");
 	}
 
+	/**
+	 * Check if the variable involves a differential operator on a diffvar 
+	 * @param pVariable, String "diff" (e.g. diffv/difft
+	 * @return 一致判定
+	 */
+	public boolean isDiffOperator(MathOperand pVariable) 
+	throws MathException {
+		//TODO: remove MathException
+		/*すべての要素を比較*/
+		
+		String strOperandVar = pVariable.toLegalString();
+		if (strOperandVar.contains("diff")){
+			return true;
+		}
+		/*不一致*/
+		return false;
+	}
+	
 	/**
 	 * 微係数変数か判定する.
 	 * @param pVariable 判定する数式

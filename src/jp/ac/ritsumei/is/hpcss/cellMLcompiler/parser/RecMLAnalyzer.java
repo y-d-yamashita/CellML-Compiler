@@ -50,7 +50,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	
 	//HashMap
 	private HashMap<Integer, String> indexHashMapList;
-	
+	public HashMap<Integer, String> getM_HashMapIndexList() {
+		return indexHashMapList;
+	}
 	
 	private HashMap<Math_ci, Integer> m_HashMapRecurList;
 	public HashMap<Math_ci, Integer> getM_HashMapRecurVar() {

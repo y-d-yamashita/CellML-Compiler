@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
+
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.MaximumMatching;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.Tarjan;
@@ -102,6 +103,7 @@ public class GraphManipulator {
      * @return XML string
      */
     public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,SetList sl){
+
     	/***** Dependency graph XML  *****/
     	String indent="		";
     	StringBuilder sb= new StringBuilder().

@@ -111,6 +111,7 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 		SetList<RecMLVertex> t = gm.tarjan(dg);
 		System.out.println("Tarjan-----------------------");
 		System.out.println(t.toString());
+
 		System.out.println(gm.toRecMLXMLString(dg, t));
 	}
 

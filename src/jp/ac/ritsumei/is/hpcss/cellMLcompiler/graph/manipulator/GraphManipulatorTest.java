@@ -3,10 +3,12 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
@@ -14,10 +16,13 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableReference;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
@@ -31,7 +36,8 @@ public class GraphManipulatorTest {
 
 GraphManipulator gm= new GraphManipulator();
 RecMLAnalyzer ra = new RecMLAnalyzer();
-	
+/****
+
 	@Test
 	public void testCretateDependencyGraph() {
 		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
@@ -92,7 +98,7 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 			System.out.println(p.getFirst()+","+p.getSecond());
 		}
 }
-
+****/
 	@Test
 	public void testTarjan() {
 		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
@@ -124,7 +130,41 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 		System.out.println("Tarjan-----------------------");
 		System.out.println(t.toString());
 
-		System.out.println(gm.toRecMLXMLString(dg, t));
+RecMLVariableTable table = recmlAnalyzer.getRecMLVariableTable();		
+for(RecMLVariableReference v:table.getVariableReferences()){
+	System.out.print(v.getMathCI().getM_strPresentText()+":");
+	for(MathFactor f:v.getMathCI().getM_vecIndexListFactor()){
+		try {
+			System.out.print(f.toLegalString()+",");
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	System.out.println();
+}
+
+
+System.out.println(gm.toRecMLXMLString(dg, t));
+	List<RecMLVertex> vl = new ArrayList<RecMLVertex>(dg.getVertexes());
+	for(RecMLVertex v:vl){
+		try {
+			System.out.print("V:"+v.toString()+"  ");
+			for(MathFactor f:table.getVariableReference(vl.indexOf(v)).getMathCI().getM_vecIndexListFactor()){
+				try {
+					System.out.print(f.toLegalString()+" ");
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+		} catch (TableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		sb.append(v.toXMLString(vl.indexOf(v), indent));
+System.out.println();
+	}
 	}
 
 private static RecMLAnalyzer parse(){

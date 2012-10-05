@@ -92,4 +92,11 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 		else
 			return 1;
 	}
+	
+	public Math_ci getMathCI(){
+		return variable;
+	}
+	public void setMathCI(Math_ci ci){
+		this.variable=ci;
+	}
 }

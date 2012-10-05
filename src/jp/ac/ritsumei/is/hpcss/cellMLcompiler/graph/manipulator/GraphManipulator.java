@@ -104,7 +104,7 @@ public class GraphManipulator {
      * @param indent
      * @return XML string
      */
-    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,List2D sl){
+    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,List2D<RecMLVertex> listlist){
 
     	/***** Dependency graph XML  *****/
     	String indent="		";
@@ -126,18 +126,14 @@ public class GraphManipulator {
     	sb.append("	</edges>\n").
     	append("</graph>\n");
     	
-    	
     	/*** Simultaneous equation XML ***/
     	sb.append("<!----- Simultaneous equations ---->\n")
     	.append("<simulequs>\n");
-    	for(Object obj:sl.toArray()){
-    	if(obj instanceof Set){
-    		Set<RecMLVertex> s = (Set<RecMLVertex>)obj;
-    		sb.append("	<gourp id=").append(sl.indexOf(obj)).append(">\n");
-    		for(RecMLVertex v:s)
+    	for(List<RecMLVertex> list:listlist){
+    		sb.append("	<gourp id=").append(listlist.indexOf(list)).append(">\n");
+    		for(RecMLVertex v:list)
     			sb.append("		<node>").append(vl.indexOf(v)).append("</node>\n");
     		sb.append("	</group>\n");
-    	}
     	}
     	sb.append("</simulequs>\n");
     	return sb.toString();

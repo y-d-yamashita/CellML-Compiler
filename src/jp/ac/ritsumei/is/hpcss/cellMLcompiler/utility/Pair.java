@@ -4,28 +4,28 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility;
 /**
  * Pair class
  * @author y-yamashita
- * @param <First> Type of First element
- * @param <Second> Type of Second element
+ * @param <FIRST> Type of First element
+ * @param <SECOND> Type of Second element
  */
-public class Pair<First,Second> {
-	private final First first;
-	private final Second second;
+public class Pair<FIRST, SECOND> {
+	private final FIRST first;
+	private final SECOND second;
 	
 	/**
 	 * Constructor
 	 * @param a
 	 * @param b
 	 */
-	public Pair(First fst,Second sec){
-		this.first=fst;
-		this.second=sec;
+	public Pair(FIRST first,SECOND second){
+		this.first=first;
+		this.second=second;
 	}
 	
 	/**
 	 * Obtain first
 	 * @return first
 	 */
-	public final First getFirst(){
+	public final FIRST getFirst(){
 		return first;
 	}
 	
@@ -33,7 +33,7 @@ public class Pair<First,Second> {
 	 * Obtain second
 	 * @return second
 	 */
-	public final Second getSecond(){
+	public final SECOND getSecond(){
 		return second;
 	}
 	
@@ -43,7 +43,7 @@ public class Pair<First,Second> {
 	public boolean equals(Object obj){
 		if(obj == null){return false;}
 		if(obj instanceof Pair){
-			Object[] that = getValues((Pair<First,Second>) obj);
+			Object[] that = getValues((Pair<FIRST,SECOND>) obj);
 			return java.util.Arrays.deepEquals(that,getValues(this));
 		}
 		return false;		
@@ -61,7 +61,7 @@ public class Pair<First,Second> {
 	 * @param v
 	 * @return object array
 	 */
-	private static <First,Second> Object[] getValues(Pair<First,Second> v){
+	private static <FIRST,SECOND> Object[] getValues(Pair<FIRST,SECOND> v){
 		return new Object[]	{v.first,v.second};
 	}
 	

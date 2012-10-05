@@ -62,7 +62,7 @@ public class CudaRecurrenceCalcKernelGenerator extends CudaRecurrenceProgramGene
 	 * @throws TranslateException
 	 * @throws SyntaxException 
 	 */
-	public SyntaxFunction getSyntaxCalcKernel()
+	public SyntaxFunction getCudaSyntaxCalcKernel()
 	throws MathException, TranslateException, SyntaxException {
 		//----------------------------------------------
 		//カーネル生成

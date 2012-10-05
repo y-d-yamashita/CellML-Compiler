@@ -18,8 +18,8 @@ static{
 	logger = Logger.getLogger(loggerName);
 	ConsoleHandler handler = new ConsoleHandler();
 	handler.setFormatter(new SimpleFormatter());
-	handler.setLevel(Level.CONFIG);
-	logger.setLevel(Level.CONFIG);
+	handler.setLevel(Level.WARNING);
+	logger.setLevel(Level.WARNING);
 	logger.addHandler(handler);
 	logger.setUseParentHandlers(false);
 }

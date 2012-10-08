@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
@@ -13,6 +14,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
@@ -26,6 +29,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Triple;
 
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -146,8 +150,36 @@ for(RecMLVariableReference v:table.getVariableReferences()){
 
 
 System.out.println(gm.toRecMLXMLString(dg, t));
+
+/*
+List<Triple<String,String,String>> indexesList = new ArrayList<Triple<String,String,String>>();
 	List<RecMLVertex> vl = new ArrayList<RecMLVertex>(dg.getVertexes());
 	for(RecMLVertex v:vl){
+		try {
+			Triple<String,String,String> indexes = new Triple<String,String,String>();
+			Vector<MathFactor> indexesListInVarRef = table.getVariableReference(vl.indexOf(v)).getMathCI().getM_vecIndexListFactor();	
+			if(indexesListInVarRef.size()>0){	
+				indexes.setFirst(indexesListInVarRef.get(0).toLegalString());
+			}
+			if(indexesListInVarRef.size()>1){	
+				indexes.setSecond(indexesListInVarRef.get(1).toLegalString());
+			}
+
+			if(indexesListInVarRef.size()>2){	
+				indexes.setThird(indexesListInVarRef.get(2).toLegalString());
+			}
+
+			indexesList.add(indexes);
+
+		} catch (TableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (MathException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+		
+		
 		try {
 			System.out.print("V:"+v.toString()+"  ");
 			for(MathFactor f:table.getVariableReference(vl.indexOf(v)).getMathCI().getM_vecIndexListFactor()){
@@ -165,7 +197,27 @@ System.out.println(gm.toRecMLXMLString(dg, t));
 //		sb.append(v.toXMLString(vl.indexOf(v), indent));
 System.out.println();
 	}
+	
+	for(Triple<String,String,String> indexes:indexesList)
+		System.out.println(indexes);
+		*/
+DirectedGraph<FieldVertex, FieldEdge> fg=null;
+	try {
+		 fg=gm.cretateFieldDependencyGraph(dg, recmlAnalyzer.getRecMLVariableTable());
+	} catch (TableException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (MathException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (GraphException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
+	
+	System.out.println("<<Field Graph>>------------------------------");
+	System.out.println(gm.toRecMLXMLString(fg));
+}
 
 private static RecMLAnalyzer parse(){
 	RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
@@ -222,8 +274,8 @@ private static RecMLAnalyzer parse(){
 	
 	return pRecMLAnalyzer;
 }
-	BipartiteGraph<RecMLVertex, RecMLEdge>createBipartieGraph() throws GraphException{
-		BipartiteGraph<RecMLVertex, RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
+	BipartiteGraph<RecMLVertex, FieldEdge>createBipartieGraph() throws GraphException{
+		BipartiteGraph<RecMLVertex, FieldEdge> graph = new BipartiteGraph<RecMLVertex, FieldEdge>();
 		
 		RecMLVertex var1 = new RecMLVertex();
 		var1.setVariable(1);
@@ -247,11 +299,11 @@ private static RecMLAnalyzer parse(){
 		graph.addDestVertex(expr3);
 
 
-		graph.addEdge(new RecMLEdge(), var1, expr1);
-		graph.addEdge(new RecMLEdge(), var2, expr2);
-		graph.addEdge(new RecMLEdge(), var3, expr3);
-		graph.addEdge(new RecMLEdge(), var1, expr3);
-		graph.addEdge(new RecMLEdge(), var3, expr1);
+		graph.addEdge(new FieldEdge(), var1, expr1);
+		graph.addEdge(new FieldEdge(), var2, expr2);
+		graph.addEdge(new FieldEdge(), var3, expr3);
+		graph.addEdge(new FieldEdge(), var1, expr3);
+		graph.addEdge(new FieldEdge(), var3, expr1);
 		return graph;
 	}
 }

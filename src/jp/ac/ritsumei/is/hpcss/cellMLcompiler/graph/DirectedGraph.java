@@ -173,6 +173,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			throw new GraphException("Error:"+e+"["+src+","+dst+"]"+
 					", Edge:"+e+" was already added");
 		
+		
 		//If vertex s and d were not added, throw exception
 		if(s==null || d == null) 
 			throw new GraphException("Error:"+e+"["+src+","+dst+"]"+

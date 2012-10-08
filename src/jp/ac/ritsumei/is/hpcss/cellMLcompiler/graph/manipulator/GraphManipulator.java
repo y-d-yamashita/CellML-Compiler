@@ -149,11 +149,13 @@ public class GraphManipulator {
     	/*** Simultaneous equation XML ***/
     	sb.append("<!----- Simultaneous equations ---->\n")
     	.append("<simulequs>\n");
-    	for(List<RecMLVertex> list:listlist){
-    		sb.append("	<gourp id=").append(listlist.indexOf(list)).append(">\n");
-    		for(RecMLVertex v:list)
-    			sb.append("		<node>").append(vl.indexOf(v)).append("</node>\n");
-    		sb.append("	</group>\n");
+    	if(listlist!=null){
+    		for(List<RecMLVertex> list:listlist){
+    			sb.append("	<gourp id=").append(listlist.indexOf(list)).append(">\n");
+    			for(RecMLVertex v:list)
+    				sb.append("		<node>").append(vl.indexOf(v)).append("</node>\n");
+    			sb.append("	</group>\n");
+    		}
     	}
     	sb.append("</simulequs>\n");
     	return sb.toString();

@@ -13,6 +13,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.SyntaxException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TranslateException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.generator.*;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.GraphManipulator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.CellMLAnalyzer;
@@ -96,7 +97,11 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 		}
 		
 		
-	
+	if(pRecMLAnalyzer.getGraph()!=null){
+		System.out.println(new GraphManipulator().toRecMLXMLString(
+				pRecMLAnalyzer.getGraph(),
+				null));
+	}
 //		/*selector内cnのInteger*/
 		pRecMLAnalyzer.changeAllSelectorInteger();
 		

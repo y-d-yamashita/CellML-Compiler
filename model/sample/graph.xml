@@ -1,0 +1,44 @@
+<recml>
+<graph>
+<nodes>
+<node id="0">
+<equation>1</equation>
+<variable>2</variable>
+</node>
+<node id="1">
+<equation>3</equation>
+<variable>4</variable>
+</node>
+<node id="2">
+<equation>3</equation>
+<variable>4</variable>
+</node>
+<node id="3">
+<equation>3</equation>
+<variable>4</variable>
+</node>
+<node id="4">
+<equation>3</equation>
+<variable>4</variable>
+</node>
+</nodes>
+<edges>
+<edge id="0">
+<source>0</source>
+<dest>1</dest>
+</edge>
+<edge id="1">
+<source>1</source>
+<dest>0</dest>
+</edge>
+<edge id="2">
+<source>2</source>
+<dest>4</dest>
+</edge>
+<edge id="3">
+<source>4</source>
+<dest>3</dest>
+</edge>
+</edges>
+</graph>
+</recml>

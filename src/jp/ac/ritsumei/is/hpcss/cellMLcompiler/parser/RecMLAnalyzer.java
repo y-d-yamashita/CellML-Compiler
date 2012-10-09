@@ -20,6 +20,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.XMLException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
@@ -44,6 +48,8 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	private boolean m_bAttrParsing;
 	
 	private RecMLVariableTable recMLVariableTable;
+	private RecMLGraphAnalyzer graphAnlyzer;
+	private DirectedGraph<RecMLVertex,RecMLEdge> graph;
 	
 	// loop index variable name list (initialized in constructor)
 	// just for test
@@ -164,7 +170,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		m_vecConstVar = new Vector<Math_ci>();
 		m_vecCondition = new Vector<Math_ci>();
 		m_vecOutput = new Vector<Math_ci>();
-		
+
+		graphAnlyzer=new RecMLGraphAnalyzer();
+		graph=null;
 	}
 
 	/*-----解析メソッド-----*/
@@ -188,6 +196,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 
 			/*MathML解析器に投げる*/
 			super.findTagStart(strTag,pXMLAttr);
+		}
+		else if(graphAnlyzer.isParseMode()){
+			graphAnlyzer.findTagStart(strTag, pXMLAttr);
 		}
 
 		//-----------------------------------------------------
@@ -273,6 +284,11 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 					m_NextOperandKind = null;
 					break;
 				}
+			case CTAG_GRAPH:
+			{
+				graphAnlyzer.setParseMode(true);
+				break;
+			}
 				//--------------------------------------変数宣言
 			case CTAG_VARIABLE:
 				{
@@ -402,6 +418,16 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			/*MathML解析器に投げる*/
 			super.findTagEnd(strTag);
 		}
+		
+		else if(graphAnlyzer.isParseMode()){
+			if(strTag==RecMLDefinition.RECML_TAG_STR_GRAPH){
+				graphAnlyzer.setParseMode(false);
+				graph = graphAnlyzer.getGraph();
+				return;
+			}
+			graphAnlyzer.findTagEnd(strTag);
+		}
+		
 
 		//-----------------------------------------------------
 		//RecML analysis
@@ -447,6 +473,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			super.findText(strText);
 		}
 
+		else if(graphAnlyzer.isParseMode()){
+			graphAnlyzer.findText(strText);
+		}
 		//-----------------------------------------------------
 		//CellMLの解析
 		//-----------------------------------------------------
@@ -840,5 +869,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		for(MathExpression expr:this.m_vecMathExpression){
 			expr.traverse(visitor);
 		}
+	}
+	
+	public DirectedGraph<RecMLVertex,RecMLEdge>getGraph(){
+		return graph;
 	}
 }

@@ -53,7 +53,7 @@ public class RecMLVertex extends Vertex {
 	 * Get variable
 	 * @return RecML variable
 	 */
-	public Integer getVariable(){
+	public Integer getVariableID(){
 		return recVar;
 	}
 	
@@ -61,7 +61,7 @@ public class RecMLVertex extends Vertex {
 	 * Get expression
 	 * @return RecML expression
 	 */
-	public Integer getExpression(){
+	public Integer getExpressionID(){
 		return recExpr;
 	}
 	/**

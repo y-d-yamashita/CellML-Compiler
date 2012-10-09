@@ -35,6 +35,7 @@ public class RecMLVariableTable extends Table<RecMLVariableReference> {
 		/*構造体を構成*/
 		RecMLVariableReference pVarRef = new RecMLVariableReference();
 		pVarRef.setID(id);
+		pVarRef.setMathCI(variable);
 		try {
 			pVarRef.strVariableName = variable.toLegalString();
 		} catch (MathException e) {
@@ -47,6 +48,19 @@ public class RecMLVariableTable extends Table<RecMLVariableReference> {
 
 		/*値の挿入*/
 		super.insert(pVarRef.strVariableName,pVarRef);
+	}
+
+	public RecMLVariableReference getVariableReference(int id) throws TableException{
+		for(RecMLVariableReference v:this.m_mapElements.values()){
+			if(v.getID()==id)
+				return v;
+		}
+			
+		throw new TableException(this.getClass().getName(), "getVariableReference","Not Found variable of id:"+id);
+	}
+	
+	public Collection<RecMLVariableReference> getVariableReferences(){
+		return this.m_mapElements.values();
 	}
 
 	/**

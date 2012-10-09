@@ -18,6 +18,9 @@ public class RecMLDefinition {
 	public static final String RECML_TAG_STR_POSITION = "position";
 	
 	public static final String RECML_TAG_STR_VARIABLE = "variable";
+
+	public static final String RECML_TAG_STR_GRAPH=RecMLGraphDefinition.RECML_TAG_STR_GRAPH;
+
 	
 	/*RecML変数型文字列定義*/
 	public static final String RECML_VARTYPE_STR_RECURVAR = "recurvar";
@@ -46,7 +49,8 @@ public class RecMLDefinition {
 		CTAG_LOOPINDEX		(RECML_TAG_STR_LOOPINDEX),
 		CTAG_LOOPSTRUCT		(RECML_TAG_STR_LOOPSTRUCT),
 		CTAG_POSITION	(RECML_TAG_STR_POSITION),
-		CTAG_VARIABLE	(RECML_TAG_STR_VARIABLE)
+		CTAG_VARIABLE	(RECML_TAG_STR_VARIABLE),
+		CTAG_GRAPH	(RECML_TAG_STR_GRAPH),
 			;
 		private final String operatorStr;
 		private eRecMLTag(String operatorstr) {

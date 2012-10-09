@@ -231,7 +231,7 @@ public class CudaRecurrenceProgramGenerator extends ProgramGenerator {
 		/*計算カーネル生成・追加*/
 		CudaRecurrenceCalcKernelGenerator pCudaCalcKernelGenerator =
 			new CudaRecurrenceCalcKernelGenerator(m_pRecMLAnalyzer);
-		SyntaxFunction  pSynCalcKernel = pCudaCalcKernelGenerator.getSyntaxCalcKernel();
+		SyntaxFunction  pSynCalcKernel = pCudaCalcKernelGenerator.getCudaSyntaxCalcKernel();
 	
 		pSynProgram.addFunction(pSynCalcKernel);
 		

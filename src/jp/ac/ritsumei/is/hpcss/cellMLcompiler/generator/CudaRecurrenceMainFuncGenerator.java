@@ -267,7 +267,7 @@ public class CudaRecurrenceMainFuncGenerator extends CudaRecurrenceProgramGenera
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListConstVar().size(); i++) {
 
 			/*型構文生成*/
-			SyntaxDataType pSynTypePDouble = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
+			SyntaxDataType pSynTypePDouble = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
 
 			/*宣言用変数の生成*/
 			Math_ci pDecHostVar =
@@ -599,7 +599,6 @@ public class CudaRecurrenceMainFuncGenerator extends CudaRecurrenceProgramGenera
 		/*cudaMalloc文を追加*/
 			pSynMainFunc.addStatement(this.createCudaHostAlloc(pTmpHostVar, pMathTimes1));
 		}
-		/*
 		for (int i = 0; i < m_vecSynHostConstVarDec.size(); i++) {
 
 			//コピー先変数インスタンス生成
@@ -613,13 +612,28 @@ public class CudaRecurrenceMainFuncGenerator extends CudaRecurrenceProgramGenera
 					String.valueOf(1);
 
 			//データ数計算式の構築
+			//Math_cn pDataNumVar =
+			//	(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, strDataNumVar);
+
+
+			/*データ数計算式の構築*/
 			Math_cn pDataNumVar =
 				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, strDataNumVar);
+			Math_times pMathTimes1 =
+				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
 
+			pMathTimes1.addFactor(m_pDefinedDataSizeVar);
+//			pMathTimes1.addFactor(pDataNumVar);
+			Math_ci pMathRecurSize =
+					(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+										CUPROG_DEFINE_MAXARRAYNUM_NAME);
+
+			pMathTimes1.addFactor(pMathRecurSize);
+			pMathTimes1.addFactor(pMathRecurSize);
+	
 			//cudaMalloc文を追加
-			pSynMainFunc.addStatement(this.createCudaHostAlloc(pTmpHostVar, pDataNumVar));
+			pSynMainFunc.addStatement(this.createCudaHostAlloc(pTmpHostVar, pMathTimes1));
 		}
-		*/
 		
 		
 		

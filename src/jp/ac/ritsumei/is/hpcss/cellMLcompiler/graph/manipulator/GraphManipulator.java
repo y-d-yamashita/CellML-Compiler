@@ -8,11 +8,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.MaximumMatching;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.Tarjan;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
@@ -67,6 +71,22 @@ public class GraphManipulator {
 	}
 	
 	/**
+	 * Crate dependency graph
+	 * @param dependency graph of variables and equations
+	 * @return Field Dependency graph
+	 * @throws GraphException
+	 * @throws MathException 
+	 * @throws TableException 
+	 */
+	public DirectedGraph<FieldVertex, FieldEdge> cretateFieldDependencyGraph(
+			DirectedGraph<RecMLVertex, RecMLEdge> graph,
+			RecMLVariableTable recMLVariableTable
+			) throws GraphException, TableException, MathException{
+			return graphCreator.cretateFieldDependencyGraph(graph,recMLVariableTable);
+	}
+	
+	
+	/**
 	 * Create bipartite graph
 	 * @param recmlAnalyzer
 	 * @return Bipartite graph
@@ -104,7 +124,7 @@ public class GraphManipulator {
      * @param indent
      * @return XML string
      */
-    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,List2D sl){
+    public String toRecMLXMLString(DirectedGraph<RecMLVertex, RecMLEdge> graph,List2D<RecMLVertex> listlist){
 
     	/***** Dependency graph XML  *****/
     	String indent="		";
@@ -126,23 +146,53 @@ public class GraphManipulator {
     	sb.append("	</edges>\n").
     	append("</graph>\n");
     	
-    	
     	/*** Simultaneous equation XML ***/
     	sb.append("<!----- Simultaneous equations ---->\n")
     	.append("<simulequs>\n");
-    	for(Object obj:sl.toArray()){
-    	if(obj instanceof Set){
-    		Set<RecMLVertex> s = (Set<RecMLVertex>)obj;
-    		sb.append("	<gourp id=").append(sl.indexOf(obj)).append(">\n");
-    		for(RecMLVertex v:s)
-    			sb.append("		<node>").append(vl.indexOf(v)).append("</node>\n");
-    		sb.append("	</group>\n");
-    	}
+    	if(listlist!=null){
+    		for(List<RecMLVertex> list:listlist){
+    			sb.append("	<gourp id=").append(listlist.indexOf(list)).append(">\n");
+    			for(RecMLVertex v:list)
+    				sb.append("		<node>").append(vl.indexOf(v)).append("</node>\n");
+    			sb.append("	</group>\n");
+    		}
     	}
     	sb.append("</simulequs>\n");
     	return sb.toString();
     	
     	
+    	
+    }
+    
+    /**
+     * toXMLString method
+     * @param indent
+     * @return XML string
+     */
+    public String toRecMLXMLString(DirectedGraph<FieldVertex, FieldEdge> graph){
+
+    	/***** Dependency graph XML  *****/
+    	String indent="		";
+    	StringBuilder sb= new StringBuilder().
+    			append("<!----- Field graph ---->\n").
+    			append("<graph type=\"dependency\">\n").
+    			append("	<nodes>\n");
+    	List<FieldVertex> vl = new ArrayList<FieldVertex>(graph.getVertexes());
+    	for(FieldVertex v:vl)
+    		sb.append(v.toXMLString(vl.indexOf(v), indent));
+    	sb.append("	</nodes>\n").
+    	append("	<edges>\n");
+    	List<FieldEdge> el = new ArrayList<FieldEdge>(graph.getEdges());
+    	for(FieldEdge e:el)
+    		sb.append(e.toXMLString(
+    				vl.indexOf(graph.getSourceVertex(e)),
+    				vl.indexOf(graph.getDestVertex(e)),
+    				el.indexOf(e), indent));
+    	sb.append("	</edges>\n").
+    	append("</graph>\n");
+    	
+    	
+    	return sb.toString();
     	
     }
 }

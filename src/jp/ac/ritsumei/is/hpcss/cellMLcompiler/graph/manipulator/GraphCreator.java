@@ -4,23 +4,33 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
+import java.util.Vector;
 
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 
@@ -50,8 +60,8 @@ public class GraphCreator {
 		//Add new vertex of variable and expression
 		for(Pair<RecMLVertex,RecMLVertex> p:pairList){
 			RecMLVertex v = new RecMLVertex();
-			v.setVariable(p.getFirst().getVariable());
-			v.setExpression(p.getSecond().getExpression());
+			v.setVariable(p.getFirst().getVariableID());
+			v.setExpression(p.getSecond().getExpressionID());
 			dependencyGraph.addVertex(v);
 			oldSrcMap.put(p.getFirst(), v);
 			oldDstMap.put(p.getSecond(), v);
@@ -65,7 +75,85 @@ public class GraphCreator {
 		return dependencyGraph;
 	}
 	
+
+	/**
+	 * Create a dependency graph
+	 * @param  Graph of variables and equations
+	 * @return Field Dependency graph
+	 * @throws GraphException
+	 * @throws TableException 
+	 * @throws MathException 
+	 */
+	public DirectedGraph<FieldVertex, FieldEdge> cretateFieldDependencyGraph(
+			DirectedGraph<RecMLVertex,RecMLEdge> oldGraph,
+			RecMLVariableTable table
+			) throws GraphException, TableException, MathException{
+		
+		DirectedGraph<FieldVertex, FieldEdge> fieldDependencyGraph = new DirectedGraph<FieldVertex, FieldEdge>();
 	
+		Map<String,FieldVertex> vertexMap = new HashMap<String,FieldVertex>();
+		
+		//Add vertex
+		List<String> indexStringList= new ArrayList<String>();
+		StringBuilder vertexMapKeyBuilder = new StringBuilder();
+		for(RecMLVertex rv:oldGraph.getVertexes()){
+			System.out.println(rv);
+			for(MathFactor f:table.getVariableReference(rv.getVariableID()).getMathCI().getM_vecIndexListFactor()){
+				indexStringList.add(f.toLegalString());
+				vertexMapKeyBuilder.append(f.toLegalString());
+			}
+			if(!vertexMap.containsKey(vertexMapKeyBuilder.toString())){
+				FieldVertex v = new FieldVertex();
+				for(String index:indexStringList){
+					v.setAxisIndex(index, indexStringList.indexOf(index));
+				}
+				fieldDependencyGraph.addVertex(v);
+				vertexMap.put(vertexMapKeyBuilder.toString(),v);
+			}
+			indexStringList.clear();
+			vertexMapKeyBuilder.setLength(0);
+		}
+		
+		//Add Edge
+		RecMLVertex srv; // Source RecML Vertex
+		RecMLVertex drv; // Dest RecML Vertex
+		StringBuilder srvIndexStringBuilder =  new StringBuilder();
+		StringBuilder drvIndexStringBuilder =  new StringBuilder();
+		FieldVertex sfv = null;
+		FieldVertex dfv = null;
+		Set<String> addedEdge = new TreeSet<String>();
+		for(RecMLEdge re:oldGraph.getEdges()){
+			srv = oldGraph.getSourceVertex(re);
+			drv = oldGraph.getDestVertex(re);
+			
+			for(MathFactor f:table.getVariableReference(srv.getVariableID()).getMathCI().getM_vecIndexListFactor()){
+				srvIndexStringBuilder.append(f.toLegalString());
+			}
+			if(vertexMap.containsKey(srvIndexStringBuilder.toString())){
+				sfv=vertexMap.get(srvIndexStringBuilder.toString());
+			}
+			
+			
+			for(MathFactor f:table.getVariableReference(drv.getVariableID()).getMathCI().getM_vecIndexListFactor()){
+				drvIndexStringBuilder.append(f.toLegalString());
+			}
+			if(vertexMap.containsKey(drvIndexStringBuilder.toString())){
+				dfv=vertexMap.get(drvIndexStringBuilder.toString());
+			}
+			
+			if(!addedEdge.contains(sfv.toString()+dfv.toString())){
+				fieldDependencyGraph.addEdge(new FieldEdge(), sfv, dfv);
+				addedEdge.add(sfv.toString()+dfv.toString());
+			}
+			srvIndexStringBuilder.setLength(0);
+			drvIndexStringBuilder.setLength(0);
+		}
+		
+		
+		
+		return fieldDependencyGraph;
+	}
+
 	
 	/**
 	 * Create a bipartite graph

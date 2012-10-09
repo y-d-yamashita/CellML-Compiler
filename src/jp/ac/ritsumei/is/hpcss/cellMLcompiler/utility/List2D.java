@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * @author y-yamashita
  *
  */
-public class List2D<V> extends ArrayList<List<V>> {
+public class List2D<V> extends ArrayList<List<V>>{
 
 	/**
 	 * Constructor
@@ -44,6 +44,7 @@ public class List2D<V> extends ArrayList<List<V>> {
 			for(V v:list){
 				sb.append(v.toString()).append(", ");
 			}
+		sb.delete(sb.length()-2, sb.length()-1);
 			sb.append("]\n");
 		}
 		return sb.toString();

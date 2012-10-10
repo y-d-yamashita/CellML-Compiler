@@ -48,7 +48,6 @@ public class Math_root extends MathOperator {
 		}
 
 		return 	"<apply><root/>" + "\n" +
-				"\t <degree><ci type='integer'> 2 </ci></degree>" + "\n" +
 				"\t " + m_vecFactor.get(0).toMathMLString() + "\n" +
 			    "</apply>";
 	}

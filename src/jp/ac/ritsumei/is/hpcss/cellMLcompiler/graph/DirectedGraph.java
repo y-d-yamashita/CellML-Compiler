@@ -120,6 +120,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 	 private Map<V,Node> nGroup;
 	 /** Map of edges */
 	 private Map<E,Connection> cGroup;
+	
 
 	 /**
 	  * Constructor
@@ -148,7 +149,8 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		
 		//Register vertex "v"
 		nGroup.put(v,new Node(v));
-	}
+		
+		}
 
 	/**
 	 * Add new edge
@@ -186,6 +188,8 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		
 		//Register new edge
 		cGroup.put(e,new Connection(e, src, dst));
+		
+
 	}
 	
 	
@@ -329,6 +333,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			nGroup.get(c.src).outEdges.remove(e);
 			nGroup.get(c.dst).inEdges.remove(e);
 			cGroup.remove(e);
+
 		}
 
 		/**

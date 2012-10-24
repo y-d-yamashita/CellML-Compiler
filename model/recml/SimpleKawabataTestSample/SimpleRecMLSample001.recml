@@ -1,0 +1,189 @@
+﻿<recml>
+<!-- single loop -->
+	<!-- loop1 pre -->
+	<!-- loop1 init -->
+	<!-- loop1 inner -->
+	<!-- loop1 loopcond -->
+	<!-- loop1 final -->
+	<!-- loop1 post -->
+
+<!-- loop1 ������ -->
+
+	<loopindex num="0" name="n1" />
+	
+	<variable name="X1" type="recurvar"/>
+	<variable name="kX1" type="arithvar"/>
+	<variable name="X1end" type="output"/>
+	<variable name="t1" type="recurvar"/>
+	<variable name="t1end" type="output"/>
+	<variable name="Y1" type="arithvar"/>
+
+<!--	<variable name="n1" type="stepvar"/> -->
+
+
+
+	<math>
+		<!-- loop1 pre -->
+		
+		<!-- loop1 init -->
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<cn>0</cn>
+			</apply>
+			<cn>1</cn>
+		</apply>
+	
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<cn>n1</cn>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<cn>0</cn>
+			</apply>
+		</apply>
+	
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<cn>0</cn>
+			</apply>
+			<cn>1</cn>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<cn>n1</cn>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<cn>0</cn>
+			</apply>
+		</apply>
+
+		<!-- loop1 inner -->
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>Y1</ci>
+				<ci>n1</ci>
+			</apply>
+			<apply>
+				<apply>
+					<times/>
+					<apply>
+						<minus/>
+						<apply>
+							<cn>1</cn>
+						</apply>
+					</apply>	
+					<apply>
+						<selector/>
+						<ci>X1</ci>
+						<ci>n1</ci>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kX1</ci>
+				<ci>n1</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>Y1</ci>
+				<ci>n1</ci>
+			</apply>
+		</apply>
+		
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>X1</ci>
+					<ci>n1</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kX1</ci>
+						<ci>n1</ci>
+					</apply>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>t1</ci>
+					<ci>n1</ci>
+				</apply>
+				<cn>1</cn>
+			</apply>
+		</apply>
+			
+		<!-- loop1 loopcond -->
+		
+		
+		<!-- loop1 final -->
+		<apply>
+			<eq/>
+			<ci>X1end</ci>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<!-- loop1 post -->		
+	</math>
+</recml>

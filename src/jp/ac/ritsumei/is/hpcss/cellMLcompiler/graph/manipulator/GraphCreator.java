@@ -18,6 +18,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
@@ -84,12 +85,12 @@ public class GraphCreator {
 	 * @throws TableException 
 	 * @throws MathException 
 	 */
-	public DirectedGraph<FieldVertex, FieldEdge> cretateFieldDependencyGraph(
+	public FieldGraph cretateFieldDependencyGraph(
 			DirectedGraph<RecMLVertex,RecMLEdge> oldGraph,
 			RecMLVariableTable table
 			) throws GraphException, TableException, MathException{
 		
-		DirectedGraph<FieldVertex, FieldEdge> fieldDependencyGraph = new DirectedGraph<FieldVertex, FieldEdge>();
+		FieldGraph fieldDependencyGraph = new FieldGraph();
 	
 		Map<String,FieldVertex> vertexMap = new HashMap<String,FieldVertex>();
 		
@@ -104,8 +105,8 @@ public class GraphCreator {
 			}
 			if(!vertexMap.containsKey(vertexMapKeyBuilder.toString())){
 				FieldVertex v = new FieldVertex();
-				for(String index:indexStringList){
-					v.setAxisIndex(index, indexStringList.indexOf(index));
+				for(int i=0;i<indexStringList.size();i++){
+					v.setAxisIndex(indexStringList.get(i), i);
 				}
 				fieldDependencyGraph.addVertex(v);
 				vertexMap.put(vertexMapKeyBuilder.toString(),v);
@@ -188,9 +189,16 @@ public class GraphCreator {
 	 */
 	private void removeNotConnectedVertexes(
 			Graph<RecMLVertex, RecMLEdge> graph) {
-		for(RecMLVertex v:graph.getVertexes())
-			if(graph.getEdges(v).isEmpty())
-				graph.removeVertex(v);
+		List<RecMLVertex> removeVertexList = new ArrayList<RecMLVertex>();
+		for(RecMLVertex v:graph.getVertexes()){
+			if(graph.getEdges(v).isEmpty()){
+				removeVertexList.add(v);
+			}
+				
+		}
+			for(RecMLVertex rv:removeVertexList){
+				graph.removeVertex(rv);
+			}
 	}
 
 

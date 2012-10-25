@@ -12,6 +12,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldLoopGroupList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
@@ -111,6 +113,8 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 		try {
 			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
 			graph = gm.createBipartiteGraph(contener);
+			System.out.println("BIPARTITE GRAPH>>>>>>>>>>>>>>>>>>>");
+			System.out.println(gm.toRecMLXMLString(graph,null));
 		} catch (GraphException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,7 +126,6 @@ RecMLAnalyzer ra = new RecMLAnalyzer();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		DirectedGraph<RecMLVertex, RecMLEdge> dg = null;
 		try {
 		dg=gm.cretateDependencyGraph(pairList, graph);
@@ -201,7 +204,7 @@ System.out.println();
 	for(Triple<String,String,String> indexes:indexesList)
 		System.out.println(indexes);
 		*/
-DirectedGraph<FieldVertex, FieldEdge> fg=null;
+FieldGraph fg=null;
 	try {
 		 fg=gm.cretateFieldDependencyGraph(dg, recmlAnalyzer.getRecMLVariableTable());
 	} catch (TableException e) {
@@ -217,14 +220,22 @@ DirectedGraph<FieldVertex, FieldEdge> fg=null;
 	
 	System.out.println("<<Field Graph>>------------------------------");
 	System.out.println(gm.toRecMLXMLString(fg));
+	
+	FieldLoopGroupList fgl=	gm.generateLoopGroup(fg);
+
+	System.out.println("<<Loop>>------------------------------");
+
+	System.out.println(fgl.toString());
 }
 
 private static RecMLAnalyzer parse(){
 	RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
 	
 	String xml = "";
-	xml = "./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml";
-
+//	xml = "./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml";
+//	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple.recml";
+	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml";
+	//xml = "./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml";
 	//---------------------------------------------------
 	//XMLパーサ初期化
 	//---------------------------------------------------
@@ -262,7 +273,8 @@ private static RecMLAnalyzer parse(){
 	
 	
 	pRecMLAnalyzer.createVariableTable();
-	pRecMLAnalyzer.setAssignRefRecVariableType();
+	pRecMLAnalyzer.setLeftsideRightsideVariable();
+	pRecMLAnalyzer.setRefVariableType();
 	/** 内容確認 ***/
 
 	try {

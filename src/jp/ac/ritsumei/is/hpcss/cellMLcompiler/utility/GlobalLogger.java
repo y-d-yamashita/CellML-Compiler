@@ -13,13 +13,13 @@ import java.util.logging.SimpleFormatter;
 public class GlobalLogger {
 private static final Logger logger;
 private static final String loggerName = "GlobalLogger";
-
+private static final Level logLevel = Level.WARNING;
 static{
 	logger = Logger.getLogger(loggerName);
 	ConsoleHandler handler = new ConsoleHandler();
 	handler.setFormatter(new SimpleFormatter());
-	handler.setLevel(Level.WARNING);
-	logger.setLevel(Level.WARNING);
+	handler.setLevel(logLevel);
+	logger.setLevel(logLevel);
 	logger.addHandler(handler);
 	logger.setUseParentHandlers(false);
 }

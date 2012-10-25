@@ -12,11 +12,14 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldLoopGroupList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.LoopSeparator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.MaximumMatching;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.Tarjan;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
@@ -47,15 +50,18 @@ public class GraphManipulator {
 	/** Tarjan */
 	private Tarjan	tarjan;
 	
+	/** Loop separator of Field graph*/
+	private LoopSeparator loopSeparator;
 	
 	/**
 	 * Constructor
 	 */
 	public GraphManipulator(){
-		//Initialize
+		//Algorithm executors initialize
 		graphCreator = new GraphCreator();
 		maximumMatching = new MaximumMatching();
 		tarjan = new Tarjan();
+		loopSeparator=new LoopSeparator();
 	}
 	
 	/**
@@ -78,7 +84,7 @@ public class GraphManipulator {
 	 * @throws MathException 
 	 * @throws TableException 
 	 */
-	public DirectedGraph<FieldVertex, FieldEdge> cretateFieldDependencyGraph(
+	public FieldGraph cretateFieldDependencyGraph(
 			DirectedGraph<RecMLVertex, RecMLEdge> graph,
 			RecMLVariableTable recMLVariableTable
 			) throws GraphException, TableException, MathException{
@@ -178,8 +184,10 @@ public class GraphManipulator {
     			append("<graph type=\"dependency\">\n").
     			append("	<nodes>\n");
     	List<FieldVertex> vl = new ArrayList<FieldVertex>(graph.getVertexes());
-    	for(FieldVertex v:vl)
-    		sb.append(v.toXMLString(vl.indexOf(v), indent));
+    	for(FieldVertex v:vl){
+    		v.setId(vl.indexOf(v));
+    		sb.append(v.toXMLString( indent));
+    	}
     	sb.append("	</nodes>\n").
     	append("	<edges>\n");
     	List<FieldEdge> el = new ArrayList<FieldEdge>(graph.getEdges());
@@ -195,4 +203,15 @@ public class GraphManipulator {
     	return sb.toString();
     	
     }
+
+    /**
+     * Generate loop group based on Field graph
+     * @param fg
+     * @return loop group list
+     */
+	public FieldLoopGroupList generateLoopGroup(
+			FieldGraph fg) {
+			FieldLoopGroupList fgl = loopSeparator.separate(fg);
+		return fgl;
+	}
 }

@@ -110,7 +110,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 		
 		
 		pRecMLAnalyzer.createVariableTable();
-		pRecMLAnalyzer.setAssignRefRecVariableType();
+		pRecMLAnalyzer.setLeftsideRightsideVariable();
 		/** 内容確認 ***/
 		try {
 			pRecMLAnalyzer.printContents();

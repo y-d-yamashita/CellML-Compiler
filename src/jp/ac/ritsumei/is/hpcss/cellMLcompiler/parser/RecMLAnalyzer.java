@@ -30,7 +30,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.CreateRecMLVariableTableVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.ReplacePartOfVariableNameVisitor;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SetAssignRefRecMLVariableTypeVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SetLeftSideRightSideVariableVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLVarType;
@@ -809,14 +809,20 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		 recMLVariableTable=visitor.getTable();
 	}
 
-	public void setAssignRefRecVariableType(){
-		SetAssignRefRecMLVariableTypeVisitor visitor = new SetAssignRefRecMLVariableTypeVisitor(recMLVariableTable);
+	public void setLeftsideRightsideVariable(){
+		SetLeftSideRightSideVariableVisitor visitor = new SetLeftSideRightSideVariableVisitor(recMLVariableTable);
 		 for(MathExpression expr :m_vecMathExpression){
 			 expr.getRootFactor().traverse(visitor);
 			 visitor.reset();
 		 }
 		 recMLVariableTable=visitor.getTable();
 	}
+	
+	public void setRefVariableType(){
+		recMLVariableTable.setRefVariableType(this);
+	}
+	
+	
 	public RecMLVariableTable getRecMLVariableTable() {
 		return recMLVariableTable;
 	}

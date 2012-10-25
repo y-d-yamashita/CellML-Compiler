@@ -14,10 +14,11 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
  *
  */
 public class FieldVertex extends Vertex {
-	private String timeIndex;
-	private String xAxisIndex;
-	private String yAxisIndex;
-	private String zAxisIndex;
+	private Integer id;
+	private Integer timeIndex;
+	private Integer xAxisIndex;
+	private Integer yAxisIndex;
+	private Integer zAxisIndex;
 	
 	
 	/** Flag to identify source vertex for maximum matching*/
@@ -41,10 +42,10 @@ public class FieldVertex extends Vertex {
 	 */
 	public FieldVertex(String timeIndex,String xAxisIndex,String yAxisIndex,String zAxisIndex){
 		this();
-		this.timeIndex=timeIndex;
-		this.xAxisIndex=xAxisIndex;
-		this.yAxisIndex=yAxisIndex;
-		this.zAxisIndex=zAxisIndex;
+		this.timeIndex=decode(timeIndex);
+		this.xAxisIndex=decode(xAxisIndex);
+		this.yAxisIndex=decode(yAxisIndex);
+		this.zAxisIndex=decode(zAxisIndex);
 	}
 	/**
 	 * Constructor
@@ -60,19 +61,22 @@ public class FieldVertex extends Vertex {
 	}
 
 	
+	private Integer decode(String str){
+		return Integer.decode(str.replace(" ","").replace("(","").replace(")", ""));
+	}
 	/**
 	 * Get time index
-	 * @return String of time index
+	 * @return  time index
 	 */
-	public String getTimeIndexString(){
+	public Integer getTimeIndex(){
 		return timeIndex;
 	}
 	
 	/**
 	 * Get X axis index
-	 * @return String of x axis index 
+	 * @return  x axis index 
 	 */
-	public String getXAxisIndex(){
+	public Integer getXAxisIndex(){
 		return xAxisIndex;
 	}
 	
@@ -80,7 +84,7 @@ public class FieldVertex extends Vertex {
 	 * Get Y axis index
 	 * @return String of y axis index 
 	 */
-	public String getYAxisIndex(){
+	public Integer getYAxisIndex(){
 		return yAxisIndex;
 	}
 
@@ -88,7 +92,7 @@ public class FieldVertex extends Vertex {
 	 * Get Z axis index
 	 * @return String of z axis index 
 	 */
-	public String getZAxisIndex(){
+	public Integer getZAxisIndex(){
 		return zAxisIndex;
 	}
 
@@ -96,7 +100,7 @@ public class FieldVertex extends Vertex {
 	 * Set time index
 	 */
 	public void setTimeIndex(String timeIndex){
-		this.timeIndex=timeIndex;
+		this.timeIndex=decode(timeIndex);
 	}
 
 	
@@ -105,7 +109,7 @@ public class FieldVertex extends Vertex {
 	 * Set x axis index
 	 */
 	public void setXAxisIndex(String xAsisIndex){
-		this.xAxisIndex = xAsisIndex;
+		this.xAxisIndex = decode(xAsisIndex);
 	}
 
 
@@ -113,20 +117,20 @@ public class FieldVertex extends Vertex {
 	 * Set y axis index
 	 */
 	public void setYAxisIndex(String yAsisIndex){
-		this.yAxisIndex = yAsisIndex;
+		this.yAxisIndex = decode(yAsisIndex);
 	}
 
 	/**
 	 * Set z axis index
 	 */
 	public void setZAxisIndex(String zAsisIndex){
-		this.zAxisIndex = zAsisIndex;
+		this.zAxisIndex = decode(zAsisIndex);
 	}
 	
 	
 	/**
 	 * Set z axis index
-	 * @param index
+	 * @param indexString
 	 * @param number of index type
 	 * 
 	 * 0: time
@@ -134,19 +138,19 @@ public class FieldVertex extends Vertex {
 	 * 2: y axis
 	 * 3: z axis
 	 */
-	public void setAxisIndex(String index,int type){
+	public void setAxisIndex(String indexString,int type){
 		switch(type){
 			case 0:
-				setTimeIndex(index);
+				setTimeIndex(indexString);
 				break;
 			case 1:
-				setXAxisIndex(index);
+				setXAxisIndex(indexString);
 				break;
 			case 2:
-				setYAxisIndex(index);
+				setYAxisIndex(indexString);
 				break;
 			case 3:
-				setZAxisIndex(index);
+				setZAxisIndex(indexString);
 				break;
 		}
 	}
@@ -158,7 +162,7 @@ public class FieldVertex extends Vertex {
 	 * @return if having index equals arg index return true, otherwise return false
 	 */
 	public boolean equalsTimeIndex(String index){
-		return timeIndex.equals(index);
+		return timeIndex.equals(decode(index));
 	}
 
 	/**
@@ -167,7 +171,7 @@ public class FieldVertex extends Vertex {
 	 * @return if x axis index equals arg index return true, otherwise return false
 	 */
 	public boolean equalsXAxisIndex(String index){
-		return xAxisIndex.equals(index);
+		return xAxisIndex.equals(decode(index));
 	}
 
 	/**
@@ -176,7 +180,7 @@ public class FieldVertex extends Vertex {
 	 * @return if y axis index equals arg index return true, otherwise return false
 	 */
 	public boolean equalsYAxisIndex(String index){
-		return yAxisIndex.equals(index);
+		return yAxisIndex.equals(decode(index));
 	}
 
 	/**
@@ -185,7 +189,7 @@ public class FieldVertex extends Vertex {
 	 * @return if z axis index equals arg index return true, otherwise return false
 	 */
 	public boolean equalsZAxisIndex(String index){
-		return zAxisIndex.equals(index);
+		return zAxisIndex.equals(decode(index));
 	}
 
 	/**
@@ -260,8 +264,8 @@ public class FieldVertex extends Vertex {
      * @param indent
      * @return XML string
      */
-    public String toXMLString(int id, String indent){
-     	StringBuilder sb =  new StringBuilder().append(indent).append("<node id="+id);
+    public String toXMLString(String indent){
+     	StringBuilder sb =  new StringBuilder().append(indent).append("<node id=\""+getId()+"\"");
      	if(timeIndex!=null){
      		sb.append(" time=\""+timeIndex+"\"");
      	}
@@ -277,6 +281,15 @@ public class FieldVertex extends Vertex {
      	sb.append(" />\n");
      	return sb.toString();
     }
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public void setId(String id){
+		this.id=decode(id);
+	}
 }
 
 

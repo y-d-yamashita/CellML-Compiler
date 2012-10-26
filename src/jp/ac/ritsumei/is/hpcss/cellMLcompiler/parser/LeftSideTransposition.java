@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
@@ -15,226 +16,181 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLCla
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 
 /**
- * 数式ライブラリ対応 導出変数左辺移項テストクラス
+ * This class is Left side Transposition for code generator.
+ * 
+ * input:  
+ * 	expression list in RecML
+ * 	variable list in RecML
+ * 	correspondence between expression and derived variable
+ * 
+ * limitation of expression:
+ * 	The operator contained in expression limits to the following one. 
+ *	-plus,minus,times,divide,inc,dec,exp,ln,root,power,log
+ * 
+ * @author n-washio
  * 
  */
 
-public class LeftSideTranspositionTest {
-
-	public static void main(String[] args) throws MathException {
-		
-		//数式の属性情報(nullにしておく)
-		String strAttrLoop1 = "null";
-		String strAttrLoop2 = "null";
-		String strAttrLoop3 = "null";
-		String strAttrLoop4 = "null";
-		String strAttrLoop5 = "null";
-		String[] strAttr = new String[] {strAttrLoop1, strAttrLoop2, strAttrLoop3, strAttrLoop4, strAttrLoop5};
+public class LeftSideTransposition {
 	
-		//テスト用変数定義
-		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "A");
-		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
-		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
-		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
-		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
-		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
-		
-		MathExpression pNewExpression5 = new MathExpression();
-		pNewExpression5.addOperator(
-				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-		pNewExpression5.addOperator(
-				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+	/*入力数式リスト*/
+	public Vector<MathExpression> expressionList;
 	
-			//左辺追加
-			pNewExpression5.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-			pNewExpression5.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("plus"), strAttr));
-			pNewExpression5.addOperand(val1);
-			pNewExpression5.addOperand(val2);
-			pNewExpression5.breakOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-			
-			
-			//右辺追加
-			pNewExpression5.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-			pNewExpression5.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("plus"), strAttr));
-			
-				//plus第１要素
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
-				pNewExpression5.addOperand(val3);
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("minus"), strAttr));
-				pNewExpression5.addOperand(val4);
-				pNewExpression5.addOperand(num);
-				pNewExpression5.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				pNewExpression5.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				//plus第2要素
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("log"), strAttr));
-				pNewExpression5.addOperand(val5);
-				pNewExpression5.addOperand(val4);
-				pNewExpression5.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-		
-				
-				//plus第3要素
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression5.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
-				pNewExpression5.addOperand(val1);
-				pNewExpression5.addOperand(val2);
-				pNewExpression5.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+	public Vector<MathExpression> output_expressionList;
+
+	/*入力数式変数リスト*/
+	public Vector<Math_ci> variableList;
 	
-			pNewExpression5.breakOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-			
-		pNewExpression5.breakOperator(
-				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-
+	/*数式ID,導出変数ID対応リスト*/
+	public HashMap<Integer,Integer> correspondenceList;
+	
+	
+	
+	public LeftSideTransposition(
+			Vector<MathExpression> expList, Vector<Math_ci> varList, HashMap<Integer,Integer> corList) {
 		
-		System.out.println("Input Expression: derived variable name = "+val5.toLegalString());
-		System.out.println(pNewExpression5.toLegalString());
-		System.out.println();
-		
-		//属性情報を取得
-		strAttr=((MathOperator)pNewExpression5.getRootFactor()).getAttribute();
-		
-		//導出変数が右辺,左辺どちらにあるか探索
-		Vector<Math_ci> exp_leftValiableList = new Vector<Math_ci>();
-		Vector<Math_ci> exp_rightValiableList = new Vector<Math_ci>();
-		
-		if(pNewExpression5.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-			pNewExpression5.getLeftExpression().getAllVariables(exp_leftValiableList);
-		}else{
-			exp_leftValiableList.add((Math_ci) pNewExpression5.getLeftExpression().getRootFactor());
-		}
-		if(pNewExpression5.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-			pNewExpression5.getRightExpression().getAllVariables(exp_rightValiableList);
-		}else{
-			exp_rightValiableList.add((Math_ci) pNewExpression5.getRightExpression().getRootFactor());
-		}		
-		
-		boolean targetSide_position=false;
-		for(int i=0;i<exp_rightValiableList.size();i++){
-			if(exp_rightValiableList.get(i).matches(val5)){
-				//右辺であればtrue
-				targetSide_position=true;
-			}
-		}
-		
-		//導出変数を含む辺を左辺に移動
-		if(targetSide_position==true){
-			pNewExpression5=replace_TwoSides(pNewExpression5,strAttr);
-		}
-		
-		//導出変数がequal直下の左辺であるか検査
-		boolean goal_flag=(check_EqDirectLeft(pNewExpression5,val5));
-		
-		//equalの直下が導出変数となるまで移項を繰り返す.
-		while(goal_flag!=true){
-			
-			MathOperator targetSide = null;
-			MathFactor oppositeSide = null;//反対辺はオペレータを含まない可能性があるのでMathFactorとして宣言
-			
-			//両辺をコピー.
-			targetSide =(MathOperator) pNewExpression5.getLeftExpression().getRootFactor();
-			if(pNewExpression5.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-				oppositeSide =(MathOperator) pNewExpression5.getRightExpression().getRootFactor();
-			}else{
-				oppositeSide =(MathOperand) pNewExpression5.getRightExpression().getRootFactor();
-			}
-
-			//左辺apply直下のオペレータの種類を調べ文字列に格納.
-			String directOperatorKind = ((MathOperator)targetSide.getUnderFactor()).getOperatorKind().toString();
-			
-			//導出変数がオペレータの何番目の要素に含まれているかを調べる.
-			int val_position = ((MathOperator) targetSide.getUnderFactor()).searchVariablePosition(val5);
-			
-			int transpositionType=0;//移項方式を判定.
-			//	1.normal transposition
-			//	2.abnormal transposition(target側の移項要素を反対辺の第1要素にするケース)
-			//	3.base transposition	(導出変数が底となっているケース)
-			
-			if(directOperatorKind.equals("MOP_PLUS")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_MINUS")){
-				if(val_position==1)transpositionType=1;
-				if(val_position==2)transpositionType=2;
-			}
-			else if(directOperatorKind.equals("MOP_TIMES")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_DIVIDE")){
-				if(val_position==1)transpositionType=1;
-				if(val_position==2)transpositionType=2;
-			}
-			else if(directOperatorKind.equals("MOP_INC")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_DEC")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_EXP")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_LN")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_ROOT")){
-				transpositionType=1;
-			}
-			else if(directOperatorKind.equals("MOP_POWER")){
-				if(val_position==1)transpositionType=3;
-				if(val_position==2)transpositionType=2;
-			}
-			else if(directOperatorKind.equals("MOP_LOG")){
-				if(val_position==1)transpositionType=3;
-				if(val_position==2)transpositionType=2;
-			}
-			else{
-				System.out.println("cannot transport operator");
-			}
-			
-			//移項処理メソッドへ
-			if(transpositionType==1){
-				pNewExpression5=normal_transposition(
-						pNewExpression5,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
-			}
-			if(transpositionType==2){
-				pNewExpression5=abnormal_transposition(
-						pNewExpression5,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
-			}
-			if(transpositionType==3){
-				pNewExpression5=base_transposition(
-						pNewExpression5,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
-			}
-			
-			//移項後の判定
-			goal_flag=check_EqDirectLeft(pNewExpression5,val5);
-		}
-				
-		System.out.println("Output Expression:");
-		System.out.println(pNewExpression5.toLegalString());
+		/*コンストラクタ*/
+		this.expressionList=expList;
+		this.variableList=varList;
+		this.correspondenceList=corList;
+	
 	}
 	
-	public static MathExpression normal_transposition(
+	public Vector<MathExpression> transporseExpression() throws MathException {
+		
+		for(int i=0;i<expressionList.size();i++){
+			
+			//数式を取得
+			MathExpression expression = expressionList.get(i);
+			
+			//導出変数を取得
+			Math_ci derivedVariable = variableList.get(correspondenceList.get(i));
+			
+			//属性情報を取得
+			String[] strAttr=((MathOperator)expression.getRootFactor()).getAttribute();
+			
+			//導出変数が右辺,左辺どちらにあるか探索
+			Vector<Math_ci> exp_leftValiableList = new Vector<Math_ci>();
+			Vector<Math_ci> exp_rightValiableList = new Vector<Math_ci>();
+			
+			if(expression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+				expression.getLeftExpression().getAllVariables(exp_leftValiableList);
+			}else{
+				exp_leftValiableList.add((Math_ci) expression.getLeftExpression().getRootFactor());
+			}
+			if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+				expression.getRightExpression().getAllVariables(exp_rightValiableList);
+			}else{
+				exp_rightValiableList.add((Math_ci) expression.getRightExpression().getRootFactor());
+			}
+			
+			boolean targetSide_position=false;
+			for(int j=0;j<exp_rightValiableList.size();j++){
+				if(exp_rightValiableList.get(i).matches(derivedVariable)){
+					//右辺であればtrue
+					targetSide_position=true;
+				}
+			}
+			
+			//導出変数を含む辺を左辺に移動
+			if(targetSide_position==true){
+				expression=replace_TwoSides(expression,strAttr);
+			}
+			
+			//導出変数がequal直下の左辺であるか検査
+			boolean goal_flag=(check_EqDirectLeft(expression,derivedVariable));
+			
+			//equalの直下が導出変数となるまで移項を繰り返す.
+			while(goal_flag!=true){
+				
+				MathOperator targetSide = null;
+				MathFactor oppositeSide = null;//反対辺はオペレータを含まない可能性があるのでMathFactorとして宣言
+				
+				//両辺をコピー.
+				targetSide =(MathOperator) expression.getLeftExpression().getRootFactor();
+				if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					oppositeSide =(MathOperator) expression.getRightExpression().getRootFactor();
+				}else{
+					oppositeSide =(MathOperand) expression.getRightExpression().getRootFactor();
+				}
+
+				//左辺apply直下のオペレータの種類を調べ文字列に格納.
+				String directOperatorKind = ((MathOperator)targetSide.getUnderFactor()).getOperatorKind().toString();
+				
+				//導出変数がオペレータの何番目の要素に含まれているかを調べる.
+				int val_position = ((MathOperator) targetSide.getUnderFactor()).searchVariablePosition(derivedVariable);
+				
+				int transpositionType=0;//移項方式を判定.
+				//	1.normal transposition
+				//	2.abnormal transposition(target側の移項要素を反対辺の第1要素にするケース)
+				//	3.base transposition	(導出変数が底となっているケース)
+				
+				if(directOperatorKind.equals("MOP_PLUS")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_MINUS")){
+					if(val_position==1)transpositionType=1;
+					if(val_position==2)transpositionType=2;
+				}
+				else if(directOperatorKind.equals("MOP_TIMES")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_DIVIDE")){
+					if(val_position==1)transpositionType=1;
+					if(val_position==2)transpositionType=2;
+				}
+				else if(directOperatorKind.equals("MOP_INC")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_DEC")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_EXP")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_LN")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_ROOT")){
+					transpositionType=1;
+				}
+				else if(directOperatorKind.equals("MOP_POWER")){
+					if(val_position==1)transpositionType=3;
+					if(val_position==2)transpositionType=2;
+				}
+				else if(directOperatorKind.equals("MOP_LOG")){
+					if(val_position==1)transpositionType=3;
+					if(val_position==2)transpositionType=2;
+				}
+				else{
+					System.out.println("cannot transport operator");
+				}
+				
+				//移項処理メソッドへ
+				if(transpositionType==1){
+					expression=normal_transposition(
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+				}
+				if(transpositionType==2){
+					expression=abnormal_transposition(
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+				}
+				if(transpositionType==3){
+					expression=base_transposition(
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+				}
+				
+				//移項後の判定
+				goal_flag=check_EqDirectLeft(expression,derivedVariable);
+			}
+			
+			output_expressionList.add(expression);
+		}
+		
+		return output_expressionList;
+	}
+	
+	public MathExpression normal_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
 			String operatorKind,int val_position) throws MathException{
 		
@@ -513,7 +469,7 @@ public class LeftSideTranspositionTest {
 		return pNewExpression;
 	}
 	
-	public static MathExpression abnormal_transposition(
+	public MathExpression abnormal_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
 			String operatorKind,int val_position) throws MathException {
 		
@@ -616,7 +572,7 @@ public class LeftSideTranspositionTest {
 		
 		return pNewExpression;
 	}
-	public static MathExpression base_transposition(
+	public MathExpression base_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
 			String operatorKind,int val_position) throws MathException {
 		
@@ -743,7 +699,7 @@ public class LeftSideTranspositionTest {
 		return pNewExpression;
 	}
 	
-	public static String getOperatorKindString(String operatorKind) {
+	public String getOperatorKindString(String operatorKind) {
 		
 		//オペレータの種類の文字列を返す
 		if(operatorKind.equals("MOP_PLUS")) return("plus");
@@ -762,7 +718,7 @@ public class LeftSideTranspositionTest {
 		}
 	}
 
-	public static String getCorrespondingOperatorKindString(String operatorKind) {
+	public String getCorrespondingOperatorKindString(String operatorKind) {
 		
 		//対応するオペレータの種類の文字列を返す
 		if(operatorKind.equals("MOP_PLUS")) return("minus");
@@ -783,7 +739,7 @@ public class LeftSideTranspositionTest {
 
 
 
-	public static boolean check_EqDirectLeft(MathExpression expression,Math_ci val) {
+	public boolean check_EqDirectLeft(MathExpression expression,Math_ci val) {
 
 		//導出変数がequal直下であるかを判定するメソッド
 		if(expression.getLeftExpression().getRootFactor().matches(val)){
@@ -793,7 +749,7 @@ public class LeftSideTranspositionTest {
 		}
 	}
 
-	public static MathExpression replace_TwoSides(MathExpression expression, String[] strAttr) throws MathException {
+	public MathExpression replace_TwoSides(MathExpression expression, String[] strAttr) throws MathException {
 		
 		//右辺に導出変数を含む際,右辺と左辺を入れ替えるメソッド
 		MathExpression newExpression = new MathExpression();		

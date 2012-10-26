@@ -27,7 +27,12 @@ public class MathExpression {
 
 	/**変数リスト保持ベクタ*/
 	Vector<MathOperand> m_vecVariables;
-
+	
+	/**数式ID*/
+	long exID = -1;
+	/**conditionのreference*/
+	int condref = -1;
+	
 	
 	/**
 	 * MathML数式インスタンスを作成する.
@@ -98,6 +103,7 @@ public class MathExpression {
 		if (m_pCurFuncOperator != null
 		    && m_stackCurOperator.peek() == m_pFuncParentOperand) {
 			/*関数引数として要素追加*/
+			m_pCurFuncOperator.addFactor(pOperand);
 		}
 
 		/*関数演算子fnの場合*/
@@ -201,9 +207,8 @@ public class MathExpression {
 				m_pCurFuncOperator = null;
 				m_pFuncParentOperand = null;
 			}
-				/*一致した演算子をpop-up*/
+			/*一致した演算子をpop-up*/
 			m_stackCurOperator.pop();
-			
 		}
 	}
 	
@@ -219,6 +224,36 @@ public class MathExpression {
 	 */
 	public void changeSelectorInteger(){
 		((MathOperator) m_pRootFactor).changeSelectorInteger(m_pRootFactor);
+	}
+	
+	/**
+	 *  conditionがあるかどうか検索
+	 */
+	public MathExpression searchCondition(){
+		MathExpression condExp = ((MathOperator) m_pRootFactor).searchCondition(m_pRootFactor);
+		return condExp;
+	}
+	
+	/**
+	 * conditionのreference番号を登録する
+	 */
+	public void setCondref(int num){
+		this.condref = num;
+	}
+	
+	/**
+	 * 数式IDを登録する
+	 */
+	public void setExID(int num){
+		this.exID = num;
+	}
+	
+	/**
+	 *数式内の全てのvariableを取得する (selector考慮)
+	 * @throws MathException 
+	 */
+	public void getAllVariables(Vector<Math_ci> pVec) throws MathException{
+		((MathOperator)m_pRootFactor).getVariables(m_pRootFactor, pVec);
 	}
 	
 	/**
@@ -243,17 +278,6 @@ public class MathExpression {
 		return m_vecVariables.get(dVariableId);
 	}
 
-	/**
-	 * 変数を取得する.
-	 * @param dVariableId 変数id
-	 * @return 引数指定idの変数
-	 * @author y-yamashita
-	 */
-	public Vector<MathOperand> getVariables() {
-		return m_vecVariables;
-	}
-
-	
 	/**
 	 * 数式中の変数の数を取得する.
 	 * @return 変数の数
@@ -453,7 +477,22 @@ public class MathExpression {
 
 		return null;
 	}
-
+	
+	/**
+	 *数式IDを取得する
+	 * @return 数式ID
+	 */
+	public long getExID(){
+		return this.exID;
+	}
+	
+	/**
+	 * conditionのReference番号を返す
+	 * @return conditionのReference番号
+	 */
+	public int getCondRef(){
+		return this.condref;
+	}
 	/**
 	 * 数式を比較する.
 	 * @param pExpression 比較対象の式

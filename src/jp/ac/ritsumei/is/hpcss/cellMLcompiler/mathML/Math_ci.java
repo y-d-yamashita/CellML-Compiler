@@ -3,9 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
 
 /**
  * MathML変数被演算子ciクラス
@@ -78,6 +76,7 @@ public class Math_ci extends MathOperand {
 
 		/*整数より定数オペランドインスタンスを生成*/
 		Math_cn pConst = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, strIndex);
+		pConst.changeType();
 
 		/*オーバーロードメソッドに投げる*/
 		this.addArrayIndexToBack(pConst);
@@ -87,7 +86,12 @@ public class Math_ci extends MathOperand {
 	public void setPointerNum(int nPointerNum){
 		m_nPointerNum = nPointerNum;
 	}
-
+	
+	/*-----名前を返すメソッド-----*/
+	public String getName(){
+		return m_strPresentText;
+	}
+	
 	/*-----文字列変換メソッド-----*/
 	public String toLegalString() throws MathException {
 
@@ -116,8 +120,6 @@ public class Math_ci extends MathOperand {
 		/*配列インデックスの追加*/
 		for (MathFactor it: m_vecIndexListFactor) {
 			/*項を追加*/
-//			strVariable += "[" + it.toSelectorLegalString() + "]";
-			/*項を追加*/
 			strVariable += "[" + it.toLegalString() + "]";
 		}
 		
@@ -135,6 +137,5 @@ public class Math_ci extends MathOperand {
 		
 		return newOperand;
 	}
-	
 
 }

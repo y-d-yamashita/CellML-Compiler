@@ -14,6 +14,11 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 /**
+ * /**
+ * This class is the test of Left side Transposition for code generator.
+ * @author n-washio
+ *
+ *
  * 数式ライブラリ対応 導出変数左辺移項テストクラス
  * 
  *	対応オペレータ

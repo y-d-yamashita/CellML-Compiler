@@ -257,6 +257,16 @@ public class MathExpression {
 	}
 	
 	/**
+	 * 変数を取得する.
+	 * @param dVariableId 変数id
+	 * @return 引数指定idの変数
+	 * @author y-yamashita
+	 */
+	public Vector<MathOperand> getVariables() {
+		return m_vecVariables;
+	}
+	
+	/**
 	 * 計算式構築状態を取得する.
 	 * @return 計算式構築状態
 	 */

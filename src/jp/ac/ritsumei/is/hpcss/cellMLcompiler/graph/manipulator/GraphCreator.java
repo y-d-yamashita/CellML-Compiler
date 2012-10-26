@@ -18,6 +18,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;

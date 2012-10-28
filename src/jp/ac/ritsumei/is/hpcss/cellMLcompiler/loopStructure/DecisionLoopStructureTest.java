@@ -10,7 +10,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
 
 import java.util.*;
 
-//修正版v4 2012/10/28
+//修正版v4 2012/10/28 get_LoopStructure()
 public class DecisionLoopStructureTest {
 	public static void main(String[] args) {
 		//---------------------------------------------------
@@ -31,15 +31,23 @@ public class DecisionLoopStructureTest {
 		
 		pattern = new RelationPattern(1,2,"inner");
 		inputList.add(pattern);
-		pattern = new RelationPattern(1,3,"inner");
+		pattern = new RelationPattern(1,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(1,4,"inner");
+		pattern = new RelationPattern(1,4,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,3,"inner");
+		pattern = new RelationPattern(2,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,4,"inner");
+		pattern = new RelationPattern(2,4,"null");
+		inputList.add(pattern);
+		pattern = new RelationPattern(3,1,"null");
+		inputList.add(pattern);
+		pattern = new RelationPattern(3,2,"null");
 		inputList.add(pattern);
 		pattern = new RelationPattern(3,4,"inner");
+		inputList.add(pattern);
+		pattern = new RelationPattern(4,1,"null");
+		inputList.add(pattern);
+		pattern = new RelationPattern(4,2,"null");
 		inputList.add(pattern);
 		
 		Integer[] loop_name = {1,2,3,4};
@@ -221,8 +229,8 @@ public class DecisionLoopStructureTest {
 		
 		ArrayList<RelationPattern> LoopStructure = new ArrayList<RelationPattern>();
 		ArrayList<RelationPattern> pattern_set;
-
-		for(int i=0;i<combinationList.size();i++){
+		
+		for(int i=137;i<combinationList.size();i++){
 			pattern_set = new ArrayList<RelationPattern>();
 
 			for(int j=0;j<loop_num-1;j++){
@@ -285,41 +293,48 @@ public class DecisionLoopStructureTest {
 					}
 				}
 			}
-
+			
 			int count=0;
 			for(int j=0; j<pattern_set.size();j++){
 				for(int k=0;k<inputList.size();k++){
 					if(pattern_set.get(j).Parent_name.equals(inputList.get(k).Parent_name)){
 						if(pattern_set.get(j).Child_name.equals(inputList.get(k).Child_name)){
+							
 							if(pattern_set.get(j).Attribute_name.equals(inputList.get(k).Attribute_name)){
-								count++;//完全に一致でカウント
+								count++;//属性まで完全に一致でカウント
 							}
-							if(inputList.get(k).Attribute_name.equals("null")){//継承関係がnullの場合
-								int not_directpath=0;
+							
+							//入力側の属性がnullの場合, 判定した子要素が他にnull以外の親を持っているか入力を探索.
+							if(inputList.get(k).Attribute_name.equals("null")){
+								int accept_flag=0; 
+								ArrayList<RelationPattern> not_nullSet = new ArrayList<RelationPattern>();
 								for(int m=0;m<inputList.size();m++){
-									//入力を探索し,直接の関係が含まれているかどうかを調べる
-									
-									if(pattern_set.get(j).Child_name.equals(inputList.get(m).Parent_name)||
-											pattern_set.get(j).Child_name.equals(inputList.get(m).Child_name)){
-										
-										
+									//入力を探索し,null以外の関係がある親が存在しているかどうかを調べる.
+									if(pattern_set.get(j).Child_name.equals(inputList.get(m).Child_name)){
 										if(!inputList.get(m).Attribute_name.equals("null")){
-											//null以外の直接の関係がある場合,pattern_setにnull以外の関係があるかどうか探索
-											not_directpath=1;
-											for(int n=0;n<pattern_set.size();n++){
-												if(!pattern_set.get(n).Attribute_name.equals("null")){
-													if(pattern_set.get(n).Child_name.equals(inputList.get(m).Child_name)){
-															not_directpath=0;
-													}	
+											not_nullSet.add(inputList.get(m));//not_nullSetに格納
+										}
+									}
+								}
+								//null以外の関係がある場合,not_nullSetの１つがpattern_setにあるか探索
+								if(not_nullSet.size() != 0){
+									for(int m=0;m<not_nullSet.size();m++){
+										for(int n=0;n<pattern_set.size();n++){
+											if(pattern_set.get(n).Attribute_name.equals(not_nullSet.get(m).Attribute_name)){
+												if(pattern_set.get(n).Parent_name.equals(not_nullSet.get(m).Parent_name)){
+													if(pattern_set.get(n).Child_name.equals(not_nullSet.get(m).Child_name)){
+														accept_flag=1;
+													}
 												}
 											}
 										}
 									}
-									
+								} else{
+									accept_flag=1;
 								}
-								if(not_directpath==0){
+								if(accept_flag == 1){
 									if(!pattern_set.get(j).Attribute_name.equals("inner")){
-										count++;//親子が一緒でnullのものがあればカウント(nullは任意の属性と見なすことができる)
+										count++;//innerでなければcount;		
 									}
 								}								
 							}

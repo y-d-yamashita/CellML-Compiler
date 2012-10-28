@@ -202,7 +202,6 @@ public class HighSpeedDecisionLoopStructureTest {
 				if(i!=j){
 					if(c_name.equals(fixed_inputList.get(j).Parent_name)){
 						
-						
 						Integer p = fixed_inputList.get(i).Parent_name;
 						Integer c = fixed_inputList.get(j).Child_name;
 						String a = new String(fixed_inputList.get(i).Attribute_name);
@@ -217,7 +216,6 @@ public class HighSpeedDecisionLoopStructureTest {
 								}
 							}
 						}
-						
 					}
 				}
 			}

@@ -10,8 +10,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
 
 import java.util.*;
 
-//修正版 2012/10/29
-//継承関係の判定は不要なので削減
+//修正版v5 2012/10/29
 public class DecisionLoopStructureTest {
 	public static void main(String[] args) {
 		//---------------------------------------------------
@@ -221,14 +220,72 @@ public class DecisionLoopStructureTest {
 	
 	public static ArrayList<RelationPattern> get_LoopStructure(ArrayList<ArrayList<RelationPattern>> combinationList, int loop_num, ArrayList<RelationPattern>  inputList){
 		
-		//入力情報と比較し、矛盾があれば削除
+		//継承関係を含めて入力情報と比較し、矛盾があれば削除
 		ArrayList<RelationPattern> LoopStructure = new ArrayList<RelationPattern>();
 		ArrayList<RelationPattern> pattern_set;
 		
 		for(int i=0;i<combinationList.size();i++){
 			pattern_set = new ArrayList<RelationPattern>();
+
 			for(int j=0;j<loop_num-1;j++){
-				pattern_set.add(combinationList.get(i).get(j));
+				pattern_set.add(combinationList.get(i).get(j));	//継承以外の情報も格納する
+				Integer c_name = combinationList.get(i).get(j).Child_name;
+				for(int k=0;k<loop_num-1;k++){
+					if(j!=k){
+						if(c_name.equals(combinationList.get(i).get(k).Parent_name)){
+							
+							Integer p = combinationList.get(i).get(j).Parent_name;
+							Integer c = combinationList.get(i).get(k).Child_name;
+							String a = new String(combinationList.get(i).get(j).Attribute_name);
+							RelationPattern pattern = new RelationPattern(p,c,a);
+							
+							int match=0;
+							for(int y=0;y<pattern_set.size();y++){
+								if(pattern.Attribute_name.equals(pattern_set.get(y).Attribute_name)){
+									if(pattern.Child_name.equals(pattern_set.get(y).Child_name)){
+										if(pattern.Parent_name.equals(pattern_set.get(y).Parent_name)){
+											match=1;
+										}
+									}
+								}
+							}
+							if(match==0)pattern_set.add(pattern);
+						}
+					}
+				}
+			}
+			
+			if(loop_num>3){
+				for(int x=0;x<loop_num-3;x++){//ループ数4以上では曾孫以降の継承情報も必要
+				
+					int setSize = pattern_set.size(); //初期サイズを記録して探索に使用
+					for(int j=0;j<setSize;j++){
+						Integer c_name = pattern_set.get(j).Child_name;
+						for(int k=0;k<setSize;k++){
+							if(j!=k){
+								if(c_name.equals(pattern_set.get(k).Parent_name)){
+									
+									Integer p = pattern_set.get(j).Parent_name;
+									Integer c = pattern_set.get(k).Child_name;
+									String a = new String(pattern_set.get(j).Attribute_name);
+									RelationPattern pattern = new RelationPattern(p,c,a);
+									
+									int match=0;
+									for(int y=0;y<pattern_set.size();y++){
+										if(pattern.Attribute_name.equals(pattern_set.get(y).Attribute_name)){
+											if(pattern.Child_name.equals(pattern_set.get(y).Child_name)){
+												if(pattern.Parent_name.equals(pattern_set.get(y).Parent_name)){
+													match=1;
+												}
+											}
+										}
+									}
+									if(match==0)pattern_set.add(pattern);
+								}
+							}
+						}
+					}
+				}
 			}
 
 			int count=0;

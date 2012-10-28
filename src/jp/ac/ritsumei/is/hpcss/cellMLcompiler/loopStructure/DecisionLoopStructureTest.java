@@ -10,7 +10,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
 
 import java.util.*;
 
-//修正版v3 2012/10/15
+//修正版v4 2012/10/28
 public class DecisionLoopStructureTest {
 	public static void main(String[] args) {
 		//---------------------------------------------------
@@ -304,17 +304,13 @@ public class DecisionLoopStructureTest {
 										
 										
 										if(!inputList.get(m).Attribute_name.equals("null")){
-											//null以外の直接の関係がある場合,それがpattern_setにあるかどうか探索
+											//null以外の直接の関係がある場合,pattern_setにnull以外の関係があるかどうか探索
 											not_directpath=1;
 											for(int n=0;n<pattern_set.size();n++){
-												
-												if(pattern_set.get(n).Attribute_name.equals(inputList.get(m).Attribute_name)){
-													if(pattern_set.get(n).Parent_name.equals(inputList.get(m).Parent_name)){
-														if(pattern_set.get(n).Child_name.equals(inputList.get(m).Child_name)){
+												if(!pattern_set.get(n).Attribute_name.equals("null")){
+													if(pattern_set.get(n).Child_name.equals(inputList.get(m).Child_name)){
 															not_directpath=0;
-														}
-														
-													}
+													}	
 												}
 											}
 										}

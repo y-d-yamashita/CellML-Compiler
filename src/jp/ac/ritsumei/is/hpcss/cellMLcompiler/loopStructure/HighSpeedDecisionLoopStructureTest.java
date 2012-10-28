@@ -9,7 +9,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
 
 import java.util.*;
 
-//修正版 2012/10/15
+//修正版 2012/10/29
 public class HighSpeedDecisionLoopStructureTest {
 
 	public static ArrayList<Integer> path_length;
@@ -120,7 +120,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		
 		
 		if(inputList.size()==0){
-			//全て孤立ノードである場合,関係を作成
+			//全て独立ノードである場合,関係を作成
 			pattern = new RelationPattern(loop_name[0],loop_name[1],"post");
 			inputList.add(pattern);
 			pattern = new RelationPattern(loop_name[1],loop_name[0],"pre");
@@ -321,12 +321,12 @@ public class HighSpeedDecisionLoopStructureTest {
 			}
 			RelationPattern relation;
 			if(nullNodeList.size()!=0){
-				//rootリストの最後のツリーの接続可能箇所に孤立ノードを接続
+				//rootリストの最後のツリーの接続可能箇所に独立ノードを接続
 				Integer last_root=connectableNode.get(root_nameList.get(root_nameList.size()-1));
 				relation = new RelationPattern(last_root,nullNodeList.get(0),"post");
 				LoopStructure.add(relation);
 				if(nullNodeList.size()>1){
-					//孤立ノード同士は必ず接続できる
+					//独立ノード同士は必ず接続できる
 					for(int i=1;i<nullNodeList.size();i++){
 						relation = new RelationPattern(nullNodeList.get(i-1),nullNodeList.get(i),"post");
 						LoopStructure.add(relation);

@@ -16,9 +16,9 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOpera
 
 /**
  * 数式ライブラリ対応 導出変数左辺移項テストクラス
- * 
+ * @author n-washio
  */
-
+//修正版 2012/10/29
 public class LeftSideTranspositionTest {
 
 	public static void main(String[] args) throws MathException {
@@ -96,7 +96,7 @@ public class LeftSideTranspositionTest {
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression5.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
-				pNewExpression5.addOperand(val1);
+				pNewExpression5.addOperand(val5);
 				pNewExpression5.addOperand(val2);
 				pNewExpression5.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
@@ -120,16 +120,33 @@ public class LeftSideTranspositionTest {
 		Vector<Math_ci> exp_rightValiableList = new Vector<Math_ci>();
 		
 		if(pNewExpression5.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-			pNewExpression5.getLeftExpression().getAllVariables(exp_leftValiableList);
+			pNewExpression5.getLeftExpression().getAllVariables_SusceptibleOfOverlap(exp_leftValiableList);
 		}else{
 			exp_leftValiableList.add((Math_ci) pNewExpression5.getLeftExpression().getRootFactor());
 		}
 		if(pNewExpression5.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-			pNewExpression5.getRightExpression().getAllVariables(exp_rightValiableList);
+			pNewExpression5.getRightExpression().getAllVariables_SusceptibleOfOverlap(exp_rightValiableList);
 		}else{
 			exp_rightValiableList.add((Math_ci) pNewExpression5.getRightExpression().getRootFactor());
-		}		
+		}
 		
+		//導出変数の個数を確認
+		int derivedVariable_count=0;
+		for(int i=0;i<exp_rightValiableList.size();i++){
+			if(exp_rightValiableList.get(i).matches(val5)){
+				derivedVariable_count++;
+			}
+		}
+		for(int i=0;i<exp_rightValiableList.size();i++){
+			if(exp_rightValiableList.get(i).matches(val5)){
+				derivedVariable_count++;
+			}
+		}
+		if(derivedVariable_count!=1){
+			throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+		}
+		
+		//導出変数を含む辺を左辺に移動
 		boolean targetSide_position=false;
 		for(int i=0;i<exp_rightValiableList.size();i++){
 			if(exp_rightValiableList.get(i).matches(val5)){
@@ -137,8 +154,6 @@ public class LeftSideTranspositionTest {
 				targetSide_position=true;
 			}
 		}
-		
-		//導出変数を含む辺を左辺に移動
 		if(targetSide_position==true){
 			pNewExpression5=replace_TwoSides(pNewExpression5,strAttr);
 		}
@@ -209,7 +224,7 @@ public class LeftSideTranspositionTest {
 				if(val_position==2)transpositionType=2;
 			}
 			else{
-				System.out.println("cannot transport operator");
+				System.out.println("cannot transporse");
 			}
 			
 			//移項処理メソッドへ

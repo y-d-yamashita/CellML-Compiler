@@ -67,14 +67,15 @@ public abstract class MathOperator extends MathFactor {
 	
 	
 	/* 	(非 Javadoc)	autor: n-washio
-	 *	add six methods for LeftSideTransposition for code generator
+	 *	add seven methods for LeftSideTransposition for code generator
 	 *
-	 *	1.getOperatorKind()		演算子の種類を返す
-	 *	2.getAttribute()		数式の属性を返す
-	 *	3.getUnderFactor()		直下の要素を返す
-	 *	4.getChildFactor(int n)	n番目の子要素を返す
-	 *	5.getChildFactorNum()	保持している子要素の数を返す
-	 *	6.searchVariablePosition_inChildFactor(Math_ci)	変数がどの子要素に含まれるかを返す
+	 *	1.getOperatorKind()					演算子の種類を返す
+	 *	2.getAttribute()					数式の属性を返す
+	 *	3.getUnderFactor()					直下の要素を返す
+	 *	4.getChildFactor(int n)				n番目の子要素を返す
+	 *	5.getChildFactorNum()				保持している子要素の数を返す
+	 *	6.searchVariablePosition(Math_ci)	変数がどの子要素に含まれるかを返す
+	 *	7.getVariables_SusceptibleOfOverlap(MathFactor,Vector<Math_ci>) 重複を許して全ての変数を取得
 	 *
 	*/
 	
@@ -164,6 +165,20 @@ public abstract class MathOperator extends MathFactor {
 		return val_num;
 	}
 	
+	/*-----数式中のvariablesを重複を許して取得するメソッド-----*/
+	public void getVariables_SusceptibleOfOverlap(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariables_SusceptibleOfOverlap(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					MathFactor pVariable = ((Math_ci)it).createCopy();
+					pVec.add((Math_ci)pVariable);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * 要素を追加する.

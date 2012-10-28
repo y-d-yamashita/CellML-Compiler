@@ -257,6 +257,14 @@ public class MathExpression {
 	}
 	
 	/**
+	 *数式内の全てのvariableを重複を許して取得する
+	 * @throws MathException 
+	 */
+	public void getAllVariables_SusceptibleOfOverlap(Vector<Math_ci> pVec) throws MathException{
+		((MathOperator)m_pRootFactor).getVariables_SusceptibleOfOverlap(m_pRootFactor, pVec);
+	}
+	
+	/**
 	 * 変数を取得する.
 	 * @param dVariableId 変数id
 	 * @return 引数指定idの変数

@@ -10,7 +10,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
 
 import java.util.*;
 
-//修正版v4 2012/10/28 get_LoopStructure()
+//修正版v5 2012/10/29 get_LoopStructure()
 public class DecisionLoopStructureTest {
 	public static void main(String[] args) {
 		//---------------------------------------------------
@@ -220,17 +220,11 @@ public class DecisionLoopStructureTest {
 	
 	public static ArrayList<RelationPattern> get_LoopStructure(ArrayList<ArrayList<RelationPattern>> combinationList, int loop_num, ArrayList<RelationPattern>  inputList){
 		
-		//孫以降へ継承する情報を含めて入力情報と比較し、矛盾があれば削除
-		
-		//全組み合わせについて各親に対する子の名前を記録し、その名前の親があるかどうか探索
-		//子が親になっている場合（すなわち孫が存在する時）、その孫に親の親がもつ属性を付加した関係パターンを作成
-		//作成した関係パターンまたはその親子関係がnullであるものが入力情報（inputList）に含まれるかどうかを探索
-		//パターンが存在しないとき、その組み合わせを削除
-		
+		//継承関係を含めて入力情報と比較し、矛盾があれば削除
 		ArrayList<RelationPattern> LoopStructure = new ArrayList<RelationPattern>();
 		ArrayList<RelationPattern> pattern_set;
 		
-		for(int i=137;i<combinationList.size();i++){
+		for(int i=0;i<combinationList.size();i++){
 			pattern_set = new ArrayList<RelationPattern>();
 
 			for(int j=0;j<loop_num-1;j++){
@@ -293,7 +287,7 @@ public class DecisionLoopStructureTest {
 					}
 				}
 			}
-			
+
 			int count=0;
 			for(int j=0; j<pattern_set.size();j++){
 				for(int k=0;k<inputList.size();k++){
@@ -344,7 +338,7 @@ public class DecisionLoopStructureTest {
 			}
 			
 			if(count==pattern_set.size()){
-				//全ての関係が含まれている場合、適切な構造と見なす。
+				//全ての関係が含まれている場合、適切な構造と見なす
 				LoopStructure = combinationList.get(i);//１つ見つかった段階で終了
 				break;
 			}

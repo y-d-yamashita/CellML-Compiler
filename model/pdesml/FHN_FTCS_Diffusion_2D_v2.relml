@@ -1,0 +1,199 @@
+<!-- 					FHN_FTCS_Diffusion_2D.relml		 				-->
+<!-- Finite Difference solution in 2D for the FitzHugh-Nagumo model 	-->
+<!-- with diffusion PDE and Forward-Time Central Space Scheme (FTCS)	-->
+
+<relml>
+	<tecml filename="model/tecml/FTCS_Diffusion_2D.tecml" />
+	<cellml filename="model/fhn2/fhn_diffusion_2D.cellml"/>
+	
+	<variable name="Main.time" type="dimensionvar" order="1"/>
+	<variable name="Main.x1" type="dimensionvar" order="2"/>
+	<variable name="Main.x2" type="dimensionvar" order="3"/>
+	
+	<variable name="n" type="indexvar" order="1"/>
+	<variable name="j" type="indexvar" order="2"/>
+	<variable name="l" type="indexvar" order="3"/>
+	
+	<variable name="deltat" type="deltavar" order="1"/>
+	<variable name="deltax1" type="deltavar" order="2"/>
+	<variable name="deltax2" type="deltavar" order="3"/>
+
+	<variable name="Main.x" type="diffvar" />
+	<variable name="Main.y" type="diffvar" />
+	<variable name="Main.r" type="arithvar" />
+	<variable name="Main.zz" type="constvar" />
+	<variable name="Main.epsilon" type="constvar" />
+	<variable name="Main.beta" type="constvar" />
+	<variable name="Main.gamma" type="constvar" />
+	
+	<variable name="Main.D" type="constvar" />
+	<variable name="c5" type="constvar" />
+	<variable name="c6" type="constvar" />
+	<variable name="c7" type="constvar" />
+	<variable name="c8" type="constvar" />
+	
+	<morphology name="2D LV wall model">
+		<geometry geometry-id="1" type="solid" dimension="2">
+			<mesh type="RECTILINEAR_GRID" dimensions="4 4 1" spacing="1 1 1" />
+		</geometry>
+	</morphology>	
+	
+	<boundary-cond variable-name="Main.x" filename="boundary_RMesh_4x4.csv">
+		<math>
+			<apply boundary-id="1" boundary="left"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>	
+					<ci> l </ci>
+				</apply>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 0 </cn>
+					<ci> l </ci>
+				</apply>
+			</apply>
+			
+			<apply boundary-id="2" boundary="right"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 4 </cn>
+					<ci> l </ci>
+				</apply>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 3 </cn>
+					<ci> l </ci>
+				</apply>
+			</apply>
+			
+			<apply boundary-id="3" boundary="bottom"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<cn> 0 </cn>
+				</apply>
+			</apply>
+			
+			<apply boundary-id="4" boundary="top"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<cn> 4 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<cn> 3 </cn>
+				</apply>
+			</apply>
+			
+			<apply boundary-id="5" boundary="corner"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 0 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<ci> c5 </ci>
+			</apply>
+			
+			<apply boundary-id="6" boundary="corner"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 0 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<ci> c6 </ci>
+			</apply>
+			
+			<apply boundary-id="7" boundary="corner"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 3 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<ci> c7 </ci>
+			</apply>
+			
+			<apply boundary-id="8" boundary="corner"><eq/>
+				<apply><selector/>
+					<ci> Main.x </ci>
+					<ci> n </ci>
+					<cn> 3 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<ci> c8 </ci>
+			</apply>
+		</math>
+	</boundary-cond>
+		
+	<parameter-cond variable-name="Main.epsilon" filename="epsilonDP_RMesh_4x4.csv">
+		<math>
+			<apply parameter-id="1"><eq/>
+				<apply><selector/>
+					<ci> Main.epsilon </ci>
+					<ci> n </ci>
+					<cn> j </cn>
+					<cn> l </cn>
+				</apply>
+				<cn> 0.434 </cn>
+			</apply>
+			<apply parameter-id="2"></eq>
+				<apply><selector/>
+					<ci> Main.epsilon </ci>
+					<ci> n </ci>
+					<cn> j </cn>
+					<cn> l </cn>
+				</apply>
+				<cn> 0.166 </cn>
+			</apply>
+		</math>		
+	</parameter-cond>	
+	
+	<parameter-cond variable-name="Main.zz">
+		<math>
+			<apply parameter-id="3"><eq/>
+				<apply><selector/>
+					<ci> Main.zz </ci>
+					<ci> n </ci>
+					<cn> j </cn>
+					<cn> l </cn>
+				</apply>
+				<piecewise>
+					<piece>
+						<cn> 3 </cn>
+						<apply><and/>
+							<apply><geq/><ci> Main.time </ci><cn> 10 </cn></apply>
+							<apply><lt/><ci> Main.time </ci><cn> 12 </cn></apply>
+							<apply><eq/><ci> j </ci><cn> 1 </cn></apply>
+							<apply><eq/><ci> l </ci><cn> 1 </cn></apply>
+						</apply>
+					</piece>
+					<otherwise>
+						<cn> 0 </cn>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</parameter-cond>
+
+</relml>

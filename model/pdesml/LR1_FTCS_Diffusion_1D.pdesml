@@ -1,0 +1,92 @@
+<!-- 					LR1_FTCS_Diffusion_2D.relml		 			-->
+<!-- Finite Difference solution in 2D for Luo-Rudy 1991 model 		-->
+<!-- with diffusion PDE and Forward-Time Central Space Scheme (FTCS)-->
+
+<pdesml>
+
+	<variable name="membrane_time" type="dimensionvar" order="1"/>
+	<variable name="x1" type="dimensionvar" order="2"/>
+	
+	<variable name="n" type="indexvar" order="1"/>
+	<variable name="j" type="indexvar" order="2"/>
+	
+	<variable name="deltat" type="deltavar" order="1"/>
+	<variable name="deltax1" type="deltavar" order="2"/>
+	
+	<variable name="membrane_V" type="diffvar" />
+	<variable name="fast_sodium_current_m_gate_m" type="diffvar" />
+	<variable name="fast_sodium_current_h_gate_h" type="diffvar" />
+	<variable name="fast_sodium_current_j_gate_j" type="diffvar" />
+	<variable name="slow_inward_current_d_gate_d" type="diffvar" />
+	<variable name="slow_inward_current_f_gate_f" type="diffvar" />
+	<variable name="time_dependent_potassium_current_X_gate_X" type="diffvar" />
+	<variable name="intracellular_calcium_concentration_Cai" type="diffvar" />
+	
+	<variable name="membrane_R" type="constvar" />
+	<variable name="membrane_T" type="constvar" />
+	<variable name="membrane_F" type="constvar" />
+	<variable name="membrane_C" type="constvar" />
+	<variable name="membrane_i_Na" type="constvar" />
+	<variable name="membrane_i_si" type="constvar" />
+	<variable name="membrane_i_K" type="constvar" />
+	<variable name="membrane_i_K1" type="constvar" />
+	<variable name="membrane_i_Kp" type="constvar" />
+	<variable name="membrane_i_b" type="constvar" />
+	<variable name="membrane_stim_start" type="constvar" />
+	<variable name="membrane_stim_end" type="constvar" />
+	<variable name="membrane_stim_period" type="constvar" />
+	<variable name="membrane_stim_duration" type="constvar" />
+	<variable name="membrane_stim_amplitude" type="constvar" />
+	<variable name="fast_sodium_current_g_Na" type="constvar" />
+	<variable name="ionic_concentrations_Nao" type="constvar" />
+	<variable name="ionic_concentrations_Ko" type="constvar" />
+	<variable name="background_current_g_b" type="constvar" />
+	<variable name="ionic_concentrations_Nai" type="constvar" />
+	<variable name="fast_sodium_current_g_Na" type="constvar" />
+	<variable name="plateau_potassium_current_g_Kp" type="constvar" />
+	<variable name="ionic_concentrations_Ki" type="constvar" />
+	<variable name="background_current_E_b" type="constvar" />
+	<variable name="time_dependent_potassium_current_PR_NaK" type="constvar" />
+	
+	<variable name="boundary_value_A" type="constvar" />
+	<variable name="boundary_value_B" type="constvar" />
+	
+	
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		<apply type="Dirichlet"><eq/>
+			<apply><minus/>
+				<apply><selector/>
+					<ci> membrane_V </ci>
+					<ci> n </ci>
+					<cn> 0 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> membrane_V </ci>
+					<ci> n </ci>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>	
+				</apply>
+			</apply>
+			<ci> boundary_value_A </ci>
+		</apply>
+		
+		<apply type="Dirichlet"><eq/>
+			<apply><minus/>
+				<apply><selector/>
+					<ci> membrane_V </ci>
+					<ci> n </ci>
+					<cn> 3 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> membrane_V </ci>
+					<ci> n </ci>
+					<cn> 2 </cn>
+				</apply>
+			</apply>
+			<ci> boundary_value_B </ci>
+		</apply>
+	</math>
+
+</pdesml>

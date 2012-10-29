@@ -1,0 +1,149 @@
+<!-- Forward Time Centered Space (FTCS) Scheme
+	Finite difference method for solving PDEs
+		It is first-order method in time, explicit in time and is conditionally stable
+-->
+
+<pdesml>
+	<variable name="v" type="partialdiffvar" />
+	<variable name="j" type="indexvar" />
+	<variable name="l" type="indexvar" />
+	<variable name="dx" type="deltavar" />
+	<variable name="dy" type="deltavar" />
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+	
+	<apply dimension="1D">
+		<eq/>
+		<apply><partialdiff/>
+			<bvar><ci> x </ci><degree><cn> 2 </cn></degree></bvar>
+			<degree><cn> 2 </cn></degree>
+			<apply>
+				<ci type="function"> v </ci>
+			</apply>
+		</apply>
+		<apply><divide/>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<apply><minus/>
+						<ci> j </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><minus/>
+					<apply><times/>
+						<cn> 2 </cn>
+						<apply><selector/>
+							<ci> v </ci>
+							<ci> j </ci>
+						</apply>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<apply><plus/>
+						<ci> j </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+			<apply><times/>
+				<ci> dx </ci>
+				<ci> dx </ci>
+			</apply>	
+		</apply>
+	</apply>
+	
+	<apply dimension="2D">
+		<eq/>
+		<apply><plus/>
+			<apply><partialdiff/>
+				<bvar><ci> x </ci><degree><cn> 2 </cn></degree></bvar>
+				<degree><cn> 2 </cn></degree>
+				<apply>
+					<ci type="function"> v </ci>
+				</apply>
+			</apply>
+			<apply><partialdiff/>
+				<bvar><ci> y </ci><degree><cn> 2 </cn></degree></bvar>
+				<degree><cn> 2 </cn></degree>
+				<apply>
+					<ci type="function"> v </ci>
+				</apply>
+			</apply>
+		</apply>
+		<apply><plus/>
+			<apply><divide/>
+				<apply><plus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<apply><minus/>
+							<ci> j </ci>
+							<cn> 1 </cn>
+						</apply>
+						<ci> l </ci>
+					</apply>
+					<apply><minus/>
+						<apply><times/>
+							<cn> 2 </cn>
+							<apply><selector/>
+								<ci> v </ci>
+								<ci> j </ci>
+								<ci> l </ci>
+							</apply>
+						</apply>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<apply><plus/>
+							<ci> j </ci>
+							<cn> 1 </cn>
+						</apply>
+						<ci> l </ci>
+					</apply>
+				</apply>
+				<apply><times/>
+					<ci> dx </ci>
+					<ci> dx </ci>
+				</apply>	
+			</apply>
+			<apply><divide/>
+				<apply><plus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> j </ci>
+						<apply><minus/>
+							<ci> l </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+					<apply><minus/>
+						<apply><times/>
+							<cn> 2 </cn>
+							<apply><selector/>
+								<ci> v </ci>
+								<ci> j </ci>
+								<ci> l </ci>
+							</apply>
+						</apply>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> j </ci>
+						<apply><plus/>
+							<ci> l </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+				</apply>
+				<apply><times/>
+					<ci> dy </ci>
+					<ci> dy </ci>
+				</apply>	
+			</apply>
+		</apply>
+	</apply>
+	
+	</math>
+	
+</pdesml>

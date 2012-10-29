@@ -1,0 +1,74 @@
+<!-- Formula for Finite Difference Method (central difference)
+	Central difference for Poisson's equation
+	delta^2 u / delta x^2 + delta^2 u / delta y^2 = phi(x,y)
+		j = 0, 1,..., J (x-axis , columns)
+		l = 0, `,..., L (y-axis, rows)
+	to write the LSE in matrix form, we need a vector of u
+		i = j(L + 1) + l for all j = 1, 2, ..., J-1; l = 1, 2, ..., L-1 (boundary)
+		
+	format for attributes: dimensions="nx ny nz" and spacing="sx sy sz"
+-->
+
+<sedml name="centralDifference" version="0.1">
+	<mesh type="RECTILINEAR_GRID" dimensions="5 5 1" spacing="1 1 1" />
+	<variable name="v" type="partialdiffvar" />
+	<variable name="L" type="constvar" />
+	<variable name="i" type="indexvar" />
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		<apply>
+			<plus/>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply>
+					<plus/>
+					<ci> i </ci>
+					<ci> L </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply> 
+					<minus/>
+					<ci> i </ci>
+					<apply>
+						<plus/>
+						<ci> L </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply>
+					<plus/>
+					<ci> i </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply> 
+					<minus/>
+					<ci> i </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply>
+				<times/>
+				<cn> 4 </cn>
+				<apply>
+					<selector/>
+					<ci type="vector"> u </ci>
+					<ci> i </ci>
+				</apply>
+			</apply>
+		</apply>
+	</math>
+	
+</sedml>

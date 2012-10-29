@@ -1,0 +1,108 @@
+<!-- 					FHN_FTCS_Diffusion_2D.relml		 				-->
+<!-- Finite Difference solution in 2D for the FitzHugh-Nagumo model 	-->
+<!-- with diffusion PDE and Forward-Time Central Space Scheme (FTCS)	-->
+
+<relml>
+	<tecml filename="model/tecml/FTCS_Diffusion_2D.tecml" />
+	<cellml filename="model/fhn2/fhn_diffusion_2D.cellml"/>
+	
+	<variable name="Main.time" type="dimensionvar" order="1"/>
+	<variable name="Main.x1" type="dimensionvar" order="2"/>
+	<variable name="Main.x2" type="dimensionvar" order="3"/>
+	
+	<variable name="n" type="indexvar" order="1"/>
+	<variable name="j" type="indexvar" order="2"/>
+	<variable name="l" type="indexvar" order="3"/>
+	
+	<variable name="deltat" type="deltavar" order="1"/>
+	<variable name="deltax1" type="deltavar" order="2"/>
+	<variable name="deltax2" type="deltavar" order="3"/>
+
+	<variable name="Main.x" type="diffvar" />
+	<variable name="Main.y" type="diffvar" />
+	<variable name="Main.r" type="arithvar" />
+	<variable name="Main.zz" type="constvar" />
+	<variable name="Main.epsilon" type="constvar" />
+	<variable name="Main.beta" type="constvar" />
+	<variable name="Main.gamma" type="constvar" />
+	
+	<variable name="Main.D" type="constvar" />
+	
+	<morphology name="2D LV wall model">
+		<geometry geometry-id="1" type="solid" dimension="2">
+			<mesh type="RECTILINEAR_GRID" dimensions="3 3 1" spacing="1 1 1" />
+		</geometry>
+		
+		<boundary-cond boundary-id="1">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<apply boundary-type="Neumann"><eq/>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<apply><minus/>
+							<cn> 1 </cn>
+						</apply>	
+						<ci> l </ci>
+					</apply>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<cn> 0 </cn>
+						<ci> l </ci>
+					</apply>
+				</apply>
+				
+				<apply boundary-type="Neumann"><eq/>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<cn> 3 </cn>
+						<ci> l </ci>
+					</apply>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<cn> 2 </cn>
+						<ci> l </ci>
+					</apply>
+				</apply>
+				
+				<apply boundary-type="Neumann"><eq/>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<apply><minus/>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<cn> 0 </cn>
+					</apply>
+				</apply>
+				
+				<apply boundary-type="Neumann"><eq/>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<cn> 3 </cn>
+					</apply>
+					<apply><selector/>
+						<ci> Main.x </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<cn> 2 </cn>
+					</apply>
+				</apply>
+			</math>
+		</boundary-cond>
+		
+		<parameter-cond parameter-id="1">
+		</parameter-cond>
+	</morphology>	
+
+</relml>

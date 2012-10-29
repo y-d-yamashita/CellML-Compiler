@@ -1,0 +1,123 @@
+<tecml>
+	<!-- 	FTCS_1D version 1    	 		-->
+	<!--	Single-step Replacement Scheme 	-->
+	<!--	Last edit:   20120621   		-->
+
+	<variable name="v" type="diffvar"/>
+	<variable name="y" type="arithvar"/>
+	<variable name="z" type="constvar"/>
+	<variable name="t" type="dimensionvar" order="1"/>
+	<variable name="x1" type="dimensionvar" order="2"/>
+
+	<variable name="deltat" type="deltavar" order="1"/>
+	<variable name="deltax1" type="deltavar" order="2"/>
+
+	<variable name="n" type="indexvar" order="1"/> 
+	<variable name="j" type="indexvar" order="2"/>
+	<!--	<variable name="l" type="indexvar" order="3"/>   -->
+	<!--	<variable name="m" type="indexvar" order="4"/>   -->
+
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		
+
+		<apply><eq/> 
+			<ci> v </ci>
+			<apply><selector/>
+				<ci> v </ci>
+				<ci> n </ci>
+				<ci> j </ci>
+			</apply>
+		</apply>
+
+		<apply><eq/>
+			<ci> y </ci>
+			<apply><selector/>
+				<ci> y </ci>
+				<ci> n </ci>
+				<ci> j </ci>
+			</apply>
+		</apply>
+
+		<apply><eq/>
+			<ci> z </ci>
+			<apply><selector/>
+				<ci> z </ci>
+				<ci> n </ci>
+				<ci> j </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/> 
+			<apply><partialdiff/>
+				<bvar><ci> x1 </ci><degree><cn> 2 </cn></degree></bvar>
+				<degree><cn> 2 </cn></degree>
+				<apply>
+					<ci> v </ci>
+				</apply>
+			</apply>
+			<apply><divide/>
+				<apply><plus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<apply><plus/>
+							<ci> j </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+					<apply><minus/>
+						<apply><times/>
+							<cn> 2 </cn>
+							<apply><selector/>
+								<ci> v </ci>
+								<ci> n </ci>
+								<ci> j </ci>
+							</apply>
+						</apply>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<apply><minus/>
+							<ci> j </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+				</apply>
+				<apply><times/>
+					<ci> deltax1 </ci>
+					<ci> deltax1 </ci>
+				</apply>	
+			</apply>
+		</apply>
+		
+		<apply><eq/> 
+			<apply><partialdiff/>
+				<bvar><ci> t </ci></bvar>
+				<apply>
+					<ci> v </ci>
+				</apply>
+			</apply>
+			<apply><divide/>
+				<apply><minus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<apply><plus/>
+							<ci> n </ci>
+							<cn> 1 </cn>
+						</apply>
+						<ci> j </ci>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+					</apply>
+				</apply>
+				<ci> deltat </ci>
+			</apply>
+		</apply>
+
+	</math>
+	
+</tecml>

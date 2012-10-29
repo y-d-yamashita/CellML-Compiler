@@ -1,0 +1,217 @@
+<!-- Formula for Finite Difference Method (central difference)
+	Central difference for Poisson's equation
+	delta^2 u / delta x^2 + delta^2 u / delta y^2 = phi(x,y)
+		j = 0, 1,..., J (x-axis , columns)
+		l = 0, `,..., L (y-axis, rows)
+	to write the LSE in matrix form, we need a vector of u
+		i = j(L + 1) + l for all j = 1, 2, ..., J-1; l = 1, 2, ..., L-1 (boundary)
+		
+	format for attributes: dimensions="nx ny nz" and spacing="sx sy sz"
+-->
+
+<sedml name="centralDifference" version="0.1">
+	<mesh type="RECTILINEAR_GRID" dimensions="8 8 1" spacing="1 1 1" />
+	<variable name="v" type="partialdiffvar" />
+	<variable name="J" type="constvar" />
+	<variable name="L" type="constvar" />
+	<variable name="__i" type="indexvar" />
+	<variable name="j" type="indexvar" />
+	<variable name="l" type="indexvar" />
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply>
+			<selector/>
+			<ci type="vector"> u </ci>
+			<apply> 
+				<minus/>
+				<ci> __i </ci>
+				<apply>
+					<plus/>
+					<ci> L </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+		</apply>
+		<piecewise>
+			<piece>
+				<cn> 0 </cn>
+				<apply><eq/><ci> j </ci> <cn> 0 </cn></apply>
+			</piece>
+			<otherwise>
+				<apply>
+					<selector/>
+					<ci type="vector"> u </ci>
+					<apply> 
+						<minus/>
+						<ci> __i </ci>
+						<apply>
+							<plus/>
+							<ci> L </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply>
+			<selector/>
+			<ci type="vector"> u </ci>
+			<apply>
+				<plus/>
+				<ci> __i </ci>
+				<ci> L </ci>
+				<cn> 1 </cn>
+			</apply>
+		</apply>
+		<piecewise>
+			<piece>
+				<cn> 0 </cn>
+				<apply><eq/><ci> j </ci> <ci> J </ci></apply>
+			</piece>
+			<otherwise>
+				<apply>
+					<selector/>
+					<ci type="vector"> u </ci>
+					<apply>
+						<plus/>
+						<ci> __i </ci>
+						<ci> L </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply>
+			<selector/>
+			<ci type="vector"> u </ci>
+			<apply>
+				<minus/>
+				<ci> __i </ci>
+				<cn> 1 </cn>
+			</apply>
+		</apply>
+		<piecewise>
+			<piece>
+				<cn> 0 </cn>
+				<apply><eq/><ci> l </ci> <cn> 0 </cn></apply>
+			</piece>
+			<otherwise>
+				<apply>
+					<selector/>
+					<ci type="vector"> u </ci>
+					<apply>
+						<minus/>
+						<ci> __i </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply>
+			<selector/>
+			<ci type="vector"> u </ci>
+			<apply>
+				<plus/>
+				<ci> __i </ci>
+				<cn> 1 </cn>
+			</apply>
+		</apply>
+		<piecewise>
+			<piece>
+				<cn> 0 </cn>
+				<apply><eq/><ci> l </ci> <ci> L </ci></apply>
+			</piece>
+			<otherwise>
+				<apply>
+					<selector/>
+					<ci type="vector"> u </ci>
+					<apply>
+						<plus/>
+						<ci> __i </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	
+	<apply type="PDESolution">
+		<eq/>
+		<apply>
+			<selector/>
+			<ci type="vector"> v </ci>
+			<ci> __i </ci>
+		</apply>
+		<apply>
+			<plus/>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply>
+					<plus/>
+					<ci> __i </ci>
+					<ci> L </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply> 
+					<minus/>
+					<ci> __i </ci>
+					<apply>
+						<plus/>
+						<ci> L </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply>
+					<plus/>
+					<ci> __i </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply>
+				<selector/>
+				<ci type="vector"> u </ci>
+				<apply> 
+					<minus/>
+					<ci> __i </ci>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply>
+				<times/>
+				<cn> 4 </cn>
+				<apply>
+					<selector/>
+					<ci type="vector"> u </ci>
+					<ci> __i </ci>
+				</apply>
+			</apply>
+		</apply>
+	</apply>
+	</math>
+	
+</sedml>

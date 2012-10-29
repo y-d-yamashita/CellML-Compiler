@@ -1,0 +1,257 @@
+<tecml>
+	<!-- 	FTCS_2D version 1    	 		-->
+	<!--	Single-step Replacement Scheme 	-->
+	<!--	Last edit:   20120913   		-->
+	<variable name="v" type="diffvar"/>
+	<variable name="y" type="arithvar"/>
+	<variable name="z" type="constvar"/>
+	<variable name="t" type="dimensionvar" order="1"/>
+	<variable name="x1" type="dimensionvar" order="2"/>
+	<variable name="x2" type="dimensionvar" order="3"/>
+
+	<variable name="deltat" type="deltavar" order="1"/>
+	<variable name="deltax1" type="deltavar" order="2"/>
+	<variable name="deltax2" type="deltavar" order="3"/>
+
+	<variable name="n" type="indexvar" order="1"/> 
+	<variable name="j" type="indexvar" order="2"/>
+	<variable name="l" type="indexvar" order="3"/>
+	<!--	<variable name="m" type="indexvar" order="4"/>   -->
+
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		
+
+		<apply><eq/> 
+			<ci> v </ci>
+			<apply><selector/>
+				<ci> v </ci>
+				<ci> n </ci>
+				<ci> j </ci>
+				<ci> l </ci>
+			</apply>
+		</apply>
+
+		<apply><eq/>
+			<ci> y </ci>
+			<apply><selector/>
+				<ci> y </ci>
+				<ci> n </ci>
+				<ci> j </ci>
+				<ci> l </ci>
+			</apply>
+		</apply>
+		
+		<apply location="left"><eq/>
+			<apply><partialdiff/>
+				<bvar><ci> x1 </ci></bvar>
+				<ci> v </ci>
+			</apply>
+			<apply><minus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>	
+					<ci> l </ci>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<cn> 0 </cn>
+					<ci> l </ci>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply location="right"><eq/>
+			<apply><partialdiff/>
+				<bvar><ci> x1 </ci></bvar>
+				<ci> v </ci>
+			</apply>
+			<apply><minus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<cn> 4 </cn>
+					<ci> l </ci>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<cn> 3 </cn>
+					<ci> l </ci>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply location="bottom"><eq/>
+			<apply><partialdiff/>
+				<bvar><ci> x2 </ci></bvar>
+				<ci> v </ci>
+			</apply>
+			<apply><minus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<cn> 0 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply location="top"><eq/>
+			<apply><partialdiff/>
+				<bvar><ci> x2 </ci></bvar>
+				<ci> v </ci>
+			</apply>
+			<apply><minus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<cn> 4 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> n </ci>
+					<ci> j </ci>
+					<cn> 3 </cn>
+				</apply>
+			</apply>
+		</apply>
+			
+		<apply><eq/> 
+			<apply><partialdiff/>
+				<bvar><ci> x1 </ci><degree><cn> 2 </cn></degree></bvar>
+				<degree><cn> 2 </cn></degree>
+				<apply>
+					<ci> v </ci>
+				</apply>
+			</apply>
+			<apply><divide/>
+				<apply><plus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<apply><plus/>
+							<ci> j </ci>
+							<cn> 1 </cn>
+						</apply>
+						<ci> l </ci>
+					</apply>
+					<apply><minus/>
+						<apply><times/>
+							<cn> 2 </cn>
+							<apply><selector/>
+								<ci> v </ci>
+								<ci> n </ci>
+								<ci> j </ci>
+								<ci> l </ci>
+							</apply>
+						</apply>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<apply><minus/>
+							<ci> j </ci>
+							<cn> 1 </cn>
+						</apply>
+						<ci> l </ci>
+					</apply>
+				</apply>
+				<apply><times/>
+					<ci> deltax1 </ci>
+					<ci> deltax1 </ci>
+				</apply>	
+			</apply>
+		</apply>
+		
+		<apply><eq/> 
+			<apply><partialdiff/>
+				<bvar><ci> x2 </ci><degree><cn> 2 </cn></degree></bvar>
+				<degree><cn> 2 </cn></degree>
+				<apply>
+					<ci> v </ci>
+				</apply>
+			</apply>
+			<apply><divide/>
+				<apply><plus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<apply><plus/>
+							<ci> l </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+					<apply><minus/>
+						<apply><times/>
+							<cn> 2 </cn>
+							<apply><selector/>
+								<ci> v </ci>
+								<ci> n </ci>
+								<ci> j </ci>
+								<ci> l </ci>
+							</apply>
+						</apply>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<apply><minus/>
+							<ci> l </ci>
+							<cn> 1 </cn>
+						</apply>
+					</apply>
+				</apply>
+				<apply><times/>
+					<ci> deltax2 </ci>
+					<ci> deltax2 </ci>
+				</apply>	
+			</apply>
+		</apply>
+		
+		<apply><eq/> 
+			<apply><partialdiff/>
+				<bvar><ci> t </ci></bvar>
+				<apply>
+					<ci> v </ci>
+				</apply>
+			</apply>
+			<apply><divide/>
+				<apply><minus/>
+					<apply><selector/>
+						<ci> v </ci>
+						<apply><plus/>
+							<ci> n </ci>
+							<cn> 1 </cn>
+						</apply>
+						<ci> j </ci>
+						<ci> l </ci>
+					</apply>
+					<apply><selector/>
+						<ci> v </ci>
+						<ci> n </ci>
+						<ci> j </ci>
+						<ci> l </ci>
+					</apply>
+				</apply>
+				<ci> deltat </ci>
+			</apply>
+		</apply>
+
+	</math>
+	
+</tecml>

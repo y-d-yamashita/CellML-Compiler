@@ -96,7 +96,7 @@ public class LeftSideTranspositionTest {
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression5.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
-				pNewExpression5.addOperand(val5);
+				pNewExpression5.addOperand(val3);
 				pNewExpression5.addOperand(val2);
 				pNewExpression5.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
@@ -132,8 +132,8 @@ public class LeftSideTranspositionTest {
 		
 		//導出変数の個数を確認
 		int derivedVariable_count=0;
-		for(int i=0;i<exp_rightValiableList.size();i++){
-			if(exp_rightValiableList.get(i).matches(val5)){
+		for(int i=0;i<exp_leftValiableList.size();i++){
+			if(exp_leftValiableList.get(i).matches(val5)){
 				derivedVariable_count++;
 			}
 		}

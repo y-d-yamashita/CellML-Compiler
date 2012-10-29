@@ -19,6 +19,7 @@ public class SyntaxControl extends SyntaxStatement {
 	 * 制御文種類列挙
 	 */
 	public enum eControlKind {
+		CTRL_BLANK,
 		CTRL_IF,
 		CTRL_FOR,
 		CTRL_WHILE,
@@ -59,6 +60,12 @@ public class SyntaxControl extends SyntaxStatement {
 		/*制御文の種類ごとの処理*/
 		switch (m_controlKind) {
 
+			/*if there are no control arguments*/
+		case CTRL_BLANK:
+			strPresentText += "";
+			dowhile_flag = -1;
+			break;
+			
 			/*if文*/
 		case CTRL_IF:
 			strPresentText += "if(" + m_pSynCondition.toLegalString() + ")";

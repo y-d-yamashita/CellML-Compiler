@@ -18,6 +18,17 @@ public class SyntaxCondition extends Syntax {
 	protected MathExpression m_pReInitExpression;
 
 	/**
+	 * SyntaxCondition for creating a blank loop.
+	 * @param null
+	 */
+	public SyntaxCondition() {
+		super(eSyntaxClassification.SYN_CONDITION);
+		m_pCondExpression = null;
+		m_pInitExpression = null;
+		m_pReInitExpression = null;
+	}
+	
+	/**
 	 * 条件文構文インスタンスを作成する.
 	 * @param pCondExpression 条件式
 	 */

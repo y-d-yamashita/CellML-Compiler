@@ -3,6 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.xml.sax.SAXException;
@@ -37,6 +38,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 
 	/**数式解析中判定*/
 	private boolean m_bMathParsing;
+	private int m_intGeometryDimension;
 
 	/*種類ごとの対応変数名*/
 	Vector<Math_ci> m_vecTimeVar;
@@ -53,8 +55,13 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	boolean m_bDiffEquListParsing;
 	String m_strCurComponent;
 	String m_strMeshType;   	// mesh type (currently regular rectilinear grid only)
-	String m_morphologyName; 	// name for morphology grid
+	String m_strMorphologyName; 	// name for morphology grid
 
+	/* return the number of spatial dimensions */
+	public int getM_intGeometryDimension() {
+		return m_intGeometryDimension;
+	}
+	
 	/* return differential variables vector */
 	public Vector<Math_ci> getM_vecDiffVar() {
 		return m_vecDiffVar;
@@ -71,31 +78,31 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	}
 	
 	/* return variable dimension vector */
-	Vector<Math_ci> m_vecDimensionVar;
+	private Vector<Math_ci> m_vecDimensionVar;
 	public Vector<Math_ci> getM_vecDimensionVar() {
 		return m_vecDimensionVar;
 	}
 	
 	/* return index names vector */
-	Vector<Math_ci> m_vecIndexVar;
+	private Vector<Math_ci> m_vecIndexVar;
 	public Vector<Math_ci> getM_vecIndexVar() {
 		return m_vecIndexVar;
 	}
 	
 	/* return delta time and space vector */
-	Vector<Math_ci> m_vecDeltaVar;
+	private Vector<Math_ci> m_vecDeltaVar;
 	public Vector<Math_ci> getM_vecDeltaVar() {
 		return m_vecDeltaVar;
 	}
 	
 	/* return mesh dimensions vector */
-	Vector<Math_cn> m_vecDimensions;
+	private Vector<Math_cn> m_vecDimensions;
 	public Vector<Math_cn> getM_vecDimensions() {
 		return m_vecDimensions;
 	}
 	
 	/* mesh grid spacing (for regular grids) vector */
-	Vector<Math_cn> m_vecSpacing;
+	private Vector<Math_cn> m_vecSpacing;
 	public Vector<Math_cn> getM_vecSpacing() {
 		return m_vecSpacing;
 	}
@@ -105,7 +112,24 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	public Vector<MathExpression> getM_vecExpression() {
 		return m_vecExpression;
 	}
-
+	
+	/* return bounded variables map with filename */
+	private HashMap<Math_ci, String> m_HashMapBoundedVar;
+	public HashMap<Math_ci, String> getM_HashMapBoundedVar() {
+		return m_HashMapBoundedVar;
+	}
+	
+	/* return distributed parameters map with filename */
+	private HashMap<Math_ci, String> m_HashMapDistributedParam;
+	public HashMap<Math_ci, String> getM_HHashMapDistributedParam() {
+		return m_HashMapDistributedParam;
+	}	
+	
+	/* return the file name of the morphology file*/
+	public String getMorphologyFileName() {
+		return m_strMorphologyName;
+	}
+	
 	/**
 	 * RelML解析インスタンスを作成する.
 	 */
@@ -122,6 +146,8 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		m_vecArithVar = new Vector<Math_ci>();
 		m_vecConstVar = new Vector<Math_ci>();
 		m_vecExpression = new Vector<MathExpression>();
+		m_HashMapBoundedVar = new HashMap<Math_ci, String>();
+		m_HashMapDistributedParam = new HashMap<Math_ci, String>();
 	}
 
 	/* (非 Javadoc)
@@ -154,6 +180,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			{
 				/* Get the attributes values for morphology tag*/
 				String strName = pXMLAttr.getValue("name");
+				m_strMorphologyName = pXMLAttr.getValue("filename");
 				
 				break;
 			}
@@ -164,7 +191,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 				/* Get the attributes values for geometry tags*/
 				String m_strGeometryID = pXMLAttr.getValue("geometry-id");
 				String m_strType = pXMLAttr.getValue("type");
-				String m_strDimension = pXMLAttr.getValue("dimension");
+				m_intGeometryDimension = Integer.parseInt(pXMLAttr.getValue("dimension"));
 				Math_cn pGeometryID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strGeometryID);
 				
 				break;
@@ -198,8 +225,10 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			case RTAG_BOUNDARY:
 			{
 				/* Get the attributes values for boundary condition tag*/
-				String m_strBoundaryID = pXMLAttr.getValue("boundary-id");
-				Math_cn pBoundID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strBoundaryID);
+				String strName = pXMLAttr.getValue("variablename");
+				String strFileName = pXMLAttr.getValue("filename");
+				Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
+				m_HashMapBoundedVar.put(pVariable, strFileName);
 				
 				break;
 			}
@@ -208,8 +237,10 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			case RTAG_PARAMETER:
 			{
 				/* Get the attributes values for boundary condition tag*/
-				String m_strParameterID = pXMLAttr.getValue("parameter-id");
-				Math_cn pParameterID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strParameterID);
+				String strName = pXMLAttr.getValue("variablename");
+				String strFileName = pXMLAttr.getValue("filename");
+				Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
+				m_HashMapDistributedParam.put(pVariable, strFileName);
 				
 				break;
 			}

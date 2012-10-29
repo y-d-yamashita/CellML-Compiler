@@ -40,6 +40,11 @@ public class RecMLDefinition {
 	public static final String RECML_ATTR_FINAL = "final";
 	public static final String RECML_ATTR_POST = "post";
 	
+	/* RecML attribute names for boundary and distributed parameters */
+	public static final String RECML_ATTR_BOUNDARYID = "boundary-id";
+	public static final String RECML_ATTR_BOUNDARYLOC = "location";
+	public static final String RECML_ATTR_PARAMETERID = "parameter-id";
+	
 	public enum eRecMLTag {
 		CTAG_RECML		(RECML_TAG_STR_RECML),
 		CTAG_MATH		(RECML_TAG_STR_MATH),

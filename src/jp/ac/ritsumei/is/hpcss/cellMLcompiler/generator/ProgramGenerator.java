@@ -339,7 +339,30 @@ public abstract class ProgramGenerator {
 		return pSynFor;
 	}
 
-//	========================================================
+	//========================================================
+	//createSyntaxBlankLoop
+	// 	generates a blank loop
+	//
+	//@arg
+	// void
+	//
+	//@return
+	// 制御文構文インスタンス	: SyntaxControl*
+	//
+	//========================================================
+	public SyntaxControl createSyntaxBlankLoop()
+	throws MathException {
+		/*ループ条件生成*/
+		SyntaxCondition pSynLoopCond = new SyntaxCondition();
+
+		/*ループを生成*/
+		SyntaxControl pSynBlank = new SyntaxControl(eControlKind.CTRL_BLANK,pSynLoopCond);
+
+		/*ループ構文を返す*/
+		return pSynBlank;
+	}
+	
+	//========================================================
 	//createSyntaxDoWhileLoop
 	// 	generates dowhile loop
 	//
@@ -562,10 +585,16 @@ public abstract class ProgramGenerator {
 		/*関数呼び出しインスタンス生成*/
 		SyntaxCallFunction pSynMallocCall = new SyntaxCallFunction(PROG_FUNC_STR_MALLOC);
 
+		StringBuilder strSizeofVar = new StringBuilder("sizeof(double "); 
+		for (int i = 0; i < (pointerNum - 1); i++) {
+			strSizeofVar.append("*");
+		}
+		strSizeofVar.append(")");
+		
 		/*引数の構築*/
 		Math_ci pSizeofVar =
 			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-			"sizeof( double )");	//Syntax構文群が完成するまでの暫定処置
+			strSizeofVar.toString());	//Syntax構文群が完成するまでの暫定処置
 		Math_times pMathTimes1 =
 			(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
 

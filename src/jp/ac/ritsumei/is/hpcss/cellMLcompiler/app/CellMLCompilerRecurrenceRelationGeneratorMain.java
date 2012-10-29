@@ -44,9 +44,9 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 	private static final String GENERATOR_CUDA = "cuda";
 	private static final String GENERATOR_COMMON = "common";
 	private static final String GENERATOR_SIMPLE = "simple";
-	private static final String DEFALUT_GENERATOR = GENERATOR_CUDA;
+	private static final String DEFAULT_GENERATOR = GENERATOR_COMMON;
 
-	protected static String generatorName = DEFALUT_GENERATOR;
+	protected static String generatorName = DEFAULT_GENERATOR;
 
 	//===================================================
 	//main
@@ -64,7 +64,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 		RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
 		
 		String xml = "";
-		xml = "./model/relfile/relation.recml";
+		xml = "./model/recml/RecMLSample/LR1_FTCS_2D_struct_v2.recml";
 
 		//---------------------------------------------------
 		//XMLパーサ初期化
@@ -330,7 +330,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 		System.err.println("option:");
         System.err.println("  -g name     Select Generator by name. {cuda|common|simple}");
         System.err.println("default:");
-        System.err.println("  Generator:  "+DEFALUT_GENERATOR);
+        System.err.println("  Generator:  "+DEFAULT_GENERATOR);
 	}
 	
 }

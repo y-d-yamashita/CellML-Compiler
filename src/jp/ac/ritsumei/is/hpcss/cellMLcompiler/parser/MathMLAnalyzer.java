@@ -110,12 +110,35 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_LOOP5);
 			String[] strAttr = new String[] {strAttrLoop1, strAttrLoop2, strAttrLoop3, strAttrLoop4, strAttrLoop5};
 			
+			/* get operator attribute for boundary condition and distributed parameters */
+			String strAttrBoundaryID = 
+				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_BOUNDARYID);
+			String strAttrBoundaryLoc = 
+					pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_BOUNDARYLOC);
+			String strAttrParameterID = 
+					pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_PARAMETERID);
+			
+			/* put new boundary/parameter attribute to attribute list */
+			String[] strParamAttr = null;
+			if(strAttrBoundaryID != null) {
+				strParamAttr = new String[] {strAttrBoundaryID, strAttrBoundaryLoc}; 
+			} else if(strAttrParameterID != null) {
+				strParamAttr = new String[] {strAttrParameterID, null}; 
+			} else if(strAttrBoundaryLoc != null) {
+				strParamAttr = new String[] {null, strAttrBoundaryLoc};   //applicable to MathML boundary conditions
+			}
+			
+			if (strParamAttr != null) {
+				strAttr = strParamAttr;
+			}
+			
 			/*新しい計算式*/
 			if(m_pCurMathExpression==null || !m_pCurMathExpression.isConstructing()){
 				this.addNewExpression();
 				
 				/* store the MathExpression attribute values */
 				addNewAttribute(strAttr);
+				
 			}
 
 			m_pCurMathExpression.addOperator(

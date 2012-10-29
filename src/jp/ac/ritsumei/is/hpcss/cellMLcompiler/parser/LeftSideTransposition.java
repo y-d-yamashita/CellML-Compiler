@@ -84,9 +84,24 @@ public class LeftSideTransposition {
 				exp_rightValiableList.add((Math_ci) expression.getRightExpression().getRootFactor());
 			}
 			
+			//導出変数の個数を確認
+			int derivedVariable_count=0;
+			for(int j=0;j<exp_leftValiableList.size();j++){
+				if(exp_leftValiableList.get(j).matches(derivedVariable)){
+					derivedVariable_count++;
+				}
+			}
+			for(int j=0;j<exp_rightValiableList.size();j++){
+				if(exp_rightValiableList.get(j).matches(derivedVariable)){
+					derivedVariable_count++;
+				}
+			}
+			if(derivedVariable_count!=1){
+				throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+			}
 			boolean targetSide_position=false;
 			for(int j=0;j<exp_rightValiableList.size();j++){
-				if(exp_rightValiableList.get(i).matches(derivedVariable)){
+				if(exp_rightValiableList.get(j).matches(derivedVariable)){
 					//右辺であればtrue
 					targetSide_position=true;
 				}

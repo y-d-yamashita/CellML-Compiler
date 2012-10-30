@@ -58,7 +58,7 @@ public class SimpleRecMLWriter {
 		}
 		
 		/* insert the model and boundary condition mathml equations */
-		this.insertMathMLEquations(m_strMathMLExp); 
+//		this.insertMathMLEquations(m_strMathMLExp); 
 		
 		m_strSimpleRecML.append("</recml>" + "\n");
 	}

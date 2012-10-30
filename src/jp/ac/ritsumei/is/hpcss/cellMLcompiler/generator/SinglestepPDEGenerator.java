@@ -655,8 +655,8 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		
 		//Variables for testing the instantiation of simulation equations with time and a 2D array
 		int maxTime = 2;
-		int maxx = 50;
-		int maxy = 50;
+		int maxx = 75;
+		int maxy = 75;
 		long start = System.currentTimeMillis();
 		StringBuilder strRecMLMathExp = new StringBuilder();
 		try {
@@ -664,8 +664,8 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 			pSingleStepGenerator.generateAllInstanceEquations(maxTime);
 			strRecMLMathExp = pSingleStepGenerator.getM_strMathMLExp();
 			
-			pSingleStepGenerator.generateMeshPoints(maxx, maxy);
-//			pSingleStepGenerator.generateBoundaryPoints(maxx, maxy);
+//			pSingleStepGenerator.generateMeshPoints(maxx, maxy);
+			pSingleStepGenerator.generateBoundaryPoints(maxx, maxy);
 			System.out.println("[output]------------------------------------");
 			
 //			pSingleStepGenerator.createSimpleRecMLString(maxDimensions);
@@ -692,7 +692,13 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		SimpleRecMLWriter pSimpleRecMLWriter = new SimpleRecMLWriter();
 		try {
 			pSimpleRecMLWriter.createSimpleRecMLString(pRelMLAnalyzer, strRecMLMathExp);
-			pSimpleRecMLWriter.writeSimpleRecMLFile("FHN_FTCS_2x50x50.recml");
+			pSimpleRecMLWriter.writeSimpleRecMLFile("FHN_FTCS_2x75x75.recml");
+			
+			Writer output = null;
+			File strMorpFile = new File("mathExp_75x75.txt");
+			output = new BufferedWriter(new FileWriter(strMorpFile));
+			output.append(strRecMLMathExp);
+			output.close();
 //			pSimpleRecMLWriter.printContents();
 		} catch (MathException e1) {
 			// TODO 自動生成された catch ブロック

@@ -273,6 +273,40 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	}
 	
 	/**
+	 *  condition部分を抜き取り、別数式として保存
+	 */
+	public void pickUpConditions(){
+		int count = 0; /*数式番号*/
+		int condcount = 0; /*condition番号*/
+		MathExpression[] condExp = new MathExpression[10];
+		for (MathExpression it: m_vecMathExpression) {
+			/*condition検索*/
+			condExp[condcount] = it.searchCondition();
+			if(condExp[condcount] !=null){
+//				/*test*/
+//				try {
+//					System.out.println("exp["+count+"]: " + condExp[condcount].toLegalString() + " Ref:" +count);
+//				} catch (MathException e) {
+//					// TODO 自動生成された catch ブロック
+//					e.printStackTrace();
+//				}
+				/*conditionReference登録*/
+				condExp[condcount].setCondref(count);
+				condcount++;
+			}
+			/*数式番号登録*/
+			it.setExID(count);
+			count++;
+		}
+		for (MathExpression it: condExp){
+			if(it != null){
+				m_vecMathExpression.add(it);
+			}
+		}
+		
+	}
+	
+	/**
 	 * Selector内のcnをintegerにする
 	 * */
 	public void changeAllSelectorInteger(){

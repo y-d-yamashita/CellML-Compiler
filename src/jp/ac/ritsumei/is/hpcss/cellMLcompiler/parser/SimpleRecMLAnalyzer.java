@@ -394,7 +394,9 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 			e.printStackTrace();
 		}
 		
+		simpleRecMLAnalyzer.changeAllSelectorInteger();
 		simpleRecMLAnalyzer.removeSelector();
+		simpleRecMLAnalyzer.pickUpConditions();
 		
 //		String[] strAttr = new String[] {"init", null, null};
 //		System.out.println("loop1 = " + strAttr[0] + "\n");
@@ -410,6 +412,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 //				e.printStackTrace();
 //			}
 //		}
+		/*
 		int i = 0;
 		System.out.println(i);
 		System.out.println(simpleRecMLAnalyzer.m_HashMapSimpleRecurList.size());
@@ -419,24 +422,24 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		}
 		
 		/*数式の数*/
-		System.out.println("simpleRecMLAnalyzer.getExpressionCount()");
-		System.out.println(simpleRecMLAnalyzer.getExpressionCount());
-		System.out.println();
+		//System.out.println("simpleRecMLAnalyzer.getExpressionCount()");
+		//System.out.println(simpleRecMLAnalyzer.getExpressionCount());
+		//System.out.println();
 		
 		/*ある数式の変数の個数を取得*/
-		System.out.println("simpleRecMLAnalyzer.getExpression().getVariable()");
-		System.out.println(simpleRecMLAnalyzer.getExpression(0).getVariableCount());
-		System.out.println();
+		//System.out.println("simpleRecMLAnalyzer.getExpression().getVariable()");
+		//System.out.println(simpleRecMLAnalyzer.getExpression(0).getVariableCount());
+		//System.out.println();
 		
 		/*数式取得*/
-		System.out.println("simpleRecMLAnalyzer.getExpression().getVariable()");
-		System.out.println(simpleRecMLAnalyzer.getExpression(0).getVariable(1).toLegalString());
-		System.out.println();
+		//System.out.println("simpleRecMLAnalyzer.getExpression().getVariable()");
+		//System.out.println(simpleRecMLAnalyzer.getExpression(0).getVariable(1).toLegalString());
+		//System.out.println();
 		
-		System.out.println("simpleRecMLAnalyzer.getExpression().toLegalString()");
-		System.out.println(simpleRecMLAnalyzer.getExpression(0).toLegalString());
-		System.out.println();
-
+		//System.out.println("simpleRecMLAnalyzer.getExpression().toLegalString()");
+		//System.out.println(simpleRecMLAnalyzer.getExpression(0).toLegalString());
+		//System.out.println();
+	
 		try {
 			simpleRecMLAnalyzer.printContents();
 		} catch (MathException e) {

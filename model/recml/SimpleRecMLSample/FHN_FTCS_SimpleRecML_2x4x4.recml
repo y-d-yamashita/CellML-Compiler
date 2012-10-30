@@ -5,20 +5,25 @@
 	<loopindex num="0" name="n" />
 	<loopindex num="1" name="j" />
 	<loopindex num="2" name="l" />
-	<variable name="Main.time" type="double" initialvalue="0.0" />
-	<variable name="Main.x1" type="double" initialvalue="0.0" />
-	<variable name="Main.x2" type="double" initialvalue="0.0" />
-	<variable name="Main.x" type="double" initialvalue="0.0" />
-	<variable name="Main.y" type="double" initialvalue="0.0" />
-	<variable name="Main.r" type="double" initialvalue="0.0" />
-	<variable name="Main.zz" type="double" initialvalue="0.0" />
-	<variable name="Main.epsilon" type="double" initialvalue="0.0" />
-	<variable name="Main.beta" type="double" initialvalue="0.0" />
-	<variable name="Main.gamma" type="double" initialvalue="0.0" />
-	<variable name="Main.D" type="double" initialvalue="0.0" />
-	<variable name="deltat" type="double" initialvalue="0.0" />
-	<variable name="deltax1" type="double" initialvalue="0.0" />
-	<variable name="deltax2" type="double" initialvalue="0.0" />
+	<variable name="n" type="stepvar"/>
+	<variable name="j" type="stepvar"/>
+	<variable name="l" type="stepvar"/>
+	<variable name="Main.time" type="recurvar" />
+	<variable name="Main.x1" type="constvar" />
+	<variable name="Main.x2" type="constvar" />
+	<variable name="Main.x" type="recurvar" />
+	<variable name="Main.y" type="recurvar" />
+	<variable name="Main.r" type="arithvar" />
+	<variable name="Main.zz" type="arithvar" />
+	<variable name="Main.epsilon" type="constvar" />
+	<variable name="Main.beta" type="constvar" />
+	<variable name="Main.gamma" type="constvar" />
+	<variable name="Main.D" type="constvar" />
+	<variable name="deltat" type="constvar" />
+	<variable name="deltax1" type="constvar" />
+	<variable name="deltax2" type="constvar" />
+	
+	<variable name="X1end" type="output"/>
 	
 	<math>
 		<apply><eq/>
@@ -7054,5 +7059,15 @@
 			<cn> 0 </cn>
 		</apply>
 
+		<apply><eq/>
+			<ci> X1end </ci>
+			<apply><selector/>
+				<ci> Main.x </ci>
+				<cn> 1 </cn>
+				<cn> 2 </cn>
+				<cn> 2 </cn>
+			</apply>
+		</apply>
+		
 	</math>
 </recml>

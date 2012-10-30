@@ -1,0 +1,2103 @@
+<!---     LR1_FTCS_2D SimpleRecML File         ---> 
+<!--- Generated using SinglestepPDEGenerator   ---> 
+
+<recml>
+	<loopindex num="0" name="n" />
+	<loopindex num="1" name="j" />
+	<loopindex num="2" name="l" />
+	
+	<variable name="membrane.V" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current.m" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current.h" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current.j" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current.d" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current.f" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.X" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current.Cai" type="double" initialvalue="0.0" />
+	<variable name="membrane.I_stim" type="double" initialvalue="0.0" />
+	<variable name="membrane.i_Na" type="double" initialvalue="0.0" />
+	<variable name="membrane.i_si" type="double" initialvalue="0.0" />
+	<variable name="membrane.i_K" type="double" initialvalue="0.0" />
+	<variable name="membrane.i_K1" type="double" initialvalue="0.0" />
+	<variable name="membrane.i_Kp" type="double" initialvalue="0.0" />
+	<variable name="membrane.i_b" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current.E_Na" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current_m_gate.alpha_m" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current_m_gate.beta_m" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current_h_gate.alpha_h" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current_h_gate.beta_h" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current_j_gate.alpha_j" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current_j_gate.beta_j" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current.E_si" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current_d_gate.alpha_d" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current_d_gate.beta_d" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current_f_gate.alpha_f" type="double" initialvalue="0.0" />
+	<variable name="slow_inward_current_f_gate.beta_f" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.g_K" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.E_K" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.Xi" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current_X_gate.alpha_X" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current_X_gate.beta_X" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current.g_K1" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current.E_K1" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current.K1" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current_K1_gate.alpha_K1" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current_K1_gate.beta_K1" type="double" initialvalue="0.0" />
+	<variable name="plateau_potassium_current.E_Kp" type="double" initialvalue="0.0" />
+	<variable name="plateau_potassium_current.Kp" type="double" initialvalue="0.0" />
+	<variable name="membrane.R" type="double" initialvalue="0.0" />
+	<variable name="membrane.T" type="double" initialvalue="0.0" />
+	<variable name="membrane.F" type="double" initialvalue="0.0" />
+	<variable name="membrane.C" type="double" initialvalue="0.0" />
+	<variable name="membrane.stim_start" type="double" initialvalue="0.0" />
+	<variable name="membrane.stim_end" type="double" initialvalue="0.0" />
+	<variable name="membrane.stim_period" type="double" initialvalue="0.0" />
+	<variable name="membrane.stim_duration" type="double" initialvalue="0.0" />
+	<variable name="membrane.stim_amplitude" type="double" initialvalue="0.0" />
+	<variable name="fast_sodium_current.g_Na" type="double" initialvalue="0.0" />
+	<variable name="background_current.g_b" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.Nai" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.Nao" type="double" initialvalue="0.0" />
+	<variable name="plateau_potassium_current.g_Kp" type="double" initialvalue="0.0" />
+	<variable name="background_current.E_b" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current.Ki" type="double" initialvalue="0.0" />
+	<variable name="time_independent_potassium_current.Ko" type="double" initialvalue="0.0" />
+	<variable name="time_dependent_potassium_current.PR_NaK" type="double" initialvalue="0.0" />
+	<variable name="deltat" type="double" initialvalue="0.0" />
+	<variable name="deltax1" type="double" initialvalue="0.0" />
+	<variable name="deltax2" type="double" initialvalue="0.0" />
+	
+	<math>
+		<apply><eq/>
+			<ci> membrane.V[ n ][  ( - (double)1 )  ][ (double)l ] </ci>
+			<ci> membrane.V[ n ][ (double)0 ][ (double)l ] </ci>
+		</apply>
+		<apply><eq/>
+			<ci> membrane.V[ n ][ (double)100 ][ l ] </ci>
+			<ci> membrane.V[ n ][ (double)99 ][ (double)l ] </ci>
+		</apply>
+		<apply><eq/>
+			<ci> membrane.V[ n ][ (double)j ][  ( - (double)1 )  ] </ci>
+			<ci> membrane.V[ n ][ (double)j ][ (double)0 ] </ci>
+		</apply>
+		<apply><eq/>
+			<ci> membrane.V[ n ][ j ][ (double)100 ] </ci>
+			<ci> membrane.V[ n ][ j ][ (double)99 ] </ci>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.I_stim </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<piecewise>
+		   <piece>
+			<apply><selector/>
+			<ci> membrane.stim_amplitude </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><and/>
+			   <apply><geq/>
+			<ci> intracellular_calcium_concentration.time </ci>
+			<apply><selector/>
+			<ci> membrane.stim_start </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		   <apply><leq/>
+			<ci> intracellular_calcium_concentration.time </ci>
+			<apply><selector/>
+			<ci> membrane.stim_end </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		   <apply><leq/>
+			<apply><minus/>
+			<apply><minus/>
+			<ci> intracellular_calcium_concentration.time </ci>
+			<apply><selector/>
+			<ci> membrane.stim_start </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><floor/>
+			<apply><divide/>
+			<apply><minus/>
+			<ci> intracellular_calcium_concentration.time </ci>
+			<apply><selector/>
+			<ci> membrane.stim_start </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.stim_period </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.stim_period </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.stim_duration </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<cn> (double)0 </cn>
+		</otherwise>
+		</piecewise>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><plus/>
+			<apply><times/>
+		<apply><divide/>
+			<apply><minus/>
+		   <cn> (double)1 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.C </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.I_stim </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_Na </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_si </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_K </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_b </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<apply><plus/>
+			<ci> j </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+		   <apply><times/>
+		<cn> (double)2 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<apply><minus/>
+			<ci> j </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><times/>
+		<ci> deltax1 </ci>
+			<ci> deltax1 </ci>
+		</apply>
+		</apply>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<apply><plus/>
+			<ci> l </ci>
+			<cn> (double)1 </cn>
+		</apply>
+		</apply>
+			<apply><minus/>
+		   <apply><times/>
+		<cn> (double)2 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<apply><minus/>
+			<ci> l </ci>
+			<cn> (double)1 </cn>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<ci> deltax2 </ci>
+			<ci> deltax2 </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current.E_Na </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><divide/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> membrane.R </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.T </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.F </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><ln/>
+			<apply><divide/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.Nao </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.Nai </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.i_Na </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current.g_Na </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><power/>
+			<apply><selector/>
+			<ci> fast_sodium_current.m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)3 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.E_Na </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current_m_gate.alpha_m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.32 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)47.13 </cn>
+		</apply>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.1 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)47.13 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current_m_gate.beta_m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<cn> (double)0.08 </cn>
+			<apply><exp/>
+			<apply><divide/>
+			<apply><minus/>
+		   <apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<cn> (double)11 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> fast_sodium_current.m </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><minus/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current_m_gate.alpha_m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><selector/>
+			<ci> fast_sodium_current.m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current_m_gate.beta_m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.m </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current_h_gate.alpha_h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<piecewise>
+		   <piece>
+			<apply><times/>
+		<cn> (double)0.135 </cn>
+			<apply><exp/>
+			<apply><divide/>
+			<apply><plus/>
+			<cn> (double)80 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)6.8 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><lt/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)40 </cn>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<cn> (double)0 </cn>
+		</otherwise>
+		</piecewise>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current_h_gate.beta_h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<piecewise>
+		   <piece>
+			<apply><plus/>
+			<apply><times/>
+		<cn> (double)3.56 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.079 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<cn> (double)310000 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.35 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><lt/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)40 </cn>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<apply><divide/>
+			<cn> (double)1 </cn>
+			<apply><times/>
+		<cn> (double)0.13 </cn>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)10.66 </cn>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)11.1 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</otherwise>
+		</piecewise>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> fast_sodium_current.h </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><minus/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current_h_gate.alpha_h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><selector/>
+			<ci> fast_sodium_current.h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current_h_gate.beta_h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.h </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current_j_gate.alpha_j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<piecewise>
+		   <piece>
+			<apply><divide/>
+			<apply><times/>
+		<apply><minus/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)127140 </cn>
+		</apply>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.2444 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<cn> (double)0.00003474 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.04391 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)37.78 </cn>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.311 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)79.23 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><lt/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)40 </cn>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<cn> (double)0 </cn>
+		</otherwise>
+		</piecewise>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> fast_sodium_current_j_gate.beta_j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<piecewise>
+		   <piece>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.1212 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.01052 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.1378 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)40.14 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><lt/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)40 </cn>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.3 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.0000002535 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.1 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)32 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</otherwise>
+		</piecewise>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> fast_sodium_current.j </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><minus/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current_j_gate.alpha_j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><selector/>
+			<ci> fast_sodium_current.j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> fast_sodium_current_j_gate.beta_j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> fast_sodium_current.j </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> slow_inward_current.E_si </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)7.7 </cn>
+			<apply><times/>
+		<cn> (double)13.0287 </cn>
+			<apply><ln/>
+			<apply><divide/>
+			<apply><selector/>
+			<ci> slow_inward_current.Cai </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)1 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.i_si </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<cn> (double)0.09 </cn>
+			<apply><selector/>
+			<ci> slow_inward_current.d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.E_si </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> slow_inward_current_d_gate.alpha_d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.095 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.01 </cn>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)5 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.072 </cn>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)5 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> slow_inward_current_d_gate.beta_d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.07 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.017 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)44 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.05 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)44 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> slow_inward_current.d </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><minus/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> slow_inward_current_d_gate.alpha_d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><selector/>
+			<ci> slow_inward_current.d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> slow_inward_current_d_gate.beta_d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.d </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> slow_inward_current_f_gate.alpha_f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.012 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.008 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)28 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.15 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)28 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> slow_inward_current_f_gate.beta_f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.0065 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.02 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)30 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.2 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)30 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> slow_inward_current.f </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><minus/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> slow_inward_current_f_gate.alpha_f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><selector/>
+			<ci> slow_inward_current.f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> slow_inward_current_f_gate.beta_f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.f </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.g_K </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<cn> (double)0.282 </cn>
+			<apply><root/>
+			 <degree><ci type='integer'> 2 </ci></degree>
+			 <apply><divide/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.Ko </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)5.4 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.E_K </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><divide/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> membrane.R </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.T </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.F </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><ln/>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.Ko </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> time_dependent_potassium_current.PR_NaK </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.Nao </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.Ki </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> time_dependent_potassium_current.PR_NaK </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.Nai </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.i_K </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> time_dependent_potassium_current.g_K </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.Xi </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.E_K </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current_X_gate.alpha_X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.0005 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.083 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)50 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.057 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)50 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current_X_gate.beta_X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)0.0013 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.06 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)20 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.04 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)20 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.X </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><minus/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> time_dependent_potassium_current_X_gate.alpha_X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<cn> (double)1 </cn>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> time_dependent_potassium_current_X_gate.beta_X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.X </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_dependent_potassium_current.Xi </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<piecewise>
+		   <piece>
+			<apply><divide/>
+			<apply><times/>
+		<cn> (double)2.837 </cn>
+			<apply><minus/>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.04 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)77 </cn>
+		</apply>
+		</apply>
+		</apply>
+			<cn> (double)1 </cn>
+		</apply>
+		</apply>
+			<apply><times/>
+		<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)77 </cn>
+		</apply>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.04 </cn>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)35 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><gt/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+		   <cn> (double)100 </cn>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<cn> (double)1 </cn>
+		</otherwise>
+		</piecewise>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.g_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<cn> (double)0.6047 </cn>
+			<apply><root/>
+			 <degree><ci type='integer'> 2 </ci></degree>
+			 <apply><divide/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.Ko </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)5.4 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><divide/>
+			<apply><times/>
+		<apply><selector/>
+			<ci> membrane.R </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.T </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.F </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><ln/>
+			<apply><divide/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.Ko </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.Ki </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.i_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> time_independent_potassium_current.g_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<ci> time_independent_potassium_current.K1_infinity </ci>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current_K1_gate.alpha_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<cn> (double)1.02 </cn>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.2385 </cn>
+			<apply><minus/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<cn> (double)59.215 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current_K1_gate.beta_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><times/>
+		<cn> (double)0.49124 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.08032 </cn>
+			<apply><minus/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)5.476 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<cn> (double)0.06175 </cn>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<cn> (double)594.31 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><times/>
+		<apply><minus/>
+		   <cn> (double)0.5143 </cn>
+		</apply>
+			<apply><plus/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<cn> (double)4.753 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<ci> time_independent_potassium_current.K1_infinity </ci>
+			<apply><divide/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current_K1_gate.alpha_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> time_independent_potassium_current_K1_gate.alpha_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current_K1_gate.beta_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> plateau_potassium_current.E_Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> time_independent_potassium_current.E_K1 </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> plateau_potassium_current.Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><divide/>
+			<cn> (double)1 </cn>
+			<apply><plus/>
+			<cn> (double)1 </cn>
+			<apply><exp/>
+			<apply><divide/>
+			<apply><minus/>
+			<cn> (double)7.488 </cn>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<cn> (double)5.98 </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.i_Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> plateau_potassium_current.g_Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> plateau_potassium_current.Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> plateau_potassium_current.E_Kp </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><selector/>
+			<ci> membrane.i_b </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> background_current.g_b </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> membrane.V </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> background_current.E_b </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> slow_inward_current.Cai </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> (double)1 </cn>
+		</apply>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+			<apply><selector/>
+			<ci> slow_inward_current.Cai </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><plus/>
+			<apply><times/>
+		<apply><divide/>
+			<apply><minus/>
+		   <cn> (double)0.0001 </cn>
+		</apply>
+			<cn> (double)1 </cn>
+		</apply>
+			<apply><selector/>
+			<ci> membrane.i_si </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+			<apply><times/>
+		<cn> (double)0.07 </cn>
+			<apply><minus/>
+			<cn> (double)0.0001 </cn>
+			<apply><selector/>
+			<ci> slow_inward_current.Cai </ci>
+			<ci> n </ci>
+			<ci> j </ci>
+			<ci> l </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+	</math>
+</recml>
+

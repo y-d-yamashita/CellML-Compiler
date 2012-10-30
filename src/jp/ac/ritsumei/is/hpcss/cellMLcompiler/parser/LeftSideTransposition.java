@@ -163,7 +163,7 @@ public class LeftSideTransposition {
 					if(val_position==2)transpositionType=2;
 				}
 				else{
-					System.out.println("cannot transport operator");
+					throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 				}
 				
 				//移項処理メソッドへ

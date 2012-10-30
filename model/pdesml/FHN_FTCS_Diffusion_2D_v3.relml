@@ -28,13 +28,13 @@
 	
 	<variable name="Main.D" type="constvar" />
 	
-	<morphology name="2D LV wall model" filename="csv/morphology_RMesh_4x4.csv" >
+	<morphology name="2D LV wall model" filename="csv/morphology_RMesh_50x50.csv" >
 		<geometry geometry-id="1" type="solid" dimension="2">
-			<mesh type="RECTILINEAR_GRID" dimensions="4 4 1" spacing="1 1 1" />
+			<mesh type="RECTILINEAR_GRID" dimensions="50 50 1" spacing="1 1 1" />
 		</geometry>
 	</morphology>
 	
-	<boundary-cond variablename="Main.x" filename="csv/boundary_RMesh_4x4.csv" />
+	<boundary-cond variablename="Main.x" filename="csv/boundary_RMesh_50x50.csv" />
 	<parameter-cond variablename="Main.epsilon" filename="csv/epsilonDP_RMesh_4x4.csv" />
 	<parameter-cond variablename="Main.zz" />
 	

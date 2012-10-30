@@ -1,0 +1,236 @@
+<!-- Forward Time Centered Space (FTCS) Scheme (2D)
+	Finite difference method for solving PDEs
+		It is first-order method in time, explicit in time and is conditionally stable
+-->
+
+<pdesolml>
+	<variable name="v" type="partialdiffvar" />
+	<variable name="j" type="indexvar" />
+	<variable name="l" type="indexvar" />
+	<variable name="J" type="constvar" />
+	<variable name="L" type="constvar" />
+	<variable name="deltax" type="deltavar" />
+	<variable name="deltay" type="deltavar" />
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply><selector/>
+			<ci type="vector"> v </ci>
+			<apply><minus/>
+				<ci> j </ci>
+				<cn> 1 </cn>
+			</apply>
+			<ci> l </ci>
+		</apply>
+		<piecewise>
+			<piece>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<ci> J </ci>
+					<ci> l </ci>
+				</apply>
+				<apply><eq/><ci> j </ci> <cn> 0 </cn></apply>
+			</piece>
+			<otherwise>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<apply><minus/>
+						<ci> j </ci>
+						<cn> 1 </cn>
+					</apply>
+					<ci> l </ci>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply><selector/>
+			<ci type="vector"> v </ci>
+			<apply><plus/>
+				<ci> j </ci>
+				<cn> 1 </cn>
+			</apply>
+			<ci> l </ci>
+		</apply>
+		<piecewise>
+			<piece>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<ci> 0 </ci>
+					<ci> l </ci>
+				</apply>
+				<apply><eq/><ci> j </ci> <cn> J </cn></apply>
+			</piece>
+			<otherwise>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<apply><plus/>
+						<ci> j </ci>
+						<cn> 1 </cn>
+					</apply>
+					<ci> l </ci>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply><selector/>
+			<ci type="vector"> v </ci>
+			<ci> j </ci>
+			<apply><minus/>
+				<ci> l </ci>
+				<cn> 1 </cn>
+			</apply>
+		</apply>
+		<piecewise>
+			<piece>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<ci> j </ci>
+					<ci> L </ci>
+				</apply>
+				<apply><eq/><ci> l </ci> <cn> 0 </cn></apply>
+			</piece>
+			<otherwise>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<ci> j </ci>
+					<apply><minus/>
+						<ci> l </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	<apply type="boundaryCondition">
+		<eq/>
+		<apply><selector/>
+			<ci type="vector"> v </ci>
+			<ci> j </ci>
+			<apply><plus/>
+				<ci> l </ci>
+				<cn> 1 </cn>
+			</apply>
+		</apply>
+		<piecewise>
+			<piece>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<ci> j </ci>
+					<ci> 0 </ci>
+				</apply>
+				<apply><eq/><ci> l </ci> <cn> L </cn></apply>
+			</piece>
+			<otherwise>
+				<apply><selector/>
+					<ci type="vector"> v </ci>
+					<ci> j </ci>
+					<apply><plus/>
+						<ci> l </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</otherwise>
+		</piecewise>	
+	</apply>
+	
+	<apply>
+		<eq/>
+		<apply><partialdiff/>
+			<bvar><ci> x </ci><degree><cn> 2 </cn></degree></bvar>
+			<degree><cn> 2 </cn></degree>
+			<apply>
+				<ci type="function"> v </ci>
+			</apply>
+		</apply>
+		<apply><divide/>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<apply><minus/>
+						<ci> j </ci>
+						<cn> 1 </cn>
+					</apply>
+					<ci> l </ci>
+				</apply>
+				<apply><minus/>
+					<apply><times/>
+						<cn> 2 </cn>
+						<apply><selector/>
+							<ci> v </ci>
+							<ci> j </ci>
+							<ci> l </ci>
+						</apply>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<apply><plus/>
+						<ci> j </ci>
+						<cn> 1 </cn>
+					</apply>
+					<ci> l </ci>
+				</apply>
+			</apply>
+			<apply><times/>
+				<ci> deltax </ci>
+				<ci> deltax </ci>
+			</apply>	
+		</apply>
+	</apply>
+	
+	<apply>
+		<eq/>
+		<apply><partialdiff/>
+			<bvar><ci> y </ci><degree><cn> 2 </cn></degree></bvar>
+			<degree><cn> 2 </cn></degree>
+			<apply>
+				<ci type="function"> v </ci>
+			</apply>
+		</apply>
+		<apply><divide/>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> j </ci>
+					<apply><minus/>
+						<ci> l </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><minus/>
+					<apply><times/>
+						<cn> 2 </cn>
+						<apply><selector/>
+							<ci> v </ci>
+							<ci> j </ci>
+							<ci> l </ci>
+						</apply>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> v </ci>
+					<ci> j </ci>
+					<apply><plus/>
+						<ci> l </ci>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+			<apply><times/>
+				<ci> deltay </ci>
+				<ci> deltay </ci>
+			</apply>	
+		</apply>
+	</apply>
+	</math>
+	
+</pdesolml>

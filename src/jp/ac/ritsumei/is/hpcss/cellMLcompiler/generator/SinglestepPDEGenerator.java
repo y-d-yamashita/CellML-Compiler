@@ -513,6 +513,64 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		System.out.println();
 	}
 
+	/**
+	 * TODO: just for generating mesh points
+	 * @throws MathException
+	 */
+	public void generateMeshPoints(int maxx, int maxy) 
+	throws IOException {
+		StringBuilder strMorphologyMesh = new StringBuilder();
+		for (int i=0; i<maxx; i++) {
+			for (int j=0; j<maxy; j++) {
+				strMorphologyMesh.append(Integer.toString(i) + "," + Integer.toString(j) + ",0,1\n");
+			}
+		}
+		
+		Writer output = null;
+		File strMorpFile = new File("morphology_100x100.csv");
+		output = new BufferedWriter(new FileWriter(strMorpFile));
+		output.append(strMorphologyMesh);
+		output.close();
+	}
+	
+	public void generateBoundaryPoints(int maxx, int maxy) 
+	throws IOException {
+		StringBuilder strMorphologyMesh = new StringBuilder();
+		int boundaryID = 0;
+		
+		for (int i=0; i<maxx; i++) {
+			for (int j=0; j<maxy; j++) {
+				if (i==0 && j==0) {
+					boundaryID = 5;
+				} else if(i==0 && j==(maxy-1)) {
+					boundaryID = 6;
+				} else if(i==(maxx-1) && j==0) {
+					boundaryID = 7;
+				} else if(i==(maxx-1) && j==(maxy-1)) {
+					boundaryID = 8;
+				} else if(i==0) {
+					boundaryID = 1;
+				} else if(i==(maxx-1)) {
+					boundaryID = 2;
+				} else if(j==0) {
+					boundaryID = 3;
+				} else if(j==(maxy-1)) {
+					boundaryID = 4;
+				} else {
+					boundaryID = 0;
+				}
+				
+				strMorphologyMesh.append(Integer.toString(i) + "," + Integer.toString(j) + ",0," + Integer.toString(boundaryID) +"\n");
+			}
+		}
+		
+		Writer output = null;
+		File strMorpFile = new File("boundary_100x100.csv");
+		output = new BufferedWriter(new FileWriter(strMorpFile));
+		output.append(strMorphologyMesh);
+		output.close();
+	}
+
 	/***** Main program for testing *****/
 	public static void main(String[] args) 
 	throws GraphException {
@@ -594,21 +652,20 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		int nExpressionNum = pCellMLAnalyzer.getExpressionCount();
 		System.out.println("CellML Exp count: " + nExpressionNum);
 		
-//		try {
-//		System.out.println("exp: fix this bug!!!!! " + pTecMLAnalyzer.getExpression(0).toLegalString());
-//		} catch (MathException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 		//Variables for testing the instantiation of simulation equations with time and a 2D array
 		int maxTime = 2;
+		int maxx = 50;
+		int maxy = 50;
 		long start = System.currentTimeMillis();
 		StringBuilder strRecMLMathExp = new StringBuilder();
 		try {
 			pSingleStepGenerator.discretizeCellML();
 			pSingleStepGenerator.generateAllInstanceEquations(maxTime);
 			strRecMLMathExp = pSingleStepGenerator.getM_strMathMLExp();
+			
+			pSingleStepGenerator.generateMeshPoints(maxx, maxy);
+//			pSingleStepGenerator.generateBoundaryPoints(maxx, maxy);
 			System.out.println("[output]------------------------------------");
 			
 //			pSingleStepGenerator.createSimpleRecMLString(maxDimensions);
@@ -626,13 +683,16 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		} catch (TranslateException e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
 		}
 		
 		/* Generate the SimpleRecML file */
 		SimpleRecMLWriter pSimpleRecMLWriter = new SimpleRecMLWriter();
 		try {
 			pSimpleRecMLWriter.createSimpleRecMLString(pRelMLAnalyzer, strRecMLMathExp);
-			pSimpleRecMLWriter.writeSimpleRecMLFile("FHN_FTCS_2x4x4.recml");
+			pSimpleRecMLWriter.writeSimpleRecMLFile("FHN_FTCS_2x50x50.recml");
 //			pSimpleRecMLWriter.printContents();
 		} catch (MathException e1) {
 			// TODO 自動生成された catch ブロック

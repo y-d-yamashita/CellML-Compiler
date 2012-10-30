@@ -1,0 +1,34 @@
+<!-- Laplacian operator for PDE equations -->
+
+<optrml>
+	<variable name="v" type="partialdiffvar" />
+	<variable name="x" type="indexvar" />
+	<variable name="y" type="indexvar" />
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		<apply dimension="2D">
+			<eq/>
+			<apply><laplacian/>
+				<ci> v </ci>
+			</apply>
+			<apply><plus/>	
+				<apply><partialdiff/>
+					<bvar><ci> x </ci><degree><cn> 2 </cn></degree></bvar>
+					<degree><cn> 2 </cn></degree>
+					<apply>
+						<ci type="function"> v </ci>
+					</apply>
+				</apply>
+				<apply><partialdiff/>
+					<bvar><ci> y </ci><degree><cn> 2 </cn></degree></bvar>
+					<degree><cn> 2 </cn></degree>
+					<apply>
+						<ci type="function"> v </ci>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+		
+	</math>
+
+</optrml>

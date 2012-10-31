@@ -7,6 +7,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.IndexReplacingVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.MathFactorStackingVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
@@ -490,10 +492,93 @@ public class MathExpression {
 	}
 
 	/**
-	 * ツリーの横断
+	 * Vsitorパターンでのtraverse
 	 * @param v
 	 */
 	public void traverse(Visitor v){
 		m_pRootFactor.traverse(v);
+	}
+
+	public Integer compareFocusOnVariableIndex(MathExpression that,int indexPos) throws MathException{
+		//indexPos 0:time, 1:x, 2:y, 3:z
+
+		MathFactorStackingVisitor expr1_StackVisitor = new MathFactorStackingVisitor();
+		MathFactorStackingVisitor expr2_StackVisitor = new MathFactorStackingVisitor();
+		
+		this.traverse(expr1_StackVisitor);
+		that.traverse(expr2_StackVisitor);
+		
+		
+			
+		return compareMathFactorStack(expr1_StackVisitor.getStack(),expr2_StackVisitor.getStack(),indexPos);
+		
+	}
+	/**
+	 * 
+	 * @param stack1
+	 * @param stack2
+	 * @param varName
+	 * @param indexPos
+	 * @return 同じ式ならばindexPosのIndexの差を返す，異なればnull
+	 * @throws MathException 
+	 */
+	private Integer compareMathFactorStack(Stack<MathFactor> stack1,
+			Stack<MathFactor> stack2, int indexPos) throws MathException {
+		Integer indexDiff=null;
+		
+		//stackサイズがことなれば違う式の形
+		if(stack1.size()!=stack2.size()){
+			return null;
+		}
+		
+		for(MathFactor factor1:stack1){
+			MathFactor factor2=stack2.get(stack1.indexOf(factor1));
+			
+			if(factor1.getClass()!=factor2.getClass()){
+				return null;
+			}
+			if((factor1 instanceof Math_ci )&&(factor2 instanceof Math_ci)){
+				Math_ci ci1 = (Math_ci) factor1;
+				Math_ci ci2 = (Math_ci) factor2;
+				if(!ci1.getM_strPresentText().equals(ci2.getM_strPresentText())){
+					return null;
+				}else{ //変数名が同じ
+					//Indexを持っているなら(定数は持っていない場合もある)
+					if((ci1.getM_vecIndexListFactor().size()>indexPos) &&
+							(ci2.getM_vecIndexListFactor().size()>indexPos)){
+					
+					//	System.out.println(this.getClass()+":"+ci1.getM_vecIndexListFactor().get(indexPos).toLegalString()+" "+ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
+						
+					Integer index1 = decode(ci1.getM_vecIndexListFactor().get(indexPos).toLegalString());
+					Integer index2 = decode(ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
+					if(indexDiff==null){	//一回目のMath_ci
+						indexDiff= index2-index1;
+					}else{					//二回目以降
+						if(!indexDiff.equals(index2-index1)){//indexの差分が１回目と異なるなら別の式の形
+							return null;
+						}
+					}
+					}
+				}
+			}
+			
+		}
+		return indexDiff;
+	}
+	
+	/**
+	 * Translate String to Integer  
+	 * @param str
+	 * @return Translated Integer
+	 */
+	private Integer decode(String str){
+		return Integer.decode(str.replace(" ","").replace("(","").replace(")", ""));
+	}
+	
+	
+	public void replaceIndex(MathFactor replaceIndexFactor, int baseIndex,
+			int indexPosition) {
+		IndexReplacingVisitor indexReplaceVsitor = new IndexReplacingVisitor(replaceIndexFactor,baseIndex,indexPosition);
+		this.traverse(indexReplaceVsitor);
 	}
 }

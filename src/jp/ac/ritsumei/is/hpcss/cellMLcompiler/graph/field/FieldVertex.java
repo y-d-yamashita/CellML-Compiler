@@ -1,5 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.org.apache.bcel.internal.classfile.SourceFile;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
@@ -19,7 +22,7 @@ public class FieldVertex extends Vertex {
 	private Integer xAxisIndex;
 	private Integer yAxisIndex;
 	private Integer zAxisIndex;
-	
+	private List<MathExpression> expressionList;
 	
 	/** Flag to identify source vertex for maximum matching*/
 	private boolean sourceFlag;
@@ -58,6 +61,8 @@ public class FieldVertex extends Vertex {
 		sourceFlag=false;
 		sinkFlag=false;
 		visited= false;
+		this.expressionList=new ArrayList<MathExpression>();
+
 	}
 
 	
@@ -289,6 +294,15 @@ public class FieldVertex extends Vertex {
 	}
 	public void setId(String id){
 		this.id=decode(id);
+	}
+	public List<MathExpression> getExpressionList() {
+		return expressionList;
+	}
+	public void setExpressionList(List<MathExpression> expressionList) {
+		this.expressionList = expressionList;
+	}
+	public void addExpression(MathExpression expression){
+		this.expressionList.add(expression);
 	}
 }
 

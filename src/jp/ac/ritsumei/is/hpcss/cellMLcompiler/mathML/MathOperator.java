@@ -607,4 +607,7 @@ public abstract class MathOperator extends MathFactor {
 			f.traverse(v);
 	}
 
+	public Vector<MathFactor> getFactorVector(){
+		return this.m_vecFactor;
+	}
 }

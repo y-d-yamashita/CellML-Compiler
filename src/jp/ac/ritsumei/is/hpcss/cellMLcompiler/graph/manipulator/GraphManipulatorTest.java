@@ -1,20 +1,19 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 
 import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
-
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldGraph;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldLoopGroupList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldVertexGroupList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.MathExpressionLoop;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
@@ -25,7 +24,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.XMLHandler;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
@@ -34,179 +33,128 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Triple;
 
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+/**
+ * Test for GrapphManipulator Class
+ * @author y-yamashita
+ *
+ */
 public class GraphManipulatorTest {
 
-GraphManipulator gm= new GraphManipulator();
-RecMLAnalyzer ra = new RecMLAnalyzer();
-/****
+/* Shared */
+static GraphManipulator graphManipulator= new GraphManipulator();
+static RecMLAnalyzer recmlAnalyzer = null;
 
-	@Test
-	public void testCretateDependencyGraph() {
-		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
-		PairList<RecMLVertex,RecMLVertex> pairList=null;
-		RecMLAnalyzer recmlAnalyzer = parse();
-		try {
-			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
-			graph = gm.createBipartiteGraph(contener);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(graph);
-		try {
-			pairList = gm.maximumMatching(graph);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Graph<RecMLVertex, RecMLEdge> dg = null;
-		try {
-		dg=gm.cretateDependencyGraph(pairList, graph);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Dependency Graph------------");
-		System.out.println(dg);
-	}
+/* Result of each test */
+static BipartiteGraph<RecMLVertex,RecMLEdge> resultTestCreateBipartiteGraph=null;
+static DirectedGraph<RecMLVertex,RecMLEdge> resultTestCreateDependencyGraph=null;
+static PairList<RecMLVertex,RecMLVertex> resultTestMaximumMatching=null;
+static List2D<RecMLVertex> resultTestTrajan=null;
+static FieldGraph resultTestCreateFieldGraph=null;
+static FieldVertexGroupList resutlTestSeparateLoop=null;
+static MathExpressionLoop resultTestCreateLoop=null;
 
-	@Test
-	public void testCreateBipartieGraph() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testMaximumMatching() {
-		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
-		PairList<RecMLVertex,RecMLVertex> pairList=null;
-		RecMLAnalyzer recmlAnalyzer = parse();
-		try {
-			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
-			graph = gm.createBipartiteGraph(contener);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(graph);
-		try {
-			pairList = gm.maximumMatching(graph);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Matching------------------");
-		for(Pair<RecMLVertex, RecMLVertex> p:pairList){
-			System.out.println(p.getFirst()+","+p.getSecond());
-		}
-}
-****/
-	@Test
-	public void testTarjan() {
-		BipartiteGraph<RecMLVertex, RecMLEdge> graph = null;
-		PairList<RecMLVertex,RecMLVertex> pairList=null;
-		RecMLAnalyzer recmlAnalyzer = parse();
-		try {
-			RecMLEquationAndVariableContener contener = new RecMLEquationAndVariableContener(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
-			graph = gm.createBipartiteGraph(contener);
-			System.out.println("BIPARTITE GRAPH>>>>>>>>>>>>>>>>>>>");
-			System.out.println(gm.toRecMLXMLString(graph,null));
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(graph);
-		try {
-			pairList = gm.maximumMatching(graph);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		DirectedGraph<RecMLVertex, RecMLEdge> dg = null;
-		try {
-		dg=gm.cretateDependencyGraph(pairList, graph);
-		} catch (GraphException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		List2D<RecMLVertex> t = gm.tarjan(dg);
-		System.out.println("Tarjan-----------------------");
-		System.out.println(t.toString());
-
-RecMLVariableTable table = recmlAnalyzer.getRecMLVariableTable();		
-for(RecMLVariableReference v:table.getVariableReferences()){
-	System.out.print(v.getMathCI().getM_strPresentText()+":");
-	for(MathFactor f:v.getMathCI().getM_vecIndexListFactor()){
-		try {
-			System.out.print(f.toLegalString()+",");
-		} catch (MathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	System.out.println();
-}
+/* Select recml file*/
+String xml=
+//"./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml"
+//"./model/recml/RecMLSample/ArbitraryModel_1D_simple.recml"
+"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml"
+//"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
+;
 
 
-System.out.println(gm.toRecMLXMLString(dg, t));
+@Test
+public void testCreateBipartieGraph() {
+	/*Parse RecML*/
+	recmlAnalyzer = parse(xml);
 
-/*
-List<Triple<String,String,String>> indexesList = new ArrayList<Triple<String,String,String>>();
-	List<RecMLVertex> vl = new ArrayList<RecMLVertex>(dg.getVertexes());
-	for(RecMLVertex v:vl){
-		try {
-			Triple<String,String,String> indexes = new Triple<String,String,String>();
-			Vector<MathFactor> indexesListInVarRef = table.getVariableReference(vl.indexOf(v)).getMathCI().getM_vecIndexListFactor();	
-			if(indexesListInVarRef.size()>0){	
-				indexes.setFirst(indexesListInVarRef.get(0).toLegalString());
-			}
-			if(indexesListInVarRef.size()>1){	
-				indexes.setSecond(indexesListInVarRef.get(1).toLegalString());
-			}
 
-			if(indexesListInVarRef.size()>2){	
-				indexes.setThird(indexesListInVarRef.get(2).toLegalString());
-			}
+	/*
+	 * Create a variable container.
+	 * The container is necessary to create 
+	 * a bipartite graph between variables and equations.
+	 */
+	RecMLEquationAndVariableContainer container = 
+			new RecMLEquationAndVariableContainer(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
 
-			indexesList.add(indexes);
-
-		} catch (TableException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (MathException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
-		
-		
-		try {
-			System.out.print("V:"+v.toString()+"  ");
-			for(MathFactor f:table.getVariableReference(vl.indexOf(v)).getMathCI().getM_vecIndexListFactor()){
-				try {
-					System.out.print(f.toLegalString()+" ");
-				} catch (MathException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
-			}
-		} catch (TableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		sb.append(v.toXMLString(vl.indexOf(v), indent));
-System.out.println();
+	/* Create a bipartite graph */
+	try {		
+		resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);
+	} catch (GraphException e) {
+		e.printStackTrace();
 	}
 	
-	for(Triple<String,String,String> indexes:indexesList)
-		System.out.println(indexes);
-		*/
-FieldGraph fg=null;
+	/* Print result*/
+	System.out.println("<<testCreateBipartieGraph>> -----------------------------");
+	System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
+
+	assertNotNull(resultTestCreateBipartiteGraph);
+
+}
+
+
+
+@Test
+public void testMaximumMatching() {
+	/*Maximum matching*/
 	try {
-		 fg=gm.cretateFieldDependencyGraph(dg, recmlAnalyzer.getRecMLVariableTable());
+		resultTestMaximumMatching = 
+				graphManipulator.maximumMatching(resultTestCreateBipartiteGraph);
+	} catch (GraphException e) {
+		e.printStackTrace();
+	}
+	assertNotNull(resultTestMaximumMatching);
+	
+	/* Print result*/
+	System.out.println("<<testMaximumMatchin>> -----------------------------");
+	for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
+		System.out.println(p.getFirst()+","+p.getSecond());
+	}
+}
+
+
+
+
+@Test
+	public void testCretateDependencyGraph() {
+		/* Create a dependency graph from a maximum matching 
+		 * result and a bipartite graph */
+		try {
+			resultTestCreateDependencyGraph =
+					graphManipulator.cretateDependencyGraph(resultTestMaximumMatching
+												           ,resultTestCreateBipartiteGraph);
+		} catch (GraphException e) {
+			e.printStackTrace();
+		}
+		
+		assertNotNull(resultTestCreateDependencyGraph);
+		
+		/*Print result*/
+		System.out.println("<<testCretateDependencyGraph>>------------");
+		System.out.println(resultTestCreateDependencyGraph);
+	}
+
+
+	@Test
+	public void testTarjan() {
+		resultTestTrajan = graphManipulator.tarjan(resultTestCreateDependencyGraph);
+		System.out.println("<<testCretateDependencyGraph>>------------");
+		
+		System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateDependencyGraph, resultTestTrajan));
+	}
+	
+	
+	@Test
+	public void testCreateFieldDependencyGraph() {
+	try {
+		 resultTestCreateFieldGraph = 
+				 graphManipulator.cretateFieldDependencyGraph(
+						 resultTestCreateDependencyGraph,
+						 recmlAnalyzer);
 	} catch (TableException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -217,76 +165,115 @@ FieldGraph fg=null;
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	assertNotNull(resultTestCreateFieldGraph);
 	
 	System.out.println("<<Field Graph>>------------------------------");
-	System.out.println(gm.toRecMLXMLString(fg));
+	System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateFieldGraph));
 	
-	FieldLoopGroupList fgl=	gm.generateLoopGroup(fg);
-
-	System.out.println("<<Loop>>------------------------------");
-
-	System.out.println(fgl.toString());
+	MathExpression expr0=null;
+	for(FieldVertex v:resultTestCreateFieldGraph.getVertexes()){
+		System.out.println("Field vertex["+v.getId()+"]:");
+		if(expr0==null){
+			expr0=v.getExpressionList().get(0);
+		}
+		for(MathExpression expr:v.getExpressionList()){
+			try {
+				System.out.println("	"+expr.toLegalString());
+				System.out.println("	"+expr0.toLegalString());
+				System.out.println("compare expr[0]:"+expr0.compareFocusOnVariableIndex(expr, 1)+"\n");
+			} catch (MathException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
-
-private static RecMLAnalyzer parse(){
-	RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
 	
-	String xml = "";
-//	xml = "./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml";
-//	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple.recml";
-	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml";
-	//xml = "./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml";
-	//---------------------------------------------------
-	//XMLパーサ初期化
-	//---------------------------------------------------
-	// create parser
-	XMLReader parser = null;
-	try {
-		parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
-		parser.setProperty("http://apache.org/xml/properties/input-buffer-size",
-				new Integer(16 * 0x1000));
-	} catch (Exception e) {
-		System.err.println("error: Unable to instantiate parser ("
-				+ "org.apache.xerces.parsers.SAXParser" + ")");
-		System.exit(1);
-	}
+	@Test
+	public void testSeparateLoop(){
+		resutlTestSeparateLoop =	graphManipulator.separateLoopGroup(resultTestCreateFieldGraph);
+		assertNotNull(resutlTestSeparateLoop);
+		
+		System.out.println("<<testSeparateLoop>>------------------------------");
+		System.out.println(resutlTestSeparateLoop.toString());
 
-	XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
-	parser.setContentHandler(handler);
-	try {
-		parser.parse(xml);
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (SAXException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
 	
 	
+	@Test
+	public void testCreateLoop(){
+		try {
+			resultTestCreateLoop = graphManipulator.createLoop(resutlTestSeparateLoop);
+		} catch (MathException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("<<testCreateLoop>>------------------------------");
+		System.out.println(resultTestCreateLoop.toString());
 
-//	/*selector内cnのInteger*/
-	pRecMLAnalyzer.changeAllSelectorInteger();
-	
-	/*selector削除*/
-	pRecMLAnalyzer.removeAllSelector();
-	
-	
-	pRecMLAnalyzer.createVariableTable();
-	pRecMLAnalyzer.setLeftsideRightsideVariable();
-	pRecMLAnalyzer.setRefVariableType();
-	/** 内容確認 ***/
-
-	try {
-		pRecMLAnalyzer.printContents();
-	} catch (MathException e2) {
-		// TODO Auto-generated catch block
-		e2.printStackTrace();
 	}
+
 	
-	return pRecMLAnalyzer;
-}
-	BipartiteGraph<RecMLVertex, FieldEdge>createBipartieGraph() throws GraphException{
+	/* RecML parse method (Not test)*/
+	private static RecMLAnalyzer parse(String xml){
+		RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
+		
+		//---------------------------------------------------
+		//XMLパーサ初期化
+		//---------------------------------------------------
+		// create parser
+		XMLReader parser = null;
+		try {
+			parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+			parser.setProperty("http://apache.org/xml/properties/input-buffer-size",
+					new Integer(16 * 0x1000));
+		} catch (Exception e) {
+			System.err.println("error: Unable to instantiate parser ("
+					+ "org.apache.xerces.parsers.SAXParser" + ")");
+			System.exit(1);
+		}
+
+		XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
+		parser.setContentHandler(handler);
+		try {
+			parser.parse(xml);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		/*selector内cnのInteger*/
+		pRecMLAnalyzer.changeAllSelectorInteger();
+		
+		/*selector削除*/
+		pRecMLAnalyzer.removeAllSelector();
+		
+		/*Create variable table from variable information in RecmlAnalyzer*/
+		pRecMLAnalyzer.createVariableTable();
+		
+		/*Attach information about assignment and reference equations*/
+		pRecMLAnalyzer.setLeftsideRightsideVariable();
+
+		/*Set variable type (ex. recvar, constvara)*/
+		pRecMLAnalyzer.setRefVariableType();
+
+		/** 内容確認 ***/
+		try {
+			pRecMLAnalyzer.printContents();
+		} catch (MathException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		return pRecMLAnalyzer;
+	}
+
+	/* Stub method to create bibiatie graph (Not test)*/
+	private static BipartiteGraph<RecMLVertex, FieldEdge>stubCreateBipartieGraph() throws GraphException{
+		
+		//Create sample bipartite graph
 		BipartiteGraph<RecMLVertex, FieldEdge> graph = new BipartiteGraph<RecMLVertex, FieldEdge>();
 		
 		RecMLVertex var1 = new RecMLVertex();
@@ -318,4 +305,6 @@ private static RecMLAnalyzer parse(){
 		graph.addEdge(new FieldEdge(), var3, expr1);
 		return graph;
 	}
+	
+	
 }

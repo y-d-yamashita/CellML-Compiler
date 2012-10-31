@@ -15,7 +15,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
  * @author 
  *
  */
-public class RecMLEquationAndVariableContener {
+public class RecMLEquationAndVariableContainer {
 
 	private RecMLVariableTable recMLVariableTable;
 	private RecMLAnalyzer recMLAnalyzer;
@@ -24,7 +24,7 @@ public class RecMLEquationAndVariableContener {
 	private List<RecMLVariableReference> varRefList;
 
 	
-	public RecMLEquationAndVariableContener(RecMLAnalyzer analyzer,RecMLVariableTable table){
+	public RecMLEquationAndVariableContainer(RecMLAnalyzer analyzer,RecMLVariableTable table){
 		recMLVariableTable=table;
 		recMLAnalyzer=analyzer;
 		setEquationIDs();

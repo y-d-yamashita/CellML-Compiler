@@ -30,7 +30,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
@@ -87,8 +87,9 @@ public class GraphCreator {
 	 */
 	public FieldGraph cretateFieldDependencyGraph(
 			DirectedGraph<RecMLVertex,RecMLEdge> oldGraph,
-			RecMLVariableTable table
-			) throws GraphException, TableException, MathException{
+			RecMLVariableTable table,
+			RecMLAnalyzer recmlAnalyer
+			)throws GraphException, TableException, MathException{
 		
 		FieldGraph fieldDependencyGraph = new FieldGraph();
 	
@@ -97,20 +98,26 @@ public class GraphCreator {
 		//Add vertex
 		List<String> indexStringList= new ArrayList<String>();
 		StringBuilder vertexMapKeyBuilder = new StringBuilder();
+		MathExpression expression = null;
+		FieldVertex v=null;
 		for(RecMLVertex rv:oldGraph.getVertexes()){
-			System.out.println(rv);
+			expression = recmlAnalyer.getExpression(rv.getExpressionID());
+			
 			for(MathFactor f:table.getVariableReference(rv.getVariableID()).getMathCI().getM_vecIndexListFactor()){
 				indexStringList.add(f.toLegalString());
 				vertexMapKeyBuilder.append(f.toLegalString());
 			}
-			if(!vertexMap.containsKey(vertexMapKeyBuilder.toString())){
-				FieldVertex v = new FieldVertex();
+			if(vertexMap.containsKey(vertexMapKeyBuilder.toString())){
+				v= vertexMap.get(vertexMapKeyBuilder.toString());
+			}else{
+				v = new FieldVertex();
 				for(int i=0;i<indexStringList.size();i++){
 					v.setAxisIndex(indexStringList.get(i), i);
 				}
 				fieldDependencyGraph.addVertex(v);
 				vertexMap.put(vertexMapKeyBuilder.toString(),v);
 			}
+			v.addExpression(expression);
 			indexStringList.clear();
 			vertexMapKeyBuilder.setLength(0);
 		}
@@ -123,6 +130,7 @@ public class GraphCreator {
 		FieldVertex sfv = null;
 		FieldVertex dfv = null;
 		Set<String> addedEdge = new TreeSet<String>();
+		
 		for(RecMLEdge re:oldGraph.getEdges()){
 			srv = oldGraph.getSourceVertex(re);
 			drv = oldGraph.getDestVertex(re);
@@ -163,7 +171,7 @@ public class GraphCreator {
 	 * @throws GraphException
 	 * @attention No at all test
 	 */
-	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph(RecMLEquationAndVariableContener contener) throws GraphException{
+	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph(RecMLEquationAndVariableContainer contener) throws GraphException{
 		BipartiteGraph<RecMLVertex,RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
 		
 		//Add src side vertexes
@@ -210,7 +218,7 @@ public class GraphCreator {
 	 */
 	private void addRecMLEdges(
 			Graph<RecMLVertex, RecMLEdge> graph,
-			RecMLEquationAndVariableContener contener
+			RecMLEquationAndVariableContainer contener
 			) throws GraphException {
 		for(Integer varID:contener.getVariableIDs())
 			for(Integer exprID:contener.getEqautionIDsOfVariable(varID)){
@@ -257,7 +265,7 @@ public class GraphCreator {
 	 */
 	private void addRecMLExpressionVertex(
 			BipartiteGraph<RecMLVertex, RecMLEdge> graph,
-			RecMLEquationAndVariableContener contener
+			RecMLEquationAndVariableContainer contener
 			)throws GraphException {
 		for(Integer exprID: contener.getEquationIDs()){
 			RecMLVertex v = new RecMLVertex();
@@ -275,7 +283,7 @@ public class GraphCreator {
 	 */
 	private void addRecMLVariableVertex(
 			BipartiteGraph<RecMLVertex, RecMLEdge> graph, 
-			RecMLEquationAndVariableContener contener
+			RecMLEquationAndVariableContainer contener
 			) throws GraphException {
 		/* Add new vertexes of recvar*/
 		for(Integer varID: contener.getVariableIDs()){

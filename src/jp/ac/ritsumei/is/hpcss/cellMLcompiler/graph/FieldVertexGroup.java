@@ -2,24 +2,49 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
 
-public class FieldLoopGroup {
+
+/**
+ * Each FieldLoopGroup elements are having possibility of loop optimization
+ * @author y-yamashita
+ *
+ */
+public class FieldVertexGroup {
+	
+	/** Element of loop optimization */
 	private List<FieldVertex> group;
-	public FieldLoopGroup(){
+	
+	/**
+	 * Constructor
+	 */
+	public FieldVertexGroup(){
 		group=new ArrayList<FieldVertex>();
 	}
 	
+	/**
+	 * Add vertex to group
+	 * @param v
+	 */
 	public void addVertex(FieldVertex v){
 		group.add(v);
 	}
+	
+	/**
+	 * Add all vertexes to group
+	 * @param list
+	 */
 	public void addVertexList(List<FieldVertex> list){
 		if(list!=null){
 			group.addAll(list);
 		}
 	}
 	
+	
+	/**
+	 * Get loop group
+	 * @return loop group
+	 */
 	public List<FieldVertex> getVertexGroup(){
 		return group;
 	}

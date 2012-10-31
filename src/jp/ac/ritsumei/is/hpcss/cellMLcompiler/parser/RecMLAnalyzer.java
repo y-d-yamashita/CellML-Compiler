@@ -34,7 +34,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.SetLeftSideRightSid
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLVarType;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 
 
@@ -633,7 +633,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		
 		System.out.println(recMLVariableTable.toString());
 		
-		System.out.println(new RecMLEquationAndVariableContener(this,recMLVariableTable).toString());
+		System.out.println(new RecMLEquationAndVariableContainer(this,recMLVariableTable).toString());
 		//root.printString(" ");
 		//for(String[] strArray:getAttribute())			
 		//System.out.println(strArray[0]+strArray[1]+strArray[2]+strArray[3]+strArray[4]);
@@ -642,11 +642,13 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		/*数式出力*/
 		System.out.println("<Print expressions>-------------------------");
 		if(root!=null){
+			System.out.println("(Using PrintExpression of RecMLAnalyzerClass)");
 			root.printString("   ");
 			printExpressions();
-		}else
+		}else{
+			System.out.println("(Using PrintExpression of Super Class)");
 			super.printExpressions();
-		
+		}
 		
 		/*改行*/
 		System.out.println();
@@ -663,6 +665,11 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		/*数式出力*/
 		return super.getExpression(index);
 	}
+	public MathExpression getRecMLExpression(int index){
+		//MathExpression vector is empty when using RecMLAnalyzer
+		return this.m_vecExpression.get(index);
+	}
+	
 	
 	public static void main(String[] args) {
 		RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();

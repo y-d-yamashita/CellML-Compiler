@@ -97,10 +97,10 @@ public class FieldGraph extends DirectedGraph<FieldVertex,FieldEdge> {
 
 	private void updateMinMaxXAxisIndexes() {
 		if(minXAxisIndex==null){
-			minXAxisIndex = new HashMap<Integer, Integer>();
+			minXAxisIndex = new TreeMap<Integer, Integer>();
 		}
 		if(maxXAxisIndex==null){
-			maxXAxisIndex=new HashMap<Integer, Integer>();
+			maxXAxisIndex=new TreeMap<Integer, Integer>();
 		}
 		for(Integer timeIndex:indexMap.getTimeIndexes()){
 			minXAxisIndex.put(timeIndex, Collections.min(indexMap.getXAxisIndexes(timeIndex)));

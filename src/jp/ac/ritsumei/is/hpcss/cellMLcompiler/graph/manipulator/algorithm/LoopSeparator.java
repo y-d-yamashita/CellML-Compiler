@@ -9,24 +9,24 @@ import java.util.Set;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldGraph;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldLoopGroup;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldLoopGroupList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldVertexGroup;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldVertexGroupList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
 
 public class LoopSeparator {
 
-	public FieldLoopGroupList separate(FieldGraph fg) {
-		FieldLoopGroupList flg = new FieldLoopGroupList();
-		List<FieldLoopGroup> timeLoop = separateTimeLoop(fg);
+	public FieldVertexGroupList separate(FieldGraph fg) {
+		FieldVertexGroupList flg = new FieldVertexGroupList();
+		List<FieldVertexGroup> timeLoop = separateTimeLoop(fg);
 		flg.setTimeLoopGroupList(timeLoop);
 		flg.setXAxisLoopGroupList(separateXAxisLoop(fg, timeLoop));
 		return flg;
 	}
 
-	private List<FieldLoopGroup> separateTimeLoop(FieldGraph fg) {
+	private List<FieldVertexGroup> separateTimeLoop(FieldGraph fg) {
 
-		List<FieldLoopGroup> list = new ArrayList<FieldLoopGroup>();
+		List<FieldVertexGroup> list = new ArrayList<FieldVertexGroup>();
 		
 		int maxIndex = fg.getMaxTimeIndex();
 		int minIndex = fg.getMinTimeIndex();
@@ -44,7 +44,7 @@ public class LoopSeparator {
 			}
 			
 			System.out.println("minIndeIndex------------------------------"+minIndependentIndex);
-			FieldLoopGroup group = new FieldLoopGroup();
+			FieldVertexGroup group = new FieldVertexGroup();
 			for(int i=curIndex;i>= minIndependentIndex;i--){
 				group.addVertexList(fg.getFieldVertexes(i));
 			}
@@ -59,17 +59,17 @@ public class LoopSeparator {
 	
 	
 	
-	private List<List<FieldLoopGroup>> separateXAxisLoop(FieldGraph fg,List<FieldLoopGroup> timeLoop) {
+	private List<List<FieldVertexGroup>> separateXAxisLoop(FieldGraph fg,List<FieldVertexGroup> timeLoop) {
 
-		List<List<FieldLoopGroup>> xLoopList = new ArrayList<List<FieldLoopGroup>>();
+		List<List<FieldVertexGroup>> xLoopList = new ArrayList<List<FieldVertexGroup>>();
 		
-		for(FieldLoopGroup group:timeLoop){
+		for(FieldVertexGroup group:timeLoop){
 			
 			int timeIndex = group.getVertex(0).getTimeIndex();
 			int maxIndex = fg.getMaxXAxisIndex(timeIndex);
 			int minIndex = fg.getMinXAxisIndex(timeIndex);
 		
-			List<FieldLoopGroup> list= new ArrayList<FieldLoopGroup>();		
+			List<FieldVertexGroup> list= new ArrayList<FieldVertexGroup>();		
 		for(int curIndex=maxIndex;curIndex>=minIndex;curIndex--){
 			int minIndependentIndex=curIndex;
 			
@@ -83,7 +83,7 @@ public class LoopSeparator {
 			}
 			
 			System.out.println("minIndeIndex------------------------------"+minIndependentIndex);
-			FieldLoopGroup newGroup = new FieldLoopGroup();
+			FieldVertexGroup newGroup = new FieldVertexGroup();
 			for(int i=curIndex;i>= minIndependentIndex;i--){
 				newGroup.addVertexList(fg.getFieldVertexes(timeIndex,i));
 			}

@@ -234,8 +234,8 @@ private static RecMLAnalyzer parse(){
 	String xml = "";
 //	xml = "./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml";
 //	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple.recml";
-	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml";
-	//xml = "./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml";
+//	xml = "./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml";
+	xml = "./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml";
 	//---------------------------------------------------
 	//XMLパーサ初期化
 	//---------------------------------------------------

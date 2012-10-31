@@ -224,6 +224,8 @@ private static RecMLAnalyzer parse(){
 	
 	String xml = "";
 	xml = "./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3.recml";
+	//xml =  "./model/sample/graph.xml";
+
 
 	//---------------------------------------------------
 	//XMLパーサ初期化

@@ -10,7 +10,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_eq;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 
-public class SetAssignRefRecMLVariableTypeVisitor implements Visitor {
+public class SetLeftSideRightSideVariableVisitor implements Visitor {
 
 	RecMLVariableTable table;
 	Mode mode;
@@ -18,7 +18,7 @@ public class SetAssignRefRecMLVariableTypeVisitor implements Visitor {
 	MathFactor leftSide;
 	MathFactor rightSide;
 	
-	public SetAssignRefRecMLVariableTypeVisitor(RecMLVariableTable table) {
+	public SetLeftSideRightSideVariableVisitor(RecMLVariableTable table) {
 		this.table = table;
 		mode=Mode.None;
 		exprID=0;
@@ -29,7 +29,9 @@ public class SetAssignRefRecMLVariableTypeVisitor implements Visitor {
 		None;
 	}
 	@Override
-	public void visit(MathFactor factor) {			
+	public void visit(MathFactor factor) {		
+		
+			
 		if(factor instanceof Math_eq){
 			Math_eq eq=(Math_eq) factor;
 			leftSide=eq.getLeftExpression();
@@ -38,8 +40,11 @@ public class SetAssignRefRecMLVariableTypeVisitor implements Visitor {
 			mode=Mode.Assign;
 		}else if(factor==rightSide){
 			mode=Mode.Refer;
-		}else if(factor instanceof Math_ci){
+		}
+		if(factor instanceof Math_ci){
 			RecMLVariableReference variable = null;
+		
+			
 			try {
 				variable=table.find((Math_ci) factor);
 			} catch (TableException e) {
@@ -49,6 +54,8 @@ public class SetAssignRefRecMLVariableTypeVisitor implements Visitor {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			
 				switch(mode){
 				case Refer:
 					variable.addRightHandSideExpression(exprID);

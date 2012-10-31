@@ -8,6 +8,9 @@ import java.util.List;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLVarType;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.GlobalLogger;
 
 /**
  * 変数テーブルクラス.
@@ -186,6 +189,60 @@ public class RecMLVariableTable extends Table<RecMLVariableReference> {
 		sb.setLength(sb.length()-2);
 		sb.append("\n------------------------------------------\n\n");
 		return sb.toString();
+	}
+
+	public void setRefVariableType(RecMLAnalyzer recMLAnalyzer) {
+		boolean continueFlag;
+		for(RecMLVariableReference ref:this.m_mapElements.values()){
+			continueFlag=false;
+			String refVarName=ref.strVariableName;
+			String simpleVarName;
+		if(refVarName.indexOf('[')>0){
+			simpleVarName =refVarName.substring(0, refVarName.indexOf('['));
+		}else{
+			simpleVarName=refVarName;
+		}
+			for(Math_ci ci:recMLAnalyzer.getM_HashMapRecurVar().keySet()){
+				if(ci.getM_strPresentText().equals(simpleVarName)){
+					ref.setRecMLVarType(eRecMLVarType.CVAR_TYPE_RECURVAR);
+					continueFlag=true;
+					break;
+				}
+			}
+			if(continueFlag)continue;
+
+			
+			for(Math_ci ci:recMLAnalyzer.getM_HashMapConstVar().keySet()){
+				if(ci.getM_strPresentText().equals(simpleVarName)){
+					ref.setRecMLVarType(eRecMLVarType.CVAR_TYPE_CONSTVAR);
+					continueFlag=true;
+					break;
+				}
+			}
+			if(continueFlag)continue;
+
+			
+			for(Math_ci ci:recMLAnalyzer.getM_HashMapArithVar().keySet()){
+				if(ci.getM_strPresentText().equals(simpleVarName)){
+					ref.setRecMLVarType(eRecMLVarType.CVAR_TYPE_ARITHVAR);
+					continueFlag=true;
+					break;
+				}
+			}
+			if(continueFlag)continue;
+
+
+			for(Math_ci ci:recMLAnalyzer.getM_HashMapOutputVar().keySet()){
+				if(ci.getM_strPresentText().equals(simpleVarName)){
+					ref.setRecMLVarType(eRecMLVarType.CVAR_TYPE_OUTPUT);
+					continueFlag=true;
+					break;
+				}
+			}
+			if(continueFlag)continue;
+
+			
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
@@ -14,7 +15,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
  * @author 
  *
  */
-public class RecMLEquationAndVariableContener {
+public class RecMLEquationAndVariableContainer {
 
 	private RecMLVariableTable recMLVariableTable;
 	private RecMLAnalyzer recMLAnalyzer;
@@ -23,7 +24,7 @@ public class RecMLEquationAndVariableContener {
 	private List<RecMLVariableReference> varRefList;
 
 	
-	public RecMLEquationAndVariableContener(RecMLAnalyzer analyzer,RecMLVariableTable table){
+	public RecMLEquationAndVariableContainer(RecMLAnalyzer analyzer,RecMLVariableTable table){
 		recMLVariableTable=table;
 		recMLAnalyzer=analyzer;
 		setEquationIDs();
@@ -41,8 +42,19 @@ public class RecMLEquationAndVariableContener {
 	
 	private void setVariableIDs(){
 		variableIdList = new ArrayList<Integer>();
-		for(RecMLVariableReference r:varRefList)
-			variableIdList.add(r.getID());
+		for(RecMLVariableReference r:varRefList){
+			switch(r.getRecMLVarType()){
+			case CVAR_TYPE_RECURVAR:
+			case CVAR_TYPE_ARITHVAR:
+			case CVAR_TYPE_OUTPUT:
+				variableIdList.add(r.getID());
+				break;
+			case CVAR_TYPE_DOUBLE:
+			case CVAR_TYPE_CONSTVAR:
+			default:
+				
+			}
+		}
 		
 	}
 	
@@ -78,8 +90,14 @@ public class RecMLEquationAndVariableContener {
 	 */
 	public List<Integer> getEqautionIDsOfVariable(int variableID){
 		List<Integer> equIdList = new ArrayList<Integer>();
-		equIdList.addAll(varRefList.get(variableID).getLeftHandSideExpressionIDs());
-		equIdList.addAll(varRefList.get(variableID).getRightHandSideExpressionIDs());
+		HashSet<Integer> leftSideHashSet = new HashSet<Integer>();
+		HashSet<Integer> rightSideHashSet = new HashSet<Integer>();
+		
+		leftSideHashSet.addAll(varRefList.get(variableID).getLeftHandSideExpressionIDs());
+		rightSideHashSet.addAll(varRefList.get(variableID).getRightHandSideExpressionIDs());
+		
+		equIdList.addAll(leftSideHashSet);
+		equIdList.addAll(rightSideHashSet);
 
 		return equIdList;		
 	}

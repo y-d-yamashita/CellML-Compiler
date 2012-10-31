@@ -1,0 +1,707 @@
+<!---   Arbitrary model SimpleRecML File       --> 
+<!---     For testing algorithm in 1D          --> 
+
+<recml>
+	<loopindex num="0" name="n" />
+	<loopindex num="1" name="j" />
+	
+	<variable name="Main_x" type="double" initialvalue="-1.501250563778375" />
+	<variable name="c0" type="double" initialvalue="0.1" />
+	<variable name="c1" type="double" initialvalue="0.1" />
+	<variable name="c2" type="double" initialvalue="0.1" />
+
+	
+	<math>
+
+		<!--- Index n=0 --> 
+
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 0 </cn>
+				<apply><minus/>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 0 </cn>
+				<cn> 0 </cn>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 0 </cn>
+				<cn> 4 </cn>
+			</apply>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 0 </cn>
+				<cn> 3 </cn>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 0 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 0 </cn>
+						<cn> 0 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 1 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 0 </cn>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 0 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 2 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 0 </cn>
+						<cn> 2 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 3 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 4 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 0 </cn>
+						<cn> 3 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 0 </cn>
+					<cn> 2 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<!--- Index n=1 --> 
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<apply><minus/>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 0 </cn>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 4 </cn>
+			</apply>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 1 </cn>
+				<cn> 3 </cn>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 0 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 1 </cn>
+						<cn> 0 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 1 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 1 </cn>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 0 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 2 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 1 </cn>
+						<cn> 2 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 3 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 4 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 1 </cn>
+						<cn> 3 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 1 </cn>
+					<cn> 2 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<!--- Index n=2 --> 
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<apply><minus/>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 0 </cn>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 4 </cn>
+			</apply>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 2 </cn>
+				<cn> 3 </cn>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 3 </cn>
+				<cn> 0 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 2 </cn>
+						<cn> 0 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<apply><minus/>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 3 </cn>
+				<cn> 1 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 2 </cn>
+						<cn> 1 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 0 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 3 </cn>
+				<cn> 2 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 2 </cn>
+						<cn> 2 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 1 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 3 </cn>
+				<cn> 3 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 4 </cn>
+				</apply>
+				<apply><times/>
+					<cn> 2 </cn>
+					<apply><selector/>
+						<ci> Main_x </ci>
+						<cn> 2 </cn>
+						<cn> 3 </cn>
+					</apply>
+				</apply>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 2 </cn>
+					<cn> 2 </cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<!--- Index n=3 --> 
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 4 </cn>
+				<cn> 0 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 3 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 4 </cn>
+				<cn> 1 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 3 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 4 </cn>
+				<cn> 2 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 3 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 4 </cn>
+				<cn> 3 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 3 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<!--- Index n=4 --> 
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 5 </cn>
+				<cn> 0 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 4 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 5 </cn>
+				<cn> 1 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 4 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 5 </cn>
+				<cn> 2 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 4 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 5 </cn>
+				<cn> 3 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 4 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<ci> c0 </ci>
+			</apply>
+		</apply>
+		
+		<!--- Index n=5 --> 
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 6 </cn>
+				<cn> 0 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 5 </cn>
+					<cn> 0 </cn>
+				</apply>
+				<ci> c1 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 6 </cn>
+				<cn> 1 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 5 </cn>
+					<cn> 1 </cn>
+				</apply>
+				<ci> c1 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 6 </cn>
+				<cn> 2 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 5 </cn>
+					<cn> 2 </cn>
+				</apply>
+				<ci> c2 </ci>
+			</apply>
+		</apply>
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_x </ci>
+				<cn> 6 </cn>
+				<cn> 3 </cn>
+			</apply>
+			<apply><plus/>
+				<apply><selector/>
+					<ci> Main_x </ci>
+					<cn> 5 </cn>
+					<cn> 3 </cn>
+				</apply>
+				<ci> c2 </ci>
+			</apply>
+		</apply>
+		
+	</math>
+</recml>

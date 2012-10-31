@@ -5,6 +5,7 @@ import java.util.List;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition.eRecMLVarType;
 
 /**
  * 変数参照クラス.
@@ -24,6 +25,8 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 	
 	int id;
 	
+	private eRecMLVarType recMLVarType;
+	
 	//List<MathExpression> refedExpressions;
 	//List<MathExpression> assignExpressions;
 
@@ -40,7 +43,8 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 	
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		sb.append("Name: ").append(strVariableName);
+		sb.append("Name: ").append(strVariableName).append("  ");
+		sb.append("Type: ").append(this.getRecMLVarType());
 
 		sb.append("  ").append("AssignExpr: ");
 		if(leftHandSideExpressions.isEmpty()){
@@ -98,5 +102,13 @@ public class RecMLVariableReference implements Comparable< RecMLVariableReferenc
 	}
 	public void setMathCI(Math_ci ci){
 		this.variable=ci;
+	}
+
+	public eRecMLVarType getRecMLVarType() {
+		return recMLVarType;
+	}
+
+	public void setRecMLVarType(eRecMLVarType recMLVarType) {
+		this.recMLVarType = recMLVarType;
 	}
 }

@@ -3,34 +3,31 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Graph;
-
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldGraph;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.FieldVertexGroupList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.MathExpressionLoop;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.field.FieldVertex;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.LoopCreator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.LoopSeparator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.MaximumMatching;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.manipulator.algorithm.Tarjan;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser.RecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContener;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
 	
+
 /**
  * Graph Manipulator
  * @author y-yamashita
@@ -47,15 +44,23 @@ public class GraphManipulator {
 	/** Tarjan */
 	private Tarjan	tarjan;
 	
+	/** Loop separator of Field graph*/
+	private LoopSeparator loopSeparator;
+	
+	/** Loop creator */
+	private LoopCreator loopCreator;
 	
 	/**
 	 * Constructor
 	 */
 	public GraphManipulator(){
-		//Initialize
+		//Algorithm executors initialize
 		graphCreator = new GraphCreator();
 		maximumMatching = new MaximumMatching();
 		tarjan = new Tarjan();
+		loopSeparator=new LoopSeparator();
+		loopCreator = new LoopCreator();
+		
 	}
 	
 	/**
@@ -78,11 +83,11 @@ public class GraphManipulator {
 	 * @throws MathException 
 	 * @throws TableException 
 	 */
-	public DirectedGraph<FieldVertex, FieldEdge> cretateFieldDependencyGraph(
+	public FieldGraph cretateFieldDependencyGraph(
 			DirectedGraph<RecMLVertex, RecMLEdge> graph,
-			RecMLVariableTable recMLVariableTable
+			RecMLAnalyzer recmlAnalyzer
 			) throws GraphException, TableException, MathException{
-			return graphCreator.cretateFieldDependencyGraph(graph,recMLVariableTable);
+			return graphCreator.cretateFieldDependencyGraph(graph,recmlAnalyzer.getRecMLVariableTable(),recmlAnalyzer);
 	}
 	
 	
@@ -93,7 +98,7 @@ public class GraphManipulator {
 	 * @throws GraphException
 	 */
 	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph(
-			RecMLEquationAndVariableContener contener) throws GraphException{
+			RecMLEquationAndVariableContainer contener) throws GraphException{
 		return graphCreator.createBipartiteGraph(contener);
 	}
 	
@@ -128,10 +133,14 @@ public class GraphManipulator {
 
     	/***** Dependency graph XML  *****/
     	String indent="		";
-    	StringBuilder sb= new StringBuilder().
-    			append("<!----- Dependency graph ---->\n").
-    			append("<graph type=\"dependency\">\n").
-    			append("	<nodes>\n");
+    	StringBuilder sb= new StringBuilder();
+    	
+    	
+    			sb.append("<!----- Dependency graph ---->\n");
+    	if(graph!=null){
+    			sb.append("<graph type=\"dependency\">\n");
+    
+    	sb.append("	<nodes>\n");
     	List<RecMLVertex> vl = new ArrayList<RecMLVertex>(graph.getVertexes());
     	for(RecMLVertex v:vl)
     		sb.append(v.toXMLString(vl.indexOf(v), indent));
@@ -143,8 +152,8 @@ public class GraphManipulator {
     				vl.indexOf(graph.getSourceVertex(e)),
     				vl.indexOf(graph.getDestVertex(e)),
     				el.indexOf(e), indent));
-    	sb.append("	</edges>\n").
-    	append("</graph>\n");
+    	sb.append("	</edges>\n");
+    	sb.append("</graph>\n");
     	
     	/*** Simultaneous equation XML ***/
     	sb.append("<!----- Simultaneous equations ---->\n")
@@ -157,13 +166,35 @@ public class GraphManipulator {
     			sb.append("	</group>\n");
     		}
     	}
+    }else{ // graph is null
+    	sb.append("<!---- Graph is NULL  ---\n>");
+    }
     	sb.append("</simulequs>\n");
     	return sb.toString();
     	
     	
     	
     }
+
     
+    /**
+     * Generate loop group based on Field graph
+     * @param fieldGraph
+     * @return loop group list
+     */
+	public FieldVertexGroupList separateLoopGroup(
+			FieldGraph fieldGraph) {
+			FieldVertexGroupList loopGroupList = loopSeparator.separate(fieldGraph);
+		return loopGroupList;
+	}
+
+	public MathExpressionLoop createLoop(FieldVertexGroupList loopGroupList) throws MathException{
+		MathExpressionLoop mathExpressionLoop = loopCreator.create(loopGroupList);
+		return mathExpressionLoop;
+	}
+	
+	
+	
     /**
      * toXMLString method
      * @param indent
@@ -178,8 +209,10 @@ public class GraphManipulator {
     			append("<graph type=\"dependency\">\n").
     			append("	<nodes>\n");
     	List<FieldVertex> vl = new ArrayList<FieldVertex>(graph.getVertexes());
-    	for(FieldVertex v:vl)
-    		sb.append(v.toXMLString(vl.indexOf(v), indent));
+    	for(FieldVertex v:vl){
+    		v.setId(vl.indexOf(v));
+    		sb.append(v.toXMLString( indent));
+    	}
     	sb.append("	</nodes>\n").
     	append("	<edges>\n");
     	List<FieldEdge> el = new ArrayList<FieldEdge>(graph.getEdges());
@@ -195,4 +228,5 @@ public class GraphManipulator {
     	return sb.toString();
     	
     }
+
 }

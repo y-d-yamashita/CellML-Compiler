@@ -196,7 +196,7 @@ public class RecMLVertex extends Vertex {
      * @return XML string
      */
     public String toXMLString(int id, String indent){
-    	return new StringBuilder().append(indent).append("<node id="+id+">\n").
+    	return new StringBuilder().append(indent).append("<node id=\""+id+"\">\n").
     			append(indent+"	").append("<variable>").append(this.recVar).append("</variable>\n").
     			append(indent+"	").append("<equation>").append(this.recExpr).append("</equation>\n").
     			append(indent).append("</node>\n").toString();

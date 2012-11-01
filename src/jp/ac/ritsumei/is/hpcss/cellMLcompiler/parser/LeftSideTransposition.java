@@ -26,6 +26,9 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOpera
  * limitation of expression:
  * 	The operator contained in expression limits to the following one. 
  *	-plus,minus,times,divide,inc,dec,exp,ln,root,power,log
+ *
+ *  and non-linear equation is not supported by this system.
+ *  In one equation, only one derived variable is permitted.
  * 
  * @author n-washio
  * 
@@ -170,11 +173,15 @@ public class LeftSideTransposition {
 					transpositionType=1;
 				}
 				else if(directOperatorKind.equals("MOP_POWER")){
-					if(val_position==1)transpositionType=3;
+					if(val_position==1){
+						throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+					}
 					if(val_position==2)transpositionType=2;
 				}
 				else if(directOperatorKind.equals("MOP_LOG")){
-					if(val_position==1)transpositionType=3;
+					if(val_position==1){
+						throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+					}
 					if(val_position==2)transpositionType=2;
 				}
 				else{
@@ -190,11 +197,12 @@ public class LeftSideTransposition {
 					expression=abnormal_transposition(
 							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
 				}
+				/*
 				if(transpositionType==3){
 					expression=base_transposition(
 							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
 				}
-				
+				*/
 				//移項後の判定
 				goal_flag=check_EqDirectLeft(expression,derivedVariable);
 			}

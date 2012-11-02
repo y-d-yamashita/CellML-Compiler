@@ -1,20 +1,8 @@
-<!-- 					LR1_FTCS_Diffusion_2D.recml		 			-->
-<!-- Structured RecML in 2D for Luo-Rudy 1991 model with diffusion	-->
+<!-- 					LR1_FTCS_2D_simple.recml	 			-->
+<!-- Simple RecML in 2D for Luo-Rudy 1991 model with diffusion	-->
 <!-- with diffusion PDE and Forward-Time Central Space Scheme (FTCS)-->
 
 <recml>
-
-	<!-- loop1="inner" has loop2 inside -->
-	<!-- loop2="inner" has loop3 inside -->
-	<loopstruct num="0">
-		<position name="inner">
-			<loopstruct num="1">
-				<position name="inner">
-					<loopstruct num="2"/>
-				</position>
-			</loopstruct>
-		</position>
-	</loopstruct>
 	
 	<loopindex num="0" name="n" />
 	<loopindex num="1" name="j" />
@@ -29,7 +17,7 @@
 	<variable name="V2end" type="output" />
 	<variable name="V3end" type="output" />
 	
-	<variable name="intracellular_calcium_concentration.time" type="recurvar" loopcomponent1="1" />
+	<variable name="intracellular_calcium_concentration.time" type="recurvar"/>
 	<variable name="membrane.V" type="recurvar" />
 	<variable name="fast_sodium_current.m" type="recurvar" />
 	<variable name="fast_sodium_current.h" type="recurvar" />

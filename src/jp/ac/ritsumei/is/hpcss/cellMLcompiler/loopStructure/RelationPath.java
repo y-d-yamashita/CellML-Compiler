@@ -7,13 +7,13 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
  * @author n-washio
  *
  */
-public class RelationPattern {
+public class RelationPath {
 	public Integer Parent_name;
 	public Integer Child_name;
 	public String Attribute_name = new String();
 	
 	/*-----コンストラクタ-----*/
-	public RelationPattern(Integer index1, Integer index2, String index3) {	
+	public RelationPath(Integer index1, Integer index2, String index3) {	
 		this.Parent_name = index1;
 		this.Child_name = index2;
 		this.Attribute_name = index3;

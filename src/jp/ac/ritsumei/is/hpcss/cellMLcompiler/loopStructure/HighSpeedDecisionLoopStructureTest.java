@@ -9,14 +9,14 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.loopStructure;
 
 import java.util.*;
 
-//修正版 2012/10/29
+//修正版 2012/11/5
 public class HighSpeedDecisionLoopStructureTest {
 
 	public static ArrayList<Integer> path_length;
 	public static ArrayList<String[]> prepostList = new  ArrayList<String[]>();
 	public static ArrayList<Integer[]> loop_nameList = new ArrayList<Integer[]>();
 	public static ArrayList<ArrayList<Integer[]>> loop_nameListPair = new ArrayList<ArrayList<Integer[]>>();
-	public static ArrayList<RelationPattern> LoopStructure= new ArrayList<RelationPattern>();
+	public static ArrayList<RelationPath> loopStructure= new ArrayList<RelationPath>();
 	public static HashMap<Integer,Integer> connectableNode = new HashMap<Integer,Integer>();
 	
 	public static void main(String[] args) {
@@ -32,68 +32,68 @@ public class HighSpeedDecisionLoopStructureTest {
 		
 		//ArrayList<RelationPattern>  inputList = new ArrayList<RelationPattern>();
 		//inputList = make_inputList(AttrList, loopAttrList,loop_name);
-		ArrayList<RelationPattern>inputList = new ArrayList<RelationPattern>();
-		RelationPattern pattern;
+		ArrayList<RelationPath>inputList = new ArrayList<RelationPath>();
+		RelationPath pattern;
 		
-		pattern = new RelationPattern(1,2,"null");
+		pattern = new RelationPath(1,2,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(1,3,"null");
+		pattern = new RelationPath(1,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(1,4,"null");
+		pattern = new RelationPath(1,4,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(1,5,"null");
+		pattern = new RelationPath(1,5,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(1,6,"null");
+		pattern = new RelationPath(1,6,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,1,"null");
+		pattern = new RelationPath(2,1,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,3,"null");
+		pattern = new RelationPath(2,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,4,"null");
+		pattern = new RelationPath(2,4,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,5,"null");
+		pattern = new RelationPath(2,5,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(2,6,"null");
+		pattern = new RelationPath(2,6,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(3,1,"null");
+		pattern = new RelationPath(3,1,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(3,2,"null");
+		pattern = new RelationPath(3,2,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(3,4,"null");
+		pattern = new RelationPath(3,4,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(3,5,"null");
+		pattern = new RelationPath(3,5,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(3,6,"null");
+		pattern = new RelationPath(3,6,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(4,1,"null");
+		pattern = new RelationPath(4,1,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(4,2,"null");
+		pattern = new RelationPath(4,2,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(4,3,"null");
+		pattern = new RelationPath(4,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(4,5,"null");
+		pattern = new RelationPath(4,5,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(4,6,"null");
+		pattern = new RelationPath(4,6,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(5,1,"null");
+		pattern = new RelationPath(5,1,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(5,2,"null");
+		pattern = new RelationPath(5,2,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(5,3,"null");
+		pattern = new RelationPath(5,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(5,4,"null");
+		pattern = new RelationPath(5,4,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(5,6,"null");
+		pattern = new RelationPath(5,6,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(6,1,"null");
+		pattern = new RelationPath(6,1,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(6,2,"null");
+		pattern = new RelationPath(6,2,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(6,3,"null");
+		pattern = new RelationPath(6,3,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(6,4,"null");
+		pattern = new RelationPath(6,4,"null");
 		inputList.add(pattern);
-		pattern = new RelationPattern(6,5,"null");
+		pattern = new RelationPath(6,5,"null");
 		
 		Integer[] loop_name = {1,2,3,4,5,6};
 		set_nameList(0, new int [loop_name.length], new boolean [loop_name.length],loop_name);
@@ -106,42 +106,42 @@ public class HighSpeedDecisionLoopStructureTest {
 		//入力情報に対するnull処理
 		//---------------------------------------------------
 		
-		inputList=removeNull(inputList);
+		inputList=fix_PartialDependency(inputList);
 		
 		//---------------------------------------------------
 		//入力情報に対するnull処理２
 		//ここで完全に独立しているノードは消えることになるのでリストに登録する.
 		//---------------------------------------------------
 	
-		ArrayList<Integer> nullNodeList = new ArrayList<Integer>();
-		nullNodeList=make_nullNodeList(inputList,loop_name);
+		ArrayList<Integer> separateNodeList = new ArrayList<Integer>();
+		separateNodeList=make_separateNodeList(inputList,loop_name);
 		
-		inputList=deleteNull(inputList);
+		inputList=remove_NullRelation(inputList);
 		
 		
 		if(inputList.size()==0){
 			//全て独立ノードである場合,関係を作成
-			pattern = new RelationPattern(loop_name[0],loop_name[1],"post");
+			pattern = new RelationPath(loop_name[0],loop_name[1],"post");
 			inputList.add(pattern);
-			pattern = new RelationPattern(loop_name[1],loop_name[0],"pre");
+			pattern = new RelationPath(loop_name[1],loop_name[0],"pre");
 			inputList.add(pattern);
-			nullNodeList.remove(loop_name[0]);
-			nullNodeList.remove(loop_name[1]);
+			separateNodeList.remove(loop_name[0]);
+			separateNodeList.remove(loop_name[1]);
 		}
 		
-		ArrayList<RelationPattern> fixed_inputList = new ArrayList<RelationPattern>();
-		ArrayList<RelationPattern> inputList_new;
+		ArrayList<RelationPath> fixed_inputList = new ArrayList<RelationPath>();
+		ArrayList<RelationPath> inputList_new;
 		
 		for(int i=0;i<loop_nameListPair.size();i++){
 			//見つかるまで削除手順を変えて繰り返す.
 			
-			inputList_new= new ArrayList<RelationPattern>();
+			inputList_new= new ArrayList<RelationPath>();
 			
 			//---------------------------------------------------
-			//間接パスの削除
+			//継承関係の削除
 			//---------------------------------------------------
 			
-			inputList_new = remove_directPath(inputList, loop_nameListPair.get(i));
+			inputList_new = remove_inhPath(inputList, loop_nameListPair.get(i));
 			
 			//---------------------------------------------------
 			//双方向パスの処理
@@ -171,11 +171,11 @@ public class HighSpeedDecisionLoopStructureTest {
 		//null置換
 		//---------------------------------------------------
 		
-		LoopStructure=get_LoopStructure(fixed_inputList,nullNodeList);
+		loopStructure=get_LoopStructure(fixed_inputList,separateNodeList);
 		System.out.println("決定されたループ構造（Loop_Structure）----------------");
-		if(LoopStructure!=null){
-			for(int i=0;i<LoopStructure.size();i++){
-				LoopStructure.get(i).printContents();
+		if(loopStructure!=null){
+			for(int i=0;i<loopStructure.size();i++){
+				loopStructure.get(i).printContents();
 			}
 		}
 		System.out.println();
@@ -186,11 +186,11 @@ public class HighSpeedDecisionLoopStructureTest {
 		
 	}	
 
-	public static boolean check_inh(ArrayList<RelationPattern> fixed_inputList,ArrayList<RelationPattern> inputList) {
+	public static boolean check_inh(ArrayList<RelationPath> fixed_inputList,ArrayList<RelationPath> inputList) {
 		
 		//継承関係を含むセットを作成し、全て入力セットに含まれていれば矛盾しない構造であると見なす
 		
-		ArrayList<RelationPattern>inh_set = new ArrayList<RelationPattern>();
+		ArrayList<RelationPath>inh_set = new ArrayList<RelationPath>();
 		int count=0;
 		for(int i=0;i<fixed_inputList.size();i++){
 			inh_set.add(fixed_inputList.get(i));//
@@ -205,7 +205,7 @@ public class HighSpeedDecisionLoopStructureTest {
 						Integer p = fixed_inputList.get(i).Parent_name;
 						Integer c = fixed_inputList.get(j).Child_name;
 						String a = new String(fixed_inputList.get(i).Attribute_name);
-						RelationPattern pattern = new RelationPattern(p,c,a);
+						RelationPath pattern = new RelationPath(p,c,a);
 						inh_set.add(pattern);
 						for(int k=0;k<inputList.size();k++){
 							if(pattern.Parent_name.equals(inputList.get(k).Parent_name)){
@@ -235,7 +235,7 @@ public class HighSpeedDecisionLoopStructureTest {
 								Integer p = inh_set.get(j).Parent_name;
 								Integer c = inh_set.get(k).Child_name;
 								String a = new String(inh_set.get(j).Attribute_name);
-								RelationPattern pattern = new RelationPattern(p,c,a);
+								RelationPath pattern = new RelationPath(p,c,a);
 								inh_set.add(pattern);
 								for(int h=0;h<inputList.size();h++){
 									if(pattern.Parent_name.equals(inputList.get(h).Parent_name)){
@@ -257,7 +257,7 @@ public class HighSpeedDecisionLoopStructureTest {
 
 	}
 
-	public static ArrayList<Integer> make_nullNodeList(ArrayList<RelationPattern> inputList, Integer[] loop_name) {
+	public static ArrayList<Integer> make_separateNodeList(ArrayList<RelationPath> inputList, Integer[] loop_name) {
 		
 		//ほかの全ての要素に対してnull関係しか持たないものを登録する.
 		ArrayList<Integer> nullNodeList = new ArrayList<Integer>();
@@ -278,9 +278,9 @@ public class HighSpeedDecisionLoopStructureTest {
 		return nullNodeList;
 	}
 
-	public static ArrayList<RelationPattern> get_LoopStructure(ArrayList<RelationPattern> inputList,ArrayList<Integer> nullNodeList){
+	public static ArrayList<RelationPath> get_LoopStructure(ArrayList<RelationPath> inputList,ArrayList<Integer> nullNodeList){
 
-		ArrayList<RelationPattern> LoopStructure= new ArrayList<RelationPattern>(inputList);
+		ArrayList<RelationPath> LoopStructure= new ArrayList<RelationPath>(inputList);
 
 		
 		//rootを探索
@@ -308,25 +308,25 @@ public class HighSpeedDecisionLoopStructureTest {
 			//リストにある各root名について、接続可能箇所を探索
 		
 			for(int i=0;i<root_nameList.size();i++){
-				searchConnectableNode(root_nameList.get(i),root_nameList.get(i),inputList);
+				search_ConnectableNode(root_nameList.get(i),root_nameList.get(i),inputList);
 			}
 
 			//rootが一つになるまで接続を繰り返す
 			for(int i=1;i<root_nameList.size();i++){
 				//i番目のルートをi-1番目のツリーにある接続可能箇所に接続する関係を追加する
-				RelationPattern relation = new RelationPattern(connectableNode.get(root_nameList.get(i-1)),root_nameList.get(i),"post");
+				RelationPath relation = new RelationPath(connectableNode.get(root_nameList.get(i-1)),root_nameList.get(i),"post");
 				LoopStructure.add(relation);
 			}
-			RelationPattern relation;
+			RelationPath relation;
 			if(nullNodeList.size()!=0){
 				//rootリストの最後のツリーの接続可能箇所に独立ノードを接続
 				Integer last_root=connectableNode.get(root_nameList.get(root_nameList.size()-1));
-				relation = new RelationPattern(last_root,nullNodeList.get(0),"post");
+				relation = new RelationPath(last_root,nullNodeList.get(0),"post");
 				LoopStructure.add(relation);
 				if(nullNodeList.size()>1){
 					//独立ノード同士は必ず接続できる
 					for(int i=1;i<nullNodeList.size();i++){
-						relation = new RelationPattern(nullNodeList.get(i-1),nullNodeList.get(i),"post");
+						relation = new RelationPath(nullNodeList.get(i-1),nullNodeList.get(i),"post");
 						LoopStructure.add(relation);
 					}
 				}
@@ -336,7 +336,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		return LoopStructure;
 	}
 	
-	public static void searchConnectableNode(Integer root_name,Integer My_name, ArrayList<RelationPattern> inputList){
+	public static void search_ConnectableNode(Integer root_name,Integer My_name, ArrayList<RelationPath> inputList){
 		
 		//postに接続可能かどうかを判定する.
 		//preでもいいのだが、どこに接続できるかを記録する手間を省くためpostに限定する.
@@ -348,7 +348,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		}
 		
 		if(post_num!=null){
-			searchConnectableNode(root_name,inputList.get(post_num).Child_name,inputList);
+			search_ConnectableNode(root_name,inputList.get(post_num).Child_name,inputList);
 		} else{
 			connectableNode.put(root_name, My_name);
 			
@@ -356,7 +356,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		
 	}
 	
-	public static void toRecMLheader(ArrayList<RelationPattern> LoopStructure){
+	public static void toRecMLheader(ArrayList<RelationPath> LoopStructure){
 
 		//rootの探索
 		ArrayList<Integer> root_num = new ArrayList<Integer>();
@@ -391,7 +391,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		System.out.println("</loopstruct name>");
 	}
 	
-	public static void call_child(ArrayList<RelationPattern> LoopStructure,Integer My_name, int tab_count){
+	public static void call_child(ArrayList<RelationPath> LoopStructure,Integer My_name, int tab_count){
 		//子要素の名前を受け取り、親になっていれば子要素を表示する動作を再帰的に行う。
 		int flag=0;
 		
@@ -442,9 +442,9 @@ public class HighSpeedDecisionLoopStructureTest {
 	
 	
 
-	public static ArrayList<RelationPattern> deleteNull(ArrayList<RelationPattern> inputList) {
+	public static ArrayList<RelationPath> remove_NullRelation(ArrayList<RelationPath> inputList) {
 		
-		ArrayList<RelationPattern> inputList_new = new ArrayList<RelationPattern>();
+		ArrayList<RelationPath> inputList_new = new ArrayList<RelationPath>();
 		
 		for(int i=0;i<inputList.size();i++){
 			//nullでない関係情報のみを抽出する
@@ -455,11 +455,11 @@ public class HighSpeedDecisionLoopStructureTest {
 		
 		return inputList_new;
 	}	
-	public static ArrayList<RelationPattern> fix_interactivePath(ArrayList<RelationPattern> inputList, int loop_num) {
+	public static ArrayList<RelationPath> fix_interactivePath(ArrayList<RelationPath> inputList, int loop_num) {
 		
 
 		int find=0;
-		ArrayList<RelationPattern> inputList_new = new ArrayList<RelationPattern>();
+		ArrayList<RelationPath> inputList_new = new ArrayList<RelationPath>();
 		ArrayList<Integer> pre_num = new ArrayList<Integer>();		
 		
 		for(int i=0;i<inputList.size();i++){
@@ -605,8 +605,8 @@ public class HighSpeedDecisionLoopStructureTest {
 	    }
 	}
 	
-	public static ArrayList<RelationPattern> remove_directPath(ArrayList<RelationPattern> inputList, ArrayList<Integer[]> loop_namePair){
-		ArrayList<RelationPattern> inputList_new =  new ArrayList<RelationPattern>(inputList);
+	public static ArrayList<RelationPath> remove_inhPath(ArrayList<RelationPath> inputList, ArrayList<Integer[]> loop_namePair){
+		ArrayList<RelationPath> inputList_new =  new ArrayList<RelationPath>(inputList);
 		
 		//処理のアウトライン
 		//自身以外の全ノードへの間接パスと直接パスを探索。見つかったループ名は記録していく。
@@ -662,7 +662,7 @@ public class HighSpeedDecisionLoopStructureTest {
 	
 	
 	
-	public static void search_Child(ArrayList<RelationPattern> inputList,int i,int j,ArrayList<Integer> nameList){
+	public static void search_Child(ArrayList<RelationPath> inputList,int i,int j,ArrayList<Integer> nameList){
 		
 		ArrayList<Integer> nameList_new;//追加は分岐させるたびに別のリストに入れる。
 		for(int x=0;x<inputList.size();x++){
@@ -688,10 +688,10 @@ public class HighSpeedDecisionLoopStructureTest {
 		}
 	}
 	
-	public static ArrayList<RelationPattern> removeNull(ArrayList<RelationPattern> inputList){
+	public static ArrayList<RelationPath> fix_PartialDependency(ArrayList<RelationPath> inputList){
 		//nullをもつ親子のペアに対して、null以外をもつものが見つかればnullをもつ情報は削除
  		
-		ArrayList<RelationPattern> inputList_new= new ArrayList<RelationPattern>();
+		ArrayList<RelationPath> inputList_new= new ArrayList<RelationPath>();
 		for(int i=0;i<inputList.size();i++){
 			
 			if(!inputList.get(i).Attribute_name.equals("null")){
@@ -719,7 +719,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		return inputList_new;
 	}
 	
-	public static ArrayList<RelationPattern> make_inputList(HashMap<Integer,HashMap<Integer,String>> AttrList,
+	public static ArrayList<RelationPath> make_inputList(HashMap<Integer,HashMap<Integer,String>> AttrList,
 			HashMap<Integer,String> loopAttrList, Integer[] loop_name){
 		
 		//AttrListからInputListを作成するメソッド(数式がランダムでも対応する)
@@ -732,7 +732,7 @@ public class HighSpeedDecisionLoopStructureTest {
 		//initの属性を記録し、nのリスト上にその属性でinnerとfinalが各1つ以上あるか判定
 		//見つかれば子要素に追加する。（nullであってもすべて）
 		
-		ArrayList<RelationPattern>  inputList = new ArrayList<RelationPattern>();
+		ArrayList<RelationPath>  inputList = new ArrayList<RelationPath>();
 		
 		for(int i=0;i<loop_num;i++){
 			for(int j=1;j<val_num+1;j++){
@@ -752,7 +752,7 @@ public class HighSpeedDecisionLoopStructureTest {
 								}		
 							}
 							if(init_count!=0 &&  inner_count!=0 && final_count!=0){								
-								inputList.add(new RelationPattern(loop_name[k],loop_name[i],init_attr));
+								inputList.add(new RelationPath(loop_name[k],loop_name[i],init_attr));
 							}
 						}
 					}

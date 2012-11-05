@@ -82,30 +82,20 @@ public class DecisionLoopStructureTest {
 		
 		combinationList = reduce_combinationList(combinationList,loop_num);
 
-		
+
 		//---------------------------------------------------
 		//関係情報の組み合わせパターンの削減（２）
-		//異なる関係の複数の同じ子を親がもつ組み合わせを削除
+		//複数の異なる親をもつ子が存在するものを削除
 		//---------------------------------------------------
-		
-		//combinationList = remove_combinationList_2nd(combinationList,loop_num);		
-		
-		
+				
+		combinationList = reduce_combinationList_2nd(combinationList,loop_num);
+				
 		//---------------------------------------------------
 		//関係情報の組み合わせパターンの削減（３）
 		//複数の同じ属性を親がもつ組み合わせを削除
 		//---------------------------------------------------
 				
 		combinationList = reduce_combinationList_3rd(combinationList,loop_num);	
-
-
-		//---------------------------------------------------
-		//関係情報の組み合わせパターンの削減（４）
-		//複数の異なる親をもつ子が存在するものを削除
-		//---------------------------------------------------
-				
-		combinationList = reduce_combinationList_2nd(combinationList,loop_num);
-		
 		
 		//---------------------------------------------------
 		//ループ構造の決定
@@ -122,7 +112,6 @@ public class DecisionLoopStructureTest {
 			}
 		}
 		System.out.println();
-		
 		
 		
 		//toRecMLheader(LoopStructure);

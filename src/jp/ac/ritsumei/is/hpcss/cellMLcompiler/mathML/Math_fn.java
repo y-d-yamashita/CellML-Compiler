@@ -112,4 +112,30 @@ public class Math_fn extends MathOperator {
 		return strExpression;
 	}
 
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*例外処理*/
+		if(m_pFuncOperand == null){
+			throw new MathException("Math_fn","toMathMLString","have no function operand");
+		}
+
+		/*文字列を追加していく*/
+		String strExpression = "   ";
+
+		for(MathFactor it: m_vecFactor) {
+
+			/* &&演算子を追加 */
+			if(it != m_vecFactor.firstElement()){
+				strExpression += "\n\t";
+			}
+
+			/*項を追加*/
+			strExpression += it.toMathMLString();
+		}
+
+		return 	"<fn>" + "\n" +
+					strExpression + "\n" +
+			    "</fn>";
+	}
 }

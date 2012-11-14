@@ -63,5 +63,25 @@ public class Math_minus extends MathOperator {
 			throw new MathException("Math_minus","toLegalString","lack of operand");
 		}
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
 
+		/*単項演算子*/
+		if (m_vecFactor.size() == 1) {
+			return 	"<minus/>" + "\n" +
+					"   " + m_vecFactor.get(0).toMathMLString() + "\n" ;
+		}
+		/*2項演算子*/
+		else if (m_vecFactor.size() == 2) {
+			return 	"<minus/>" + "\n" +
+					"\t" + m_vecFactor.get(0).toMathMLString() + "\n" +
+					"\t" + m_vecFactor.get(1).toMathMLString() + "\n" ;
+		}
+		/*例外*/
+		else{
+			throw new MathException("Math_minus","toMathMLString","lack of operand");
+		}
+	}
+	
 }

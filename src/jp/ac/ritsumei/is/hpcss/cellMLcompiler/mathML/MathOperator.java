@@ -1,12 +1,15 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML演算子クラス.
@@ -48,23 +51,6 @@ public abstract class MathOperator extends MathFactor {
 			int unMinFactorNum) {
 		this(strPresentText, operatorKind, unMinFactorNum, null);
 	}
-
-	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#getValue()
-	 */
-	public double getValue() throws MathException {
-		/*演算結果を返す*/
-		return calculate();
-	}
-
-	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#setValue(double)
-	 */
-	public void setValue(double dValue) throws MathException {
-		throw new MathException("MathOperator","setValue",
-					"can't set value on operator");
-	}
-	
 	
 	/* 	(非 Javadoc)	autor: n-washio
 	 *	add seven methods for LeftSideTransposition for code generator
@@ -180,6 +166,23 @@ public abstract class MathOperator extends MathFactor {
 		}
 	}
 	
+	
+	/* (非 Javadoc)
+	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#getValue()
+	 */
+	public double getValue() throws MathException {
+		/*演算結果を返す*/
+		return calculate();
+	}
+
+	/* (非 Javadoc)
+	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#setValue(double)
+	 */
+	public void setValue(double dValue) throws MathException {
+		throw new MathException("MathOperator","setValue",
+					"can't set value on operator");
+	}
+
 	/**
 	 * 要素を追加する.
 	 * @param pFactor 追加要素
@@ -418,6 +421,19 @@ public abstract class MathOperator extends MathFactor {
 				}else{
 					((MathOperator)it).removeSelector(rootFactor);
 				}
+			}
+		}
+	}
+
+	/**
+	 * 構造情報をapplyへ割り当てる
+	 */
+	public void assignStruAttrToApply(MathFactor rootFactor, HashMap<Integer, String> attrList){
+		MathFactor it = rootFactor;
+		/*applyなら*/
+		if(it.matches(eMathMLClassification.MML_OPERATOR)){
+			if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+				((Math_apply)it).setAttrList(attrList);
 			}
 		}
 	}
@@ -730,7 +746,7 @@ public abstract class MathOperator extends MathFactor {
 
 		return null;
 	}
-	
+
 	/**
 	 * 式中第一変数を取得する.
 	 * @return 式のはじめの変数
@@ -776,5 +792,19 @@ public abstract class MathOperator extends MathFactor {
 	 * @throws MathException
 	 */
 	public abstract double calculate() throws MathException;
+	
+	
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+		v.visit(this);
+		for(MathFactor f:m_vecFactor)
+			f.traverse(v);
+	}
 
+	public Vector<MathFactor> getFactorVector(){
+		return this.m_vecFactor;
+	}
 }

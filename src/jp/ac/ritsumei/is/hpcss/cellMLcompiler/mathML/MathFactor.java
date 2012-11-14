@@ -2,6 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML演算要素クラス.
@@ -60,7 +61,12 @@ public abstract class MathFactor {
 	public String toStringInCondition() throws MathException {
 		return toLegalString();
 	}
-
+	/**
+	 * Convert MathFactor to MathML string.
+	 * @return String MathML
+	 * @throws MathException
+	 */
+	public abstract String toMathMLString() throws MathException;
 	/**
 	 * オブジェクトを比較する.
 	 * @param pFactor 比較オブジェクト
@@ -84,5 +90,20 @@ public abstract class MathFactor {
 	 * @return 同一判定
 	 */
 	public abstract boolean matchesExpression(MathFactor pFactor);
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public abstract void traverse(Visitor v);
 
+	public String getM_strPresentText() {
+		return m_strPresentText;
+	}
+
+	public void setM_strPresentText(String m_strPresentText) {
+		this.m_strPresentText = m_strPresentText;
+	}
+	public void replaceStrPresentExt(String regex,String replacement){
+		m_strPresentText=m_strPresentText.replaceAll(regex, replacement);
+	}
 }

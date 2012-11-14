@@ -32,7 +32,7 @@
 
 	<variable name="Y1" type="arithvar" loopcomponent1="1" />
 
-	<variable name="n1" type="stepvar" loopcomponent1="1" />
+<!--	<variable name="n1" type="stepvar" loopcomponent1="1" />-->
 	
 	<variable name="delt1" type="constvar" loopcomponent1="1" />
 	
@@ -43,7 +43,7 @@
 	
 	<variable name="Y2" type="arithvar" loopcomponent1="1" loopcomponent2="1"/>
 
-	<variable name="n2" type="stepvar" loopcomponent1="1" loopcomponent2="1"/>
+<!--	<variable name="n2" type="stepvar" loopcomponent1="1" loopcomponent2="1"/>-->
 	
 	<variable name="delt2" type="constvar" loopcomponent1="1" loopcomponent2="1"/>
 	

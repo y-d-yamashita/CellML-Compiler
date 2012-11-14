@@ -51,6 +51,12 @@ public class DecisionLoopStructureTest {
 		inputList.add(pattern);
 		
 		Integer[] loop_name = {1,2,3,4};
+		HashMap<Integer, String> m_indexList = new HashMap<Integer, String>();
+		m_indexList.put(1, "a");
+		m_indexList.put(2, "b");
+		m_indexList.put(3, "c");
+		m_indexList.put(4, "d");
+		
 		int loop_num=loop_name.length;
 		//計測開始		
 		long start = System.currentTimeMillis();
@@ -65,14 +71,14 @@ public class DecisionLoopStructureTest {
 		//関係情報の全パターン列挙
 		//---------------------------------------------------
 		ArrayList<RelationPath> relationList = new ArrayList<RelationPath>();
-		relationList = get_relationList(loop_num,loop_name);
+		relationList = get_relationList(m_indexList);
 
 		//---------------------------------------------------
 		//関係情報の組み合わせパターン列挙
 		//関係リストのパターンからループ数-1を選ぶ組み合わせをリスト化する
 		//---------------------------------------------------
 		ArrayList<ArrayList<RelationPath>> combinationList = new ArrayList<ArrayList<RelationPath>>();	
-		combinationList = get_combinationList(relationList,loop_num);
+		combinationList = get_combinationList(relationList,m_indexList);
 		
 		
 		//---------------------------------------------------
@@ -80,7 +86,7 @@ public class DecisionLoopStructureTest {
 		//ループの種類を網羅していない要素を削除する
 		//---------------------------------------------------
 		
-		combinationList = reduce_combinationList(combinationList,loop_num);
+		combinationList = reduce_combinationList_1st(combinationList,loop_num);
 
 
 		//---------------------------------------------------
@@ -124,38 +130,42 @@ public class DecisionLoopStructureTest {
 	
 	public static void toRecMLheader(ArrayList<RelationPath> LoopStructure){
 		
-		
-		//rootの探索
-		ArrayList<Integer> root_num = new ArrayList<Integer>();
-		for(int i=0;i<LoopStructure.size();i++){
-			//各親要素の名前について子要素の中を探索し、見つからなければrootである
-			int flag=0;
-			for(int j=0;j<LoopStructure.size();j++){
-				if(LoopStructure.get(i).Parent_name.equals(LoopStructure.get(j).Child_name)){
-					flag=1;
-				}
+		//loopが1つの場合
+		if(LoopStructure.size() == 1){
+			if(LoopStructure.get(0).Child_name == -1 && LoopStructure.get(0).Attribute_name.length() == 0){
+				System.out.println("<loopstruct name="+ "\""+LoopStructure.get(0).Parent_name+ "\""+">");
 			}
-			if(flag==0)	root_num.add(i);//rootとなる関係情報を記録していく
-		}
-		
-		int tab_count=2;//まず2回tabが入った状態で子要素は呼ばれる。
-		System.out.println("<loopstruct name="+ "\""+LoopStructure.get(root_num.get(0)).Parent_name+"\""+">");
-		for(int i=0;i<root_num.size();i++){
-			System.out.println("\t"+"<position name="+ "\""+LoopStructure.get(root_num.get(i)).Attribute_name+ "\""+">");
+		}else{
 			
-			
-			int p_flag=0;
-			for(int j=0;j<LoopStructure.size();j++){
-				if(LoopStructure.get(i).Child_name.equals(LoopStructure.get(j).Parent_name)){
-					p_flag=1;//親になっているフラグ
+			//rootの探索
+			ArrayList<Integer> root_num = new ArrayList<Integer>();
+			for(int i=0;i<LoopStructure.size();i++){
+				//各親要素の名前について子要素の中を探索し、見つからなければrootである
+				int flag=0;
+				for(int j=0;j<LoopStructure.size();j++){
+					if(LoopStructure.get(i).Parent_name.equals(LoopStructure.get(j).Child_name)){
+						flag=1;
+					}
 				}
+				if(flag==0)	root_num.add(i);//rootとなる関係情報を記録していく
 			}
-			if(p_flag==1)System.out.println("\t\t"+"<loopstruct name="+ "\""+LoopStructure.get(root_num.get(i)).Child_name+ "\""+">");
-			else System.out.println("\t\t"+"<loopstruct name="+ "\""+LoopStructure.get(root_num.get(i)).Child_name+ "\""+"/>");
 			
-			call_child(LoopStructure, LoopStructure.get(root_num.get(i)).Child_name, tab_count);
+			int tab_count=2;//まず2回tabが入った状態で子要素は呼ばれる。
+			System.out.println("<loopstruct name="+ "\""+LoopStructure.get(root_num.get(0)).Parent_name+"\""+">");
+			for(int i=0;i<root_num.size();i++){
+				System.out.println("\t"+"<position name="+ "\""+LoopStructure.get(root_num.get(i)).Attribute_name+ "\""+">");
+				int p_flag=0;
+				for(int j=0;j<LoopStructure.size();j++){
+					if(LoopStructure.get(i).Child_name.equals(LoopStructure.get(j).Parent_name)){
+						p_flag=1;//親になっているフラグ
+					}
+				}
+				if(p_flag==1)System.out.println("\t\t"+"<loopstruct name="+ "\""+LoopStructure.get(root_num.get(i)).Child_name+ "\""+">");
+				else System.out.println("\t\t"+"<loopstruct name="+ "\""+LoopStructure.get(root_num.get(i)).Child_name+ "\""+"/>");
+				call_child(LoopStructure, LoopStructure.get(root_num.get(i)).Child_name, tab_count);
+			}
+			System.out.println("</loopstruct name>");
 		}
-		System.out.println("</loopstruct name>");
 	}
 	
 	public static void call_child(ArrayList<RelationPath> LoopStructure,Integer My_name, int tab_count){
@@ -170,7 +180,6 @@ public class DecisionLoopStructureTest {
 				
 				tab_count++;
 				for(int j=0;j<tab_count;j++) System.out.print("\t");
-				
 				int p_flag=0;
 				for(int j=0;j<LoopStructure.size();j++){
 					if(LoopStructure.get(i).Child_name.equals(LoopStructure.get(j).Parent_name)){
@@ -190,7 +199,6 @@ public class DecisionLoopStructureTest {
 			for(int j=0;j<tab_count;j++) System.out.print("\t");
 			System.out.println("</loopstruct name>");
 		
-		
 			tab_count--;
 			for(int j=0;j<tab_count;j++) System.out.print("\t");
 			System.out.println("</position name>");
@@ -201,13 +209,12 @@ public class DecisionLoopStructureTest {
 			tab_count--;
 			for(int j=0;j<tab_count;j++) System.out.print("\t");
 			System.out.println("</position name>");
-			
 		}
 
 	}
 	
 	
-	public static ArrayList<RelationPath> get_LoopStructure(ArrayList<ArrayList<RelationPath>> combinationList, int loop_num, ArrayList<RelationPath>  inputList){
+	public static ArrayList<RelationPath> get_LoopStructure(ArrayList<ArrayList<RelationPath>> combinationList, int indexListsize, ArrayList<RelationPath>  inputList){
 		
 		//継承関係を含めて入力情報と比較し、矛盾があれば削除
 		ArrayList<RelationPath> loopStructure = new ArrayList<RelationPath>();
@@ -216,10 +223,10 @@ public class DecisionLoopStructureTest {
 		for(int i=0;i<combinationList.size();i++){
 			judgment_set = new ArrayList<RelationPath>();
 
-			for(int j=0;j<loop_num-1;j++){
+			for(int j=0;j<indexListsize-1;j++){
 				judgment_set.add(combinationList.get(i).get(j));	//継承以外の情報も格納する
 				Integer c_name = combinationList.get(i).get(j).Child_name;
-				for(int k=0;k<loop_num-1;k++){
+				for(int k=0;k<indexListsize-1;k++){
 					if(j!=k){
 						if(c_name.equals(combinationList.get(i).get(k).Parent_name)){
 							
@@ -244,8 +251,8 @@ public class DecisionLoopStructureTest {
 				}
 			}
 			
-			if(loop_num>3){
-				for(int x=0;x<loop_num-3;x++){//ループ数4以上では曾孫以降の継承情報も必要
+			if(indexListsize>3){
+				for(int x=0;x<indexListsize-3;x++){//ループ数4以上では曾孫以降の継承情報も必要
 				
 					int setSize = judgment_set.size(); //初期サイズを記録して探索に使用
 					for(int j=0;j<setSize;j++){
@@ -299,7 +306,7 @@ public class DecisionLoopStructureTest {
 										}
 									}
 								}
-								//null以外の関係がある場合,not_nullSetの１つがpattern_setにあるか探索
+								//null以外の関係がある場合,not_nullSetの１つがjudgment_setにあるか探索
 								if(not_nullSet.size() != 0){
 									for(int m=0;m<not_nullSet.size();m++){
 										for(int n=0;n<judgment_set.size();n++){
@@ -336,7 +343,7 @@ public class DecisionLoopStructureTest {
 		
 	}
 	
-	public static ArrayList<ArrayList<RelationPath>> reduce_combinationList_3rd(ArrayList<ArrayList<RelationPath>> combinationList, int loop_num){
+	public static ArrayList<ArrayList<RelationPath>> reduce_combinationList_3rd(ArrayList<ArrayList<RelationPath>> combinationList, int indexListsize){
 		
 		//複数の同じ属性を親がもつ組み合わせを削除
 		
@@ -349,7 +356,7 @@ public class DecisionLoopStructureTest {
 		for(int i=0;i<combinationList.size();i++){
 			p_nameList = new ArrayList<Integer>();
 			
-			for(int j=0;j<loop_num-1;j++){
+			for(int j=0;j<indexListsize-1;j++){
 				//親の名前を重複しないように登録
 				int match =0;
 				for(int x=0;x<p_nameList.size();x++){
@@ -360,14 +367,12 @@ public class DecisionLoopStructureTest {
 				if(match==0) p_nameList.add(combinationList.get(i).get(j).Parent_name);
 			}
 			
-			
-			
 			int flag=0;
 			for(int k=0;k<p_nameList.size();k++){
 				//各親の名ごとに探索し、属性要素が重複していたらフラグを立てる。
 				
 				a_nameList= new ArrayList<String>();
-				for(int m=0;m<loop_num-1;m++){
+				for(int m=0;m<indexListsize-1;m++){
 					if(combinationList.get(i).get(m).Parent_name.equals(p_nameList.get(k))){
 						int match=0;
 						for(int x=0;x<a_nameList.size();x++){
@@ -388,7 +393,7 @@ public class DecisionLoopStructureTest {
 		return combList_new;
 	}
 	
-	public static ArrayList<ArrayList<RelationPath>> reduce_combinationList_2nd(ArrayList<ArrayList<RelationPath>> combinationList, int loop_num){
+	public static ArrayList<ArrayList<RelationPath>> reduce_combinationList_2nd(ArrayList<ArrayList<RelationPath>> combinationList, int indexListsize){
 		
 		//複数の異なる親をもつ子が存在するものを削除
 		//親が複数あるかどうか＝子要素の名前の重複をチェックすれば十分
@@ -401,7 +406,7 @@ public class DecisionLoopStructureTest {
 		for(int i=0;i<combinationList.size();i++){
 			c_nameList = new ArrayList<Integer>();
 			
-			for(int j=0;j<loop_num-1;j++){
+			for(int j=0;j<indexListsize-1;j++){
 				//子の名前を重複しないように登録
 				int match =0;
 				for(int x=0;x<c_nameList.size();x++){
@@ -411,12 +416,12 @@ public class DecisionLoopStructureTest {
 				}
 				if(match==0) c_nameList.add(combinationList.get(i).get(j).Child_name);
 			}
-			if(c_nameList.size()==loop_num-1) combList_new.add(combinationList.get(i));
+			if(c_nameList.size()==indexListsize-1) combList_new.add(combinationList.get(i));
 		}
 		return combList_new;
 	}
 	
-	public static ArrayList<ArrayList<RelationPath>> reduce_combinationList(ArrayList<ArrayList<RelationPath>> combinationList, int loop_num){
+	public static ArrayList<ArrayList<RelationPath>> reduce_combinationList_1st(ArrayList<ArrayList<RelationPath>> combinationList, int indexListsize){
 		
 		//ループの種類を網羅していない組み合わせを削除
 		ArrayList<ArrayList<RelationPath>> combList_new = new ArrayList<ArrayList<RelationPath>>();
@@ -425,7 +430,7 @@ public class DecisionLoopStructureTest {
 			
 			nameList = new ArrayList<Integer>();
 			
-			for(int j=0;j<loop_num-1;j++){
+			for(int j=0;j<indexListsize-1;j++){
 				//親の名前を重複しないように登録
 				int match =0;
 				for(int x=0;x<nameList.size();x++){
@@ -447,19 +452,19 @@ public class DecisionLoopStructureTest {
 				if(match==0) nameList.add(combinationList.get(i).get(j).Child_name);
 			}
 			
-			if(nameList.size()==loop_num){
+			if(nameList.size()==indexListsize){
 				combList_new.add(combinationList.get(i));
 			}
 		}
 		return combList_new;
 	}
 	
-	public static ArrayList<ArrayList<RelationPath>> get_combinationList(ArrayList<RelationPath> patternList,int loop_num){
+	public static ArrayList<ArrayList<RelationPath>> get_combinationList(ArrayList<RelationPath> patternList,HashMap<Integer, String> IndexList){
 		
 		//pattenList.sizeから(loop_num-1)選ぶ組み合わせを列挙するメソッド
 		//patternList.sizeからloop_num-1個を選ぶ
 		int n = patternList.size();
-		int r = loop_num-1;
+		int r = IndexList.size() - 1;
 	    int[] c = new int[10];
 		for ( int i=0; i<10; i++ ){
 			c[i] = 0;
@@ -489,7 +494,7 @@ public class DecisionLoopStructureTest {
     }
 	
 	
-	public static ArrayList<RelationPath> get_relationList(int loop_num,Integer[] loop_name){
+	public static ArrayList<RelationPath> get_relationList(HashMap<Integer, String> IndexList){
 		
 		//関係パターンの列挙を取得するメソッド
 		//列挙数を計算し、その数だけstruPatt[]を返す
@@ -498,11 +503,11 @@ public class DecisionLoopStructureTest {
 		String[] attr_name ={"pre","inner","post"};
 		
 		ArrayList<RelationPath> patternList = new ArrayList<RelationPath>();
-		for(int i=0; i<loop_num;i++){	
-			for(int j=0; j<loop_num;j++){
+		for(int i=0; i<IndexList.size();i++){	
+			for(int j=0; j<IndexList.size();j++){
 				for(int k=0; k<attr_num;k++){
 					if(i!=j){
-						RelationPath pattern = new RelationPath(loop_name[i],loop_name[j],attr_name[k]);
+						RelationPath pattern = new RelationPath(i,j,attr_name[k]);
 						patternList.add(pattern);
 					}
 				}
@@ -543,13 +548,14 @@ public class DecisionLoopStructureTest {
 	}
 	
 	public static ArrayList<RelationPath> make_inputList(HashMap<Integer,HashMap<Integer,String>> AttrList,
-			HashMap<Integer,String> loopAttrList, Integer[] loop_name){
+			Vector<Integer> equOderVec, HashMap<Integer, String> IndexList){
+//			HashMap<Integer,String> loopAttrList, Integer[] loop_name){
 		
 		//AttrListからInputListを作成するメソッド(数式がランダムでも対応する)
 		//AttrListは番号1からスタートしていると仮定している。
 		
 		int val_num= AttrList.size();		//変数の数
-		int loop_num= loopAttrList.size();	//ループの数
+		int loop_num= IndexList.size();	//ループの数
 		
 		//ループ変数nのリスト上にある全てのinitを探索する。（複数の場合は並列ループ）
 		//initの属性を記録し、nのリスト上にその属性でinnerとfinalが各1つ以上あるか判定
@@ -558,24 +564,26 @@ public class DecisionLoopStructureTest {
 		ArrayList<RelationPath>  inputList = new ArrayList<RelationPath>();
 		
 		for(int i=0;i<loop_num;i++){
-			for(int j=1;j<val_num+1;j++){
-				if(AttrList.get(j).get(loop_name[i]).equals("init")){
+			for(int j=0;j<equOderVec.size();j++){
+				int equNum1 = equOderVec.get(j);
+				if(AttrList.get(equNum1).get(i).equals("init")){
 					for(int k=0;k<loop_num;k++){
 						
 						if(k!=i){
-							String init_attr = new String(AttrList.get(j).get(loop_name[k]));
+							String init_attr = new String(AttrList.get(equNum1).get(k));
 							int init_count=0;
 							int inner_count=0;
 							int final_count=0;
-							for(int m=1;m<val_num+1;m++){
-								if(AttrList.get(m).get(loop_name[k]).equals(init_attr)){
-									if(AttrList.get(m).get(loop_name[i]).equals("init")) init_count++;
-									if(AttrList.get(m).get(loop_name[i]).equals("inner")) inner_count++;
-									if(AttrList.get(m).get(loop_name[i]).equals("final")) final_count++;
+							for(int m=0;m<equOderVec.size();m++){
+								int equNum2 = equOderVec.get(m);
+								if(AttrList.get(equNum2).get(k).equals(init_attr)){
+									if(AttrList.get(equNum2).get(i).equals("init")) init_count++;
+									if(AttrList.get(equNum2).get(i).equals("inner")) inner_count++;
+									if(AttrList.get(equNum2).get(i).equals("final")) final_count++;
 								}		
 							}
 							if(init_count!=0 &&  inner_count!=0 && final_count!=0){								
-								inputList.add(new RelationPath(loop_name[k],loop_name[i],init_attr));
+								inputList.add(new RelationPath(k,i,init_attr));
 							}
 						}
 					}
@@ -583,7 +591,7 @@ public class DecisionLoopStructureTest {
 			}			
 		}
 		return inputList;
-	}
+	}	
 }
 
 	

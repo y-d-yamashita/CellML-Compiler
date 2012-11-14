@@ -283,16 +283,17 @@
 				</apply>
 				
 				<!-- loop3 loopcond -->
-				<condition>
-					<apply>
-						<eq/>
-						<ci>n3</ci>
-						<cn>100</cn>
-					</apply>
-				</condition>
+				
 				
 				<!-- loop3 final -->
 				<apply>
+					<condition>
+						<apply>
+							<eq/>
+							<ci>n3</ci>
+							<cn>100</cn>
+						</apply>
+					</condition>
 					<eq/>
 					<apply>
 						<selector/>
@@ -360,16 +361,17 @@
 				</apply>
 		
 			<!-- loop2 loopcond -->
-			<condition>
-				<apply>
-					<eq/>
-					<ci>n2</ci>
-					<cn>100</cn>
-				</apply>
-			</condition>
+			
 			
 			<!-- loop2 final -->
 			<apply>
+				<condition>
+					<apply>
+						<eq/>
+						<ci>n2</ci>
+						<cn>100</cn>
+					</apply>
+				</condition>
 				<eq/>
 				<apply>
 					<selector/>
@@ -460,16 +462,17 @@
 			</apply>
 			
 		<!-- loop1 loopcond -->
-		<condition>
-			<apply>
-				<eq/>
-				<ci>n1</ci>
-				<cn>100</cn>
-			</apply>
-		</condition>
+		
 		
 		<!-- loop1 final -->
 		<apply>
+			<condition>
+				<apply>
+					<eq/>
+					<ci>n1</ci>
+					<cn>100</cn>
+				</apply>
+			</condition>
 			<eq/>
 			<ci>X1end</ci>
 			<apply>
@@ -606,16 +609,17 @@
 			</apply>
 			
 			<!-- loop4 loopcond -->
-			<condition>
-				<apply>
-					<eq/>
-					<ci>n4</ci>
-					<cn>100</cn>
-				</apply>
-			</condition>
+			
 		
 			<!-- loop4 final -->
 			<apply>
+				<condition>
+					<apply>
+						<eq/>
+						<ci>n4</ci>
+						<cn>100</cn>
+					</apply>
+				</condition>
 				<eq/>
 				<ci>X4end</ci>
 				<apply>

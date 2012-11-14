@@ -18,7 +18,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_apply;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_assign;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
@@ -1174,8 +1173,6 @@ public class RecurrenceRelationGeneratorStatementList extends ProgramGenerator {
 		Math_ci tnINITTn = new Math_ci(m_pRecMLAnalyzer.getIndexHashMap(LoopNumber));
 		tnINITAssign.addFactor(tnINITTn);
 		Math_cn tnINIT0 = new Math_cn("0");
-		/*double消す*/
-		tnINIT0.changeType();
 		tnINITAssign.addFactor(tnINIT0);
 		SyntaxStatement aStatement = new SyntaxExpression(tnINIT);
 		return aStatement;
@@ -1201,8 +1198,6 @@ public class RecurrenceRelationGeneratorStatementList extends ProgramGenerator {
 		Math_ci tnpINNERTnR = new Math_ci(m_pRecMLAnalyzer.getIndexHashMap(LoopNumber));
 		tnpINNERPlusR.addFactor(tnpINNERTnR);
 		Math_cn tnpINNER1R = new Math_cn("1");
-		/*double消す*/
-		tnpINNER1R.changeType();
 		tnpINNERPlusR.addFactor(tnpINNER1R);
 		SyntaxExpression pSyntaxExpINNER = new SyntaxExpression(tnpINNER);
 		return pSyntaxExpINNER;
@@ -1219,8 +1214,6 @@ public class RecurrenceRelationGeneratorStatementList extends ProgramGenerator {
 		//pMathLt.addFactor(null);
 		//MathExpression pConditionExp = new MathExpression(pMathLt);
 		MathExpression pConditionExp = m_pRecMLAnalyzer.getExpression((Integer)expIndex.get(0));
-		/*double消す*/
-		((MathOperator)(pConditionExp.getRootFactor())).changeIndexInteger();
 		SyntaxCondition pSynLoopCond = new SyntaxCondition(pConditionExp);
 		SyntaxControl pSynDowhile = new SyntaxControl(eControlKind.CTRL_DOWHILE,pSynLoopCond);
 		return pSynDowhile;

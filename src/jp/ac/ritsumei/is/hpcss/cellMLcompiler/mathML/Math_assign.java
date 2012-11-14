@@ -45,5 +45,18 @@ public class Math_assign extends MathOperator {
 		return m_vecFactor.get(0).toLegalString()
 			+ " = " + m_vecFactor.get(1).toLegalString();
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*copied from Math_eq*/
+		if(m_vecFactor.size() != 2) {
+			throw new MathException("Math_assign","toMathMLString","lack of operand");
+		}
+
+		return 	"<eq/>" + "\n" +
+				"\t" + m_vecFactor.get(0).toMathMLString() + "\n" +
+				"\t" + m_vecFactor.get(1).toMathMLString() + "\n";
+	}
 
 }

@@ -68,5 +68,33 @@ public class Math_selector extends MathOperator {
 		
 		
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_SELECTOR){
+			throw new MathException("Math_selector","toMathMLString","lack of operand");
+		}
+
+		/*文字列を追加していく*/
+		String strExpression = "<selector/>" + "\n";
+
+		for(int i=0; i < m_vecFactor.size(); i++) {
+
+			/* &&演算子を追加 */
+			if(i != 0){
+				strExpression += "\n";
+			}
+
+			/*項を追加*/
+			strExpression += "\t" + (m_vecFactor.get(i)).toMathMLString();
+		}
+
+		strExpression += "\n";
+		
+		return strExpression;
+		
+	}
 
 }

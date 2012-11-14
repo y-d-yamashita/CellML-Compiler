@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.GlobalLogger;
 
 /**
@@ -119,6 +120,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 	 private Map<V,Node> nGroup;
 	 /** Map of edges */
 	 private Map<E,Connection> cGroup;
+	
 
 	 /**
 	  * Constructor
@@ -147,7 +149,8 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		
 		//Register vertex "v"
 		nGroup.put(v,new Node(v));
-	}
+		
+		}
 
 	/**
 	 * Add new edge
@@ -172,6 +175,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			throw new GraphException("Error:"+e+"["+src+","+dst+"]"+
 					", Edge:"+e+" was already added");
 		
+		
 		//If vertex s and d were not added, throw exception
 		if(s==null || d == null) 
 			throw new GraphException("Error:"+e+"["+src+","+dst+"]"+
@@ -184,6 +188,8 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		
 		//Register new edge
 		cGroup.put(e,new Connection(e, src, dst));
+		
+
 	}
 	
 	
@@ -327,6 +333,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			nGroup.get(c.src).outEdges.remove(e);
 			nGroup.get(c.dst).inEdges.remove(e);
 			cGroup.remove(e);
+
 		}
 
 		/**
@@ -403,6 +410,12 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 				inVs.add(cGroup.get(e).src);
 				
 				return inVs;
+		}
+
+		public void changeSrcVertex(E e, V xloop) {
+			//Connection c = cGroup.get(e);
+			///c.src=xloop;
+			
 		}
 	   
 

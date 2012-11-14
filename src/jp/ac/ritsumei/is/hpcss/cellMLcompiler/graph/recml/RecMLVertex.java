@@ -1,6 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml;
 
-import com.sun.org.apache.bcel.internal.classfile.SourceFile;
+//import com.sun.org.apache.bcel.internal.classfile.SourceFile;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Vertex;
@@ -15,10 +15,12 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
  */
 public class RecMLVertex extends Vertex {
 	/** RecML variable*/
-	private Math_ci recVar;
+	//private Math_ci recVar;
+	private Integer recVar;
 
 	/** RecML expression*/
-	private MathExpression recExpr;
+//	private MathExpression recExpr;
+	private Integer recExpr;
 	
 	/** Flag to identify source vertex for maximum matching*/
 	private boolean sourceFlag;
@@ -46,37 +48,12 @@ public class RecMLVertex extends Vertex {
 		sinkFlag=false;
 		visited= false;
 	}
-	/**
-	 * Constructor
-	 * @param var RecML variable
-	 */
-	public RecMLVertex(Math_ci var){
-		this();
-		recVar = var;
-	}
-	/**
-	 * Constructor
-	 * @param expr RecML expression
-	 */
-	public RecMLVertex(MathExpression expr){
-		this();
-		recExpr = expr;
-	}
-	/**
-	 * Constructor
-	 * @param var RecMl variable
-	 * @param expr RecMl expression
-	 */
-	public RecMLVertex(Math_ci var,MathExpression expr){
-		recVar = var;
-		recExpr = expr;
-	}
 
 	/**
 	 * Get variable
 	 * @return RecML variable
 	 */
-	public Math_ci getVariable(){
+	public Integer getVariableID(){
 		return recVar;
 	}
 	
@@ -84,8 +61,23 @@ public class RecMLVertex extends Vertex {
 	 * Get expression
 	 * @return RecML expression
 	 */
-	public MathExpression getExpression(){
+	public Integer getExpressionID(){
 		return recExpr;
+	}
+	/**
+	 * Get variable
+	 * @return RecML variable
+	 */
+	public void setVariable(Integer varID){
+		recVar=varID;
+	}
+	
+	/**
+	 * Get expression
+	 * @return RecML expression
+	 */
+	public void setExpression(Integer expId){
+		recExpr=expId;
 	}
 	
 	/**
@@ -93,7 +85,7 @@ public class RecMLVertex extends Vertex {
 	 * @param var RecML variable
 	 * @return if var equals revVar return true, otherwise return false
 	 */
-	public boolean equals(Math_ci var){
+	public boolean equalsVarID(Integer var){
 		return var.equals(recVar);
 	}
 
@@ -102,7 +94,7 @@ public class RecMLVertex extends Vertex {
 	 * @param var RecML expression
 	 * @return if expr equals revExpr return true, otherwise return false
 	 */
-	public boolean equals(MathExpression expr){
+	public boolean equalsExpID(Integer expr){
 		return expr.equals(recExpr);
 	}
 
@@ -188,27 +180,12 @@ public class RecMLVertex extends Vertex {
     }else if(isSource()){
     	return "Source";
     }else if(recVar!=null&&recExpr!=null){
-    	try {
-			return new StringBuilder().append("Var:"+recVar.toLegalString()+"&"+"Expr:"+recExpr.toLegalString()).toString();
-		} catch (MathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			return new StringBuilder().append("Var:"+recVar+"&"+"Expr:"+recExpr).toString();
     }else if(recVar!=null){
-    	try {
-			return new StringBuilder().append("Var:"+recVar.toLegalString()).toString();
-		} catch (MathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			return new StringBuilder().append("Var:"+recVar).toString();
 
     }else if(recExpr!=null){
-    	try {
-			return new StringBuilder().append("Expr:"+recExpr.toLegalString()).toString();
-		} catch (MathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			return new StringBuilder().append("Expr:"+recExpr).toString();
     }
 			return "no string";
     }
@@ -219,10 +196,17 @@ public class RecMLVertex extends Vertex {
      * @return XML string
      */
     public String toXMLString(int id, String indent){
-    	return new StringBuilder().append(indent).append("<node id="+id+">\n").
-    			append(indent+"	").append("<variable>").append("none").append("</variable>\n").
-    			append(indent+"	").append("<equation>").append("none").append("</equation>\n").
+    	return new StringBuilder().append(indent).append("<node id=\""+id+"\">\n").
+    			append(indent+"	").append("<variable>").append(this.recVar).append("</variable>\n").
+    			append(indent+"	").append("<equation>").append(this.recExpr).append("</equation>\n").
     			append(indent).append("</node>\n").toString();
+    }
+    
+    public int getVarId(){
+    	return this.recVar;
+    }
+    public int getEquId(){
+    	return this.recExpr;
     }
 }
 

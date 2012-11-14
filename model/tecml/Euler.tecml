@@ -1,8 +1,4 @@
 <tecml>
-	<!-- Euler version 1    	 	-->
-	<!--	Last edit:   20110726   	-->
-	<!--	Author:       			-->
-
 	<inputvar name="xi" type="diffvar" />
 	<outputvar name="xo" type="diffvar" />
 
@@ -12,10 +8,10 @@
 
 	<variable name="k1" type="derivativevar" />
 
-	<variable name="x0" type="diffvar" />
 	<variable name="x1" type="diffvar" />
+	<variable name="x2" type="diffvar" />
 
-	<variable name="y0" type="arithvar" />
+	<variable name="y1" type="arithvar" />
 
 	<variable name="z" type="constvar" />
 
@@ -37,20 +33,20 @@
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
 		<apply>
 			<eq/>
-			<ci>x0</ci>
+			<ci>x1</ci>
 			<ci>xi</ci>
 		</apply>
 
 		<apply>
 			<eq/>
-			<ci>y0</ci>
+			<ci>y1</ci>
 			<apply>
 				<fn>
 					<ci>g</ci>
 				</fn>
-				<ci>x0</ci>
+				<ci>x1</ci>
 				<ci>t</ci>
-				<ci>y0</ci>
+				<ci>y1</ci>
 				<ci>z</ci>
 			</apply>
 		</apply>
@@ -62,19 +58,19 @@
 				<fn>
 					<ci>f</ci>
 				</fn>
-				<ci>x0</ci>
+				<ci>x1</ci>
 				<ci>t</ci>
-				<ci>y0</ci>
+				<ci>y1</ci>
 				<ci>z</ci>
 			</apply>
 		</apply>
 
 		<apply>
 			<eq/>
-			<ci>x1</ci>
+			<ci>x2</ci>
 			<apply>
 				<plus/>
-				<ci>x0</ci>
+				<ci>x1</ci>
 				<apply>
 					<times/>
 					<ci>k1</ci>
@@ -86,7 +82,7 @@
 		<apply>
 			<eq/>
 			<ci>xo</ci>
-			<ci>x1</ci>
+			<ci>x2</ci>
 		</apply>
 
 	</math>

@@ -62,12 +62,12 @@ public class Math_cn extends MathOperand {
 		
 		return newFactor;
 	}
-	
+
 	/*(double)を消すメソッド*/
 	public void changeType(){
 		m_Type = "integer";
 	}
-
+	
 	/*-----文字列変換メソッド-----*/
 	public String toLegalString() throws MathException {
 
@@ -97,11 +97,9 @@ public class Math_cn extends MathOperand {
 			}
 		}
 	}
-	
-	/*-----文字列変換メソッド-----*/
-	public String toSelectorLegalString() throws MathException {
 
-		return m_strPresentText.substring(8);
-		
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+		return 	"<cn> " + m_strPresentText + " </cn>";
 	}
 }

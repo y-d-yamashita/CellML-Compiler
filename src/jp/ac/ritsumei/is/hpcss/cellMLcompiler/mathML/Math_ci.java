@@ -36,7 +36,12 @@ public class Math_ci extends MathOperand {
 		m_vecIndexListFactor = new Vector<MathFactor>();
 		m_nPointerNum = 0;
 	}
-
+	
+	/*-----名前を返すメソッド-----*/
+	public String getName(){
+		return m_strPresentText;
+	}
+	
 	/*-----値設定メソッド-----*/
 	public void setValue(double dValue){
 		m_dValue = dValue;
@@ -86,12 +91,7 @@ public class Math_ci extends MathOperand {
 	public void setPointerNum(int nPointerNum){
 		m_nPointerNum = nPointerNum;
 	}
-	
-	/*-----名前を返すメソッド-----*/
-	public String getName(){
-		return m_strPresentText;
-	}
-	
+
 	/*-----文字列変換メソッド-----*/
 	public String toLegalString() throws MathException {
 
@@ -138,4 +138,58 @@ public class Math_ci extends MathOperand {
 		return newOperand;
 	}
 
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+		/*ポインタ演算子の追加*/
+		String strExpression = "";
+		
+		/*Selector要素*/
+		if(m_vecIndexListFactor.size()>0){
+			/*文字列を追加していく*/
+			strExpression = "\t" + "<selector/>" + "\n";
+			strExpression += "\t" + "<ci> " + m_strPresentText + " </ci>" + "\n";
+
+			/*Selector要素*/
+			/*配列インデックスの追加*/
+			for(int i=0; i < m_vecIndexListFactor.size(); i++) {
+				if(i != 0){
+					strExpression += "\n";
+				}
+				/*項を追加*/
+				strExpression += "\t" +(m_vecIndexListFactor.get(i)).toMathMLString();
+			}
+			
+		}else{
+			strExpression += "<ci> " + m_strPresentText + " </ci>";
+		}
+		return 	strExpression;
+	}
+	
+	/**
+	 * 比較メソッド
+	 */
+	public boolean equals(Object obj){
+		if(obj instanceof Math_ci){
+			Math_ci that = (Math_ci) obj;
+			String thisStr=null;
+			String thatStr=null;
+				try {
+					thisStr=this.toLegalString();
+					thatStr=that.toLegalString();
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(thisStr.equals(thatStr)){
+					return true;
+				}
+		}	
+		return false;
+	}
+	public Vector<MathFactor> getM_vecIndexListFactor() {
+		return m_vecIndexListFactor;
+	}
+	public void setM_vecIndexListFactor(Vector<MathFactor> m_vecIndexListFactor) {
+		this.m_vecIndexListFactor = m_vecIndexListFactor;
+	}
 }

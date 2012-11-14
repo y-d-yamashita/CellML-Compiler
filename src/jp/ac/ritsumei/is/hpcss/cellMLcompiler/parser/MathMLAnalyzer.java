@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.CellMLException;
@@ -10,13 +11,18 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.XMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_apply;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathSepType;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.SimpleRecMLDefinition;
 
 /**
  * MathML解析クラス.
@@ -37,6 +43,22 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	/*the vector storing the list of attributes and its index*/
 	Vector<String[]> m_vecAttrList;
 	
+	/*SimpleRecML*/
+	/*属性情報リスト*/	
+	HashMap<Integer, HashMap<String, String>> m_hashSimpleRecAttrLists;	
+	HashMap<Integer, Integer> m_hashfinalAttrLists;	
+	public HashMap<Integer, Integer> getM_HashMapFinalAttrLists() {
+		return m_hashfinalAttrLists;
+	}
+	HashMap<Integer, Integer> m_hashinitendAttrLists;
+	public HashMap<Integer, Integer> getM_HashMapInitendAttrLists() {
+		return m_hashinitendAttrLists;
+	}
+	HashMap<Integer, Integer> m_hashcondrefAttrLists;
+	public HashMap<Integer, Integer> getM_HashMapCondrefAttrLists() {
+		return m_hashcondrefAttrLists;
+	}
+	
 	/**登録待ちオペランド種別*/
 	protected eMathOperand m_NextOperandKind;
 
@@ -49,6 +71,13 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		m_vecMathExpression = new Vector<MathExpression>();
 		m_strSepUsedValue = "";
 		m_vecAttrList = new Vector<String[]>();
+		
+		/*SimpleRecML*/	
+		/*属性情報リスト*/	
+		m_hashSimpleRecAttrLists = new HashMap<Integer, HashMap<String, String>>();	
+		m_hashfinalAttrLists = new HashMap<Integer, Integer>();	
+		m_hashinitendAttrLists = new HashMap<Integer, Integer>();	
+		m_hashcondrefAttrLists = new HashMap<Integer, Integer>();
 	}
 
 	/**
@@ -110,16 +139,73 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_LOOP5);
 			String[] strAttr = new String[] {strAttrLoop1, strAttrLoop2, strAttrLoop3, strAttrLoop4, strAttrLoop5};
 			
+			/*SimpleRecML*/	
+			/*属性情報リストを取得*/	
+			HashMap<String, String> SimpleRecAttrList = new HashMap<String, String>();	
+			String strAttrNum;	
+			String strAttrType = "";	
+			String strAttrCondref = "";	
+			int intAttrLoopnum;	
+			strAttrNum =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_NUM);	
+			strAttrType =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE);	
+			String strLoopnum =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM);	
+			strAttrCondref =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_CONDREF);	
+
+			
 			/*新しい計算式*/
 			if(m_pCurMathExpression==null || !m_pCurMathExpression.isConstructing()){
 				this.addNewExpression();
 				
 				/* store the MathExpression attribute values */
 				addNewAttribute(strAttr);
+				/*SimpleRecML*/	
+				/*属性情報リストを取得*/	
+					HashMap<String, String> hm = new HashMap<String, String>();
+					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_NUM, strAttrNum);
+				int intAttrNum;	
+				int intAttrCondref;	
+				if("final".equals(strAttrType)){	
+					intAttrNum = Integer.parseInt(strAttrNum);	
+					intAttrLoopnum = Integer.parseInt(strLoopnum);	
+					m_hashfinalAttrLists.put(intAttrNum, intAttrLoopnum);
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "final");
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
+				}	
+				if("initend".equals(strAttrType)){	
+					intAttrNum = Integer.parseInt(strAttrNum);	
+					intAttrLoopnum = Integer.parseInt(strLoopnum);	
+					m_hashinitendAttrLists.put(intAttrNum, intAttrLoopnum);	
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "initend");
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
+				}	
+				if(strAttrCondref!=null){	
+					intAttrNum = Integer.parseInt(strAttrNum);	
+					intAttrCondref = Integer.parseInt(strAttrCondref);	
+					m_hashcondrefAttrLists.put(intAttrNum, intAttrCondref);	
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_CONDREF, strAttrCondref);
+				}
+				
+				
+				m_pCurMathExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId(strTag), strAttr));
+				
+				MathFactor it = m_pCurMathExpression.getRootFactor();
+				if(it.matches(eMathMLClassification.MML_OPERATOR)){
+					if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+						((Math_apply)it).setExpInfo(hm);
+					}
+				}
+				
+				break;
 			}
 
 			m_pCurMathExpression.addOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId(strTag), strAttr));
+			
 			break;
 
 			//-----------------------------------被演算子の解析
@@ -273,6 +359,19 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	}
 	
 	/**
+	 * 構造情報をapplyへ割り当てる
+	 */
+	public void assignStruAttrToApply(HashMap<Integer, HashMap<Integer, String>> AttrLists){
+		for (int i=0;i<m_vecMathExpression.size();i++) {
+			HashMap<Integer, String> attrlist = new HashMap<Integer, String>();
+			if(AttrLists.containsKey(i)){
+				attrlist = (HashMap<Integer, String>) AttrLists.get(i).clone();
+			}
+			m_vecMathExpression.get(i).assignStruAttrToApply(attrlist);
+		}
+	}
+	
+	/**
 	 *  condition部分を抜き取り、別数式として保存
 	 */
 	public void pickUpConditions(){
@@ -312,6 +411,16 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	public void changeAllSelectorInteger(){
 		for(MathExpression it : m_vecMathExpression){
 			it.changeSelectorInteger();
+		}
+	}
+	
+	/**
+	 * 数式内のvariableを取得する(selectorも考慮する)
+	 * @throws MathException 
+	 */
+	public void getAllVariable(Vector<Math_ci> pVec) throws MathException{
+		for(MathExpression it: m_vecMathExpression){
+			it.getAllVariables(pVec);
 		}
 	}
 	
@@ -359,6 +468,26 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		}
 	}
 
+	/**
+	 * 数式をmathml出力する.
+	 * @throws MathException
+	 */
+	public void printMathmlExpressions() throws MathException {
+		/*すべての数式を出力*/
+		for (MathExpression it: m_vecMathExpression) {
+
+			/*数式標準出力*/
+			System.out.println(it.toMathMLString());
+			System.out.println();
+//			//変数一覧表示（デバッグ用）
+//			int nVariableCount = it.getVariableCount();
+//			for (int j = 0; j < nVariableCount; j++) {
+//				System.out.println(it.getVariable(j).toLegalString());
+//			}
+
+		}
+	}
+	
 	//========================================================
 	// addNewAttribute
 	//  set the values of the MathOperator attributes with vector index
@@ -377,5 +506,34 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	//========================================================
 	public String[] getAttribute(int mathExpIndex) {
 		return m_vecAttrList.get(mathExpIndex);
+	}
+	//========================================================
+	// getAttribute
+	//  get the values of the MathOperator attributes from the attribute list
+	//
+	// return
+	//	Vector<String[]> strAttributes
+	//========================================================
+	public Vector<String[]> getAttribute() {
+		return m_vecAttrList;
+	}
+	
+	public void addNewSimpleRecAttr(int Num, HashMap<String, String> List){	
+		m_hashSimpleRecAttrLists.put(Num, List);	
+	}
+	public HashMap<Integer, HashMap<String, String>> getEquAttr() {	
+		return m_hashSimpleRecAttrLists;	
+	}
+	public boolean checkFinalEquation(int equNum) {	
+		if(m_hashinitendAttrLists.containsKey(equNum)){
+			return true;
+		};
+		return false;	
+	}
+	public boolean checkinitendEquation(int equNum) {	
+		if(m_hashinitendAttrLists.containsKey(equNum)){
+			return true;
+		};
+		return false;	
 	}
 }

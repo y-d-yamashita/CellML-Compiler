@@ -39,5 +39,31 @@ public class Math_diff extends MathOperator {
 			throw new MathException("Math_diff","toLegalString","lack of operand");
 		}
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_DIFF){
+			throw new MathException("Math_diff","toMathMLString","lack of operand");
+		}
+
+		/*文字列を追加していく*/
+		String strExpression = "   ";
+
+		for(MathFactor it: m_vecFactor) {
+
+			/* &&演算子を追加 */
+			if(it != m_vecFactor.firstElement()){
+				strExpression += "\n\t";
+			}
+
+			/*項を追加*/
+			strExpression += it.toMathMLString();
+		}
+
+		return 	"<diff/>" + "\n" +
+					strExpression + "\n";
+	}
 
 }

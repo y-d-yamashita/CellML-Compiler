@@ -1,0 +1,411 @@
+<recml>
+	<loopindex num="0" name="n1" />
+	<loopindex num="1" name="n2" />
+	<loopindex num="2" name="n3" />
+	
+	<variable name="X1" type="recurvar"/>
+	<variable name="kX1" type="arithvar"/>
+	<variable name="X1end" type="output"/>
+	<variable name="Y1" type="arithvar"/>
+	<variable name="delt1" type="constvar"/>
+	
+	<variable name="X2" type="recurvar"/>
+	<variable name="kX2" type="arithvar"/>
+	<variable name="X2end" type="output"/>
+	<variable name="Y2" type="arithvar"/>
+	<variable name="delt2" type="constvar"/>
+	
+	<variable name="X3" type="recurvar"/>
+	<variable name="kX3" type="arithvar"/>
+	<variable name="X3end" type="output"/>
+	<variable name="Y3" type="arithvar"/>
+	<variable name="delt3" type="constvar"/>
+	
+	<variable name="n1" type="stepvar"/>
+	<variable name="n2" type="stepvar"/>
+	<variable name="n3" type="stepvar"/>
+	
+	
+	<node id="0" equation="0" variable = "0" />
+	<node id="1" equation="1" variable = "1" />
+	<node id="2" equation="2" variable = "2" />
+	<node id="3" equation="3" variable = "3" />
+	<node id="4" equation="4" variable = "4" />
+	<node id="5" equation="5" variable = "5" />
+	<node id="6" equation="6" variable = "6" />
+	<node id="7" equation="7" variable = "7" />
+	<node id="8" equation="8" variable = "8" />
+	<node id="9" equation="9" variable = "9" />
+	<node id="10" equation="10" variable = "10" />
+	<node id="11" equation="11" variable = "11" />
+	<node id="12" equation="13" variable = "12" />
+	<node id="13" equation="14" variable = "13" />
+	<node id="14" equation="15" variable = "14" />
+	<node id="15" equation="17" variable = "15" />
+	<node id="16" equation="18" variable = "16" />
+	<node id="17" equation="19" variable = "17" />
+	
+	<edge source = "0" dest = "1" />
+	<edge source = "1" dest = "2" />
+	<edge source = "3" dest = "4" />
+	<edge source = "4" dest = "5" />
+	<edge source = "6" dest = "7" />
+	<edge source = "7" dest = "8" />
+	<edge source = "8" dest = "9" />
+	<edge source = "9" dest = "10" />
+	<edge source = "7" dest = "10" />
+	<edge source = "10" dest = "11" />
+	<edge source = "5" dest = "12" />
+	<edge source = "12" dest = "13" />
+	<edge source = "4" dest = "13" />
+	<edge source = "13" dest = "14" />
+	<edge source = "2" dest = "15" />
+	<edge source = "15" dest = "16" />
+	<edge source = "1" dest = "16" />
+	<edge source = "16" dest = "17" />
+
+	
+	<varref id="0" name="X1[0]" />
+	<varref id="1" name="X1[n1]" />
+	<varref id="2" name="X1[n1+1]" />
+	<varref id="3" name="X1end" />
+	
+	
+	<math>
+		<apply num = "0">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>X1init</ci>
+		</apply>
+	
+		<apply num = "1" type = "initend" loopnum = "0">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<cn>n1</cn>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<cn>0</cn>
+			</apply>
+		</apply>
+	
+		<apply num = "2">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>Y1</ci>
+				<ci>n1</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<ci>n1</ci>
+			</apply>
+		</apply>
+			
+		<apply num = "3">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X2</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>X2init</ci>
+		</apply>
+			
+		<apply num = "4" type = "initend" loopnum = "1">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X2</ci>
+				<cn>n2</cn>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X2</ci>
+				<cn>0</cn>
+			</apply>
+		</apply>
+			
+		<apply num = "5">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>Y2</ci>
+				<ci>n2</ci>
+			</apply>
+			<apply>
+				<apply>
+					<times/>
+					<apply>
+						<minus/>
+						<apply>
+							<cn>1</cn>
+						</apply>
+					</apply>	
+					<apply>
+						<selector/>
+						<ci>X2</ci>
+						<ci>n2</ci>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+				
+		<apply num = "6">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X3</ci>
+				<cn>0</cn>
+			</apply>
+			<ci>X3init</ci>
+		</apply>
+				
+		<apply num = "7" type = "initend" loopnum = "2">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X3</ci>
+				<cn>n3</cn>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X3</ci>
+				<cn>0</cn>
+			</apply>
+		</apply>
+				
+		<apply num = "8">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>Y3</ci>
+				<ci>n3</ci>
+			</apply>
+			<apply>
+				<apply>
+					<times/>
+					<apply>
+						<minus/>
+						<apply>
+							<cn>1</cn>
+						</apply>
+					</apply>	
+					<apply>
+						<selector/>
+						<ci>X3</ci>
+						<ci>n3</ci>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+				
+		<apply num = "9">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kX3</ci>
+				<ci>n3</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>Y3</ci>
+				<ci>n3</ci>
+			</apply>
+		</apply>
+				
+		<apply num = "10">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X3</ci>
+				<apply>
+					<plus/>
+					<ci>n3</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>X3</ci>
+					<ci>n3</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kX3</ci>
+						<ci>n3</ci>
+					</apply>
+					<ci>delt3</ci>
+				</apply>
+			</apply>
+		</apply>
+				
+		<apply num = "11" type = "final" loopnum = "2">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X3end</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X3</ci>
+				<apply>
+					<plus/>
+					<ci>n3</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+			
+		<apply num = "12" condref = "11" >
+			<eq/>
+			<ci>n3</ci>
+			<cn>100</cn>
+		</apply>
+				
+		<apply num = "13">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kX2</ci>
+				<ci>n2</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>Y2</ci>
+				<ci>n2</ci>
+			</apply>
+		</apply>
+				
+		<apply num = "14">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X2</ci>
+				<apply>
+					<plus/>
+					<ci>n2</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>X2</ci>
+					<ci>n2</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kX2</ci>
+						<ci>n2</ci>
+					</apply>
+					<ci>delt2</ci>
+				</apply>
+			</apply>
+		</apply>
+						
+		<apply num = "15" type = "final" loopnum = "1">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X2end</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>X2</ci>
+				<apply>
+					<plus/>
+					<ci>n2</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+			
+		<apply num = "16" condref = "15" >
+			<eq/>
+			<ci>n2</ci>
+			<cn>100</cn>
+		</apply>
+			
+		<apply num = "17">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>kX1</ci>
+				<ci>n1</ci>
+			</apply>
+			<apply>
+				<selector/>
+				<ci>Y1</ci>
+				<ci>n1</ci>
+			</apply>
+		</apply>
+			
+		<apply num = "18">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>X1</ci>
+					<ci>n1</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>kX1</ci>
+						<ci>n1</ci>
+					</apply>
+					<ci>delt1</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply num = "19" type = "final" loopnum = "0">
+			<eq/>
+			<ci>X1end</ci>
+			<apply>
+				<selector/>
+				<ci>X1</ci>
+				<apply>
+					<plus/>
+					<ci>n1</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+		<apply num = "20" condref = "19">
+			<eq/>
+			<ci>n1</ci>
+			<cn>100</cn>
+		</apply>
+		
+	</math>
+
+</recml>

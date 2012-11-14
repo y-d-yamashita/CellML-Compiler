@@ -34,5 +34,19 @@ public class Math_laplacian extends MathOperator {
 			throw new MathException("Math_laplacian","toLegalString","lack of operand");
 		}
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() == 1) {
+			return 	"<laplacian/>" + "\n" +
+					"\t" + m_vecFactor.get(0).toMathMLString() + "\n";
+		}
+		/*例外*/
+		else{
+			throw new MathException("Math_laplacian","toMathMLString","lack of operand");
+		}
+	}
 
 }

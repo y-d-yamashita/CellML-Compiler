@@ -1,6 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.RecMLException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLGraphDefinition;
 
 /**
  * RecML definitions
@@ -19,16 +20,32 @@ public class SimpleRecMLDefinition {
 	
 	public static final String SIMPLERECML_TAG_STR_VARIABLE = "variable";
 	
+	public static final String SIMPLERECML_TAG_STR_GRAPH=RecMLGraphDefinition.RECML_TAG_STR_GRAPH;
+	
 	/*RecML変数型文字列定義*/
 	public static final String SIMPLERECML_VARTYPE_STR_RECURVAR = "recurvar";
 	public static final String SIMPLERECML_VARTYPE_STR_ARITHVAR = "arithvar";
 	public static final String SIMPLERECML_VARTYPE_STR_CONSTVAR = "constvar";
 	public static final String SIMPLERECML_VARTYPE_STR_OUTPUT = "output";
 	public static final String SIMPLERECML_VARTYPE_STR_STEPVER = "stepvar";
+	public static final String SIMPLERECML_VARTYPE_STR_DOUBLE = "double";
 
-
-	/* RecML attribute names */
-
+	public static final String SIMPLERECML_TAG_STR_GRAPH2 = "graph";
+	public static final String SIMPLERECML_TAG_STR_NODE = "node";
+	public static final String SIMPLERECML_TAG_STR_EDGE = "edge";
+	public static final String SIMPLERECML_TAG_STR_VARREF = "varref";
+	
+	public static final String SIMPLERECML_VARTYPE_STR_ID = "id";
+	public static final String SIMPLERECML_VARTYPE_STR_EQUATION = "equation";
+	public static final String SIMPLERECML_VARTYPE_STR_VARIABLE = "variable";
+	public static final String SIMPLERECML_VARTYPE_STR_SOURCE = "source";
+	public static final String SIMPLERECML_VARTYPE_STR_DEST = "dest";
+	
+	/*Simple RecML attribute names */
+	public static final String SIMPLERECML_ATTR_NUM = "num";
+	public static final String SIMPLERECML_ATTR_TYPE = "type";
+	public static final String SIMPLERECML_ATTR_CONDREF = "condref";
+	public static final String SIMPLERECML_ATTR_LOOPNUM = "loopnum";
 
 	
 	public enum eRecMLTag {
@@ -37,7 +54,13 @@ public class SimpleRecMLDefinition {
 		CTAG_LOOPINDEX		(SIMPLERECML_TAG_STR_LOOPINDEX),
 		CTAG_LOOPSTRUCT		(SIMPLERECML_TAG_STR_LOOPSTRUCT),
 		CTAG_POSITION	(SIMPLERECML_TAG_STR_POSITION),
-		CTAG_VARIABLE	(SIMPLERECML_TAG_STR_VARIABLE)
+		CTAG_VARIABLE	(SIMPLERECML_TAG_STR_VARIABLE),
+		CTAG_GRAPH	(SIMPLERECML_TAG_STR_GRAPH),
+		
+		CTAG_GRAPH2		(SIMPLERECML_TAG_STR_GRAPH2), 
+		CTAG_NODE		(SIMPLERECML_TAG_STR_NODE), 
+		CTAG_EDGE		(SIMPLERECML_TAG_STR_EDGE),
+		CTAG_VARREF		(SIMPLERECML_TAG_STR_VARREF), 
 			;
 		private final String operatorStr;
 		private eRecMLTag(String operatorstr) {
@@ -54,6 +77,15 @@ public class SimpleRecMLDefinition {
 		CVAR_TYPE_CONSTVAR	(SIMPLERECML_VARTYPE_STR_CONSTVAR),
 		CVAR_TYPE_OUTPUT	(SIMPLERECML_VARTYPE_STR_OUTPUT),
 		CVAR_TYPE_STEPVER	(SIMPLERECML_VARTYPE_STR_STEPVER),
+		CVAR_TYPE_DOUBLE	(SIMPLERECML_VARTYPE_STR_DOUBLE),
+		
+		CVAR_TYPE_ID	(SIMPLERECML_VARTYPE_STR_ID),
+		CVAR_TYPE_EQUATION	(SIMPLERECML_VARTYPE_STR_EQUATION),
+		CVAR_TYPE_VARIABLE	(SIMPLERECML_VARTYPE_STR_VARIABLE),
+		CVAR_TYPE_SOURCE	(SIMPLERECML_VARTYPE_STR_SOURCE),
+		CVAR_TYPE_DEST	(SIMPLERECML_VARTYPE_STR_DEST),
+		
+
 			;
 		private final String operatorStr;
 		private eRecMLVarType(String operatorstr) {

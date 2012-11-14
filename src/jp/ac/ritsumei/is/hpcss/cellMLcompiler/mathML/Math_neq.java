@@ -43,5 +43,18 @@ public class Math_neq extends MathOperator {
 		return " ( " + m_vecFactor.get(0).toLegalString()
 			+ " != " + m_vecFactor.get(1).toLegalString() + " ) ";
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() != 2) {
+			throw new MathException("Math_neq","toMathMLString","lack of operand");
+		}
+
+		return 	"<neq/>" + "\n" +
+				"\t" + m_vecFactor.get(0).toMathMLString() + "\n" +
+				"\t" + m_vecFactor.get(1).toMathMLString() + "\n" ;
+	}
 
 }

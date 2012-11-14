@@ -3,6 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML被演算子クラス.
@@ -95,5 +96,11 @@ public abstract class MathOperand extends MathFactor {
 			return false;
 		}
 	}
-
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+		v.visit(this);
+	}
 }

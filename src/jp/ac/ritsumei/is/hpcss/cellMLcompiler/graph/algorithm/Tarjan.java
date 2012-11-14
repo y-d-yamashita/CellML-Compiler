@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLVertex;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.SetList;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.List2D;
 
 /**
  * Topological sort class using Tarjan's algorithm
@@ -29,8 +29,8 @@ public class Tarjan {
 	 * @param graph
 	 * @return Sorted vertexes list. Strongly connected components is presented as Set of vertex. 
 	 */
-	public SetList<RecMLVertex> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
-		SetList<RecMLVertex> result = new SetList<RecMLVertex>();
+	public List2D<RecMLVertex> tarjan(DirectedGraph<RecMLVertex,RecMLEdge> graph){
+		List2D<RecMLVertex> result = new List2D<RecMLVertex>();
 		Stack<RecMLVertex> stack = new Stack<RecMLVertex>();
 	
 		index = -1;	
@@ -41,7 +41,7 @@ public class Tarjan {
 		return result;
 	}
 	private void travarse(RecMLVertex v, Stack<RecMLVertex> stack,
-			SetList<RecMLVertex> result, DirectedGraph<RecMLVertex, RecMLEdge> graph) {
+			List2D<RecMLVertex> result, DirectedGraph<RecMLVertex, RecMLEdge> graph) {
 		index++;
 		v.number=index;
 		v.lowpt=index;
@@ -57,8 +57,8 @@ public class Tarjan {
 					v.lowpt = Math.min(v.lowpt, w.number);
 			}
 		if(v.lowpt==v.number){
-			Set<RecMLVertex> stronglyConnectedComponents =
-					new TreeSet<RecMLVertex>();
+			List<RecMLVertex> stronglyConnectedComponents =
+					new ArrayList<RecMLVertex>();
 			
 			while(stack.isEmpty()!=true&&stack.peek().number>=v.number)
 				stronglyConnectedComponents.add(stack.pop());

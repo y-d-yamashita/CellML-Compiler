@@ -720,13 +720,14 @@ public class HighSpeedDecisionLoopStructureTest {
 	}
 	
 	public static ArrayList<RelationPath> make_inputList(HashMap<Integer,HashMap<Integer,String>> AttrList,
-			HashMap<Integer,String> loopAttrList, Integer[] loop_name){
+			Vector<Integer> equOderVec, HashMap<Integer, String> IndexList){
+//			HashMap<Integer,String> loopAttrList, Integer[] loop_name){
 		
 		//AttrListからInputListを作成するメソッド(数式がランダムでも対応する)
 		//AttrListは番号1からスタートしていると仮定している。
 		
 		int val_num= AttrList.size();		//変数の数
-		int loop_num= loopAttrList.size();	//ループの数
+		int loop_num= IndexList.size();	//ループの数
 		
 		//ループ変数nのリスト上にある全てのinitを探索する。（複数の場合は並列ループ）
 		//initの属性を記録し、nのリスト上にその属性でinnerとfinalが各1つ以上あるか判定
@@ -735,24 +736,26 @@ public class HighSpeedDecisionLoopStructureTest {
 		ArrayList<RelationPath>  inputList = new ArrayList<RelationPath>();
 		
 		for(int i=0;i<loop_num;i++){
-			for(int j=1;j<val_num+1;j++){
-				if(AttrList.get(j).get(loop_name[i]).equals("init")){
+			for(int j=0;j<equOderVec.size();j++){
+				int equNum1 = equOderVec.get(j);
+				if(AttrList.get(equNum1).get(i).equals("init")){
 					for(int k=0;k<loop_num;k++){
 						
 						if(k!=i){
-							String init_attr = new String(AttrList.get(j).get(loop_name[k]));
+							String init_attr = new String(AttrList.get(equNum1).get(k));
 							int init_count=0;
 							int inner_count=0;
 							int final_count=0;
-							for(int m=1;m<val_num+1;m++){
-								if(AttrList.get(m).get(loop_name[k]).equals(init_attr)){
-									if(AttrList.get(m).get(loop_name[i]).equals("init")) init_count++;
-									if(AttrList.get(m).get(loop_name[i]).equals("inner")) inner_count++;
-									if(AttrList.get(m).get(loop_name[i]).equals("final")) final_count++;
+							for(int m=0;m<equOderVec.size();m++){
+								int equNum2 = equOderVec.get(m);
+								if(AttrList.get(equNum2).get(k).equals(init_attr)){
+									if(AttrList.get(equNum2).get(i).equals("init")) init_count++;
+									if(AttrList.get(equNum2).get(i).equals("inner")) inner_count++;
+									if(AttrList.get(equNum2).get(i).equals("final")) final_count++;
 								}		
 							}
 							if(init_count!=0 &&  inner_count!=0 && final_count!=0){								
-								inputList.add(new RelationPath(loop_name[k],loop_name[i],init_attr));
+								inputList.add(new RelationPath(k,i,init_attr));
 							}
 						}
 					}
@@ -760,7 +763,7 @@ public class HighSpeedDecisionLoopStructureTest {
 			}			
 		}
 		return inputList;
-	}
+	}	
 }
 
 	

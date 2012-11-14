@@ -38,5 +38,17 @@ public class Math_ln extends MathOperator {
 
 		return "log( " + m_vecFactor.get(0).toLegalString() + " )";
 	}
+	
+	/*-----Method for converting Expression to MathML-----*/
+	public String toMathMLString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() != MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_LN) {
+			throw new MathException("Math_ln","toMathMLString","lack of operand");
+		}
+
+		return 	"<ln/>" + "\n" +
+				"\t" + m_vecFactor.get(0).toMathMLString() + "\n";
+	}
 
 }

@@ -3,6 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.algorithm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.recml.RecMLEdge;

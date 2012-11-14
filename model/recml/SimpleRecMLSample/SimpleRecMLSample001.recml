@@ -7,7 +7,7 @@
 	<!-- loop1 final -->
 	<!-- loop1 post -->
 
-<!-- loop1  -->
+<!-- loop1 ������ -->
 
 	<loopindex num="0" name="n1" />
 	
@@ -143,31 +143,22 @@
 		</apply>
 			
 		<!-- loop1 loopcond -->
-		<condition>
-			<apply>
-				<eq/>
-				<ci>n1</ci>
-				<cn>100</cn>
-			</apply>
-		</condition>
+		
 		
 		<!-- loop1 final -->
 		<apply>
+			<condition>
+				<apply>
+					<eq/>
+					<ci>n1</ci>
+					<cn>100</cn>
+				</apply>
+			</condition>
 			<eq/>
 			<ci>X1end</ci>
 			<apply>
 				<selector/>
 				<ci>X1</ci>
-				<ci>n1</ci>
-			</apply>
-		</apply>
-		
-		<apply>
-			<eq/>
-			<ci>t1end</ci>
-			<apply>
-				<selector/>
-				<ci>t1</ci>
 				<ci>n1</ci>
 			</apply>
 		</apply>

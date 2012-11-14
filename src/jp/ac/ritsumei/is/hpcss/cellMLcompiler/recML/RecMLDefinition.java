@@ -1,6 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.RecMLException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLGraphDefinition;
 
 /**
  * RecML definitions
@@ -19,12 +20,15 @@ public class RecMLDefinition {
 	
 	public static final String RECML_TAG_STR_VARIABLE = "variable";
 	
+	public static final String RECML_TAG_STR_GRAPH=RecMLGraphDefinition.RECML_TAG_STR_GRAPH;
+
+	
 	/*RecML変数型文字列定義*/
 	public static final String RECML_VARTYPE_STR_RECURVAR = "recurvar";
 	public static final String RECML_VARTYPE_STR_ARITHVAR = "arithvar";
 	public static final String RECML_VARTYPE_STR_CONSTVAR = "constvar";
 	public static final String RECML_VARTYPE_STR_OUTPUT = "output";
-
+	public static final String RECML_VARTYPE_STR_DOUBLE = "double";
 
 	/* RecML attribute names */
 	public static final String RECML_ATTR_LOOP1 = "loop1";
@@ -46,7 +50,8 @@ public class RecMLDefinition {
 		CTAG_LOOPINDEX		(RECML_TAG_STR_LOOPINDEX),
 		CTAG_LOOPSTRUCT		(RECML_TAG_STR_LOOPSTRUCT),
 		CTAG_POSITION	(RECML_TAG_STR_POSITION),
-		CTAG_VARIABLE	(RECML_TAG_STR_VARIABLE)
+		CTAG_VARIABLE	(RECML_TAG_STR_VARIABLE),
+		CTAG_GRAPH	(RECML_TAG_STR_GRAPH),
 			;
 		private final String operatorStr;
 		private eRecMLTag(String operatorstr) {
@@ -62,6 +67,7 @@ public class RecMLDefinition {
 		CVAR_TYPE_ARITHVAR	(RECML_VARTYPE_STR_ARITHVAR),
 		CVAR_TYPE_CONSTVAR	(RECML_VARTYPE_STR_CONSTVAR),
 		CVAR_TYPE_OUTPUT	(RECML_VARTYPE_STR_OUTPUT),
+		CVAR_TYPE_DOUBLE	(RECML_VARTYPE_STR_DOUBLE),
 			;
 		private final String operatorStr;
 		private eRecMLVarType(String operatorstr) {

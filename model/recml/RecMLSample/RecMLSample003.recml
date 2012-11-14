@@ -38,13 +38,10 @@
 	<variable name="X1" type="recurvar" loopcomponent1="1" />
 	<variable name="kX1" type="arithvar" loopcomponent1="1" />
 	<variable name="X1end" type="output" loopcomponent1="1" />
-
 	<variable name="t1" type="recurvar" loopcomponent1="1" />
 	<variable name="t1end" type="output" loopcomponent1="1" />
-
 	<variable name="Y1" type="arithvar" loopcomponent1="1" />
-
-	<variable name="n1" type="stepvar" loopcomponent1="1" />
+<!--	<variable name="n1" type="stepvar" loopcomponent1="1" />　-->
 	
 	<variable name="delt1" type="constvar" loopcomponent1="1" />
 	
@@ -52,22 +49,16 @@
 	<variable name="X2" type="recurvar" loopcomponent1="1" loopcomponent2="1"/>
 	<variable name="kX2" type="arithvar" loopcomponent1="1" loopcomponent2="1"/>
 	<variable name="X2end" type="output" loopcomponent1="1" loopcomponent2="1"/>
-
 	<variable name="Y2" type="arithvar" loopcomponent1="1" loopcomponent2="1"/>
-
-	<variable name="n2" type="stepvar" loopcomponent1="1" loopcomponent2="1"/>
-	
+<!--	<variable name="n2" type="stepvar" loopcomponent1="1" loopcomponent2="1"/> -->
 	<variable name="delt2" type="constvar" loopcomponent1="1" loopcomponent2="1"/>
 	
 	
 	<variable name="X3" type="recurvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/>
 	<variable name="kX3" type="arithvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/>
 	<variable name="X3end" type="output" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/>
-
 	<variable name="Y3" type="arithvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/>
-
-	<variable name="n3" type="stepvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/>
-	
+<!--	<variable name="n3" type="stepvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/> -->
 	<variable name="delt3" type="constvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1"/>
 	
 	<math>

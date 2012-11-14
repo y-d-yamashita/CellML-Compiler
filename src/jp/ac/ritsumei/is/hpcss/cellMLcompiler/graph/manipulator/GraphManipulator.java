@@ -87,12 +87,12 @@ public class GraphManipulator {
 	 * @throws MathException 
 	 * @throws TableException 
 	 */
-	public FieldGraph cretateFieldDependencyGraph(
-			DirectedGraph<RecMLVertex, RecMLEdge> graph,
-			RecMLAnalyzer recmlAnalyzer
-			) throws GraphException, TableException, MathException{
-			return graphCreator.cretateFieldDependencyGraph(graph,recmlAnalyzer.getRecMLVariableTable(),recmlAnalyzer);
-	}
+	//public FieldGraph cretateFieldDependencyGraph(
+	//		DirectedGraph<RecMLVertex, RecMLEdge> graph,
+	//		RecMLAnalyzer recmlAnalyzer
+	//		) throws GraphException, TableException, MathException{
+	//		return graphCreator.cretateFieldDependencyGraph(graph,recmlAnalyzer.getRecMLVariableTable(),recmlAnalyzer);
+	//}
 	
 	/**
 	 * Create bipartite graph

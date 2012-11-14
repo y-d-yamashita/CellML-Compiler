@@ -96,7 +96,7 @@ public class StructuredRecMLGenerator{
 				//"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml"
 //				"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
 //				"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample002.recml"
-				"./model/recml/SimpleRecMLSample/SimpleKawabataTestSample/SimpleRecMLSample002.recml"
+				"./model/recml/SimpleRecMLSample/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
 		;
 		
 		XMLReader parser = null;

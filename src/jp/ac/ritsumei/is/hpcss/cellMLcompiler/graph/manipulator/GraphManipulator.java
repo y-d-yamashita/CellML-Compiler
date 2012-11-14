@@ -78,7 +78,7 @@ public class GraphManipulator {
 			DirectedGraph<RecMLVertex,RecMLEdge> graph) throws GraphException{
 			return graphCreator.cretateDependencyGraph(pairList, graph);
 	}
-	/*
+
 	/**
 	 * Crate dependency graph
 	 * @param dependency graph of variables and equations
@@ -93,7 +93,6 @@ public class GraphManipulator {
 			) throws GraphException, TableException, MathException{
 			return graphCreator.cretateFieldDependencyGraph(graph,recmlAnalyzer.getRecMLVariableTable(),recmlAnalyzer);
 	}
-	*/
 	
 	/**
 	 * Create bipartite graph

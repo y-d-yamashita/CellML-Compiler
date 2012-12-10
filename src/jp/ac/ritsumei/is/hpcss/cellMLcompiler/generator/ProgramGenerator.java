@@ -96,12 +96,7 @@ public abstract class ProgramGenerator {
 		// TODO 自動生成されたコンストラクター・スタブ
 		m_pRecMLAnalyzer = recMLAnalyzer;
 	}
-	
-	public ProgramGenerator() {
-		// TODO Remove after testing
-		
-	}
-	
+
 	/**
 	 * プログラム構文を生成し，返す.
 	 * @return プログラム構文インスタンス
@@ -319,6 +314,7 @@ public abstract class ProgramGenerator {
 		Math_assign pMathAssign =
 			(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
 		Math_cn pLoopInit = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,"0");
+		pLoopInit.changeType();
 		pMathAssign.addFactor(pIndexVariable);
 		pMathAssign.addFactor(pLoopInit);
 		MathExpression pInitExp = new MathExpression(pMathAssign);
@@ -452,6 +448,7 @@ public abstract class ProgramGenerator {
 		Math_leq pMathLeq = (Math_leq)MathFactory.createOperator(eMathOperator.MOP_LEQ);
 		Math_cn pLoopCount =
 			(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,strEndTime);
+		pLoopCount.changeType();
 		pMathLeq.addFactor(pTimeVariable);
 		pMathLeq.addFactor(pLoopCount);
 		MathExpression pConditionExp = new MathExpression(pMathLeq);
@@ -461,6 +458,7 @@ public abstract class ProgramGenerator {
 			(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
 		Math_cn pLoopInit =
 			(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,strStartTime);
+		pLoopInit.changeType();
 		pMathAssign.addFactor(pTimeVariable);
 		pMathAssign.addFactor(pLoopInit);
 		MathExpression pInitExp = new MathExpression(pMathAssign);
@@ -505,6 +503,7 @@ public abstract class ProgramGenerator {
 		/*第二引数追加*/
 		Math_cn pZeroConst =
 			(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,"0");
+		pZeroConst.changeType();
 		//Syntax構文群が完成するまでの暫定処置
 		pSynMemsetCall.addArgFactor(pZeroConst);
 

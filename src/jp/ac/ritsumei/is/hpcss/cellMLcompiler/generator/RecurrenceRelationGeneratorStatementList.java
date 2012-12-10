@@ -10,10 +10,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.SyntaxException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TranslateException;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.generator.CommonProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.generator.CudaProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.generator.ProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLcompiler.generator.SimpleProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
@@ -43,18 +39,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.SyntaxDataType.eDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.syntax.SyntaxPreprocessor.ePreprocessorKind;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.tecML.TecMLDefinition.eTecMLVarType;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.utility.StringUtil;
-
-
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**

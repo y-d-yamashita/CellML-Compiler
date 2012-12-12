@@ -96,8 +96,8 @@ public class MathFactory {
 			return new Math_root(strAttr);
 		case MOP_FLOOR:
 			return new Math_floor(strAttr);
-		case MOP_CEIL:
-			return new Math_ceil(strAttr);
+		case MOP_CEILING:
+			return new Math_ceiling(strAttr);
 		case MOP_PIECEWISE:
 			return new Math_piecewise(strAttr);
 		case MOP_PIECE:
@@ -114,6 +114,8 @@ public class MathFactory {
 			return new Math_laplacian(strAttr);
 		case MOP_DEGREE:
 			return new Math_degree(strAttr);
+		case MOP_ABS:
+			return new Math_abs(strAttr);
 
 			/*例外*/
 		default:

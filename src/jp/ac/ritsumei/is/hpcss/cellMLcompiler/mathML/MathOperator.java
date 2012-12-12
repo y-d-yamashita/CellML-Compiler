@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -48,9 +49,9 @@ public abstract class MathOperator extends MathFactor {
 			int unMinFactorNum) {
 		this(strPresentText, operatorKind, unMinFactorNum, null);
 	}
-
+	
 	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#getValue()
+	 * @see jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor#getValue()
 	 */
 	public double getValue() throws MathException {
 		/*演算結果を返す*/
@@ -58,7 +59,7 @@ public abstract class MathOperator extends MathFactor {
 	}
 
 	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#setValue(double)
+	 * @see jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor#setValue(double)
 	 */
 	public void setValue(double dValue) throws MathException {
 		throw new MathException("MathOperator","setValue",
@@ -99,7 +100,7 @@ public abstract class MathOperator extends MathFactor {
 	}
 
 	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#createCopy()
+	 * @see jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor#createCopy()
 	 */
 	public MathFactor createCopy() throws MathException {
 		/*関数の場合*/
@@ -576,7 +577,7 @@ public abstract class MathOperator extends MathFactor {
 	}
 
 	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#matchesExpression(jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor)
+	 * @see jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor#matchesExpression(jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor)
 	 */
 	public boolean matchesExpression(MathFactor pFactor) {
 		/*比較要素が演算子でなければ終了*/
@@ -916,6 +917,22 @@ public abstract class MathOperator extends MathFactor {
 		return this;
 		}
 
+	/**
+	 * Add attribute to equation (Math_eq operator)
+	 * @param strAttrName name of the attribute to be added
+	 * @param strAttrValue value of the attribute
+	 * @throws MathException
+	 */
+	public void addAttribute(HashMap<String, String> HMapApplyAttr)
+	throws MathException {
+		/*ルートが演算子の場合*/
+		for (MathFactor it: m_vecFactor) {
+			if (((MathOperator)it).matches(eMathOperator.MOP_EQ)) {
+				((Math_eq)it).setExpInfo(HMapApplyAttr);
+			}
+		}
 
+
+	}
 
 }

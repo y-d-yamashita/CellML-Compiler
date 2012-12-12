@@ -155,4 +155,38 @@ public abstract class MathFactor {
 	 */
 	public abstract MathFactor removeExcessiveArithmeticOperator() throws MathException;
 
+	/* override hashcode and equals of MathFactor to make objects work as hash map keys */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((m_classification == null) ? 0 : m_classification.hashCode());
+		result = prime
+				* result
+				+ ((m_strPresentText == null) ? 0 : m_strPresentText.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MathFactor other = (MathFactor) obj;
+		if (m_classification != other.m_classification)
+			return false;
+		if (m_strPresentText == null) {
+			if (other.m_strPresentText != null)
+				return false;
+		} else if (!m_strPresentText.equals(other.m_strPresentText))
+			return false;
+		return true;
+	}
+
+	
 }

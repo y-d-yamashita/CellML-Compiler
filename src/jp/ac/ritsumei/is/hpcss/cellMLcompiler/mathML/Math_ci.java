@@ -3,6 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.variableMesh.MeshCoordinates;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 
 /**
@@ -138,4 +139,43 @@ public class Math_ci extends MathOperand {
 	public String toMathMLString() throws MathException {
 		return 	"<ci> " + m_strPresentText + " </ci>";
 	}
+	
+	/* override hashcode and equals of Math_ci to make objects work as hash map keys */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime
+				* result
+				+ ((m_vecArrayIndexFactor == null) ? 0 : m_vecArrayIndexFactor
+						.hashCode());
+		result = prime
+				* result
+				+ ((m_vecIndexListFactor == null) ? 0 : m_vecIndexListFactor
+						.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Math_ci other = (Math_ci) obj;
+		if (m_vecArrayIndexFactor == null) {
+			if (other.m_vecArrayIndexFactor != null)
+				return false;
+		} else if (!m_vecArrayIndexFactor.equals(other.m_vecArrayIndexFactor))
+			return false;
+		if (m_vecIndexListFactor == null) {
+			if (other.m_vecIndexListFactor != null)
+				return false;
+		} else if (!m_vecIndexListFactor.equals(other.m_vecIndexListFactor))
+			return false;
+		return true;
+	}
+	
+	
 }

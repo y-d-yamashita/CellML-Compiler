@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -602,4 +603,32 @@ public class MathExpression {
 		m_pRootFactor = m_pRootFactor.removeExcessiveArithmeticOperator();
 		return this;
 	}
+	
+	/**
+	 * Add attribute to equation (Math_eq operator)
+	 * @param strAttrName name of the attribute to be added
+	 * @param strAttrValue value of the attribute
+	 * @throws MathException
+	 */
+	public void addAttribute(HashMap<String, String> HMapApplyAttr)
+	throws MathException {
+		/*ルートが演算子の場合*/
+		
+		if (m_pRootFactor.matches(eMathMLClassification.MML_OPERATOR)) {
+			if (((MathOperator)m_pRootFactor).matches(eMathOperator.MOP_EQ)) {
+				((Math_eq)m_pRootFactor).setExpInfo(HMapApplyAttr);
+			}
+			else {
+				((MathOperator)m_pRootFactor).addAttribute(HMapApplyAttr);
+			}
+		}
+		/*例外の要素*/
+		else {
+			throw new MathException("MathExpression","addAttribute",
+						"first factor should be Math_apply of Math_Eq");
+		}
+	}
 }
+
+
+

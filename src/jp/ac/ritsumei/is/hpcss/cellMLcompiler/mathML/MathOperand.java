@@ -157,4 +157,35 @@ public abstract class MathOperand extends MathFactor {
 	@Override
 	public MathFactor removeExcessiveArithmeticOperator()throws MathException{return this;}
 
+	/* override hashcode and equals of MathOperand to make objects work as hash map keys */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		long temp;
+		temp = Double.doubleToLongBits(m_dValue);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result
+				+ ((m_operandKind == null) ? 0 : m_operandKind.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MathOperand other = (MathOperand) obj;
+		if (Double.doubleToLongBits(m_dValue) != Double
+				.doubleToLongBits(other.m_dValue))
+			return false;
+		if (m_operandKind != other.m_operandKind)
+			return false;
+		return true;
+	}
+
+	
 }

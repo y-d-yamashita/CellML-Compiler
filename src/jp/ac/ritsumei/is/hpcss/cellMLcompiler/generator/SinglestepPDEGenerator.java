@@ -357,9 +357,8 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 			pMathEq.addFactor(pDistrParamFactor);
 			MathExpression pNewExp = new MathExpression(pMathEq);
 			
-			/* if the distributed parameter variable does contains a relml equation, discretize that equation. else, add new parameter expression to hashmap */
+			/* if the distributed parameter variable does contains a relml equation, add that equation. else, add new parameter expression to hashmap */
 			if (DistrParamExpHMap.containsKey(strDistrParamKey)){
-//				this.createDiscreteSingleExpression(DistrParamExpHMap.get(strDistrParamKey));
 				m_vecDistrParamExp.add(DistrParamExpHMap.get(strDistrParamKey));
 			} else{
 				DistrParamExpHMap.put(DistrParamHMap.get(pVariable), pNewExp);
@@ -367,6 +366,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 
 		}
 		
+		/* Discretize distributed parameter equations */
 		this.createDiscreteExpressions(m_vecDistrParamExp);
 		
 	}
@@ -395,7 +395,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		
 		/* add the instances for boundary conditions */
 		System.out.println("\n --------------------------- Spatial Boundary locations and instances:");
-		this.generateBoundaryExpSpatialInstances(pw);
+		this.generateBoundaryExpInstances(pw, false);
 		pw.flush();
 		
 		/* add the instances for distributed parameters */
@@ -409,45 +409,12 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		fw.close();   
 	}
 	
-
 	/*****
-	 * Generate the equations for instances of space only
-	 * using the csv files
+	 * Generate the expanded equations using full expansion or spatial expansion only
+	 * @arg: morphology, boundary and distributed parameter csv files
+	 * 
 	 * *****/
-	public void generateRecMLSpatialExpansionEquations(String strFileName) 
-	throws MathException, GraphException, IOException, TranslateException {
-		
-		FileWriter fw = new FileWriter(strFileName, true);
-		PrintWriter pw = new PrintWriter(fw);
-
-		   
-		/* add the instances for model equations */		
-		System.out.println("\n --------------------------- Equation Spatial instances:");
-		this.generateDiscreteExpSpatialInstances(pw);
-		pw.flush();
-		
-		/* add the instances for boundary conditions */
-		System.out.println("\n --------------------------- Boundary Spatial locations and instances:");
-		this.generateBoundaryExpSpatialInstances(pw);
-		pw.flush();
-		
-		/* add the instances for distributed parameters */
-		System.out.println("\n --------------------------- Distributed parameter instances:");
-		this.generateDistrParamExpInstances(pw);
-		
-	   //Close the Print Writer
-	   pw.close();
-	       
-	   //Close the File Writer
-	   fw.close();   
-		
-	}
-	
-	/*****
-	 * Generate the equations for all instances of time and space
-	 * using the csv files
-	 * *****/
-	public void generateRecMLAllExpansionEquations(String strFileName) 
+	public void generateRecMLExpandedEquations(String strFileName, boolean bFullExpansion) 
 	throws MathException, GraphException, IOException, TranslateException {
 		
 		FileWriter fw = new FileWriter(strFileName, true);
@@ -456,12 +423,12 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		   
 		/* add the instances for model equations */		
 		System.out.println("\n --------------------------- Equation instances:");
-		this.generateDiscreteExpInstances(pw);
+		this.generateDiscreteExpInstances(pw, bFullExpansion);
 		pw.flush();
 		
 		/* add the instances for boundary conditions */
 		System.out.println("\n --------------------------- All Boundary locations and instances:");
-		this.generateBoundaryExpInstances(pw);
+		this.generateBoundaryExpInstances(pw, bFullExpansion);
 		pw.flush();
 		
 		/* add the instances for distributed parameters */
@@ -482,25 +449,50 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 	 * 
 	 * @return: m_strMathExpInstances.append(boundaryMathMLString)
 	 * *****/
-	public void generateDiscreteExpInstances(PrintWriter pw) 
+	public void generateDiscreteExpInstances(PrintWriter pw, boolean bFullExpansion) 
 	throws MathException, GraphException {
 		
-		/* Combine the time steps with the spatial coordinates*/
+		
 		int nTimeSteps = maxTime;
 		int[] morphologyInstance = new int[m_pRelMLAnalyzer.getM_vecIndexVar().size()];
-		for (int i=0; i<nTimeSteps; i++) {
-			morphologyInstance[0] = i;
+
+		/* add the spatial coordinates to index instance */
+		for (MeshCoordinates coor: MorphologyHMap.keySet()) {
 			
-			/* add the spatial coordinates to index instance */
-			for (MeshCoordinates coor: MorphologyHMap.keySet()) {
-				
-				for (int j=1; j<morphologyInstance.length; j++) {
-					morphologyInstance[j] = coor.getCoordinate(j-1);
+			/* check if coordinate is a material node */
+			if (Integer.parseInt(MorphologyHMap.get(coor)) != 0) {		
+				for (int i=1; i<morphologyInstance.length; i++) {					
+					morphologyInstance[i] = coor.getCoordinate(i-1);
 				}
-				if (Integer.parseInt(MorphologyHMap.get(coor)) != 0) {
+				
+				/* If full expansion is needed, combine the time steps with the spatial coordinates, if not, use spatial coordinate only */	
+				if(bFullExpansion) {					
+					/* include time step in coordinate instance */
+					for (int j=0; j<nTimeSteps; j++) {
+						morphologyInstance[0] = j;
+
+						for (int k=0; k<m_vecDiscreteModelExp.size(); k++) {
+							MathExpression pNewModelExpInstance = m_vecDiscreteModelExp.get(k).createCopy();
+							this.generateExpInstance(pNewModelExpInstance, morphologyInstance, bFullExpansion);
+							
+							/* insert equation number attribute in equation */
+							HashMap<String, String> HMapEquNum = new HashMap<String, String>();
+							HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
+							pNewModelExpInstance.addAttribute(HMapEquNum);
+							this.incrementEquNum();
+							
+							pw.print(pNewModelExpInstance.toMathMLString() + "\n");
+//							System.out.println(pNewModelExpInstance.toLegalString());
+						}
+					}
+					
+				} else {				
+					/* dummy value for time index (will not be used)*/
+					morphologyInstance[0] = 0;
+
 					for (int k=0; k<m_vecDiscreteModelExp.size(); k++) {
 						MathExpression pNewModelExpInstance = m_vecDiscreteModelExp.get(k).createCopy();
-						this.generateExpInstance(pNewModelExpInstance, morphologyInstance, true);
+						this.generateExpInstance(pNewModelExpInstance, morphologyInstance, bFullExpansion);
 						
 						/* insert equation number attribute in equation */
 						HashMap<String, String> HMapEquNum = new HashMap<String, String>();
@@ -509,48 +501,13 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 						this.incrementEquNum();
 						
 						pw.print(pNewModelExpInstance.toMathMLString() + "\n");
-						System.out.println(pNewModelExpInstance.toLegalString());
+//						System.out.println(pNewModelExpInstance.toLegalString());
 					}
 				}
 			}
-		}
-
-	}
-	
-	/*****
-	 * Generate the model equations for all instances except time
-	 * and append the MathML equations to StringBuilder
-	 * 
-	 * @return: m_strMathExpInstances.append(boundaryMathMLString)
-	 * *****/
-	public void generateDiscreteExpSpatialInstances(PrintWriter pw) 
-	throws MathException, GraphException {
-		
-		/* Combine the time steps with the spatial coordinates*/
-		int[] morphologyInstance = new int[m_pRelMLAnalyzer.getM_vecIndexVar().size() - 1];
 			
-		/* add the spatial coordinates to index instance */
-		for (MeshCoordinates coor: MorphologyHMap.keySet()) {
-			
-			for (int j=0; j<morphologyInstance.length; j++) {
-				morphologyInstance[j] = coor.getCoordinate(j);
-			}
-			if (Integer.parseInt(MorphologyHMap.get(coor)) != 0) {
-				for (int k=0; k<m_vecDiscreteModelExp.size(); k++) {
-					MathExpression pNewModelExpInstance = m_vecDiscreteModelExp.get(k).createCopy();
-					this.generateExpInstance(pNewModelExpInstance, morphologyInstance, false);
-					
-					/* insert equation number attribute in equation */
-					HashMap<String, String> HMapEquNum = new HashMap<String, String>();
-					HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
-					pNewModelExpInstance.addAttribute(HMapEquNum);
-					this.incrementEquNum();
-					
-					pw.print(pNewModelExpInstance.toMathMLString() + "\n");
-					System.out.println(pNewModelExpInstance.toLegalString());
-				}
-			}
 		}
+			
 	}
 	
 	/*****
@@ -559,43 +516,81 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 	  * 
 	  * @return: m_strMathExpInstances.append(boundaryMathMLString)
 	 * *****/
-	public void generateBoundaryExpInstances(PrintWriter pw)
+	public void generateBoundaryExpInstances(PrintWriter pw, boolean bFullExpansion)
 	throws MathException, GraphException {
 		
 		/* get the boundary file and locations */ 
 		int nTimeSteps = maxTime;
 		HashMap<Math_ci, String> BoundaryHMap = new HashMap<Math_ci, String>();
 		BoundaryHMap = m_pRelMLAnalyzer.getM_HashMapBoundedVar();
-		Vector<ParameterMapper> m_vecBoundaryMaps = new Vector<ParameterMapper>();
 
 		/* Get all the bounded variables' boundary condition */
 		for (Math_ci m_pBoundedVar : BoundaryHMap.keySet()) {
 //		    System.out.println(m_pBoundedVar.toLegalString() + " filename: " + BoundaryHMap.get(m_pBoundedVar));
 		    ParameterMapper boundaryMapper = new ParameterMapper();
 			boundaryMapper.readParameterCSVFile(m_pBoundedVar, BoundaryHMap.get(m_pBoundedVar));
-			m_vecBoundaryMaps.add(boundaryMapper);
 			
-			/* generate the all instances for bounded variable boundary equations */
+			/* generate the instances for bounded variable boundary equations */
 			HashMap<MeshCoordinates, String> BoundedVarHMap = new HashMap<MeshCoordinates, String>();
 			BoundedVarHMap = boundaryMapper.getParameterHMap();
 			
 			/* Combine the time steps with the spatial coordinates*/
 			int[] boundInstance = new int[m_pRelMLAnalyzer.getM_vecIndexVar().size()];
-			for (int i=0; i<nTimeSteps; i++) {
-				boundInstance[0] = i;
 			
-				/* add the spatial coordinates to index instance */
-				for (MeshCoordinates coor : BoundedVarHMap.keySet()) {
+			/* add the spatial coordinates to index instance */
+			for (MeshCoordinates coor : BoundedVarHMap.keySet()) {
+				
+				int nBoundaryID = Integer.parseInt(BoundedVarHMap.get(coor));
+				if (nBoundaryID != 0) {			
 					for (int j=1; j<boundInstance.length; j++) {
 						boundInstance[j] = coor.getCoordinate(j-1);
 					}
-					int nBoundaryID = Integer.parseInt(BoundedVarHMap.get(coor));
-					if (nBoundaryID != 0) {	
-						PrimeFactors primeBoundID = new PrimeFactors();
+					PrimeFactors primeBoundID = new PrimeFactors();
+					
+					/* If full expansion is needed, combine the time steps with the spatial coordinates, if not, use spatial coordinate only */	
+					if (bFullExpansion) {
+						for (int i=0; i<nTimeSteps; i++) {
+							boundInstance[0] = i;
+	
+							if (primeBoundID.isPrime(nBoundaryID)) {
+								MathExpression pNewBoundaryInstance = BoundaryExpHMap.get(BoundedVarHMap.get(coor)).createCopy();
+								this.generateExpInstance(pNewBoundaryInstance, boundInstance, bFullExpansion);
+								
+								/* insert equation number attribute in equation */
+								HashMap<String, String> HMapEquNum = new HashMap<String, String>();
+								HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
+								pNewBoundaryInstance.addAttribute(HMapEquNum);
+								this.incrementEquNum();
+								
+								pw.print(pNewBoundaryInstance.toMathMLString() + "\n");
+//								System.out.println(pNewBoundaryInstance.toLegalString());
+								
+							} else {
+								List<Integer> boundaryIDsList = primeBoundID.primeFactors(nBoundaryID);
+								for (int l=0; l<boundaryIDsList.size(); l++) {
+									MathExpression pNewBoundaryInstance = BoundaryExpHMap.get(Integer.toString(boundaryIDsList.get(l))).createCopy();
+									this.generateExpInstance(pNewBoundaryInstance, boundInstance, bFullExpansion);
+		
+									/* insert equation number attribute in equation */
+									HashMap<String, String> HMapEquNum = new HashMap<String, String>();
+									HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
+									pNewBoundaryInstance.addAttribute(HMapEquNum);
+									this.incrementEquNum();
+									
+									pw.print(pNewBoundaryInstance.toMathMLString() + "\n");
+//									System.out.println(pNewBoundaryInstance.toLegalString());
+								}
+							}
+						}
+						
+					} else {
+						/* dummy value for time index (will not be used)*/
+						boundInstance[0] = 0;
+						
 						if (primeBoundID.isPrime(nBoundaryID)) {
 							MathExpression pNewBoundaryInstance = BoundaryExpHMap.get(BoundedVarHMap.get(coor)).createCopy();
-							this.generateExpInstance(pNewBoundaryInstance, boundInstance, true);
-							
+							this.generateExpInstance(pNewBoundaryInstance, boundInstance, bFullExpansion);
+
 							/* insert equation number attribute in equation */
 							HashMap<String, String> HMapEquNum = new HashMap<String, String>();
 							HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
@@ -604,11 +599,12 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 							
 							pw.print(pNewBoundaryInstance.toMathMLString() + "\n");
 //							System.out.println(pNewBoundaryInstance.toLegalString());
+							
 						} else {
 							List<Integer> boundaryIDsList = primeBoundID.primeFactors(nBoundaryID);
 							for (int l=0; l<boundaryIDsList.size(); l++) {
 								MathExpression pNewBoundaryInstance = BoundaryExpHMap.get(Integer.toString(boundaryIDsList.get(l))).createCopy();
-								this.generateExpInstance(pNewBoundaryInstance, boundInstance, true);
+								this.generateExpInstance(pNewBoundaryInstance, boundInstance, bFullExpansion);
 
 								/* insert equation number attribute in equation */
 								HashMap<String, String> HMapEquNum = new HashMap<String, String>();
@@ -630,78 +626,6 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 
 	}
 	
-	/*****
-	  * Generate the equations of boundary locations for all instances except time 
-	  * indicated in the boundary maps and append the MathML equations to StringBuilder
-	  * 
-	  * @return: m_strMathExpInstances.append(boundaryMathMLString)
-	 * *****/
-	public void generateBoundaryExpSpatialInstances(PrintWriter pw)
-	throws MathException, GraphException {
-		
-		/* get the boundary file and locations */ 
-		HashMap<Math_ci, String> BoundaryHMap = new HashMap<Math_ci, String>();
-		BoundaryHMap = m_pRelMLAnalyzer.getM_HashMapBoundedVar();
-		Vector<ParameterMapper> m_vecBoundaryMaps = new Vector<ParameterMapper>();
-
-		/* Get all the bounded variables' boundary condition */
-		for (Math_ci m_pBoundedVar : BoundaryHMap.keySet()) {
-//		    System.out.println(m_pBoundedVar.toLegalString() + " filename: " + BoundaryHMap.get(m_pBoundedVar));
-		    ParameterMapper boundaryMapper = new ParameterMapper();
-			boundaryMapper.readParameterCSVFile(m_pBoundedVar, BoundaryHMap.get(m_pBoundedVar));
-			m_vecBoundaryMaps.add(boundaryMapper);
-			
-			/* generate the all instances for bounded variable boundary equations */
-			HashMap<MeshCoordinates, String> BoundedVarHMap = new HashMap<MeshCoordinates, String>();
-			BoundedVarHMap = boundaryMapper.getParameterHMap();
-			
-			/* Combine the time steps with the spatial coordinates*/
-			int[] boundInstance = new int[m_pRelMLAnalyzer.getM_vecIndexVar().size() - 1];
-			
-			/* add the spatial coordinates to index instance */
-			/* check if the boundary-id is a prime id (has one boundary) or a combination of 2 or more boundaries */
-			for (MeshCoordinates coor : BoundedVarHMap.keySet()) {
-				for (int j=0; j<boundInstance.length; j++) {
-					boundInstance[j] = coor.getCoordinate(j);
-				}
-				int nBoundaryID = Integer.parseInt(BoundedVarHMap.get(coor));
-				if (nBoundaryID != 0) {					
-					PrimeFactors primeBoundID = new PrimeFactors();
-					if (primeBoundID.isPrime(nBoundaryID)) {
-						MathExpression pNewBoundaryInstance = BoundaryExpHMap.get(BoundedVarHMap.get(coor)).createCopy();
-						this.generateExpInstance(pNewBoundaryInstance, boundInstance, false);
-
-						/* insert equation number attribute in equation */
-						HashMap<String, String> HMapEquNum = new HashMap<String, String>();
-						HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
-						pNewBoundaryInstance.addAttribute(HMapEquNum);
-						this.incrementEquNum();
-						
-						pw.print(pNewBoundaryInstance.toMathMLString() + "\n");
-//						System.out.println(pNewBoundaryInstance.toLegalString());
-					} else {
-						List<Integer> boundaryIDsList = primeBoundID.primeFactors(nBoundaryID);
-						for (int l=0; l<boundaryIDsList.size(); l++) {
-							MathExpression pNewBoundaryInstance = BoundaryExpHMap.get(Integer.toString(boundaryIDsList.get(l))).createCopy();
-							this.generateExpInstance(pNewBoundaryInstance, boundInstance, false);
-
-							/* insert equation number attribute in equation */
-							HashMap<String, String> HMapEquNum = new HashMap<String, String>();
-							HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
-							pNewBoundaryInstance.addAttribute(HMapEquNum);
-							this.incrementEquNum();
-							
-							pw.print(pNewBoundaryInstance.toMathMLString() + "\n");
-//							System.out.println(pNewBoundaryInstance.toLegalString());
-						}
-					}
-				}
-				
-			}
-
-		}
-
-	}
 	
 	/*****
 	  * Generate the equations for all instances of boundary locations
@@ -713,7 +637,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 	throws MathException, GraphException {
 
 		/* set the number of the parameter indices = number of spatial indices */
-		int[] coordInstance = new int[(m_pRelMLAnalyzer.getM_vecIndexVar().size() - 1)];
+		int[] coordInstance = new int[m_pRelMLAnalyzer.getM_vecIndexVar().size()];
 		
 		/* get the distributed parameter file and/or parameter equations */
 		for (String strParamKey: DistrParamExpHMap.keySet()) {
@@ -721,38 +645,41 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 			/* check if the variable has a parameter-id (parsable) or csv parameter file (unparsable) */
 			boolean parsable = true;
 			try{
-			Integer.parseInt(strParamKey);
-
-			}catch(NumberFormatException e){
-			parsable = false;
+				Integer.parseInt(strParamKey);
+			} catch(NumberFormatException e){
+				parsable = false;
 			}
 			
 			if (parsable) {
 									
 				/* add the spatial coordinates to index instance */
 				for (MeshCoordinates coor: MorphologyHMap.keySet()) {
-					
-					for (int j=0; j<coordInstance.length; j++) {
-						coordInstance[j] = coor.getCoordinate(j);
-					}
-					/* replace all parameter variables with instance in the distributed parameter equation */
-					if (Integer.parseInt(MorphologyHMap.get(coor)) != 0) {
-							MathExpression pNewParamExpInstance = DistrParamExpHMap.get(strParamKey).createCopy();
-							this.generateExpSpatialInstance(pNewParamExpInstance, coordInstance);	
 
-							/* insert equation number attribute in equation */
-							HashMap<String, String> HMapEquNum = new HashMap<String, String>();
-							HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
-							pNewParamExpInstance.addAttribute(HMapEquNum);
-							this.incrementEquNum();
-							
-							pw.print(pNewParamExpInstance.toMathMLString() + "\n");
-							System.out.println(pNewParamExpInstance.toLegalString());
+					if (Integer.parseInt(MorphologyHMap.get(coor)) != 0) {			
+						for (int j=1; j<coordInstance.length; j++) {
+							coordInstance[j] = coor.getCoordinate(j-1);
+						}
+						
+						/* dummy value for time index (will not be used)*/
+						coordInstance[0] = 0;
+						
+						/* replace all parameter variables with instance in the distributed parameter equation */
+						MathExpression pNewParamExpInstance = DistrParamExpHMap.get(strParamKey).createCopy();
+						this.generateExpInstance(pNewParamExpInstance, coordInstance, false);	
+
+						/* insert equation number attribute in equation */
+						HashMap<String, String> HMapEquNum = new HashMap<String, String>();
+						HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
+						pNewParamExpInstance.addAttribute(HMapEquNum);
+						this.incrementEquNum();
+						
+						pw.print(pNewParamExpInstance.toMathMLString() + "\n");
+						System.out.println(pNewParamExpInstance.toLegalString());
+				
 					}
 				}
 
 			} else {
-				
 				ParameterMapper distrParamMapper = new ParameterMapper();
 				distrParamMapper.readParameterCSVFile(strParamKey);
 				
@@ -773,7 +700,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 					pMathEq.addFactor(pLeftExp.getRootFactor());
 					pMathEq.addFactor(paramValue);
 					MathExpression pNewParamExpInstance = new MathExpression(pMathEq);
-					this.generateExpSpatialInstance(pLeftExp, coordInstance);
+					this.generateExpInstance(pLeftExp, coordInstance, false);
 
 					/* insert equation number attribute in equation */
 					HashMap<String, String> HMapEquNum = new HashMap<String, String>();
@@ -795,49 +722,29 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 	 * input: MathExpression with index
 	 * output: MathExpression with index instance
 	 * *****/
-	public void generateExpInstance(MathExpression pExp, int[] pIndexValues, boolean bWithTimeIndex)
+	public void generateExpInstance(MathExpression pExp, int[] pIndexValues, boolean bFullExpansion)
 	throws MathException {
 		
-		if (bWithTimeIndex) {		
-			if (m_pRelMLAnalyzer.getM_vecIndexVar().size() != pIndexValues.length) {
-				throw new MathException("SingleStepPDEGenerator","generateExpressionInstance",
-							     "number of indices and indices instance does not match");
-			}
-			
+		if (m_pRelMLAnalyzer.getM_vecIndexVar().size() != pIndexValues.length) {
+			throw new MathException("SingleStepPDEGenerator","generateExpressionInstance",
+						     "number of indices and indices instance does not match");
+		}
+		
+		if (bFullExpansion) {				
 			for (int i=0; i<pIndexValues.length; i++) {	
 				Math_cn pIndexInstance = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, Integer.toString(pIndexValues[i]));
 				pIndexInstance.changeType();
 				pExp.replace(m_pRelMLAnalyzer.getM_vecIndexVar().get(i), (MathOperand)pIndexInstance);
 			}
-		} else {
-			if ((m_pRelMLAnalyzer.getM_vecIndexVar().size() - 1) != pIndexValues.length) {
-				throw new MathException("SingleStepPDEGenerator","generateExpInstance",
-							     "number of spatial indices does not match");
-			}
 			
-			for (int i=0; i<pIndexValues.length; i++) {	
+		} else {
+			for (int i=1; i<pIndexValues.length; i++) {	
 				Math_cn pIndexInstance = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, Integer.toString(pIndexValues[i]));
 				pIndexInstance.changeType();
-				pExp.replace(m_pRelMLAnalyzer.getM_vecIndexVar().get(i+1), (MathOperand)pIndexInstance);
+				pExp.replace(m_pRelMLAnalyzer.getM_vecIndexVar().get(i), (MathOperand)pIndexInstance);
 			}
 		}
 			
-	}
-	
-	public void generateExpSpatialInstance(MathExpression pExp, int[] pIndexValues)
-	throws MathException {
-
-		if ((m_pRelMLAnalyzer.getM_vecIndexVar().size() - 1) != pIndexValues.length) {
-			throw new MathException("SingleStepPDEGenerator","generateExpSpatialInstance",
-						     "number of spatail indices does not match");
-		}
-		
-		for (int i=0; i<pIndexValues.length; i++) {	
-			Math_cn pIndexInstance = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, Integer.toString(pIndexValues[i]));
-			pIndexInstance.changeType();
-			pExp.replace(m_pRelMLAnalyzer.getM_vecIndexVar().get(i+1), (MathOperand)pIndexInstance);
-		}
-		
 	}
 	
 	/**
@@ -891,9 +798,9 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		if (nExpansionType == 0) { // no expansion
 			this.generateRecMLDiscreteEquations(strRecMLFileName);
 		} else if (nExpansionType == 1) { // spatial expansion
-			this.generateRecMLSpatialExpansionEquations(strRecMLFileName);
+			this.generateRecMLExpandedEquations(strRecMLFileName, false);
 		} else if (nExpansionType == 2) { // all expansion
-			this.generateRecMLAllExpansionEquations(strRecMLFileName);	
+			this.generateRecMLExpandedEquations(strRecMLFileName, true);	
 		}
 		
 		/* change the variable names in the equations to remove the dot (from component name) */
@@ -1069,35 +976,16 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		//	System.out.println("******* TecML parse end");
 		
 		int[] spaceDimension = pRelMLAnalyzer.getDimensions();
-//		int[] spacing = pRelMLAnalyzer.getSpacing();
-//		System.out.println(Arrays.toString(spaceDimension));
-//		System.out.println(Arrays.toString(spacing));
 		
 		
 		int nExpressionNum = pCellMLAnalyzer.getExpressionCount();
 		System.out.println("CellML Exp count: " + nExpressionNum);
-		
-		/* get the variables of the CellML expressions and store it in a hashset (avoid duplicates)*/
-//		HashSet<String> modelVarSet = new HashSet<String>();	
-//		for (int i=0; i<nExpressionNum; i++) {
-//			Vector<Math_ci> expVars = new Vector<Math_ci>();
-//			pCellMLAnalyzer.getExpression(i).getAllVariables(expVars);
-//			String varList = "";
-//			for (int j=0; j<expVars.size(); j++) {
-//				modelVarSet.add(expVars.get(j).toLegalString());
-//				varList += expVars.get(j).toLegalString() + ", ";
-//			}
-//			System.out.println(varList);
-//		}
-//		VariableListPrinter printVars = new VariableListPrinter();
-//		printVars.printRelMLVarList(modelVarSet);
 		
 		/* Print the contents of the generator*/
 		SinglestepPDEGenerator pSingleStepGenerator = null;
 		
 		try {
 			pSingleStepGenerator = new SinglestepPDEGenerator(pCellMLAnalyzer,pRelMLAnalyzer,pTecMLAnalyzer);
-//			pSynProgram = pSingleStepGenerator.getSyntaxProgram();
 		} catch (Exception e) {
 			/*エラー出力*/
 			System.err.println(e.getMessage());
@@ -1113,8 +1001,6 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 
 //		String strRecMLFileName = "FHN_FTCS_SimpleRecML" + Integer.toString(maxTime) + "x" + Integer.toString(spaceDimension[0]) + "x" + Integer.toString(spaceDimension[1]) +".recml";
 		String strRecMLFileName = "FHN_FTCS_SimpleRecML_DiscreteOnly" + Integer.toString(spaceDimension[0]) + "x" + Integer.toString(spaceDimension[1]) +".recml";
-		long start = System.currentTimeMillis();
-		StringBuilder strRecMLMathExp = new StringBuilder();
 		try {
 			pSingleStepGenerator.setMaxTime(maxTime);
 			pSingleStepGenerator.discretizeCellML();
@@ -1135,9 +1021,9 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		
 		
 		try {
-			/* Generate the SimpleRecML file */
+			/* TODO: Generate the SimpleRecML file */
 //			pSingleStepGenerator.generateAllInstanceEquations(strRecMLFileName);
-			pSingleStepGenerator.writeToSimpleRecMLFile(strRecMLFileName, 0);
+			pSingleStepGenerator.writeToSimpleRecMLFile(strRecMLFileName, 2);
 		
 			
 		} catch (MathException e1) {
@@ -1148,51 +1034,6 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 			e1.printStackTrace();
 		}
 		
-		
-//		/* Total number of processors or cores available to the JVM */
-//		System.out.println("Available processors (cores): " + 
-//		        Runtime.getRuntime().availableProcessors());
-//
-//		/* Total amount of free memory available to the JVM */
-//	    System.out.println("Free memory (bytes): " + 
-//	        Runtime.getRuntime().freeMemory());
-//
-//	    /* This will return Long.MAX_VALUE if there is no preset limit */
-//	    long maxMemory = Runtime.getRuntime().maxMemory();
-//	    /* Maximum amount of memory the JVM will attempt to use */
-//	    System.out.println("Maximum memory (bytes): " + 
-//	        (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory));
-//
-//	    /* Total memory currently in use by the JVM */
-//	    System.out.println("Total memory (bytes): " + 
-//	        Runtime.getRuntime().totalMemory());
-//
-//	    PerformanceMonitor runtimeMonitor = new PerformanceMonitor();
-//	    // Get the Java runtime
-//	    Runtime runtime = Runtime.getRuntime();
-//	    // Run the garbage collector
-//	    runtime.gc();
-//	    // Calculate the used memory
-//	    long memory = runtime.totalMemory() - runtime.freeMemory();
-//	    System.out.println("Used memory in bytes: " + memory);
-//	    System.out.println("Used memory in megabytes: "
-//	        + runtimeMonitor.bytesToMegabytes(memory));
-//
-//		long end = System.currentTimeMillis();
-//		System.out.println("Execution time: "+ (end-start) +" ms.");
-		
-
-//		try {
-//			pRelMLAnalyzer.printContents();
-//		} catch (MathException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		try {
-//			pTecMLAnalyzer.printContents();
-//		} catch (MathException e) {
-//			e.printStackTrace();
-//		}
 		
 	}
 

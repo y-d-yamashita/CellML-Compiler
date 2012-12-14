@@ -15,11 +15,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassi
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
- * 数式ライブラリ対応 導出変数左辺移項テストクラス
+ * 数式ライブラリ対応 f(x)=0作成テストクラス
  * @author n-washio
  */
-//修正版 2012/10/29
-public class LeftSideTranspositionTest {
+public class ImplicitFunctionTranspositionTest {
 
 	public static void main(String[] args) throws MathException {
 		
@@ -34,12 +33,14 @@ public class LeftSideTranspositionTest {
 		//テスト用変数定義
 		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "A");
 		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
-		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
-		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
-		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
-		Math_ci val6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "F");
-		Math_ci val7=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "G");
-		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
+		val2.addArrayIndexToFront(0);
+		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
+		val3.addArrayIndexToFront(1);
+		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
+		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
+		Math_ci val6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
+		Math_ci val7=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "F");
+		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "5");
 		
 		MathExpression pNewExpression = new MathExpression();
 		pNewExpression.addOperator(
@@ -106,57 +107,16 @@ public class LeftSideTranspositionTest {
 
 		
 		
-		System.out.println("Input Expression:");
+		System.out.println("Input Expression : ");
 		System.out.println(pNewExpression.toLegalString());
 		System.out.println("");
 		
-		//クラステスト1
+		//テスト
 		MathExpression pNewExpression2 = new MathExpression();
-		LeftSideTransposition lst2 = new LeftSideTransposition();
-		pNewExpression2 = lst2.transporseExpression(pNewExpression,val2);
-		System.out.println("Derived variable name : "+val2.toLegalString());
+		ImplicitFunctionTransposition ift2 = new ImplicitFunctionTransposition();
+		pNewExpression2 = ift2.transporseExpression(pNewExpression,val2);
+		System.out.println("Implicit Function Form : ");
 		System.out.println(pNewExpression2.toLegalString());
 		System.out.println("");
-		
-		//クラステスト2
-		MathExpression pNewExpression3 = new MathExpression();
-		LeftSideTransposition lst3 = new LeftSideTransposition();
-		pNewExpression3 = lst3.transporseExpression(pNewExpression,val3);
-		System.out.println("Derived variable name : "+val3.toLegalString());
-		System.out.println(pNewExpression3.toLegalString());
-		System.out.println("");
-		
-		//クラステスト3
-		MathExpression pNewExpression4 = new MathExpression();
-		LeftSideTransposition lst4 = new LeftSideTransposition();
-		pNewExpression4 = lst4.transporseExpression(pNewExpression,val4);
-		System.out.println("Derived variable name : "+val4.toLegalString());
-		System.out.println(pNewExpression4.toLegalString());
-		System.out.println("");
-		
-		//クラステスト4
-		MathExpression pNewExpression5 = new MathExpression();
-		LeftSideTransposition lst5 = new LeftSideTransposition();
-		pNewExpression5 = lst5.transporseExpression(pNewExpression,val5);
-		System.out.println("Derived variable name : "+val5.toLegalString());
-		System.out.println(pNewExpression5.toLegalString());
-		System.out.println("");
-		
-		//クラステスト5
-		MathExpression pNewExpression6 = new MathExpression();
-		LeftSideTransposition lst6 = new LeftSideTransposition();
-		pNewExpression6 = lst6.transporseExpression(pNewExpression,val6);
-		System.out.println("Derived variable name : "+val6.toLegalString());
-		System.out.println(pNewExpression6.toLegalString());
-		System.out.println("");
-		
-		//クラステスト6
-		MathExpression pNewExpression7 = new MathExpression();
-		LeftSideTransposition lst7 = new LeftSideTransposition();
-		pNewExpression7 = lst7.transporseExpression(pNewExpression,val7);
-		System.out.println("Derived variable name : "+val7.toLegalString());
-		System.out.println(pNewExpression7.toLegalString());
-		System.out.println("");
-		
 	}
 }

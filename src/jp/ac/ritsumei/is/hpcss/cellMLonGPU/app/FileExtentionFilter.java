@@ -1,7 +1,7 @@
 /*
  * 数式展開システム.
  */
-package jp.ac.ritsumei.is.hpcss.cellMLcompiler.app;
+package jp.ac.ritsumei.is.hpcss.cellMLonGPU.app;
 
 import java.io.File;
 

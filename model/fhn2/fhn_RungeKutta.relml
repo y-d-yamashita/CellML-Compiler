@@ -1,5 +1,5 @@
 <relml>
-	<tecml filename="model/tecml/RungeKutta.tecml"/>
+	<tecml filename="model/tecml/RungeKutta4.tecml"/>
 	<cellml filename="model/fhn2/fhn.cellml"/>
 
 	<variable component="Main" name="time" type="timevar"/>

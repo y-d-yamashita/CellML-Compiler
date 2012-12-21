@@ -15,7 +15,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassi
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
- * 数式ライブラリ対応 記号微分テストクラス
+ * 数式ライブラリ対応 Newton法ソルバーテストクラス
  * @author n-washio
  * 
  * plus(1,2項,多項)
@@ -28,7 +28,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * ln,log
  * 
  */
-public class DifferentiationTest {
+public class NewtonSolverTest {
 
 	public static void main(String[] args) throws MathException {
 		
@@ -41,16 +41,17 @@ public class DifferentiationTest {
 		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
 		val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
-		val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+		val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
 		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
 		Math_ci val6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
-		Math_ci val7=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "F");
+		
 		
 		
 		Math_cn zero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
 		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "5");
 		MathExpression pNewExpression = new MathExpression();
+		pNewExpression.setExID(7);
 		pNewExpression.addOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 		pNewExpression.addOperator(
@@ -118,16 +119,18 @@ public class DifferentiationTest {
 		System.out.println("Input Function : ");
 		System.out.println(pNewExpression.getLeftExpression().toLegalString());
 		System.out.println("");
-		Differentiation diff = new Differentiation();
+
 		//導出変数を設定
 		Math_ci derivedVal = val5;
 
 		
-		//数式の左辺を微分して取得
-		pNewExpression = diff.differentiate(pNewExpression  ,derivedVal);
-		
-		System.out.println("Implicit Function Form : ");
-		System.out.println(pNewExpression.getLeftExpression().toLegalString());
+		System.out.println("Code");
 		System.out.println("");
+		
+		double e = 0.001;
+		NewtonSolver ns = new NewtonSolver();
+		ns.writeNewtonSolver(pNewExpression, val5, e);
+		
+		
 	}
 }

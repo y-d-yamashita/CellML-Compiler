@@ -40,18 +40,13 @@ public class Differentiation {
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 		pNewExpression.addOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
-		
+	
 		//左辺を導出変数で微分したツリーを付加
 		if(expression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
 			//apply直下のオペレータの種類を格納
 			String underOperatorKind =
 				((MathOperator)((MathOperator)(expression.getLeftExpression().getRootFactor())).getUnderFactor()).getOperatorKind().toString();
-			
-			
-			
-			
-			
-			
+		
 			//plusの場合
 			if(underOperatorKind.equals("MOP_PLUS")){
 				
@@ -64,7 +59,8 @@ public class Differentiation {
 				int childFactorNum = 
 						((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactorNum();
 				
-				for(int i=0;i<childFactorNum;i++){
+				
+				for(int i=1;i<childFactorNum+1;i++){
 					
 					if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i).matches(
 							eMathMLClassification.MML_OPERATOR) ){
@@ -78,16 +74,18 @@ public class Differentiation {
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 						
 						pExpression.addOperator(
-								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i));
+						
+						pExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						
 						pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 						
 						
 						pExpression.breakOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-						pExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-
+						
+						
 						pExpression = differentiate( pExpression , val );
 						
 						if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
@@ -103,10 +101,13 @@ public class Differentiation {
 						}
 						
 					} else{
+						
 						//導出変数であれば1,それ以外の変数または定数は全て0とする
-						if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+						if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i).toLegalString().equals(
+								val.toLegalString())){
 							pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 						}else{
+						
 							pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 						}	
 					}
@@ -114,16 +115,9 @@ public class Differentiation {
 				
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
 				
 			}
-			
-			
-			
-			
-			
-			
 			
 			//minusの場合
 			else if(underOperatorKind.equals("MOP_MINUS")){
@@ -137,7 +131,7 @@ public class Differentiation {
 				int childFactorNum = 
 						((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactorNum();
 				
-				for(int i=0;i<childFactorNum;i++){
+				for(int i=1;i<childFactorNum+1;i++){
 					
 					if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i).matches(
 							eMathMLClassification.MML_OPERATOR) ){
@@ -151,13 +145,14 @@ public class Differentiation {
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 						
 						pExpression.addOperator(
-								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i));
+						
+						pExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						
 						pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 						
 						
-						pExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						pExpression.breakOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
@@ -177,9 +172,11 @@ public class Differentiation {
 						
 					} else{
 						//導出変数であれば1,それ以外の変数または定数は全て0とする
-						if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+						if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i).toLegalString().equals(
+								val.toLegalString())){
 							pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 						}else{
+						
 							pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 						}	
 					}
@@ -187,18 +184,93 @@ public class Differentiation {
 				
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
 			} 
 			
+			//timesの場合(多項演算)
+			else if(underOperatorKind.equals("MOP_TIMES")&&
+					((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactorNum()>2){
+				
+				int childFactorNum = 
+						((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactorNum();
+				
+				//2項演算として微分
+				MathExpression pExpression = new MathExpression();
+				
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+				
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
+				
+				
+				//f(x)第1要素				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					pExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				} else{
+					pExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+				}
+				
+				//第2要素以降は1つのオペレータにまとめる
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
+				
+				for(int i=2;i<childFactorNum+1;i++){
+					if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i).matches(
+							eMathMLClassification.MML_OPERATOR) ){
+						pExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i));
+						pExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					} else{
+						pExpression.addOperand(
+								(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(i));
+					}
+				}
+				
+				pExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
+				
+				pExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
+				
+				
+				pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+				
+				pExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+				pExpression = differentiate( pExpression , val );
+				
+				if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					//オペレータの場合
+					pNewExpression.addOperator(
+							(MathOperator) pExpression.getLeftExpression().getRootFactor());
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}else{
+					//オペランドの場合
+					pNewExpression.addOperand(
+							(MathOperand) pExpression.getLeftExpression().getRootFactor());
+				}
+				
+			}
 			
-			
-			
-			
-			
-			//timesの場合(未完成：現在2項演算のみ対応)
-			else if(underOperatorKind.equals("MOP_TIMES")){
+			//timesの場合(2項演算)
+			else if(underOperatorKind.equals("MOP_TIMES")&&
+					((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactorNum()==2){
+				
 				//ライプニッツルールを適用 ( f'*g + f*g' )
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
@@ -214,7 +286,7 @@ public class Differentiation {
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -226,53 +298,57 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					
 					
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
+					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 	
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
 				} else{
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 				}
 				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				
-				
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
 				
 				//f * g'
 				pNewExpression.addOperator(
@@ -280,7 +356,7 @@ public class Differentiation {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
 							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
@@ -292,13 +368,8 @@ public class Differentiation {
 							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 				}
 				
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
-				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -310,50 +381,49 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					
 					
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
+					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 	
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
+				
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
 
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
 			}
-			
-			
-			
-			
-			
 			
 			//divideの場合
 			else if(underOperatorKind.equals("MOP_DIVIDE")){
@@ -367,9 +437,7 @@ public class Differentiation {
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("minus"), strAttr));
-				
-				
-				
+
 				//f' * g
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
@@ -377,7 +445,7 @@ public class Differentiation {
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -389,53 +457,59 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					
-					
+
+
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
+					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 	
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
 				} else{
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 				}
 				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				
-				
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
+
 				
 				//f * g'
 				pNewExpression.addOperator(
@@ -443,25 +517,19 @@ public class Differentiation {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
 				} else{
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 				}
 				
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -473,71 +541,71 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					
-					
+						
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
+					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 	
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break
+
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				
-				
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //minus break;
 				
 				//g^2
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 					pNewExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 					
-					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
-					
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+						
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+						
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+
 					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
-					
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
 				
 				} else{
 					pNewExpression.addOperator(
@@ -546,31 +614,19 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 					
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 					
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				}
 				
-				
-				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
 				
 			}
-			
-			
-			
-			
-			
-			
-			
+
 			else if(underOperatorKind.equals("MOP_SIN")){
 				//合成関数の微分に対応
 				pNewExpression.addOperator(
@@ -585,24 +641,22 @@ public class Differentiation {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("cos"), strAttr));
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				} else{
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 				}
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //cos break;
 				
 				//f'(x)
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -614,43 +668,45 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
 					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break;
+				
 			}
-			
-			
-			
-			
-			
-			
 			
 			else if(underOperatorKind.equals("MOP_COS")){
 				//合成関数の微分に対応
@@ -671,24 +727,22 @@ public class Differentiation {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("sin"), strAttr));
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				} else {
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 				}
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //sin break;
 				
 				//f'(x)
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -700,64 +754,63 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
 					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
 				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //minus break;
 				
 			}
-			
-			
-			
-			
-			
-			
+
 			else if(underOperatorKind.equals("MOP_TAN")){
 				//合成関数の微分に対応
+				// 1/cos(f(x))^2 * 
 				
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
-				
-				// 1/cos(f(x))^2
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
-				
 				
 				pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 				
@@ -773,20 +826,18 @@ public class Differentiation {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("cos"), strAttr));
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				} else {
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 				}
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //cos break;
 				
 				 //cos(f(x))
 				pNewExpression.addOperator(
@@ -794,43 +845,29 @@ public class Differentiation {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("cos"), strAttr));
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				} else {
 					pNewExpression.addOperand(
-							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 				}
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //cos break;
 				
 				
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//apply break
-				
 				
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//divide break
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//apply break
-				
-				
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//apply break
-				
 				
 				//f'(x)
 				
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					
 					//微分する関数を左辺とし,再帰取得して追加.
@@ -842,49 +879,52 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression = differentiate( pExpression , val );
 					
-					pNewExpression.addOperator(
-							(MathOperator) pExpression.getLeftExpression().getRootFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
 					
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 				}
 				
 				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //times break;
 				
 			}
-			
-			
-			
-			
 			
 			//incの場合
 			if(underOperatorKind.equals("MOP_INC")){
 				
 				//inc(x) = x + 1
 
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					//微分する関数を左辺とし,再帰取得して追加.
 					MathExpression pExpression = new MathExpression();
@@ -895,13 +935,14 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					
 					
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
@@ -918,29 +959,26 @@ public class Differentiation {
 						pNewExpression.addOperand(
 								(MathOperand) pExpression.getLeftExpression().getRootFactor());
 					}
-					
-					
-					
+
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 					
 				}
 			}
-			
-			
-			
-			
+
 			//decの場合
 			if(underOperatorKind.equals("MOP_DEC")){
 				
 				//dec(x) = x - 1
 
-				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 						eMathMLClassification.MML_OPERATOR) ){
 					//微分する関数を左辺とし,再帰取得して追加.
 					MathExpression pExpression = new MathExpression();
@@ -951,13 +989,13 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
 					pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
-					
-					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
-					
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
@@ -974,22 +1012,19 @@ public class Differentiation {
 						pNewExpression.addOperand(
 								(MathOperand) pExpression.getLeftExpression().getRootFactor());
 					}
-					
-					
-					
+
 				} else{
 					//導出変数であれば1,それ以外の変数または定数は全て0とする
-					if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 					}else{
+					
 						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 					}	
 					
 				}
 			}
-			
-			
-			
 			
 			//powerの場合
 			if(underOperatorKind.equals("MOP_POWER")){
@@ -1019,9 +1054,7 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 					pNewExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("plus"), strAttr));
-					
-					
-					
+
 						//(f'*g)/f
 						pNewExpression.addOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
@@ -1032,10 +1065,8 @@ public class Differentiation {
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 						pNewExpression.addOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
-						
-						
-						
-						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+
+						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 								eMathMLClassification.MML_OPERATOR) ){
 							//微分する関数を左辺とし,再帰取得して追加.
 							MathExpression pExpression = new MathExpression();
@@ -1046,13 +1077,13 @@ public class Differentiation {
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 							
 							pExpression.addOperator(
-									(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
-							
-							pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
-							
+									(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 							
 							pExpression.breakOperator(
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							
+							pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+							
 							pExpression.breakOperator(
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 		
@@ -1072,13 +1103,30 @@ public class Differentiation {
 	
 						} else{
 							//導出変数であれば1,それ以外の変数または定数は全て0とする
-							if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+							if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+									val.toLegalString())){
 								pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 							}else{
+							
 								pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 							}	
 							
 						}
+						
+						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
+								eMathMLClassification.MML_OPERATOR) ){
+							pNewExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						} else{
+							pNewExpression.addOperand(
+									(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+									
+						}
+						
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break;
 						
 						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 								eMathMLClassification.MML_OPERATOR) ){
@@ -1093,27 +1141,7 @@ public class Differentiation {
 						}
 						
 						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break;
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-						
-						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
-								eMathMLClassification.MML_OPERATOR) ){
-							pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
-							pNewExpression.breakOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-						} else{
-							pNewExpression.addOperand(
-									(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
-									
-						}
-						
-						pNewExpression.breakOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//divide break;
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-						
 						
 						//log(f)*g'
 						pNewExpression.addOperator(
@@ -1128,26 +1156,23 @@ public class Differentiation {
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
 						
 						
-						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 								eMathMLClassification.MML_OPERATOR) ){
 							pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 							pNewExpression.breakOperator(
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						} else{
 							pNewExpression.addOperand(
-									(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+									(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 									
 						}
 						
 						pNewExpression.breakOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//ln break;
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-						
-						
+					
 						//g'
-						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
 								eMathMLClassification.MML_OPERATOR) ){
 							//微分する関数を左辺とし,再帰取得して追加.
 							MathExpression pExpression = new MathExpression();
@@ -1158,13 +1183,13 @@ public class Differentiation {
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 							
 							pExpression.addOperator(
-									(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
-							
-							pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
-							
+									(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
 							
 							pExpression.breakOperator(
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							
+							pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+							
 							pExpression.breakOperator(
 									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 		
@@ -1184,9 +1209,11 @@ public class Differentiation {
 	
 						} else{
 							//導出変数であれば1,それ以外の変数または定数は全て0とする
-							if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+							if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).toLegalString().equals(
+									val.toLegalString())){
 								pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 							}else{
+							
 								pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 							}	
 							
@@ -1195,29 +1222,14 @@ public class Differentiation {
 						
 						pNewExpression.breakOperator(
 								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break;
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-						
 						
 					pNewExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//plus break;
+
 					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
-					
-					
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break;
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				
-				
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//times break;			
 			}
-			
-			
-			
-			
+
 			//rootの場合
 			if(underOperatorKind.equals("MOP_ROOT")){
 				
@@ -1230,37 +1242,31 @@ public class Differentiation {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 					pExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
-					
-					
+	
 					pExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 					pExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("power"), strAttr));
 					
-					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
 							eMathMLClassification.MML_OPERATOR)){
 						pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					
 						pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					} else{
 						pExpression.addOperand(
-								(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
+								(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					}
 					
 					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0.5"));
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//power break;
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					
 					
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//eq break;
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
 					pExpression = differentiate( pExpression , val );
 					
@@ -1277,15 +1283,41 @@ public class Differentiation {
 					}
 				
 			}
-			
-			
-			
-			
+
 			//expの場合
 			if(underOperatorKind.equals("MOP_EXP")){
 				
 				//{e^(f(x))}' = e^(f(x)) * f'(x)
+				//合成関数の微分に対応
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
+				//e^(f(x))
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("exp"), strAttr));
+				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					pNewExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				} else{
+					pNewExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+				}
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+				//f'(x)
+				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					
 					//微分する関数を左辺とし,再帰取得して追加.
 					MathExpression pExpression = new MathExpression();
 					
@@ -1294,39 +1326,17 @@ public class Differentiation {
 					pExpression.addOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 					
-					
 					pExpression.addOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-					pExpression.addOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("power"), strAttr));
-					
-					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2.7"));
-					
-					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0).matches(
-							eMathMLClassification.MML_OPERATOR)){
-						pExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
-					
-						pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-					} else{
-						pExpression.addOperand(
-								(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(0));
-					}
-					
-					
-					
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//power break;
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
 					pExpression.breakOperator(
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					
 					
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));//eq break;
-					pExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
 					pExpression = differentiate( pExpression , val );
 					
 					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
@@ -1340,27 +1350,188 @@ public class Differentiation {
 						pNewExpression.addOperand(
 								(MathOperand) pExpression.getLeftExpression().getRootFactor());
 					}
+					
+				} else{
+					//導出変数であれば1,それ以外の変数または定数は全て0とする
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
+						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
+					}else{
+					
+						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+					}	
+				}
+				
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+		
+			}
+			
+			//lnの場合
+			if(underOperatorKind.equals("MOP_LN")){
+				
+				//{ln(f(x))}' = f'(x) / (f(x))
+				//合成関数の微分に対応
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
+				
+				//f'(x)
+				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					
+					//微分する関数を左辺とし,再帰取得して追加.
+					MathExpression pExpression = new MathExpression();
+					
+					pExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+					
+					pExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+					
+					
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					pExpression = differentiate( pExpression , val );
+					
+					if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						//オペレータの場合
+						pNewExpression.addOperator(
+								(MathOperator) pExpression.getLeftExpression().getRootFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						//オペランドの場合
+						pNewExpression.addOperand(
+								(MathOperand) pExpression.getLeftExpression().getRootFactor());
+					}
+					
+				} else{
+					//導出変数であれば1,それ以外の変数または定数は全て0とする
+					if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).toLegalString().equals(
+							val.toLegalString())){
+						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
+					}else{
+					
+						pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+					}		
+				}
+	
+				//f(x)
+				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					pNewExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				} else{
+					pNewExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+				}
+				
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"))); //divide break;
 				
 			}
 			
-			
+			//logの場合
+			if(underOperatorKind.equals("MOP_LOG")){
+				
+				//{log(f(x),g(x))}' = {ln(g(x)) / ln(f(x))}'
+				//底変換により微分.
+				
+				//微分する関数を左辺とし,再帰取得して追加.
+				MathExpression pExpression = new MathExpression();
+				
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+				
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
+				
+				
+				//ln(g(x))
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
+				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					pExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				} else{
+					pExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(2));
+				}
+				pExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));				
+				
+				//ln(f(x))
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
+				
+				if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1).matches(
+						eMathMLClassification.MML_OPERATOR) ){
+					pExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+					pExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				} else{
+					pExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getChildFactor(1));
+				}
+				
+				pExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+				
+				pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+				
+				pExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+				pExpression = differentiate( pExpression , val );
+				
+				if(pExpression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					//オペレータの場合
+					pNewExpression.addOperator(
+							(MathOperator) pExpression.getLeftExpression().getRootFactor());
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}else{
+					//オペランドの場合
+					pNewExpression.addOperand(
+							(MathOperand) pExpression.getLeftExpression().getRootFactor());
+				}
+				
+			}
+			/*
 			else{
+				
+				
 				throw new MathException("Differentiation","differentiate","can't differentiate(not supported operator)");
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			*/
 			
 		}else{
 			//導出変数であれば微分値は1,それ以外であれば0
@@ -1377,7 +1548,7 @@ public class Differentiation {
 		
 		pNewExpression.breakOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-		
+	
 		return pNewExpression;
 	}
 	

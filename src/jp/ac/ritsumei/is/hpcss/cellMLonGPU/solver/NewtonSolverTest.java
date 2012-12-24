@@ -39,9 +39,9 @@ public class NewtonSolverTest {
 		//テスト用変数定義
 		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "A");
 		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
-		val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+		//val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
-		val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
+		//val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
 		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
 		Math_ci val6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
@@ -69,7 +69,8 @@ public class NewtonSolverTest {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("power"), strAttr));
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
+				pNewExpression.addOperand(val1);
 				pNewExpression.addOperand(val1);
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
@@ -89,20 +90,10 @@ public class NewtonSolverTest {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				pNewExpression.addOperand(val3);
-				pNewExpression.addOperand(val4);
+				pNewExpression.addOperand(val5);
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 		
-				
-				//plus第3要素
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
-				pNewExpression.addOperand(val5);
-				pNewExpression.addOperand(val6);
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 	
 			pNewExpression.breakOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
@@ -121,15 +112,15 @@ public class NewtonSolverTest {
 		System.out.println("");
 
 		//導出変数を設定
-		Math_ci derivedVal = val5;
+		Math_ci derivedVal = val1;
 
 		
-		System.out.println("Code");
+		System.out.println("Code　:");
 		System.out.println("");
 		
 		double e = 0.001;
 		NewtonSolver ns = new NewtonSolver();
-		ns.writeNewtonSolver(pNewExpression, val5, e);
+		ns.writeNewtonSolver(pNewExpression, derivedVal, e);
 		
 		
 	}

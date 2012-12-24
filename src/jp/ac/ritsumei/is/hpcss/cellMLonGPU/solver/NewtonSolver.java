@@ -36,32 +36,43 @@ public class NewtonSolver {
 		//数式の左辺を微分して取得
 		pDiffExpression = diff.differentiate(expression ,derivedVariable);
 		
-		System.out.print("double newton_"+expression.getExID()+"(");
+		//含まれる変数リストを作成
 		Vector<Math_ci> valList= new Vector<Math_ci>();
-		
 		expression.getAllVariables(valList);
 		
+		//main関数に記述される構文
+		System.out.print(derivedVariable.toLegalString()+" = newton"+expression.getExID()+"(");
 		for(int i=0;i<valList.size();i++){
 			System.out.print(valList.get(i).toLegalString());
 			if(i!=valList.size()-1)System.out.print(",");
 		}
+		System.out.println(");");
+		System.out.println();
+		
+		
+		
+		//ニュートン法計算関数
+		System.out.print("double newton"+expression.getExID()+"(");
+		
+		for(int i=0;i<valList.size();i++){
+			System.out.print("double "+valList.get(i).toLegalString());
+			if(i!=valList.size()-1)System.out.print(",");
+		}
 		System.out.println(") {");
 		System.out.println();
-		System.out.println("\tdouble e = 0;");
-		System.out.println("\tdouble " +derivedVariable.toLegalString()+" = "+"0;");
-		System.out.println("\tdouble " +derivedVariable.toLegalString()+"_next"+" = "+"0;");
+		System.out.println("\tdouble e;");
+		System.out.println("\tdouble " +derivedVariable.toLegalString()+"_next;");
 		
 		System.out.println();
 		System.out.println("\tdo {");
 		System.out.print("\t\t"+derivedVariable.toLegalString()+"_next = "+derivedVariable.toLegalString()+" - ( func"+expression.getExID()+ "(");
-		System.out.print(derivedVariable.toLegalString()+",");
+		
 		for(int i=0;i<valList.size();i++){
 			System.out.print(valList.get(i).toLegalString());
 			if(i!=valList.size()-1)System.out.print(",");
 		}
 		System.out.print(") / ");
 		System.out.print( "dfunc"+expression.getExID()+ "(");
-		System.out.print(derivedVariable.toLegalString()+",");
 		for(int i=0;i<valList.size();i++){
 			System.out.print(valList.get(i).toLegalString());
 			if(i!=valList.size()-1)System.out.print(",");
@@ -71,7 +82,7 @@ public class NewtonSolver {
 		
 		System.out.println("\t\t"+derivedVariable.toLegalString()+" = "+derivedVariable.toLegalString()+"_next;");
 		
-		System.out.println("\t} while( e > "+e+" )" );
+		System.out.println("\t} while( e > "+e+" );" );
 		System.out.println();
 		System.out.println("\treturn "+ derivedVariable.toLegalString()+";");
 		System.out.println("}");
@@ -79,20 +90,21 @@ public class NewtonSolver {
 		
 		
 		
-		System.out.print( "func"+expression.getExID()+ "(");
-		System.out.print(expression.toLegalString()+",");
+		//左辺関数
+		System.out.print( "double func"+expression.getExID()+ "(");
 		for(int i=0;i<valList.size();i++){
-			System.out.print(valList.get(i).toLegalString());
+			System.out.print("double "+valList.get(i).toLegalString());
 			if(i!=valList.size()-1)System.out.print(",");
 		}
 		System.out.println(") {");
 		System.out.println("\treturn "+expression.getLeftExpression().toLegalString()+";");
 		System.out.println("}");
-		System.out.println("");
-		System.out.print( "dfunc"+expression.getExID()+ "(");
-		System.out.print(derivedVariable.toLegalString()+",");
+		
+		
+		//左辺微分関数
+		System.out.print( "double dfunc"+expression.getExID()+ "(");
 		for(int i=0;i<valList.size();i++){
-			System.out.print(valList.get(i).toLegalString());
+			System.out.print("double "+valList.get(i).toLegalString());
 			if(i!=valList.size()-1)System.out.print(",");
 		}
 		System.out.println(") {");

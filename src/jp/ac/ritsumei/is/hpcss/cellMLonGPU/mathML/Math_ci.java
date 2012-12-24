@@ -222,5 +222,6 @@ public class Math_ci extends MathOperand {
 	 */
 	public void traverse(Visitor v){
 //		m_pRootFactor.traverse(v);
+		v.visit(this);
 	}
 }

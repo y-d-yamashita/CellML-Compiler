@@ -18,7 +18,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * 数式ライブラリ対応 導出変数左辺移項テストクラス
  * @author n-washio
  */
-// 2012/12/14 selector対応
+// 2012/12/24 BaseTransposition対応
 public class LeftHandSideTranspositionTest {
 
 	public static void main(String[] args) throws MathException {
@@ -55,51 +55,24 @@ public class LeftHandSideTranspositionTest {
 			pNewExpression.addOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 			pNewExpression.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("plus"), strAttr));
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("power"), strAttr));
 			
-				//plus第１要素
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("power"), strAttr));
-				pNewExpression.addOperand(val1);
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("minus"), strAttr));
-				pNewExpression.addOperand(val2);
-				pNewExpression.addOperand(num);
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-				
-				//plus第2要素
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
-				pNewExpression.addOperand(val3);
-				pNewExpression.addOperand(val4);
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-		
-				
-				//plus第3要素
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
-				pNewExpression.addOperand(val5);
-				pNewExpression.addOperand(val6);
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-	
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
+			pNewExpression.addOperand(val1);
+			pNewExpression.addOperand(val2);
+			
+			
 			pNewExpression.breakOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			
+			pNewExpression.addOperand(val2);
 			
+			
+			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			//右辺追加
 			pNewExpression.addOperand(val7);
 
@@ -113,50 +86,57 @@ public class LeftHandSideTranspositionTest {
 		System.out.println("");
 		
 		//テスト1
+		/*
 		MathExpression pNewExpression2 = new MathExpression();
 		LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
 		pNewExpression2 = lst2.transporseExpression(pNewExpression,val2);
 		System.out.println("Derived variable name : "+val2.toLegalString());
 		System.out.println(pNewExpression2.toLegalString());
 		System.out.println("");
-		
+		*/
 		//テスト2
+		/*
 		MathExpression pNewExpression3 = new MathExpression();
 		LeftHandSideTransposition lst3 = new LeftHandSideTransposition();
 		pNewExpression3 = lst3.transporseExpression(pNewExpression,val3);
 		System.out.println("Derived variable name : "+val3.toLegalString());
 		System.out.println(pNewExpression3.toLegalString());
 		System.out.println("");
-		
+		*/
 		//テスト3
+		/*
 		MathExpression pNewExpression4 = new MathExpression();
 		LeftHandSideTransposition lst4 = new LeftHandSideTransposition();
 		pNewExpression4 = lst4.transporseExpression(pNewExpression,val4);
 		System.out.println("Derived variable name : "+val4.toLegalString());
 		System.out.println(pNewExpression4.toLegalString());
 		System.out.println("");
-		
+		*/
 		//テスト4
+		/*
 		MathExpression pNewExpression5 = new MathExpression();
 		LeftHandSideTransposition lst5 = new LeftHandSideTransposition();
 		pNewExpression5 = lst5.transporseExpression(pNewExpression,val5);
 		System.out.println("Derived variable name : "+val5.toLegalString());
 		System.out.println(pNewExpression5.toLegalString());
 		System.out.println("");
-		
+		*/
 		//テスト5
+		/*
 		MathExpression pNewExpression6 = new MathExpression();
 		LeftHandSideTransposition lst6 = new LeftHandSideTransposition();
 		pNewExpression6 = lst6.transporseExpression(pNewExpression,val6);
 		System.out.println("Derived variable name : "+val6.toLegalString());
 		System.out.println(pNewExpression6.toLegalString());
 		System.out.println("");
-		
+		*/
 		//テスト6
+		
 		MathExpression pNewExpression7 = new MathExpression();
+		
 		LeftHandSideTransposition lst7 = new LeftHandSideTransposition();
-		pNewExpression7 = lst7.transporseExpression(pNewExpression,val7);
-		System.out.println("Derived variable name : "+val7.toLegalString());
+		pNewExpression7 = lst7.transporseExpression(pNewExpression,val1);
+		System.out.println("Derived variable name : "+val1.toLegalString());
 		System.out.println(pNewExpression7.toLegalString());
 		System.out.println("");
 		

@@ -26,13 +26,15 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * 	The operator contained in expression limits to the following one. 
  *	-plus,minus,times,divide,inc,dec,exp,ln,root,power,log
  *
- *  and non-linear equation is not supported by this system.
+ *  and non-linear operator (sin,cos,tan) is not supported by this system.
  *  In one equation, only one derived variable is permitted.
  * 
  * @author n-washio
  * 
  */
 
+//非線形フラグ対応
+//2012/12/24 BaseTransposition対応
 public class LeftHandSideTransposition {
 	
 	public MathExpression transporseExpression(MathExpression expression, Math_ci derivedVariable) throws MathException {
@@ -71,7 +73,8 @@ public class LeftHandSideTransposition {
 			}
 			if(derivedVariable_count!=1){
 				//非線形方程式
-				throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+				expression.addNonlinearFlag();
+				//throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 			}
 			boolean targetSide_position=false;
 			for(int j=0;j<exp_rightValiableList.size();j++){
@@ -91,8 +94,8 @@ public class LeftHandSideTransposition {
 			
 			
 			
-			//equalの直下が導出変数となるまで移項を繰り返す.
-			while(goal_flag!=true){
+			//equalの直下が導出変数となるまで移項を繰り返す.(非線形の場合は移項しない)
+			while(goal_flag!=true || expression.getNonlinearFlag()==true){
 				
 				MathOperator targetSide = null;
 				MathFactor oppositeSide = null;//反対辺はオペレータを含まない可能性があるのでMathFactorとして宣言
@@ -114,6 +117,7 @@ public class LeftHandSideTransposition {
 				int transpositionType=0;//移項方式を判定.
 				//	1.normal transposition
 				//	2.abnormal transposition(target側の移項要素を反対辺の第1要素にするケース)
+				//	3.base transposition (power第1要素,log第1要素)
 				
 				if(directOperatorKind.equals("MOP_PLUS")){
 					transpositionType=1;
@@ -146,13 +150,17 @@ public class LeftHandSideTransposition {
 				}
 				else if(directOperatorKind.equals("MOP_POWER")){
 					if(val_position==1){
-						throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+						transpositionType=3;
+						//expression.addNonlinearFlag();
+						//throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 					}
 					if(val_position==2)transpositionType=2;
 				}
 				else if(directOperatorKind.equals("MOP_LOG")){
 					if(val_position==1){
-						throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+						transpositionType=3;
+						//expression.addNonlinearFlag();
+						//throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 					}
 					if(val_position==2)transpositionType=2;
 				}
@@ -169,6 +177,10 @@ public class LeftHandSideTransposition {
 					expression=abnormal_transposition(
 							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
 				}
+				if(transpositionType==3){
+					expression=base_transposition(
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+				}
 				
 				//移項後の判定
 				goal_flag=check_EqDirectLeft(expression,derivedVariable);
@@ -177,6 +189,167 @@ public class LeftHandSideTransposition {
 		return expression;
 	}
 	
+	
+	public MathExpression base_transposition(
+			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
+			String operatorKind,int val_position) throws MathException{
+		
+		//pow(x,a) = b  ->  x = exp(ln(b)/a)
+		//log(x,a) = b  ->  x = exp(ln(a)/b)
+		
+		MathExpression pNewExpression = new MathExpression();
+		String operatorKindString=getOperatorKindString(operatorKind);
+		
+		if(operatorKindString.equals("power")){
+			//pow(x,a) = b  ->  x = exp(ln(b)/a)
+		
+			pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+			
+			//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
+			if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			} else{
+				pNewExpression.addOperand(
+						((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
+			}
+			
+			
+			//右辺追加
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("exp"), strAttr));
+			
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
+					
+			
+					//divide 第1要素
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
+			
+					if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					} else{
+						pNewExpression.addOperand((MathOperand)oppositeSide);
+					}
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					//divide 第2要素
+					if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(2).matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					} else{
+						pNewExpression.addOperand(
+								((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)));
+					}
+					
+			
+			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			
+			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+		
+		}
+		if(operatorKindString.equals("log")){
+			//pow(x,a) = b  ->  x = exp(ln(b)/a)
+		
+			pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+			
+			//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
+			if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			} else{
+				pNewExpression.addOperand(
+						((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
+			}
+			
+			
+			//右辺追加
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("exp"), strAttr));
+			
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
+					
+			
+					//divide 第1要素
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
+					
+					if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(2).matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					} else{
+						pNewExpression.addOperand(
+								((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)));
+					}
+				
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					//divide 第2要素
+					if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					} else{
+						pNewExpression.addOperand((MathOperand)oppositeSide);
+					}
+					
+			
+			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			
+			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+		
+		}
+		
+		return pNewExpression;
+	}
 
 	public MathExpression normal_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,

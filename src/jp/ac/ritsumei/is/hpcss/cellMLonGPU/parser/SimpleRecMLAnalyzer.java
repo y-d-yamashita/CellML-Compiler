@@ -1138,17 +1138,17 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 			 expr.getRootFactor().traverse(visitor);
 		 simpleRecMLVariableTable=visitor.getTable();
 	}
-	/*
+	
 	public void setLeftsideRightsideVariable(){
 		SimpleRecML_SetLeftSideRightSideVariableVisitor visitor = new SimpleRecML_SetLeftSideRightSideVariableVisitor(simpleRecMLVariableTable);
 		 for(MathExpression expr :m_vecMathExpression){
 			 visitor.reset(expr.getExpressionNumfromApply());
 			 expr.getRootFactor().traverse(visitor);
-//			 visitor.reset();
+			 visitor.reset();
 		 }
 		 simpleRecMLVariableTable=visitor.getTable();
 	}
-	*/
+	
 	public void setRefVariableType(){
 		simpleRecMLVariableTable.setRefVariableType(this);
 	}

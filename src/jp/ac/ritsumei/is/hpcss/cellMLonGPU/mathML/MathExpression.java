@@ -820,4 +820,9 @@ public class MathExpression {
 	public void addNonlinearFlag(){
 		nonlinear=true;
 	}
+	
+	public int getExpressionNumfromApply() {
+		int num = ((Math_apply)m_pRootFactor).getExpNum();
+		return num;
+	}
 }

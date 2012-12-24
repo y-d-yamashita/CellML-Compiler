@@ -18,10 +18,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * This class is Differentiation for code generator.
  * 
  * input:  
- * 	MathExpression
+ * 	MathExpression f(x)=0
  * 	Math_ci
  * 
- * output
+ * output f'(x)=0
  *  MathExpression(Left-hand side is differentiated by derived variable)
  * 
  * @author n-washio

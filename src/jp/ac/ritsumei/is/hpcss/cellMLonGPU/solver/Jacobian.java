@@ -24,25 +24,33 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 public class Jacobian {
 	
-	public Vector<Vector<MathExpression>> Jacobian;
+	public Vector<Vector<MathFactor>> Jacobian;
 	
 	//コンストラクタ
 	public Jacobian(){
-		Jacobian = new Vector<Vector<MathExpression>>();
+		Jacobian = new Vector<Vector<MathFactor>>();
 	}
 	
-	
-	public Vector<Vector<MathExpression>> makeJacobian(
+	public void printJacobian() throws MathException{
+		int n = getDimension();
+		for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				System.out.print(Jacobian.get(i).get(j).toLegalString());
+				if(j!=n-1)System.out.print("  , ");
+			}System.out.println();
+		}
+	}
+	public Vector<Vector<MathFactor>> makeJacobian(
 			Vector<MathExpression> expressionList, Vector<Math_ci> varList) throws MathException {
 		
-		Vector<MathExpression> JacobianLine;
+		Vector<MathFactor> JacobianLine;
 		Differentiation diff = new Differentiation();
 		
 		for(int i=0;i<expressionList.size();i++){
-			JacobianLine = new Vector<MathExpression>();
+			JacobianLine = new Vector<MathFactor>();
 			for(int j=0;j<varList.size();j++){
 				
-				JacobianLine.add(diff.differentiate(expressionList.get(i),varList.get(j)).getLeftExpression());
+				JacobianLine.add(diff.differentiate(expressionList.get(i),varList.get(j)).getLeftExpression().getRootFactor());
 			}
 			Jacobian.add(i,JacobianLine);
 		}
@@ -51,14 +59,14 @@ public class Jacobian {
 	}
 	
 	
-	public Vector<Vector<MathExpression>> changeInverseMatrix() throws MathException{
+	public Vector<Vector<MathFactor>> changeInverseMatrix() throws MathException{
 		
-		Vector<MathExpression> JacobianLine;
+		Vector<MathFactor> JacobianLine;
 		String[] strAttr = new String[] {"null", "null", "null", "null", "null"};
 		//掃き出し法による逆行列生成メソッド
 		int n = getDimension();
-		Vector<Vector<MathExpression>> inverseMatrix = new Vector<Vector<MathExpression>>();
-		Vector<MathExpression> inverseMatrixLine;
+		Vector<Vector<MathFactor>> inverseMatrix = new Vector<Vector<MathFactor>>();
+		Vector<MathFactor> inverseMatrixLine;
 		
 		
 		//一時記憶バッファ
@@ -71,44 +79,40 @@ public class Jacobian {
 		
 		//単位行列生成
 		for(int i=0;i<n;i++){
-			inverseMatrixLine = new Vector<MathExpression>();
+			inverseMatrixLine = new Vector<MathFactor>();
 			for(int j=0;j<n;j++){
 				if(i!=j){
-					MathExpression exp = new MathExpression();
 					Math_cn zero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
-					exp.addOperand(zero);
-					inverseMatrixLine.add(exp);
+					inverseMatrixLine.add(zero);
 				} else{
-					MathExpression exp = new MathExpression();
 					Math_cn one = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
-					exp.addOperand(one);
-					inverseMatrixLine.add(exp);
+					inverseMatrixLine.add(one);
 				}
 			}
 			inverseMatrix.add(inverseMatrixLine);
 		}
-		
+
 		//掃き出し法の実行
 		for(int i=0;i<n;i++){
 			//行の初期化
-			inverseMatrixLine = new Vector<MathExpression>(); 
-			JacobianLine = new Vector<MathExpression>();
+			inverseMatrixLine = new Vector<MathFactor>(); 
+			JacobianLine = new Vector<MathFactor>();
 			
 			// buf　に　1/a[i][i]を格納
 			
 			buf = new MathExpression();
 			Math_cn one = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
 			buf.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-			buf.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divie"), strAttr));
+			buf.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("divide"), strAttr));
 			
 				buf.addOperand(one);
 				
-				if(Jacobian.get(i).get(i).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-					buf.addOperator((MathOperator) Jacobian.get(i).get(i).getRootFactor());
+				if(Jacobian.get(i).get(i).matches(eMathMLClassification.MML_OPERATOR)){
+					buf.addOperator((MathOperator) Jacobian.get(i).get(i));
 					buf.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				}
 				else{
-					buf.addOperand((MathOperand) Jacobian.get(i).get(i).getRootFactor());
+					buf.addOperand((MathOperand) Jacobian.get(i).get(i));
 				}
 				
 			buf.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
@@ -121,13 +125,13 @@ public class Jacobian {
 				buf2.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
 				//times第1要素
-				if(Jacobian.get(i).get(j).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+				if(Jacobian.get(i).get(j).matches(eMathMLClassification.MML_OPERATOR)){
 
-					buf2.addOperator((MathOperator) Jacobian.get(i).get(j).getRootFactor());
+					buf2.addOperator((MathOperator) Jacobian.get(i).get(j));
 					buf2.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				}
 				else{
-					buf2.addOperand((MathOperand) Jacobian.get(i).get(j).getRootFactor());
+					buf2.addOperand((MathOperand) Jacobian.get(i).get(j));
 				}
 				
 				//times第2要素
@@ -140,7 +144,7 @@ public class Jacobian {
 				
 				buf2.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
-				JacobianLine.add(j, buf2);
+				JacobianLine.add(j, buf2.getRootFactor());
 				
 				
 				
@@ -149,7 +153,12 @@ public class Jacobian {
 				buf3.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				buf3.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
-				buf3.addOperand((MathOperand) inverseMatrix.get(i).get(j).getRootFactor());
+				if(inverseMatrix.get(i).get(j).matches(eMathMLClassification.MML_OPERATOR)){
+					buf3.addOperator((MathOperator) inverseMatrix.get(i).get(j));
+					buf3.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}else{
+					buf3.addOperand((MathOperand) inverseMatrix.get(i).get(j));
+				}
 				
 				if(buf.getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
 					buf3.addOperator((MathOperator) buf.getRootFactor());
@@ -160,29 +169,29 @@ public class Jacobian {
 				
 				buf3.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				
-				inverseMatrixLine.add(j,buf3);
+				inverseMatrixLine.add(j,buf3.getRootFactor());
 				
 				
 			}
-			Jacobian.add(i, JacobianLine);
-			inverseMatrix.add(i,inverseMatrixLine);
+			Jacobian.set(i, JacobianLine);
+			inverseMatrix.set(i,inverseMatrixLine);
 			
 			
 			
 			
 			for(int j=0;j<n;j++){
 				buf4 = new MathExpression();
-				JacobianLine = new Vector<MathExpression>();
-				inverseMatrixLine = new Vector<MathExpression>();
+				JacobianLine = new Vector<MathFactor>();
+				inverseMatrixLine = new Vector<MathFactor>();
 				if(i!=j){
 					//buf4 = a[j][i]
-					if(Jacobian.get(j).get(i).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					if(Jacobian.get(j).get(i).matches(eMathMLClassification.MML_OPERATOR)){
 
-						buf4.addOperator((MathOperator) Jacobian.get(j).get(i).getRootFactor());
+						buf4.addOperator((MathOperator) Jacobian.get(j).get(i));
 						buf4.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 					}
 					else{
-						buf4.addOperand((MathOperand) Jacobian.get(j).get(i).getRootFactor());
+						buf4.addOperand((MathOperand) Jacobian.get(j).get(i));
 					}
 					
 					for(int k=0;k<n;k++){
@@ -193,13 +202,13 @@ public class Jacobian {
 						
 						
 						//minus第1要素
-						if(Jacobian.get(j).get(k).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						if(Jacobian.get(j).get(k).matches(eMathMLClassification.MML_OPERATOR)){
 
-							buf5.addOperator((MathOperator) Jacobian.get(j).get(k).getRootFactor());
+							buf5.addOperator((MathOperator) Jacobian.get(j).get(k));
 							buf5.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						}
 						else{
-							buf5.addOperand((MathOperand) Jacobian.get(j).get(k).getRootFactor());
+							buf5.addOperand((MathOperand) Jacobian.get(j).get(k));
 						}
 						
 						
@@ -209,13 +218,13 @@ public class Jacobian {
 						
 						
 							//times第1要素
-							if(Jacobian.get(i).get(k).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							if(Jacobian.get(i).get(k).matches(eMathMLClassification.MML_OPERATOR)){
 	
-								buf5.addOperator((MathOperator) Jacobian.get(i).get(k).getRootFactor());
+								buf5.addOperator((MathOperator) Jacobian.get(i).get(k));
 								buf5.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 							}
 							else{
-								buf5.addOperand((MathOperand) Jacobian.get(i).get(k).getRootFactor());
+								buf5.addOperand((MathOperand) Jacobian.get(i).get(k));
 							}
 	
 							//times第2要素
@@ -234,7 +243,7 @@ public class Jacobian {
 						
 						buf5.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						
-						JacobianLine.add(k,buf5);
+						JacobianLine.add(k,buf5.getRootFactor());
 						
 						//inv_a[j][k] = inv_a[j][k] -  inv_a[i][k]* buf4;
 						buf6 = new MathExpression();
@@ -243,13 +252,13 @@ public class Jacobian {
 						
 						
 						//minus第1要素
-						if(inverseMatrix.get(j).get(k).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						if(inverseMatrix.get(j).get(k).matches(eMathMLClassification.MML_OPERATOR)){
 
-							buf6.addOperator((MathOperator) inverseMatrix.get(j).get(k).getRootFactor());
+							buf6.addOperator((MathOperator) inverseMatrix.get(j).get(k));
 							buf6.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						}
 						else{
-							buf6.addOperand((MathOperand) inverseMatrix.get(j).get(k).getRootFactor());
+							buf6.addOperand((MathOperand) inverseMatrix.get(j).get(k));
 						}
 						
 						
@@ -259,13 +268,13 @@ public class Jacobian {
 						
 						
 							//times第1要素
-							if(inverseMatrix.get(i).get(k).getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							if(inverseMatrix.get(i).get(k).matches(eMathMLClassification.MML_OPERATOR)){
 	
-								buf6.addOperator((MathOperator) inverseMatrix.get(i).get(k).getRootFactor());
+								buf6.addOperator((MathOperator) inverseMatrix.get(i).get(k));
 								buf6.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 							}
 							else{
-								buf6.addOperand((MathOperand) inverseMatrix.get(i).get(k).getRootFactor());
+								buf6.addOperand((MathOperand) inverseMatrix.get(i).get(k));
 							}
 	
 							//times第2要素
@@ -284,12 +293,12 @@ public class Jacobian {
 						
 						buf6.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 						
-						inverseMatrixLine.add(k,buf6);
+						inverseMatrixLine.add(k,buf6.getRootFactor());
 						
 											
 					}
-					Jacobian.add(j, JacobianLine);
-					inverseMatrix.add(j,inverseMatrixLine);
+					Jacobian.set(j, JacobianLine);
+					inverseMatrix.set(j,inverseMatrixLine);
 				}
 			}
 			

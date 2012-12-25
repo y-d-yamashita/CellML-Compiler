@@ -1,11 +1,11 @@
-<!-- 					LR1_FTCS_Diffusion_2D_struct_v3.recml		 			->
-<!-- Structured RecML in 2D for Luo-Rudy 1991 model with diffusion	->
-<!-- with diffusion PDE and Forward-Time Central Space Scheme (FTCS)->
+<!-- 					LR1_FTCS_Diffusion_2D_struct_v3.recml		 			- -->
+<!-- Structured RecML in 2D for Luo-Rudy 1991 model with diffusion	- -->
+<!-- with diffusion PDE and Forward-Time Central Space Scheme (FTCS) - -->
 
 <recml>
 
-	<!-- loop1="inner" has loop2 inside ->
-	<!-- loop2="inner" has loop3 inside ->
+	<!-- loop1="inner" has loop2 inside - -->
+	<!-- loop2="inner" has loop3 inside - -->
 	<loopstruct num="0">
 		<position name="inner">
 			<loopstruct num="1">
@@ -90,8 +90,8 @@
 	<variable name="time_dependent_potassium_current.PR_NaK" type="constvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1" />
 
 	<math>
-		<!-- loop1 pre ->
-		<!-- loop1 init: RecurVar ->
+		<!-- loop1 pre  -->
+		<!-- loop1 init: RecurVar  -->
 		<apply loop1 = "init">
 			<eq/>
 			<apply><selector/>
@@ -183,7 +183,7 @@
 			<cn> 0.0002 </cn>
 		</apply>
 		
-		<!-- loop1 init: ArithVar ->
+		<!-- loop1 init: ArithVar  -->
 		<apply loop1 = "init">
 			<eq/>
 			<apply><selector/>
@@ -385,7 +385,7 @@
 			<cn> 1 </cn>
 		</apply>
 		
-		<!-- loop1 inner ->
+		<!-- loop1 inner  -->
 		<apply loop1 = "inner"><eq/>
 			<apply><selector/>
 				<ci> intracellular_calcium_concentration.time </ci>
@@ -407,14 +407,14 @@
 			</apply>
 		</apply>
 		
-			<!-- loop2 pre ->
-			<!-- loop2 init ->
+			<!-- loop2 pre  -->
+			<!-- loop2 init  -->
 			
-			<!-- loop2 inner ->
-				<!-- loop3 pre ->
-				<!-- loop3 init ->
+			<!-- loop2 inner  -->
+				<!-- loop3 pre  -->
+				<!-- loop3 init  -->
 				
-				<!-- loop3 inner ->	
+				<!-- loop3 inner  -->	
 				<apply loop1 = "inner" loop2 = "inner" loop3 = "inner"><eq/>
 					<apply><selector/>
 						<ci> membrane.I_stim </ci>
@@ -2475,7 +2475,7 @@
 				</apply>
 				</apply>
 				
-				<!-- loop3 loopcond ->
+				<!-- loop3 loopcond  -->
 				<condition loop1 = "inner" loop2 = "inner" loop3 = "loopcond">
 					<apply><eq/>
 						<ci>l</ci>
@@ -2483,7 +2483,7 @@
 					</apply>
 				</condition>
 				
-				<!-- loop3 final ->
+				<!-- loop3 final  -->
 				<apply loop1 = "inner" loop2 = "inner" loop3 = "final"><eq/>
 					<ci>V3end</ci>
 					<apply><selector/>
@@ -2494,7 +2494,7 @@
 					</apply>
 				</apply>
 				
-				<!-- loop3 post ->
+				<!-- loop3 post  -->
 			
 			<condition loop1 = "inner" loop2 = "loopcond">
 				<apply><eq/>
@@ -2503,7 +2503,7 @@
 				</apply>
 			</condition>
 			
-			<!-- loop2 final ->
+			<!-- loop2 final  -->
 			<apply loop1 = "inner" loop2 = "final"><eq/>
 				<ci>V2end</ci>
 				<apply><selector/>
@@ -2514,7 +2514,7 @@
 				</apply>
 			</apply>
 			
-			<!-- loop2 post ->
+			<!-- loop2 post  -->
 			
 		<condition loop1 = "loopcond">
 			<apply><eq/>
@@ -2523,7 +2523,7 @@
 			</apply>
 		</condition>
 		
-		<!-- loop1 final ->
+		<!-- loop1 final  -->
 		<apply loop1 = "final"><eq/>
 			<ci>V1end</ci>
 			<apply><selector/>
@@ -2534,7 +2534,7 @@
 			</apply>
 		</apply>
 			
-		<!-- loop1 post ->
+		<!-- loop1 post  -->
 					
 	</math>
 </recml>

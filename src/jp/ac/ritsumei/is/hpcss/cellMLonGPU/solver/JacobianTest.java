@@ -19,7 +19,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * @author n-washio
  * 
  */
-public class NonLinearSimultaneousEquationTest {
+public class JacobianTest {
 
 	public static void main(String[] args) throws MathException {
 		
@@ -56,6 +56,7 @@ public class NonLinearSimultaneousEquationTest {
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 				
+				pNewExpression.addOperand(val1);
 				pNewExpression.addOperand(val1);
 				pNewExpression.addOperand(num1);
 				

@@ -132,7 +132,7 @@ public class FieldVertexGroupList {
 		}
 end */
 
-		//if(xAxisLoopGroupList!=null){
+		if(xAxisLoopGroupList!=null){
 			sb.append("< X Axis Index Group >-----------------------\n");
 			for(List<FieldVertexGroup> xLoop:xAxisLoopGroupList){
 				sb.append("time group["+xAxisLoopGroupList.indexOf(xLoop)+"]").append("{\n");
@@ -143,14 +143,14 @@ end */
 				}
 				sb.append("}\n");
 			}
-		//}else{
+		}else{
 			sb.append("< Time Index Group >-----------------------\n");
 			for(FieldVertexGroup group:timeLoopGroupList){
 				sb.append("time group["+timeLoopGroupList.indexOf(group)+"]").append("{\n");
 				sb.append(indent+"time group["+timeLoopGroupList.indexOf(group)+"]").append(group.toString()).append("\n");
 			}
 			sb.append("}\n");
-		//}
+		}
 		return sb.toString();
 	}
 }

@@ -6,6 +6,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_minus;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_plus;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.util.MathCollections;
 
 public class IndexReplacingVisitor implements Visitor {
 
@@ -25,11 +26,7 @@ public class IndexReplacingVisitor implements Visitor {
 			if(ci.getM_vecIndexListFactor().size()>indexPosition){
 				MathFactor indexFactor=ci.getM_vecIndexListFactor().get(indexPosition);
 				Integer indexInteger=null;
-				try {
-					indexInteger = decode(indexFactor.toLegalString());
-				} catch (MathException e) {
-					e.printStackTrace();
-				}
+				indexInteger = MathCollections.calculate(indexFactor).decode();
 				Integer diffValue = indexInteger-baseIndex;
 				if(diffValue.equals(0)){
 					ci.getM_vecIndexListFactor().set(indexPosition, replaceIndexFactor);
@@ -69,7 +66,7 @@ public class IndexReplacingVisitor implements Visitor {
 	 * @return Translated Integer
 	 */
 	private Integer decode(String str){
-		return Integer.decode(str.replace(" ","").replace("(","").replace(")", ""));
+		return Integer.decode(str.replace(" ","").replace("(","").replace(")", "").replace("double",""));
 	}
 
 }

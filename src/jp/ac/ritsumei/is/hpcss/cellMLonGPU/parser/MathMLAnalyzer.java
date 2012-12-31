@@ -421,6 +421,17 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	}
 
 	/**
+	 * 数式を取得する.
+	 * @param dExpressionId 数式id
+	 * @return 引数指定idの数式
+	 * @author y-yamashita
+	 */
+	public void setExpression(int dExpressionId,MathExpression expression) {
+		 m_vecMathExpression.set(dExpressionId, expression);
+	}
+
+	
+	/**
 	 * 数式の数を取得する.
 	 * @return 解析した数式の数
 	 */
@@ -444,7 +455,7 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		for (MathExpression it: m_vecMathExpression) {
 
 			/*数式標準出力*/
-			System.out.println(it.toLegalString());
+			System.out.println("Expr["+m_vecMathExpression.indexOf(it)+"]:"+it.toLegalString());
 
 //			//変数一覧表示（デバッグ用）
 //			int nVariableCount = it.getVariableCount();

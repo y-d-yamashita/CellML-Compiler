@@ -175,17 +175,21 @@ public class GraphCreator {
 	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph(RecMLEquationAndVariableContainer contener) throws GraphException{
 		BipartiteGraph<RecMLVertex,RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
 		
+		List<Integer> variableIDs = contener.getVariableIDs();
+		List<Integer> equationIDs = contener.getEquationIDs();
+		
 		//Add src side vertexes
-		addRecMLVariableVertex(graph,contener);
+		addRecMLVariableVertex(graph,variableIDs);
 		
 		//Add dst side vertexes
-		addRecMLExpressionVertex(graph,contener);
+		addRecMLExpressionVertex(graph,equationIDs);
 		
 		//Add edges
 		addRecMLEdges(graph,contener);
 		
 		//Remove not connected vertexes
 		removeNotConnectedVertexes(graph);
+		
 		
 		return graph;
 	}
@@ -304,12 +308,33 @@ public class GraphCreator {
 			RecMLEquationAndVariableContainer contener
 			)throws GraphException {
 		for(Integer exprID: contener.getEquationIDs()){
+			System.out.println("<<<"+this.getClass().getMethods()+":"+exprID);
 			RecMLVertex v = new RecMLVertex();
 			v.setExpression(exprID);
 			graph.addDestVertex(v);
 		}
 		
 	}
+	/**
+	 * Add a vertex of RecML expression
+	 * @param graph
+	 * @param recmlAnalyzer
+	 * @throws GraphException
+	 */
+	private void addRecMLExpressionVertex(
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph,
+			List<Integer> equationIDs
+			)throws GraphException {
+		for(Integer exprID: equationIDs){
+			System.out.println("<<<"+this.getClass().getMethods()+":"+exprID);
+			RecMLVertex v = new RecMLVertex();
+			v.setExpression(exprID);
+			graph.addDestVertex(v);
+		}
+		
+	}
+
+	
 	private void addSimpleRecMLExpressionVertex(
 			BipartiteGraph<RecMLVertex, RecMLEdge> graph,
 			SimpleRecMLEquationAndVariableContainer contener
@@ -334,6 +359,23 @@ public class GraphCreator {
 			) throws GraphException {
 		/* Add new vertexes of recvar*/
 		for(Integer varID: contener.getVariableIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setVariable(varID);
+			graph.addSourceVertex(v);
+		}
+	}
+	/**
+	 * Add a vertex of RecML variable
+	 * @param List<Integer> vairableIDs
+	 * @param recmlAnalyzer
+	 * @throws GraphException
+	 */
+	private void addRecMLVariableVertex(
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph, 
+			List<Integer> variableIDs
+			) throws GraphException {
+		/* Add new vertexes of recvar*/
+		for(Integer varID: variableIDs){
 			RecMLVertex v = new RecMLVertex();
 			v.setVariable(varID);
 			graph.addSourceVertex(v);

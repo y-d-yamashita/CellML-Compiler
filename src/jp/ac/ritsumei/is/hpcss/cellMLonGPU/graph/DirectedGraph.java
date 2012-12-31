@@ -185,7 +185,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		if(s==null || d == null) 
 			throw new GraphException(this.getClass().getName(),
 					new Throwable().getStackTrace()[0].getMethodName(),
-					"Error:"+e+"["+src+","+dst+"]"+
+					"Error:"+e+"["+src+"&"+s+","+dst+"&"+d+"]"+
 					", the either vertex is null");
 
 		//If adding failed, throw exception

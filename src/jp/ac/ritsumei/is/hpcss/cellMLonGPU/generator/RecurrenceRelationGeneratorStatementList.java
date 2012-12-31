@@ -1209,6 +1209,7 @@ public class RecurrenceRelationGeneratorStatementList extends ProgramGenerator {
 	}
 	
 	protected SyntaxControl createSyntaxDowhile(int LoopNumber, String[] strAttr) {
+		System.out.println("loopnum"+LoopNumber+" "+"strAttr"+strAttr.toString());
 		String[] strAttr_loopcond = strAttr.clone();
 		strAttr_loopcond[LoopNumber] = "loopcond";
 		ArrayList expIndex = new ArrayList();

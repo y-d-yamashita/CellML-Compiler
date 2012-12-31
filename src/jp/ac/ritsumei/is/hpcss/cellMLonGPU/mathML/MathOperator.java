@@ -52,6 +52,197 @@ public abstract class MathOperator extends MathFactor {
 		this(strPresentText, operatorKind, unMinFactorNum, null);
 	}
 
+	/* 	(非 Javadoc)	autor: n-washio
+	 *	add seven methods for LeftSideTransposition for code generator
+	 *
+	 *	1.getOperatorKind()					演算子の種類を返す
+	 *	2.getAttribute()					数式の属性を返す
+	 *	3.getUnderFactor()					直下の要素を返す
+	 *	4.getChildFactor(int n)				n番目の子要素を返す
+	 *	5.getChildFactorNum()				保持している子要素の数を返す
+	 *	6.searchVariablePosition(Math_ci)	変数がどの子要素に含まれるかを返す
+	 *	7.getVariables_SusceptibleOfOverlap(MathFactor,Vector<Math_ci>) 重複を許して全ての変数を取得
+	 *
+	*/
+	
+	/*-----演算子の種類を返すメソッド-----*/
+	public eMathOperator getOperatorKind() {
+		return m_operatorKind;
+	}
+	
+	/*-----数式の属性を返すメソッド-----*/
+	public String[] getAttribute(){
+		return attr;
+	}
+	
+	/*-----直下の要素を返すメソッド-----*/
+	public MathFactor getUnderFactor() {
+		MathFactor underFactor = null;
+		for(int i=0;i<m_vecFactor.size();i++){
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERATOR)){
+				underFactor= ((MathOperator)m_vecFactor.get(i));break;
+			}
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERAND)){
+				underFactor= ((MathOperand)m_vecFactor.get(i));break;
+			}
+		}
+		return (MathFactor) underFactor;
+	}
+	
+	/*-----n番目の子要素を返すメソッド-----*/
+	public MathFactor getChildFactor(int n) throws MathException {
+		MathFactor underFactor = null;
+		int count=0;
+		for(int i=0;i<m_vecFactor.size();i++){	
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERATOR)){
+				count++;
+				if(count==n) underFactor = ((MathOperator)m_vecFactor.get(i));
+			}
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERAND)){
+				count++;
+				if(count==n) underFactor = ((MathOperand)m_vecFactor.get(i));
+			}
+		}
+		return (MathFactor) underFactor;
+	}
+	
+	/*-----保持している子要素の数を返すメソッド-----*/
+	public int getChildFactorNum() throws MathException {
+		int count=0;	
+		for(int i=0;i<m_vecFactor.size();i++){
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERATOR)){
+				count++;
+			}
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERAND)){
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	/*-----変数が何番目の子要素に含まれるかを返すメソッド-----*/
+	public int searchVariablePosition(Math_ci val) throws MathException  {
+		int count=0;
+		int val_num = 0;
+		for(int i=0;i<m_vecFactor.size();i++){
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERATOR)){
+				count++;
+				MathOperator underOperator= ((MathOperator)m_vecFactor.get(i));
+				Vector<Math_ci> pVec= new Vector<Math_ci>();
+				underOperator.getVariables(underOperator, pVec);
+				
+				for(int j=0;j<pVec.size();j++){
+					if(pVec.get(j).matches(val)){
+						val_num=count;break;
+					}
+				}
+			}
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)(m_vecFactor.get(i))).matches(eMathOperand.MOPD_CI)){
+					count++;
+					if(val.getName().equals(((Math_ci)m_vecFactor.get(i)).getName())){
+						val_num=count;break;
+					}
+				}else{
+					count++;
+				}
+			}
+		}
+		return val_num;
+	}
+	/*-----変数が何番目の子要素に含まれるかを返すメソッド-----*/
+	public int searchVariablePositionWithSelector(Math_ci val) throws MathException  {
+		int count=0;
+		int val_num = 0;
+		for(int i=0;i<m_vecFactor.size();i++){
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERATOR)){
+				count++;
+				MathOperator underOperator= ((MathOperator)m_vecFactor.get(i));
+				Vector<Math_ci> pVec= new Vector<Math_ci>();
+				underOperator.getVariablesWithSelector(underOperator, pVec);
+				
+				for(int j=0;j<pVec.size();j++){
+					if( pVec.get(j).toLegalString().equals(val.toLegalString()) ){
+						val_num=count;break;
+					}
+				}
+			}
+			if(m_vecFactor.get(i).matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)(m_vecFactor.get(i))).matches(eMathOperand.MOPD_CI)){
+					count++;
+					if(val.toLegalString().equals( ((Math_ci)m_vecFactor.get(i)).toLegalString()) ){
+						val_num=count;break;
+					}
+				}else{
+					count++;
+				}
+			}
+		}
+		return val_num;
+	}
+	
+	/*-----数式中のvariablesを重複を許して取得するメソッド-----*/
+/*
+	public void getVariables_SusceptibleOfOverlap(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariables_SusceptibleOfOverlap(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					MathFactor pVariable = ((Math_ci)it).createCopy();
+					pVec.add((Math_ci)pVariable);
+				}
+			}
+		}
+	}
+*/
+	//Changed by y-yamashita
+
+	public void getVariables_SusceptibleOfOverlap(MathFactor rootFactor, Vector<MathOperand> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariables_SusceptibleOfOverlap(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					MathFactor pVariable = ((Math_ci)it).createCopy();
+					pVec.add((Math_ci)pVariable);
+				}
+			}
+		}
+	}
+
+	/*-----数式中のvariablesを重複を許して取得するメソッド-----*/
+/*
+	public void getVariables_SusceptibleOfOverlapWithSelector(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariables_SusceptibleOfOverlapWithSelector(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					//MathFactor pVariable = ((Math_ci)it).createCopy();
+					pVec.add((Math_ci)it);
+				}
+			}
+		}
+	}
+	*/
+	//Changed by y-yamashita
+	public void getVariables_SusceptibleOfOverlapWithSelector(MathFactor rootFactor, Vector<MathOperand> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariables_SusceptibleOfOverlapWithSelector(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					//MathFactor pVariable = ((Math_ci)it).createCopy();
+					pVec.add((Math_ci)it);
+				}
+			}
+		}
+	}
 	/* (非 Javadoc)
 	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor#getValue()
 	 */
@@ -388,6 +579,34 @@ public abstract class MathOperator extends MathFactor {
 		}
 	}
 	
+	public void getVariablesWithSelector(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				((MathOperator)it).getVariablesWithSelector(it, pVec);
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					boolean flag = true;
+					/*重複判定*/
+					String string1 = it.toLegalString();
+					String string2 = null;
+					
+					for(Math_ci it2 : pVec){
+					
+						string2 = it2.toLegalString();
+						
+						if(string1.equals(string2))
+								flag = false;
+					}
+					/*重複なしなら追加*/
+					if(flag){
+						//MathFactor pVariable = ((Math_ci)it).createCopy();
+						pVec.add((Math_ci)it);
+					}
+				}
+			}
+		}
+	}
 	/**
 	 * 置換指定ファクタを取得する.
 	 * @param pSearchOperand 検索関数オペランド
@@ -760,4 +979,6 @@ public abstract class MathOperator extends MathFactor {
 	public Vector<MathFactor> getFactorVector(){
 		return this.m_vecFactor;
 	}
+	
+
 }

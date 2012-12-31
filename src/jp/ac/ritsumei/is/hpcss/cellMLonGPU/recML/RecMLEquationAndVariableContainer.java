@@ -113,4 +113,9 @@ public class RecMLEquationAndVariableContainer {
 		
 		return sb.toString();
 	}
+	
+	public MathExpression getEquation(int equationID){
+		return recMLAnalyzer.getExpression(equationID);
+	}
+	
 }

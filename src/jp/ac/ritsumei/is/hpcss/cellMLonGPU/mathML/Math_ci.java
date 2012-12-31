@@ -46,7 +46,10 @@ public class Math_ci extends MathOperand {
 		m_dValue = dValue;
 		m_bInitFlag = true;
 	}
-
+	/*-----名前を返すメソッド-----*/
+	public String getName(){
+		return m_strPresentText;
+	}
 	/*-----配列インデックス追加メソッド(前方)-----*/
 	public void addArrayIndexToFront(MathFactor pFactor){
 

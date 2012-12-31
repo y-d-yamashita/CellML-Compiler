@@ -22,16 +22,21 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.util.MathCollections;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLEquationAndVariableContainer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.LeftHandSideTransposition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.List2D;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Triple;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.sort.ExpressionComparatorByIndex;
 
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -49,7 +54,7 @@ public class GraphManipulatorTest {
 /* Shared */
 static GraphManipulator graphManipulator= new GraphManipulator();
 static RecMLAnalyzer recmlAnalyzer = null;
-
+static RecMLEquationAndVariableContainer container =null;
 /* Result of each test */
 static BipartiteGraph<RecMLVertex,RecMLEdge> resultTestCreateBipartiteGraph=null;
 static DirectedGraph<RecMLVertex,RecMLEdge> resultTestCreateDependencyGraph=null;
@@ -63,14 +68,16 @@ static List2D<RecMLVertex> resultTestCompressDependencyList=null;
 
 /* Select recml file*/
 String xml=
-//"./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3_v2_yamashita.recml"
+"./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3_v2_yamashita.recml"
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple.recml"
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml"
-"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_notime_yamashita.recml"
+//"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v3_yamashita_strict.recml" //PASS
+//"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_notime_yamashita.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1_yamashita.recml"
 //"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_struct_v3.recml"
+//"./model/recml/SimpleRecMLSample/SimpleRecMLSampleRustyYamashita/LR1_FTCS_2D_simple_generated.recml"
 ;
 
 
@@ -85,7 +92,7 @@ public void testCreateBipartieGraph() {
 	 * The container is necessary to create 
 	 * a bipartite graph between variables and equations.
 	 */
-	RecMLEquationAndVariableContainer container = 
+	 container = 
 			new RecMLEquationAndVariableContainer(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
 
 	/* Create a bipartite graph */
@@ -102,7 +109,6 @@ public void testCreateBipartieGraph() {
 	assertNotNull(resultTestCreateBipartiteGraph);
 
 }
-
 
 
 @Test
@@ -123,7 +129,33 @@ public void testMaximumMatching() {
 	}
 }
 
-
+@Test
+public void testLeftHandSideTransport() throws MathException, TableException{
+	System.out.println(new Thread().currentThread().getStackTrace()[1].getMethodName()+">>> -----------------");
+	for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
+		System.out.print(p.getFirst()+"("+recmlAnalyzer.getRecMLVariableTable().getVariableReference(p.getFirst().getVarId()).getMathCI().toLegalString()+")"+", ");
+		System.out.print(p.getSecond()+"("+recmlAnalyzer.getExpression(p.getSecond().getEquId()).toLegalString()+")");
+	//	MathExpression lhs = recmlAnalyzer.getExpression(p.getSecond().getEquId()).getLeftExpression();
+	//	MathOperator apply = (MathOperator) lhs.getRootFactor();
+	//	System.out.println(" leftRoot:"+apply.getChildFactor(1).toLegalString());
+	}
+	
+	
+	System.out.println("Transport>>>");
+	for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
+		Math_ci target =  recmlAnalyzer.getRecMLVariableTable().getVariableReference(p.getFirst().getVarId()).getMathCI();
+		MathExpression expr = recmlAnalyzer.getExpression(p.getSecond().getEquId());
+		
+	//	if(!((MathOperator) expr.getLeftExpression().getRootFactor()).getChildFactor(1).toLegalString().equals(target.toLegalString())){
+	//		System.out.print(p.getFirst()+"("+recmlAnalyzer.getRecMLVariableTable().getVariableReference(p.getFirst().getVarId()).getMathCI().toLegalString()+")"+",");
+	//		System.out.println(p.getSecond()+"("+recmlAnalyzer.getExpression(p.getSecond().getEquId()).toLegalString()+")");
+			LeftHandSideTransposition lst = new LeftHandSideTransposition();
+	//		System.out.println((lst.transporseExpression(expr, target)).toLegalString());
+			recmlAnalyzer.setExpression(p.getSecond().getEquId(),lst.transporseExpression(expr, target));
+	//	}
+	}
+	
+}
 
 
 @Test
@@ -151,27 +183,140 @@ public void testMaximumMatching() {
 		resultTestTrajan = graphManipulator.tarjan(resultTestCreateDependencyGraph);
 		System.out.println("<<testCretateDependencyGraph>>------------");
 
+		
 		System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateDependencyGraph, resultTestTrajan));
 	}
 	
-	//ToDo
-	/*@Test
-	 *public void testAddOrderEachExpression(){
-	 *
-	 * }
-	 */
 	
 	@Test
 	public void testCompressDependencyList(){
+		/*
+		 * index position:   0   1   2 ...
+		 *                x [n] [l] [k]...
+		 */
+		int indexPosition =1;
 		//Sort to calculation order
 		   Collections.reverse(resultTestTrajan);
+		   
+			int order=0;
+			for(List<RecMLVertex> list: resultTestTrajan){
+				for(RecMLVertex v:list){
+					v.setOrder(order);
+					order++;
+				}
+			}
+		
+		   
 		resultTestCompressDependencyList = graphManipulator.compressDependencyList(resultTestTrajan, resultTestCreateDependencyGraph);
 		System.out.println("<<testCompressDependencyList>>------------");
 		System.out.println(resultTestTrajan.toString());
 		System.out.println(resultTestCompressDependencyList.toString());
+
+		List<MathExpression> exprList = new ArrayList<MathExpression>();
+		
+		MathExpressionLoop root = new MathExpressionLoop();
+
+		for(List<RecMLVertex> list:resultTestCompressDependencyList){
+			//Better result is gained than not reversing
+			Collections.reverse(list);
+			
+			for(RecMLVertex v:list){
+					exprList.add(container.getEquation(v.getEquId()));
+		}
+
+			//Sort exprlist based on index number and expression shape
+			Collections.sort(exprList,new ExpressionComparatorByIndex(indexPosition,exprList.size()));
+		
+			System.out.println("[");
+			for(MathExpression expr:exprList){
+				try {
+					System.out.println(expr.toLegalString());
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("]");
+
+			List<MathExpression> mergedExprList = new ArrayList<MathExpression>();
+			MathExpression prevExpr=null;
+			MathExpression pushExpr=null;
+			boolean replacedFlag=false;
+			
+			prevExpr = exprList.get(0);
+			pushExpr = exprList.get(0);
+			
+			MathExpressionLoop loop = new MathExpressionLoop();
+			loop.addMathExpression(pushExpr);
+			root.addLoop(loop);
+			
+			//Specify loop index
+			loop.setIndexFactor(new Math_ci("i"));
+			
+			//Set index ex. x[0][1]-> startIndex:1, endIndex:1
+			Math_cn index =  MathCollections.calculate(pushExpr.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition));
+			loop.setSatrtLoopIndex(index.decode());
+			loop.setEndLoopIndex(index.decode());
+			mergedExprList.add(pushExpr);
+			
+			for(int i=1;i<exprList.size();i++){
+				Integer compareResult = null;
+				try {
+					//Confirm that expression can be merge
+					compareResult = prevExpr.compareFocusOnVariableIndex(exprList.get(i), indexPosition);
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				
+				if(compareResult!=null&&compareResult==1){//It's increment
+							if(!replacedFlag){
+							pushExpr.replaceIndex(new Math_ci("i"), indexPosition);
+							replacedFlag=true;
+						}
+						loop.setEndLoopIndex(exprList.get(i).getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).decode());
+						
+				}else{
+						
+					pushExpr=exprList.get(i);
+					mergedExprList.add(pushExpr);
+					
+					//Create new loop group
+					loop = new MathExpressionLoop();
+					loop.addMathExpression(pushExpr);
+					loop.setIndexFactor(new Math_ci("i"));
+					Math_cn index_cn = MathCollections.calculate(pushExpr.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition));
+					loop.setSatrtLoopIndex(index_cn.decode());
+					loop.setEndLoopIndex(index_cn.decode());
+					root.addLoop(loop);
+					
+					replacedFlag=false;
+				}
+					
+				prevExpr=exprList.get(i);
+			}
+			
+			System.out.println("[");
+			for(MathExpression expr:mergedExprList){
+				try {
+					System.out.println(expr.toLegalString());
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("]");
+			
+			//Reset flags and lists
+			replacedFlag=false;
+			mergedExprList.clear();
+			exprList.clear();
+		}
+		System.out.println(root.toString());
+		
 	}
 	
-	@Test
+	//@Test
 	public void testCreateFieldDependencyGraph() {
 	try {
 		 resultTestCreateFieldGraph = 
@@ -211,7 +356,7 @@ public void testMaximumMatching() {
 	}
 }
 	
-	@Test
+	//@Test
 	public void testSeparateLoop(){
 		resutlTestSeparateLoop =	graphManipulator.separateLoopGroup(resultTestCreateFieldGraph);
 		assertNotNull(resutlTestSeparateLoop);
@@ -222,7 +367,7 @@ public void testMaximumMatching() {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testCreateLoop(){
 		try {
 			resultTestCreateLoop = graphManipulator.createLoop(resutlTestSeparateLoop);

@@ -10,7 +10,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 
 
 public class MathExpressionLoop{
-	private Integer satrtLoopIndex;
+	private Integer startLoopIndex;
 	private Integer endLoopIndex;
 	
 	/*Selector追加要素*/
@@ -23,7 +23,7 @@ public class MathExpressionLoop{
 	private List<MathExpressionLoop> mathExpressionLoopList;
 	
 	public MathExpressionLoop() {
-		this.satrtLoopIndex=null;
+		this.startLoopIndex=null;
 		this.endLoopIndex=null;
 		indexFactor=null;
 		setLoop(false);
@@ -33,11 +33,11 @@ public class MathExpressionLoop{
 	}
 
 	public Integer getSatrtLoopIndex() {
-		return satrtLoopIndex;
+		return startLoopIndex;
 	}
 
 	public void setSatrtLoopIndex(Integer satrtLoopIndex) {
-		this.satrtLoopIndex = satrtLoopIndex;
+		this.startLoopIndex = satrtLoopIndex;
 	}
 
 	public Integer getEndLoopIndex() {
@@ -71,7 +71,14 @@ public class MathExpressionLoop{
 	public void setMathExpressionList(List<MathExpression> mathExpressionList) {
 		this.mathExpressionList = mathExpressionList;
 	}
+	public void addMathExpressionList(List<MathExpression> mathExpressionList){
+		this.mathExpressionList.addAll(mathExpressionList);
+	}
+	public void addMathExpression(MathExpression mathExpression){
+		this.mathExpressionList.add(mathExpression);
+	}
 
+	
 	public List<MathExpressionLoop> getMathExpressionLoopList() {
 		return mathExpressionLoopList;
 	}
@@ -135,8 +142,8 @@ public class MathExpressionLoop{
 //			cloneExpressionList(this.getAllExpressions(),this.baseMathExpressionList);
 //			cloneExpressionList(this.mathExpressionList,this.replacedIndexMathExpressionList);
 			//System.out.println(this+","+this.getAllExpressions()+","+this.satrtLoopIndex+","+indexFactor+","+indexPosition);
-			if(this.satrtLoopIndex!=null){
-			replaceIndexInExpressions(this.getAllExpressions(),this.satrtLoopIndex,indexFactor,indexPosition);
+			if(this.startLoopIndex!=null){
+			replaceIndexInExpressions(this.getAllExpressions(),this.startLoopIndex,indexFactor,indexPosition);
 			}
 			//replaceIndexInExpressions(this.getAllExpressions(),this.satrtLoopIndex,indexFactor,indexPosition);
 			this.endLoopIndex=loop.getEndLoopIndex();
@@ -186,11 +193,11 @@ public class MathExpressionLoop{
 	}
 	
 	private void toString(StringBuilder stringBuilder,String indent){
-		if(indexFactor==null){
-			stringBuilder.append(indent+"NO LOOP: start:"+satrtLoopIndex+" end:"+endLoopIndex+"\n");
+		if(indexFactor==null||startLoopIndex==endLoopIndex){
+			stringBuilder.append(indent+"NO LOOP: start:"+startLoopIndex+" end:"+endLoopIndex+"\n");
 		}else{
 			try {
-				stringBuilder.append(indent+"LOOP: "+indexFactor.toLegalString()+"="+satrtLoopIndex+", "+indexFactor.toLegalString()+"<="+endLoopIndex+", "+indexFactor.toLegalString()+"++)\n");
+				stringBuilder.append(indent+"LOOP: "+indexFactor.toLegalString()+"="+startLoopIndex+", "+indexFactor.toLegalString()+"<="+endLoopIndex+", "+indexFactor.toLegalString()+"++)\n");
 			} catch (MathException e1) {
 				e1.printStackTrace();
 			}

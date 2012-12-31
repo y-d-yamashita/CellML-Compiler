@@ -37,6 +37,9 @@ public class RecMLVertex extends Vertex {
 	public int number = -1;
 	/** Used in tarjan's algorithm*/
 	public int lowvine=-1;
+	
+	/** Calculation order */
+	private int order = -1;
 
 	/**
 	 * Constructor
@@ -208,6 +211,14 @@ public class RecMLVertex extends Vertex {
     public int getEquId(){
     	return this.recExpr;
     }
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
 }
 

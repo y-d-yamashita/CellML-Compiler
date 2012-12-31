@@ -1,0 +1,56 @@
+<!---   Arbitrary model SimpleRecML File       --> 
+<!---     For testing algorithm in 1D          --> 
+<recml>
+<loopstruct num="0"/>
+<loopstruct num="1"/>
+
+
+<loopindex num="0" name="n"/>
+<loopindex num="1" name="n"/>
+
+<variable name="Main_x" type="recurvar" loopcomponent1="1" initialvalue="-1.501250563778375"/>
+<variable name="c0" type="constvar" />
+
+<math>
+<apply loop1="inner">
+<eq/>
+	<apply><selector/>
+		<ci>Main_x</ci>
+		<cn>0</cn>
+	</apply>
+	<ci>c0</ci>
+</apply>
+
+<apply loop1="inner">
+<eq/>
+	<apply><selector/>
+		<ci>Main_x</ci>
+		<cn>n</cn>
+	</apply>
+	<ci>c0</ci>
+</apply>
+<condition loop1="loopcond">
+<apply><eq/>
+	<ci>n</ci>
+	<cn>2</cn>
+</apply>
+</condition>
+
+<apply loop2="inner">
+<eq/>
+	<apply><selector/>
+		<ci>Main_x</ci>
+		<cn>n</cn>
+	</apply>
+	<ci>c0</ci>
+</apply>
+<condition loop2="loopcond">
+<apply><eq/>
+	<ci>n</ci>
+	<cn>4</cn>
+</apply>
+</condition>
+
+
+</math>
+</recml>

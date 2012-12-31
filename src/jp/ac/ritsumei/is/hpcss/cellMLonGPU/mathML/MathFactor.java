@@ -106,4 +106,23 @@ public abstract class MathFactor {
 	public void replaceStrPresentExt(String regex,String replacement){
 		m_strPresentText=m_strPresentText.replaceAll(regex, replacement);
 	}
+	
+	/**
+	 * Translate String to Integer  
+	 * @param str
+	 * @return Translated Integer
+	 * @see MathOperator
+	 */
+	public Integer decode(){
+		
+		String legalString = null;
+		try {
+			legalString = this.toLegalString();
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return Integer.decode(legalString.replace(" ","").replace("(","").replace(")", "").replace("double",""));
+		}
 }

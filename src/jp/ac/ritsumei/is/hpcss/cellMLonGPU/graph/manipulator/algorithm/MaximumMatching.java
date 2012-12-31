@@ -33,6 +33,16 @@ public class MaximumMatching {
 	public PairList<RecMLVertex,RecMLVertex> maximumMatching(BipartiteGraph<RecMLVertex,RecMLEdge> graph) 
 			throws GraphException{
 		
+		if(graph.getSourceVertexSet().size()!=graph.getDestVertexeSet().size()){
+			throw new GraphException(
+					this.getClass().getName(), 
+					new Thread().currentThread().getStackTrace()[1].getMethodName(),
+					"\n" +
+					"Number of source side vertexes is differential from number of dest side vertexes.\n"+
+					"Source:"+graph.getSourceVertexSet().size()+" Dest:"+graph.getDestVertexeSet().size());
+		}
+
+		
 		PairList<RecMLVertex,RecMLVertex> resultPairList = new PairList<RecMLVertex,RecMLVertex>();
 		Stack<RecMLVertex> pathStack = new Stack<RecMLVertex>();
 	

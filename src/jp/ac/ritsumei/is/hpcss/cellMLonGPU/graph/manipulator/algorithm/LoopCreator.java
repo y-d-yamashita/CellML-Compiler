@@ -56,7 +56,7 @@ public class LoopCreator {
 			}
 			
 		}else if(groupList.getTimeLoopGroupList()!=null){
-			
+		
 		}
 		return loopRoot;
 	}
@@ -80,6 +80,8 @@ public class LoopCreator {
 				}
 			}	
 		}
+		
+		/*
 		//Xループ化
 		
 		if(groupList.getXAxisLoopGroupList()!=null){
@@ -93,7 +95,7 @@ public class LoopCreator {
 				}
 			}
 		}
-		
+		*/
 		return loopRoot;
 	}
 	

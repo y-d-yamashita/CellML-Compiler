@@ -8,6 +8,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.util.MathCollections;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.IndexReplacingVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.MathFactorStackingVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.Visitor;
@@ -41,7 +42,9 @@ public class MathExpression {
 	/**conditionのreference*/
 	int condref = -1;
 	
-	
+	//非線形フラグ
+		boolean nonlinear;
+		
 	/**
 	 * MathML数式インスタンスを作成する.
 	 */
@@ -271,6 +274,24 @@ public class MathExpression {
 		((MathOperator)m_pRootFactor).getVariables(m_pRootFactor, pVec);
 	}
 	
+	/**数式内の全てのvariableを重複を許して取得する
+	 * @throws MathException 
+	 */
+//	public void getAllVariables_SusceptibleOfOverlap(Vector<Math_ci> pVec) throws MathException{
+//		((MathOperator)m_pRootFactor).getVariables_SusceptibleOfOverlap(m_pRootFactor, pVec);
+//	}
+	public void getAllVariables_SusceptibleOfOverlap(Vector<MathOperand> pVec) throws MathException{
+		((MathOperator)m_pRootFactor).getVariables_SusceptibleOfOverlap(m_pRootFactor, pVec);
+	}
+	/**数式内の全てのvariableを重複を許して取得する
+	 * @throws MathException 
+	 */
+//	public void getAllVariables_SusceptibleOfOverlapWithSelector(Vector<Math_ci> pVec) throws MathException{
+//		((MathOperator)m_pRootFactor).getVariables_SusceptibleOfOverlapWithSelector(m_pRootFactor, pVec);
+//	}
+	public void getAllVariables_SusceptibleOfOverlapWithSelector(Vector<MathOperand> pVec) throws MathException{
+		((MathOperator)m_pRootFactor).getVariables_SusceptibleOfOverlapWithSelector(m_pRootFactor, pVec);
+	}
 	/**
 	 * 計算式構築状態を取得する.
 	 * @return 計算式構築状態
@@ -569,6 +590,14 @@ public class MathExpression {
 		m_pRootFactor.traverse(v);
 	}
 
+	/**
+	 * 
+	 * @param that
+	 * @param indexPos
+	 * @return compare result, success: return integer, false: null
+	 * @throws MathException
+	 * @author y-yamashita
+	 */
 	public Integer compareFocusOnVariableIndex(MathExpression that,int indexPos) throws MathException{
 		//indexPos 0:time, 1:x, 2:y, 3:z
 
@@ -583,6 +612,71 @@ public class MathExpression {
 		return compareMathFactorStack(expr1_StackVisitor.getStack(),expr2_StackVisitor.getStack(),indexPos);
 		
 	}
+	
+	/**
+	 * Compare expression patten.
+	 * ex. "a[0] = b[1] + c" is same as "a[1] = b[3] + c"  
+	 * @param that
+	 * @return true: same shape, false: different shape
+	 * @author y-yamashita
+	 */
+	public boolean isSamePattern(MathExpression that){
+
+		MathFactorStackingVisitor expr1_StackVisitor = new MathFactorStackingVisitor();
+		MathFactorStackingVisitor expr2_StackVisitor = new MathFactorStackingVisitor();
+
+		//Get all operators and operands
+		this.traverse(expr1_StackVisitor);
+		that.traverse(expr2_StackVisitor);
+
+		Stack<MathFactor> stack1=expr1_StackVisitor.getStack();
+		Stack<MathFactor> stack2=expr2_StackVisitor.getStack();
+		
+		int stackSize=stack1.size();
+		
+		//If stack size is different, not same pattern
+		if(stackSize != stack2.size()){
+			return false;
+		}
+		
+		for(int i=0;i<stackSize;i++){
+			MathFactor factor1 = stack1.pop();
+			MathFactor factor2 = stack2.pop();
+			
+			//If class is not same, not same pattern
+			if(factor1.getClass() != factor2.getClass()){
+				return false;
+			}
+			
+			if((factor1 instanceof Math_ci )&&(factor2 instanceof Math_ci)){
+				Math_ci ci1 = (Math_ci) factor1;
+				Math_ci ci2 = (Math_ci) factor2;
+				//Not equivalent variable name, not same pattern
+				if(!ci1.getM_strPresentText().equals(ci2.getM_strPresentText())){
+					return false;
+				}
+			}
+			if((factor1 instanceof Math_cn )&&(factor2 instanceof Math_cn)){
+				Double cn1_value=null;
+				Double cn2_value=null;
+					try {
+					cn1_value = ((Math_cn) factor1).getValue();
+					cn2_value = ((Math_cn) factor2).getValue();
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					//Not same value, not same pattern
+				if(!cn1_value.equals(cn2_value)){
+					return false;
+				}
+			}
+		}
+		
+		//All pass case is same pattern
+		return true;
+	}
+	
 	/**
 	 * 
 	 * @param stack1
@@ -617,10 +711,10 @@ public class MathExpression {
 					if((ci1.getM_vecIndexListFactor().size()>indexPos) &&
 							(ci2.getM_vecIndexListFactor().size()>indexPos)){
 					
-					//	System.out.println(this.getClass()+":"+ci1.getM_vecIndexListFactor().get(indexPos).toLegalString()+" "+ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
+						System.out.println(this.getClass()+":"+ci1.getM_vecIndexListFactor().get(indexPos).toLegalString()+" "+ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
 						
-					Integer index1 = decode(ci1.getM_vecIndexListFactor().get(indexPos).toLegalString());
-					Integer index2 = decode(ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
+					Integer index1 = MathCollections.calculate(ci1.getM_vecIndexListFactor().get(indexPos)).decode();
+					Integer index2 = MathCollections.calculate(ci2.getM_vecIndexListFactor().get(indexPos)).decode();
 					if(indexDiff==null){	//一回目のMath_ci
 						indexDiff= index2-index1;
 					}else{					//二回目以降
@@ -629,6 +723,22 @@ public class MathExpression {
 						}
 					}
 					}
+				}
+			}
+			if((factor1 instanceof Math_cn )&&(factor2 instanceof Math_cn)){
+				Double cn1_value=null;
+				Double cn2_value=null;
+					try {
+					cn1_value = ((Math_cn) factor1).getValue();
+					cn2_value = ((Math_cn) factor2).getValue();
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					System.out.println(cn1_value+" "+cn2_value+cn1_value.equals(cn2_value));
+					
+				if(!cn1_value.equals(cn2_value)){
+					return null;
 				}
 			}
 			
@@ -642,7 +752,7 @@ public class MathExpression {
 	 * @return Translated Integer
 	 */
 	private Integer decode(String str){
-		return Integer.decode(str.replace(" ","").replace("(","").replace(")", ""));
+		return Integer.decode(str.replace(" ","").replace("(","").replace(")", "").replace("double",""));
 	}
 	
 	
@@ -651,11 +761,36 @@ public class MathExpression {
 		IndexReplacingVisitor indexReplaceVsitor = new IndexReplacingVisitor(replaceIndexFactor,baseIndex,indexPosition);
 		this.traverse(indexReplaceVsitor);
 	}
+	public void replaceIndex(MathFactor replaceIndexFactor,int indexPosition) {
+		int baseIndex = -1;
+		try {
+			System.out.println(this.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).toLegalString());
+			baseIndex = decode(this.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).toLegalString());
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		IndexReplacingVisitor indexReplaceVsitor = new IndexReplacingVisitor(replaceIndexFactor,baseIndex,indexPosition);
+		this.traverse(indexReplaceVsitor);
+	}
+
 	
 	public boolean serchIndexVaruable(String index, Math_ci mci) throws MathException {
 		boolean flag = false;
 		
 		flag = ((MathOperator) m_pRootFactor).K_checkIndexVariable(index,mci);
 		return flag;
+	}
+	//非線形数式判定メソッド
+	public boolean getNonlinearFlag(){
+		return nonlinear;
+	}
+	public void addNonlinearFlag(){
+		nonlinear=true;
+	}
+	
+	public int getExpressionNumfromApply() {
+		int num = ((Math_apply)m_pRootFactor).getExpNum();
+		return num;
 	}
 }

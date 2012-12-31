@@ -1,5 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML;
 
+import java.math.BigDecimal;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathSepType;
@@ -68,6 +70,28 @@ public class Math_cn extends MathOperand {
 		m_Type = "integer";
 	}
 	
+	/*小数点以下がなければ(double)を消すメソッド. scale+1桁以降は切り捨て*/
+	public void autoChangeType(int scale){
+		BigDecimal value = new BigDecimal(this.m_strPresentText);
+	
+		//整数部
+		BigDecimal integerPart = new BigDecimal(value.intValue());
+		//小数点部
+		BigDecimal fractionPart = value.subtract(integerPart).setScale(scale,BigDecimal.ROUND_DOWN);
+
+		System.out.println(fractionPart);
+		
+		//小数点以下が0なら(double)と".0"表記を消す
+		if(fractionPart.compareTo(new BigDecimal(0))==0){
+			changeType();
+			m_strPresentText=integerPart.toString();
+		}
+	}
+	/*小数点以下がなければ(double)を消すメソッド. 10桁以降は切り捨て*/
+	public void autoChangeType(){
+		autoChangeType(10);
+	}
+	
 	/*-----文字列変換メソッド-----*/
 	public String toLegalString() throws MathException {
 
@@ -102,4 +126,6 @@ public class Math_cn extends MathOperand {
 	public String toMathMLString() throws MathException {
 		return 	"<cn> " + m_strPresentText + " </cn>";
 	}
+	
+	
 }

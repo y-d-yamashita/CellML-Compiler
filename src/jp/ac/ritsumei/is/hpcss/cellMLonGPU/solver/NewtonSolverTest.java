@@ -118,8 +118,8 @@ public class NewtonSolverTest {
 		System.out.println("Code　:");
 		System.out.println("");
 		
-		double e = 0.001;
-		NewtonSolver ns = new NewtonSolver();
+		double e = 1.0e-50;
+		NewtonSolverV2 ns = new NewtonSolverV2();
 		ns.writeNewtonSolver(pNewExpression, derivedVal, e);
 		
 		

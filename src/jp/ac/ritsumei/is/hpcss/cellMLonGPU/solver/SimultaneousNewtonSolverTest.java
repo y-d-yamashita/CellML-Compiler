@@ -156,8 +156,9 @@ public class SimultaneousNewtonSolverTest {
 		System.out.println("");
 		
 		double e = 0.001;
+		int max = 1000;
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
-		sns.writeSimultaneousNewtonSolver(eqList, varList, e);
+		sns.writeSimultaneousNewtonSolver(eqList, varList, e,max);
 		
 		
 	}

@@ -29,23 +29,27 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * 
  */
 public class SimultaneousNewtonSolver {
-	public void writeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e) throws MathException {
+	public void writeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e, int max) throws MathException {
 		
 		int n= expList.size();
 		Jacobian jc = new Jacobian();
 		jc.makeJacobian(expList, varList);
 		jc.changeInverseMatrix();
 		
-		
-		//main関数に記述される構文
-		for(int i=0;i<n;i++){
-			System.out.print(varList.get(i).toLegalString()+" = simulNewton"+expList.get(i).getExID()+"(");
-			for(int j=0;j<n;j++){
-				System.out.print(varList.get(j).toLegalString());
-				if(j!=n-1)System.out.print(",");
-			}
-			System.out.println(");");
+		//含まれる変数リスト(導出する変数以外)を作成
+		Vector<Math_ci> vList= new Vector<Math_ci>();
+		for(int i=0;i<expList.size();i++){
+			expList.get(i).getAllVariables(vList);
 		}
+		//main関数に記述される構文
+		
+		System.out.print("simulNewton(");
+		for(int j=0;j<n;j++){
+			System.out.print(varList.get(j).toLegalString());
+			if(j!=n-1)System.out.print(",");
+		}
+		System.out.println(");");
+		
 		
 		System.out.println();
 	

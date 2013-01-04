@@ -28,7 +28,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * ln,log
  * 
  */
-public class NewtonSolver {
+public class NewtonSolverV2 {
 	public void writeNewtonSolver(MathExpression expression, Math_ci derivedVariable, double e) throws MathException {
 		
 		Differentiation diff = new Differentiation();
@@ -60,7 +60,7 @@ public class NewtonSolver {
 		}
 		System.out.println(") {");
 		System.out.println();
-		System.out.println("\tdouble e;");
+		System.out.println("\tdouble fx;");
 		System.out.println("\tdouble " +derivedVariable.toLegalString()+"_next;");
 		
 		System.out.println();
@@ -78,11 +78,16 @@ public class NewtonSolver {
 			if(i!=valList.size()-1)System.out.print(",");
 		}
 		System.out.println(") );");
-		System.out.println("\t\te = "+derivedVariable.toLegalString()+"_next - "+derivedVariable.toLegalString()+";");
-		
 		System.out.println("\t\t"+derivedVariable.toLegalString()+" = "+derivedVariable.toLegalString()+"_next;");
 		
-		System.out.println("\t} while( e > "+e+" );" );
+		System.out.print("\t\tfx = func" +expression.getExID()+ "(");
+		for(int i=0;i<valList.size();i++){
+			System.out.print(valList.get(i).toLegalString());
+			if(i!=valList.size()-1)System.out.print(",");
+		}
+		System.out.println(");");
+		System.out.println();
+		System.out.println("\t} while( fx < "+-1.0*e+" || "+e+" < fx );" );
 		System.out.println();
 		System.out.println("\treturn "+ derivedVariable.toLegalString()+";");
 		System.out.println("}");

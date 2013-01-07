@@ -376,13 +376,9 @@ public class HighSpeedDecisionLoopStructure2 {
 	
 	public ArrayList<RelationPattern> innerDependency(ArrayList<RelationPattern> inputList, Integer[] loopNameList) {
 		
-		//innerに独立なツリーが存在する場合,そのツリーを接続することができず,innerエッジが競合して構造決定ができない.
-				//これを避けるためには,innerを複数持つノードをなくせば良い.
-				//innerに複数要素を持つノードごとに,inner要素でループ構造を作成し,作成した構造のルート要素を子要素とする.
-				
+		
+		//innerを複数持っているノードをリスト化する.
 				ArrayList<Integer> multiInnerNode = new ArrayList<Integer>();
-				
-				//innerを複数持っているノードをリスト化する.
 				for(int i=0;i<loopNameList.length;i++){
 					int innerCount=0;
 					for(int j=0;j<inputList.size();j++){

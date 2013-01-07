@@ -202,7 +202,7 @@ public class Labelattr2 extends SimpleRecMLAnalyzer{
 			
 			//---------------------------------------------------
 			//入力情報に対するinner子要素の処理
-			//あるノードがinner子要素を複数持っていない状態まで再帰処理して取得.
+			//あるノードのinner子要素がnullである場合,pre/postを割り当てる.
 			//---------------------------------------------------
 			inputList=hsdls.innerDependency(inputList,loopNameList);
 

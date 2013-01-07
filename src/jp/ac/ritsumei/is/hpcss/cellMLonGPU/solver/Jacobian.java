@@ -31,6 +31,9 @@ public class Jacobian {
 		Jacobian = new Vector<Vector<MathFactor>>();
 	}
 	
+	public MathFactor getFactor(int i,int j){
+		return Jacobian.get(i).get(j);
+	}
 	public void printJacobian() throws MathException{
 		int n = getDimension();
 		for(int i=0;i<n;i++){

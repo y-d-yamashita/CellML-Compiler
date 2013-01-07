@@ -29,7 +29,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * 
  */
 public class NewtonSolverV2 {
-	public void writeNewtonSolver(MathExpression expression, Math_ci derivedVariable, double e) throws MathException {
+	public void writeNewtonSolver(MathExpression expression, Math_ci derivedVariable, double e, int max) throws MathException {
 		
 		Differentiation diff = new Differentiation();
 		MathExpression pDiffExpression = new MathExpression();
@@ -60,11 +60,16 @@ public class NewtonSolverV2 {
 		}
 		System.out.println(") {");
 		System.out.println();
-		System.out.println("\tdouble fx;");
+		System.out.println("\tint max = 0;");
+		System.out.println("\tdouble eps;");
 		System.out.println("\tdouble " +derivedVariable.toLegalString()+"_next;");
 		
 		System.out.println();
 		System.out.println("\tdo {");
+		System.out.println("\t\tmax ++;");
+		System.out.println("\t\tif(max > "+max+"){");
+		System.out.println("\t\t\tprintf(\"error:no convergence\\n\");break;");
+		System.out.println("\t\t}");
 		System.out.print("\t\t"+derivedVariable.toLegalString()+"_next = "+derivedVariable.toLegalString()+" - ( func"+expression.getExID()+ "(");
 		
 		for(int i=0;i<valList.size();i++){
@@ -80,14 +85,14 @@ public class NewtonSolverV2 {
 		System.out.println(") );");
 		System.out.println("\t\t"+derivedVariable.toLegalString()+" = "+derivedVariable.toLegalString()+"_next;");
 		
-		System.out.print("\t\tfx = func" +expression.getExID()+ "(");
+		System.out.print("\t\teps = func" +expression.getExID()+ "(");
 		for(int i=0;i<valList.size();i++){
 			System.out.print(valList.get(i).toLegalString());
 			if(i!=valList.size()-1)System.out.print(",");
 		}
 		System.out.println(");");
 		System.out.println();
-		System.out.println("\t} while( fx < "+-1.0*e+" || "+e+" < fx );" );
+		System.out.println("\t} while( eps < "+-1.0*e+" || "+e+" < eps );" );
 		System.out.println();
 		System.out.println("\treturn "+ derivedVariable.toLegalString()+";");
 		System.out.println("}");

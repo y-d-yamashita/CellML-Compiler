@@ -28,9 +28,10 @@ public class SimultaneousNewtonSolverTest {
 
 		//テスト用変数定義
 		//テスト用変数定義
-		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "X");
-		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "Y");
-		
+		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "x");
+		val1.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "x");
+		val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
 		Math_cn zero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
 		Math_cn num1 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
 		Math_cn num2 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
@@ -155,7 +156,7 @@ public class SimultaneousNewtonSolverTest {
 		System.out.println("Code　:");
 		System.out.println("");
 		
-		double e = 0.001;
+		double e = 0.00001;
 		int max = 1000;
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
 		sns.writeSimultaneousNewtonSolver(eqList, varList, e,max);

@@ -34,19 +34,33 @@ public class SimultaneousNewtonSolver {
 		int n= expList.size();
 		Jacobian jc = new Jacobian();
 		jc.makeJacobian(expList, varList);
-		jc.changeInverseMatrix();
+		//jc.changeInverseMatrix();
 		
 		//含まれる変数リスト(導出する変数以外)を作成
 		Vector<Math_ci> vList= new Vector<Math_ci>();
+		Vector<Math_ci> v2List= new Vector<Math_ci>();
 		for(int i=0;i<expList.size();i++){
 			expList.get(i).getAllVariables(vList);
+		}
+		for(int j=0;j<vList.size();j++){
+			boolean flag = false;
+			for(int k=0;k<n;k++){
+				if(vList.get(j).toLegalString().equals(varList.get(k).toLegalString())) flag = true;
+			}
+			if(flag==false) v2List.add(vList.get(j));
 		}
 		//main関数に記述される構文
 		
 		System.out.print("simulNewton(");
-		for(int j=0;j<n;j++){
-			System.out.print(varList.get(j).toLegalString());
-			if(j!=n-1)System.out.print(",");
+		System.out.print(varList.get(0).getM_strPresentText());
+		if(v2List.size()!=0){
+			System.out.print(", ");
+		}
+		for(int j=0;j<v2List.size();j++){
+			System.out.print("double "+ v2List.get(j).toLegalString());
+			if(j!=v2List.size()-1){
+				System.out.print(", ");
+			}
 		}
 		System.out.println(");");
 		
@@ -55,65 +69,171 @@ public class SimultaneousNewtonSolver {
 	
 		
 		//ニュートン法計算関数
-		for(int i=0;i<n;i++){
+		
 			
-			System.out.print("double simulNewton"+expList.get(i).getExID()+"(");
-			
-			for(int j=0;j<n;j++){
-				System.out.print("double "+varList.get(j).toLegalString());
-				if(j!=n-1)System.out.print(",");
+		System.out.print("void simulNewton(");
+		System.out.print("double *"+ varList.get(0).getM_strPresentText());
+		if(v2List.size()!=0){
+				System.out.print(", ");
+		}
+		for(int j=0;j<v2List.size();j++){
+			System.out.print("double "+ v2List.get(j).toLegalString());
+			if(j!=v2List.size()-1){
+				System.out.print(", ");
 			}
-			System.out.println(") {");
-			System.out.println();
-			
-			System.out.println("\tdouble e;");
-			System.out.println("\tdouble " +varList.get(i).toLegalString()+"_next;");
-			System.out.println("\tdouble buf = 0.0;");
-			System.out.println();
-			System.out.println("\tdo {");
-			for(int j=0;j<n;j++){
-				System.out.print("\t\tbuf += inv_jacobian"+expList.get(i).getExID()+varList.get(j).toLegalString()+"(");
-				for(int k=0;k<n;k++){
-					System.out.print(varList.get(k).toLegalString());
-					if(k!=n-1)System.out.print(",");
-				}
-				System.out.println(");");
-			}
-			System.out.println("\t\t"+varList.get(i).toLegalString()+"_next = "+varList.get(i).toLegalString()+" - buf;");
-			System.out.println("\t\te = "+varList.get(i).toLegalString()+"_next - "+varList.get(i).toLegalString()+";");
-			System.out.println("\t\t"+varList.get(i).toLegalString()+" = "+varList.get(i).toLegalString()+"_next;");
-			System.out.println("\t} while(e > "+e+");");
-			System.out.println();
-			System.out.println("\treturn "+varList.get(i).toLegalString()+";");
-			System.out.println("}");
-			System.out.println();
 		}
 		
-		//左辺関数
-		for(int i=0;i<n;i++){
-			System.out.print("double func"+expList.get(i).getExID()+"(");
-			for(int j=0;j<n;j++){
-				System.out.print("double "+varList.get(j).toLegalString());
-				if(j!=n-1)System.out.print(",");
-			}
-			System.out.println(") {");
-			System.out.println();
-			System.out.println("\treturn "+expList.get(i).getLeftExpression().toLegalString()+";");
-			System.out.println("}");
-		}
+		System.out.println(") {");
+		System.out.println();
 		
-		//ヤコビアン関数
-		for(int i=0;i<n;i++){
-			System.out.print("double func"+expList.get(i).getExID()+"(");
-			for(int j=0;j<n;j++){
-				System.out.print("double "+varList.get(j).toLegalString());
-				if(j!=n-1)System.out.print(",");
-			}
-			System.out.println(") {");
-			System.out.println();
-			System.out.println("\treturn "+expList.get(i).getLeftExpression().toLegalString()+";");
-			System.out.println("}");
+		System.out.println("\tint max = 0;");
+		System.out.println("\tint i, j, k;");
+		System.out.println("\tdouble buf;");
+		System.out.println("\tdouble det;");
+		System.out.println("\tdouble pro;");
+		System.out.println("\tdouble eps;");
+		System.out.println("\tdouble f["+n+"];");
+		System.out.println("\tdouble jac["+n+"]["+n+"];");
+		System.out.println("\tdouble cpy["+n+"]["+n+"];");
+		System.out.println("\tdouble inv["+n+"]["+n+"];");
+		System.out.println("\tdouble " +varList.get(0).getM_strPresentText()+"_next["+n+"];");
+		System.out.println();
+		System.out.println("\tdo {");
+		System.out.println("\t\tmax ++;");
+		System.out.println("\t\tif(max > "+max+"){");
+		System.out.println("\t\t\tprintf(\"error:no convergence\\n\");break;");
+		System.out.println("\t\t}");
+		System.out.println("\t\tdet = 1.0;");
+		System.out.println("\t\teps = 0.0;");
+		System.out.println();
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\tfor(j=0;j<"+n+";j++){");
+		System.out.print("\t\t\t\tjac[i][j] = jacobi("+varList.get(0).getM_strPresentText()+",");
+		for(int j=0;j<v2List.size();j++){
+			System.out.print(v2List.get(j).toLegalString()+",");
 		}
+		System.out.println("i,j);");
+		System.out.print("\t\t\t\tcpy[i][j] = jacobi("+varList.get(0).getM_strPresentText()+",");
+		for(int j=0;j<v2List.size();j++){
+			System.out.print(v2List.get(j).toLegalString()+",");
+		}
+		System.out.println("i,j);");
+		System.out.println();
+		System.out.println("\t\t\t}");
+		System.out.println("\t\t}");
+		System.out.println();
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\tfor(j=0;j<"+n+";j++){");
+		System.out.println("\t\t\t\tif(i<j){");
+		System.out.println("\t\t\t\t\tbuf = cpy[j][i] / cpy[i][i];");
+		System.out.println("\t\t\t\t\tfor(k=0;k<"+n+";k++){");
+		System.out.println("\t\t\t\t\t\tcpy[j][k] -= cpy[i][k] * buf;");
+		System.out.println("\t\t\t\t\t}");
+		System.out.println("\t\t\t\t}");
+		System.out.println("\t\t\t}");
+		System.out.println("\t\t}");
+		
+		
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\tdet *= cpy[i][i];");
+		System.out.println("\t\t}");
+		System.out.println("\t\tif(det ==0.0){");
+		System.out.println("\t\t\tprintf(\"error:det is zero\\n\");break;");
+		System.out.println("\t\t}");
+		
+		//単位行列を作成
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\tfor(j=0;j<"+n+";j++){");
+		System.out.println("\t\t\t\tif(i==j) inv[i][j] = 1.0;");
+		System.out.println("\t\t\t\telse inv[i][j] = 0.0;");
+		System.out.println("\t\t\t}");
+		System.out.println("\t\t}");
+		
+		//掃き出し法による逆行列生成
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\tbuf = 1 / jac[i][i];");
+		System.out.println("\t\t\tfor(j=0;j<"+n+";j++){");
+		System.out.println("\t\t\t\tjac[i][j] *= buf;");
+		System.out.println("\t\t\t\tinv[i][j] *= buf;");
+		System.out.println("\t\t\t}");
+		System.out.println("\t\t\tfor(j=0;j<"+n+";j++){");
+		System.out.println("\t\t\t\tif(i!=j){");
+		System.out.println("\t\t\t\t\tbuf = jac[j][i];");
+		System.out.println("\t\t\t\t\tfor(k=0;k<"+n+";k++){");
+		System.out.println("\t\t\t\t\t\tjac[j][k] -= jac[i][k]*buf;");
+		System.out.println("\t\t\t\t\t\tinv[j][k] -= inv[i][k]*buf;");
+		System.out.println("\t\t\t\t\t}");
+		System.out.println("\t\t\t\t}");
+		System.out.println("\t\t\t}");
+		System.out.println("\t\t}");
+		
+		//ニュートン法計算
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\tpro = 0.0;");
+		System.out.println("\t\t\tfor(j=0;j<"+n+";j++){");
+		System.out.print("\t\t\t\tpro += inv[i][j] * func("+varList.get(0).getM_strPresentText()+",");
+		for(int j=0;j<v2List.size();j++){
+			System.out.print(v2List.get(j).toLegalString()+",");
+		}
+		System.out.println("j);");
+		System.out.println("\t\t\t}");
+		System.out.println("\t\t\t"+varList.get(0).getM_strPresentText()+"_next[i] = "+varList.get(0).getM_strPresentText()+"[i] - pro;");
+		System.out.println("\t\t}");
+		
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.println("\t\t\t"+varList.get(0).getM_strPresentText()+"[i] = "+varList.get(0).getM_strPresentText()+"_next[i];");
+		System.out.println("\t\t}");
+		
+		//判定値の計算
+		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
+		System.out.print("\t\t\tf[i] = func("+varList.get(0).getM_strPresentText()+",");
+		for(int j=0;j<v2List.size();j++){
+			System.out.print(v2List.get(j).toLegalString()+",");
+		}
+		System.out.println("i);");
+		System.out.println("\t\t\teps += f[i]*f[i];");
+		System.out.println("\t\t}");
+		System.out.println("\t\tif(max > "+max+"){");
+		System.out.println("\t\t\tprintf(\"error:no convergence\\n\");break;");
+		System.out.println("\t\t}");
+		System.out.println("\t} while ("+e+" < sqrt(eps));");
+		System.out.println("}");
+		System.out.println();
+		
+		
+		//左辺関数func
+		System.out.print("double func(");
+		System.out.print("double *"+ varList.get(0).getM_strPresentText()+", ");
+		for(int j=0;j<v2List.size();j++){
+			System.out.print("double "+ v2List.get(j).toLegalString());
+			System.out.print(", ");
+		}
+		System.out.println("int i) {");
+		System.out.println();
+		for(int i=0;i<n;i++){
+			System.out.println("\tif(i=="+i+") return "+expList.get(i).getLeftExpression().toLegalString()+";");
+		}
+		System.out.println();
+		System.out.println("}");
+		
+		
+		//ヤコビ行列
+		System.out.print("double jacobi(");
+		System.out.print("double *"+ varList.get(0).getM_strPresentText()+", ");
+		for(int j=0;j<v2List.size();j++){
+			System.out.print("double "+ v2List.get(j).toLegalString());
+			System.out.print(", ");
+		}
+		System.out.println("int i, int j) {");
+		System.out.println();
+		for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				System.out.println("\tif(i=="+i+" && j=="+j+") return "+jc.getFactor(i,j).toLegalString()+";");
+			}
+		}
+		System.out.println();
+		System.out.println("}");
+
 	}
 	
 	

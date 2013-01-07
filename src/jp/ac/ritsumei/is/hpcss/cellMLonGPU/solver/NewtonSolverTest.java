@@ -119,8 +119,9 @@ public class NewtonSolverTest {
 		System.out.println("");
 		
 		double e = 1.0e-50;
+		int max = 1000;
 		NewtonSolverV2 ns = new NewtonSolverV2();
-		ns.writeNewtonSolver(pNewExpression, derivedVal, e);
+		ns.writeNewtonSolver(pNewExpression, derivedVal, e, max);
 		
 		
 	}

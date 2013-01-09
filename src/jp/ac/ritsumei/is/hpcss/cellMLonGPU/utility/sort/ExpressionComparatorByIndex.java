@@ -44,19 +44,23 @@ public class ExpressionComparatorByIndex implements Comparator<MathExpression> {
 		Math_ci var1 = lhs1.getFirstVariable();
 		Math_ci var2 = lhs2.getFirstVariable();
 		
+		
+		
 		int index1 = 0;
 		int index2 = 0;
 		
-		
-		//System.out.println(var1.getIndexList().get(indexPosition).toLegalString());
-		//Calculate index ex. (1+2) -> Math_cn(3)
-		Math_cn index1_cn = MathCollections.calculate(var1.getIndexList().get(indexPosition));  
-		Math_cn index2_cn = MathCollections.calculate(var2.getIndexList().get(indexPosition)); 
-		
-		//Decode to Integer
-		index1 = index1_cn.decode();
-		index2 = index2_cn.decode();
-		
+		if(var1.getIndexList().size() > indexPosition){
+			//Calculate index ex. (1+2) -> Math_cn(3)
+			Math_cn index1_cn = MathCollections.calculate(var1.getIndexList().get(indexPosition));  
+			//Decode to Integer
+			index1 = index1_cn.decode();
+		}
+		if(var2.getIndexList().size() > indexPosition){	
+			//Calculate index ex. (1+2) -> Math_cn(3)
+			Math_cn index2_cn = MathCollections.calculate(var2.getIndexList().get(indexPosition)); 
+			//Decode to Integer
+			index2 = index2_cn.decode();
+		}
 		//exprPattern has expression pattern number. 
 		//In case of success then exprPattern >0, failed -1
 		int expr1Pattern=-1;

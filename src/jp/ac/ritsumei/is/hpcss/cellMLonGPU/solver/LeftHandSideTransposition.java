@@ -1,6 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
@@ -14,6 +15,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.GetVariablesVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * This class is Left side Transposition for code generator.
@@ -114,6 +117,9 @@ public class LeftHandSideTransposition {
 				
 				MathOperator targetSide = null;
 				MathFactor oppositeSide = null;//反対辺はオペレータを含まない可能性があるのでMathFactorとして宣言
+				
+				CCLogger.log(expression.toLegalString());
+				
 				
 				//両辺をコピー.
 				targetSide =(MathOperator) expression.getLeftExpression().getRootFactor();
@@ -912,4 +918,30 @@ public class LeftHandSideTransposition {
 		return newExpression;
 	}
 	
+	/**
+	 * 式変換が必要がチェックするメッソド
+	 * @param expression
+	 * @param derivedVariable
+	 * @return "target変数  == ~"の形なら式変形の必要がないのでfalse, それ以外はtrue
+	 * @author y-yamashita
+	 */
+	public boolean isNecessaryTransporse(MathExpression expression, Math_ci derivedVariable){
+		MathExpression left = expression.getLeftExpression();
+		GetVariablesVisitor visitor = new GetVariablesVisitor();
+		left.traverse(visitor);
+		Set<Math_ci> variableSet = visitor.geVariableSet();
+		
+		if(variableSet.size()==1){
+			try {
+				String varName = variableSet.iterator().next().toLegalString();
+				String derivedVarName = derivedVariable.toLegalString();
+				if(varName.equals(derivedVarName)){
+					return false;
+				}
+			} catch (MathException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
 }

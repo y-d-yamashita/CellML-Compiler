@@ -19,6 +19,10 @@ public class Math_ci extends MathOperand {
 		/*オペランドをベクタに追加*/
 		m_vecIndexListFactor.add(pFactor);
 	}
+	public void addIndexList(MathFactor pFactor,int pos){
+		/*オペランドをベクタに追加*/
+		m_vecIndexListFactor.set(pos, pFactor);
+	}
 	public Vector<MathFactor> getIndexList(){
 		/*オペランドをベクタに追加*/
 		return m_vecIndexListFactor;

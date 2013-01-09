@@ -7,6 +7,9 @@ import java.util.Vector;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.AttachVariableNameAndIndexVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.ReplaceEqualToAssignVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.ReplacePartOfVariableNameVisitor;
 
 
 public class MathExpressionLoop{
@@ -21,6 +24,11 @@ public class MathExpressionLoop{
 	private List<MathExpression> mathExpressionList;
 	private List<MathExpression> baseMathExpressionList;
 	private List<MathExpressionLoop> mathExpressionLoopList;
+	
+	private int removeIndexPosition = 0;
+	private AttachVariableNameAndIndexVisitor attachVisitor = new AttachVariableNameAndIndexVisitor(removeIndexPosition);
+	private ReplacePartOfVariableNameVisitor replaceNameVisitor = new ReplacePartOfVariableNameVisitor("\\.", "_");
+	private ReplaceEqualToAssignVisitor replaceEqualVisitor = new ReplaceEqualToAssignVisitor();
 	
 	public MathExpressionLoop() {
 		this.startLoopIndex=null;
@@ -182,6 +190,8 @@ public class MathExpressionLoop{
 			loop.toString(stringBuilder,indet);
 		}
 		for(MathExpression expression:mathExpressionList){
+			expression.traverse(attachVisitor,replaceNameVisitor,replaceEqualVisitor);
+			
 			stringBuilder.append("Expr["+mathExpressionList.indexOf(expression)+"]:");
 			try {
 				stringBuilder.append(expression.toLegalString()+"\n");
@@ -194,10 +204,11 @@ public class MathExpressionLoop{
 	
 	private void toString(StringBuilder stringBuilder,String indent){
 		if(indexFactor==null||startLoopIndex==endLoopIndex){
-			stringBuilder.append(indent+"NO LOOP: start:"+startLoopIndex+" end:"+endLoopIndex+"\n");
+			stringBuilder.append(indent+"//----------------------------  NO LOOP: start:"+startLoopIndex+" end:"+endLoopIndex+" ----------------------------//\n");
 		}else{
 			try {
-				stringBuilder.append(indent+"LOOP: "+indexFactor.toLegalString()+"="+startLoopIndex+", "+indexFactor.toLegalString()+"<="+endLoopIndex+", "+indexFactor.toLegalString()+"++)\n");
+				stringBuilder.append(indent+"//---------------------------- LOOP ----------------------------//\n");
+				stringBuilder.append(indent+"for("+indexFactor.toLegalString()+"="+startLoopIndex+"; "+indexFactor.toLegalString()+"<="+endLoopIndex+"; "+indexFactor.toLegalString()+"++){\n");
 			} catch (MathException e1) {
 				e1.printStackTrace();
 			}
@@ -207,14 +218,21 @@ public class MathExpressionLoop{
 		}
 		List<MathExpression> resultExpressionList=null;
 		for(MathExpression expression:mathExpressionList){
-			stringBuilder.append(indent+" Expr["+mathExpressionList.indexOf(expression)+"]:");
+			expression.traverse(attachVisitor,replaceNameVisitor,replaceEqualVisitor);
+			//stringBuilder.append(indent+" /* Expr["+mathExpressionList.indexOf(expression)+"] */  ");
+			stringBuilder.append("		");
 			try {
 				stringBuilder.append(expression.toLegalString()+"\n");
 			} catch (MathException e) {
 				e.printStackTrace();
 			}
 		}
-		
+		if(indexFactor==null||startLoopIndex==endLoopIndex){
+			stringBuilder.append(indent+"//------------------------------- END -------------------------------//\n");
+		}else{
+			stringBuilder.append(indent+"}\n");
+			stringBuilder.append(indent+"//----------------------------- LOOP END -----------------------------//\n");
+		}
 		stringBuilder.append("\n");
 	}
 }

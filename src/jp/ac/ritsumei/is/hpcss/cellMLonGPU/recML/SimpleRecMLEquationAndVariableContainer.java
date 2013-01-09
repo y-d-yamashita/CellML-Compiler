@@ -9,6 +9,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * Get variables and equations id to create graph
@@ -32,15 +33,17 @@ public class SimpleRecMLEquationAndVariableContainer {
 		setVariableIDs();
 
 	}
-	
+
 	private void setEquationIDs(){
 		equationIdList = new ArrayList<Integer>();
-//		for(int i =0;i<simpleRecMLAnalyzer.getExpressionCount();i++)
-//			equationIdList.add(i);
-		
+
 		for(int i =0;i<simpleRecMLAnalyzer.getExpressionCount();i++){
-			int id = simpleRecMLAnalyzer.getExpressionNumfromApply(i);
-			equationIdList.add(id);
+			if(simpleRecMLAnalyzer.getExpressionNumfromApply(i)==null){
+				equationIdList.add(i);
+			}else{
+				int id = simpleRecMLAnalyzer.getExpressionNumfromApply(i);
+				equationIdList.add(id);
+			}
 		}
 		
 	}
@@ -48,15 +51,18 @@ public class SimpleRecMLEquationAndVariableContainer {
 	private void setVariableIDs(){
 		variableIdList = new ArrayList<Integer>();
 		for(SimpleRecMLVariableReference r:varRefList){
+			if(r.getRecMLVarType()==null)
+				CCLogger.log(r.toString());
 			switch(r.getRecMLVarType()){
 			case CVAR_TYPE_RECURVAR:
 			case CVAR_TYPE_ARITHVAR:
 			case CVAR_TYPE_OUTPUT:
+			case CVAR_TYPE_CONSTVAR:
 				variableIdList.add(r.getID());
 				break;
 			case CVAR_TYPE_STEPVER:
 			case CVAR_TYPE_DOUBLE:
-			case CVAR_TYPE_CONSTVAR:
+//			case CVAR_TYPE_CONSTVAR:
 			default:
 				
 			}
@@ -118,4 +124,8 @@ public class SimpleRecMLEquationAndVariableContainer {
 		
 		return sb.toString();
 	}
+	public MathExpression getEquation(int equationID){
+		return simpleRecMLAnalyzer.getExpression(equationID);
+	}
+
 }

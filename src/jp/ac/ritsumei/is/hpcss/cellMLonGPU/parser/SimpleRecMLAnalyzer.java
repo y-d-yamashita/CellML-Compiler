@@ -41,6 +41,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.AttachVariableNameAndIndexVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CalculateVariableIndexVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CreateSimpleRecMLVariableTableVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.ReplacePartOfVariableNameVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.SetLeftSideRightSideVariableVisitor;
@@ -130,7 +132,10 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	public Vector<MathExpression> getM_vecExpression() {
 		return m_vecExpression;
 	}
-
+	public Vector<MathExpression> getM_vecMathExpression() {
+		return m_vecMathExpression;
+	}
+	
 	/*式中の変数*/
 	Vector<Math_ci> m_vecRecurVar;
 	public Vector<Math_ci> getM_vecRecurVar() {
@@ -1209,6 +1214,15 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 	}
 	
+	public void replaceVariablesInExpressions(String regex,String replacement){
+		ReplacePartOfVariableNameVisitor visitor = new ReplacePartOfVariableNameVisitor(regex, replacement);
+		for(MathExpression expr:this.m_vecMathExpression){
+			expr.traverse(visitor);
+		}
+		
+	}
+
+	
 	public DirectedGraph<RecMLVertex,RecMLEdge>getGraph(){
 		return graph;
 	}
@@ -1324,7 +1338,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		return ve;
 	}
 	
-	public int getExpressionNumfromApply(int index){
+	public Integer getExpressionNumfromApply(int index){
 		/*数式出力*/
 		return super.getExpressionNumfromApply(index);
 	}
@@ -1333,4 +1347,17 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		return super.serchIndexVaruable(indexList,mci);
 	}
 	
+	public void calculateVariableIndex(){
+		CalculateVariableIndexVisitor visitor = new CalculateVariableIndexVisitor();
+		for(MathExpression expr:m_vecMathExpression){
+			expr.traverse(visitor);
+		}
+	}
+
+	public void removeAttachIndexToVariableName(int indexPosition){
+		AttachVariableNameAndIndexVisitor visitor = new AttachVariableNameAndIndexVisitor(indexPosition);
+		for(MathExpression expr:m_vecMathExpression){
+			expr.traverse(visitor);
+		}
+	}
 }

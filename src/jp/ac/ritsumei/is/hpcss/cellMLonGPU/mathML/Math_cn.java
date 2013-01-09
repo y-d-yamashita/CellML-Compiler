@@ -78,9 +78,7 @@ public class Math_cn extends MathOperand {
 		BigDecimal integerPart = new BigDecimal(value.intValue());
 		//小数点部
 		BigDecimal fractionPart = value.subtract(integerPart).setScale(scale,BigDecimal.ROUND_DOWN);
-
-		System.out.println(fractionPart);
-		
+	
 		//小数点以下が0なら(double)と".0"表記を消す
 		if(fractionPart.compareTo(new BigDecimal(0))==0){
 			changeType();

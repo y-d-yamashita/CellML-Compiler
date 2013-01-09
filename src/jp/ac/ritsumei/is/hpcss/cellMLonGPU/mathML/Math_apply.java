@@ -17,8 +17,11 @@ public class Math_apply extends MathOperator {
 		/*オペランドをベクタに追加*/
 		m_hashExpInfo = attrList;
 	}
-	public int getExpNum(){
+	public Integer getExpNum(){
 		/*オペランドをベクタに追加*/
+		if(m_hashExpInfo.get("num")==null){
+			return null;
+		}
 		int num = Integer.parseInt(m_hashExpInfo.get("num"));
 		return num;
 	}

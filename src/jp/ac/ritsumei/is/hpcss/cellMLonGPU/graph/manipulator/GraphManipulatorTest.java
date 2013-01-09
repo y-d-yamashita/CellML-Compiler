@@ -27,11 +27,14 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.util.MathCollections;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLEquationAndVariableContainer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.LeftHandSideTransposition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.List2D;
@@ -50,11 +53,20 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  */
 public class GraphManipulatorTest {
-
+	
 /* Shared */
 static GraphManipulator graphManipulator= new GraphManipulator();
-static RecMLAnalyzer recmlAnalyzer = null;
-static RecMLEquationAndVariableContainer container =null;
+
+//////////////////////////////////////////////////////////////////
+//**************** Using SimpleRecMLAnalyzer *******************//
+static SimpleRecMLAnalyzer recmlAnalyzer = null;                //
+static SimpleRecMLEquationAndVariableContainer container =null; //
+//----------------------------------------------------------------
+//****************    Using RecMLAnalyzer    *******************//
+//static RecMLAnalyzer recmlAnalyzer = null;                    //
+//static RecMLEquationAndVariableContainer container =null;     //
+//////////////////////////////////////////////////////////////////
+
 /* Result of each test */
 static BipartiteGraph<RecMLVertex,RecMLEdge> resultTestCreateBipartiteGraph=null;
 static DirectedGraph<RecMLVertex,RecMLEdge> resultTestCreateDependencyGraph=null;
@@ -68,43 +80,60 @@ static List2D<RecMLVertex> resultTestCompressDependencyList=null;
 
 /* Select recml file*/
 String xml=
-"./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3_v2_yamashita.recml"
+//"./model/recml/RecMLSample/FHN_FTCS_simple_2x3x3_v2_yamashita.recml"
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple.recml"
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml"
-//"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v3_yamashita_strict.recml" //PASS
+//"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v3_yamashita_strict.recml" //TEST CLEAR!
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_notime_yamashita.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1_yamashita.recml"
 //"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_struct_v3.recml"
 //"./model/recml/SimpleRecMLSample/SimpleRecMLSampleRustyYamashita/LR1_FTCS_2D_simple_generated.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_struct_v3.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v4_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v5_yamashia.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_50x50_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_30x30_yamashita.recml"
+"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_10x10_yamashita_3.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_3x3_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_5x5_yamashita.recml"
 ;
 
 
 @Test
 public void testCreateBipartieGraph() {
+	CCLogger.log(this.getClass(), "START TEST");
+
 	/*Parse RecML*/
-	recmlAnalyzer = parse(xml);
+	
+	//recmlAnalyzer = parse(xml);
+	recmlAnalyzer = simpleRecMLParse(xml);
 
-
+	
 	/*
 	 * Create a variable container.
 	 * The container is necessary to create 
 	 * a bipartite graph between variables and equations.
 	 */
-	 container = 
-			new RecMLEquationAndVariableContainer(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
+	container = 
+			new SimpleRecMLEquationAndVariableContainer(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
 
+	//container = 
+	//		new RecMLEquationAndVariableContainer(recmlAnalyzer,recmlAnalyzer.getRecMLVariableTable());
+
+	//System.out.println(container);
 	/* Create a bipartite graph */
 	try {		
-		resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);
+		//resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);
+		resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph_Simple(container);
 	} catch (GraphException e) {
 		e.printStackTrace();
 	}
 	
 	/* Print result*/
 	System.out.println("<<testCreateBipartieGraph>> -----------------------------");
-	System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
+	//System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
 
 	assertNotNull(resultTestCreateBipartiteGraph);
 
@@ -151,8 +180,11 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 	//		System.out.println(p.getSecond()+"("+recmlAnalyzer.getExpression(p.getSecond().getEquId()).toLegalString()+")");
 			LeftHandSideTransposition lst = new LeftHandSideTransposition();
 	//		System.out.println((lst.transporseExpression(expr, target)).toLegalString());
-			recmlAnalyzer.setExpression(p.getSecond().getEquId(),lst.transporseExpression(expr, target));
-	//	}
+			CCLogger.log(expr.toLegalString()+target.toLegalString());
+			if(!lst.check_EqDirectLeft(expr, target)){
+				recmlAnalyzer.setExpression(p.getSecond().getEquId(),lst.transporseExpression(expr, target));
+			}
+				//	}
 	}
 	
 }
@@ -254,9 +286,13 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 			loop.setIndexFactor(new Math_ci("i"));
 			
 			//Set index ex. x[0][1]-> startIndex:1, endIndex:1
+
+			if(pushExpr.getLeftExpression().getFirstVariable().getIndexList().size() > indexPosition){
+			
 			Math_cn index =  MathCollections.calculate(pushExpr.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition));
 			loop.setSatrtLoopIndex(index.decode());
 			loop.setEndLoopIndex(index.decode());
+			}
 			mergedExprList.add(pushExpr);
 			
 			for(int i=1;i<exprList.size();i++){
@@ -264,10 +300,22 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 				try {
 					//Confirm that expression can be merge
 					compareResult = prevExpr.compareFocusOnVariableIndex(exprList.get(i), indexPosition);
+					
+					
 				} catch (MathException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
+				
+				System.out.println("result:"+compareResult);
+				try {
+					System.out.println(prevExpr.toLegalString());
+					System.out.println(exprList.get(i).toLegalString());
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				
 				if(compareResult!=null&&compareResult==1){//It's increment
 							if(!replacedFlag){
@@ -285,9 +333,12 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 					loop = new MathExpressionLoop();
 					loop.addMathExpression(pushExpr);
 					loop.setIndexFactor(new Math_ci("i"));
-					Math_cn index_cn = MathCollections.calculate(pushExpr.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition));
-					loop.setSatrtLoopIndex(index_cn.decode());
-					loop.setEndLoopIndex(index_cn.decode());
+					List<MathFactor> indexList = pushExpr.getLeftExpression().getFirstVariable().getIndexList();
+					if(indexList.size() > indexPosition){
+						Math_cn index_cn = MathCollections.calculate(indexList.get(indexPosition));
+						loop.setSatrtLoopIndex(index_cn.decode());
+						loop.setEndLoopIndex(index_cn.decode());
+					}
 					root.addLoop(loop);
 					
 					replacedFlag=false;
@@ -311,6 +362,39 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 			replacedFlag=false;
 			mergedExprList.clear();
 			exprList.clear();
+		}
+		List<MathExpressionLoop> newLoopList = new ArrayList<MathExpressionLoop>();
+		for(MathExpressionLoop loop: root.getMathExpressionLoopList()){
+			if(newLoopList.size()==0){
+				newLoopList.add(loop);
+			}else{
+				Integer prevStartLoopIndex = newLoopList.get(newLoopList.size()-1).getSatrtLoopIndex();
+				Integer nextStartLoopIndex = loop.getSatrtLoopIndex();
+
+				Integer prevEndLoopIndex = newLoopList.get(newLoopList.size()-1).getEndLoopIndex();
+				Integer nextEndLoopIndex = loop.getEndLoopIndex();
+				
+				String prevIncrement = null;
+				String nextIncrement = null;
+				try {
+					prevIncrement = newLoopList.get(newLoopList.size()-1).getIndexFactor().toLegalString();
+					nextIncrement = loop.getIndexFactor().toLegalString();
+				} catch (MathException e) {
+					e.printStackTrace();
+				}
+			
+				boolean isPrevEnable = (prevStartLoopIndex != null) && (prevEndLoopIndex!=null) && (prevIncrement != null);
+				boolean isNextEnable = (nextStartLoopIndex != null) && (nextEndLoopIndex!=null) && (nextIncrement != null);
+				if(isPrevEnable && isNextEnable 
+						&& (prevStartLoopIndex == nextStartLoopIndex) 
+						&& (prevEndLoopIndex == nextEndLoopIndex)
+						&& (prevIncrement.equals(nextIncrement))){
+						newLoopList.get(newLoopList.size()-1).addMathExpressionList(loop.getMathExpressionList());
+				}else{
+					newLoopList.add(loop);
+				}
+			}
+			root.setMathExpressionLoopList(newLoopList);
 		}
 		System.out.println(root.toString());
 		
@@ -418,6 +502,70 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 		/*selector削除*/
 		pRecMLAnalyzer.removeAllSelector();
 		
+		/*Create variable table from variable information in RecmlAnalyzer*/
+		pRecMLAnalyzer.createVariableTable();
+		
+		/*Attach information about assignment and reference equations*/
+		pRecMLAnalyzer.setLeftsideRightsideVariable();
+
+		/*Set variable type (ex. recvar, constvara)*/
+		pRecMLAnalyzer.setRefVariableType();
+
+		/** 内容確認 ***/
+		try {
+			pRecMLAnalyzer.printContents();
+		} catch (MathException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		return pRecMLAnalyzer;
+	}
+
+	
+	/* RecML parse method (Not test)*/
+	private static SimpleRecMLAnalyzer simpleRecMLParse(String xml){
+
+		SimpleRecMLAnalyzer pRecMLAnalyzer = new SimpleRecMLAnalyzer();
+		
+		//---------------------------------------------------
+		//XMLパーサ初期化
+		//---------------------------------------------------
+		// create parser
+		XMLReader parser = null;
+		try {
+			parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+			parser.setProperty("http://apache.org/xml/properties/input-buffer-size",
+					new Integer(16 * 0x1000));
+		} catch (Exception e) {
+			System.err.println("error: Unable to instantiate parser ("
+					+ "org.apache.xerces.parsers.SAXParser" + ")");
+			System.exit(1);
+		}
+
+		XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
+		parser.setContentHandler(handler);
+		try {
+			parser.parse(xml);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+
+		/*selector内cnのInteger*/
+		pRecMLAnalyzer.changeAllSelectorInteger();
+		
+		/*selector削除*/
+		pRecMLAnalyzer.removeAllSelector();
+		
+		/*Precalculate index ex.x[2+1] -> x[3] ** Added by y-yamashita (2013/01/07)*/
+		pRecMLAnalyzer.calculateVariableIndex();
+	
 		/*Create variable table from variable information in RecmlAnalyzer*/
 		pRecMLAnalyzer.createVariableTable();
 		

@@ -6,6 +6,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * Calculation before code generation
@@ -24,12 +25,13 @@ public class Calculator {
 			BigDecimal integerPart;
 			BigDecimal fractionPart = null;
 			BigDecimal computaion = null;
+			
 			try {
 				computaion = new BigDecimal(operator.calculate()).setScale(scale,BigDecimal.ROUND_DOWN);
 			} catch (MathException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return null;
 			}
+			
 			
 			integerPart = new BigDecimal(computaion.intValue());
 			fractionPart = computaion.subtract(integerPart).setScale(scale,BigDecimal.ROUND_DOWN);

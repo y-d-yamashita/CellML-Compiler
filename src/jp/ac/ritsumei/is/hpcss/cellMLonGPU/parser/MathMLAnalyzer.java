@@ -22,8 +22,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassi
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathSepType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CalculateVariableIndexVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * MathML解析クラス.
@@ -523,8 +525,8 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	}
 
 
-	public int getExpressionNumfromApply(int index) {
-		int num = ((Math_apply)m_vecMathExpression.get(index).getRootFactor()).getExpNum();
+	public Integer getExpressionNumfromApply(int index) {
+		Integer num = ((Math_apply)m_vecMathExpression.get(index).getRootFactor()).getExpNum();
 		return num;
 	}
 
@@ -543,4 +545,5 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		}
 		return hm;
 	}
+	
 }

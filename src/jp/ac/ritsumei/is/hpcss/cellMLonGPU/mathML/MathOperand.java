@@ -103,4 +103,13 @@ public abstract class MathOperand extends MathFactor {
 	public void traverse(Visitor v){
 		v.visit(this);
 	}
+	public void traverse(Visitor v1,Visitor v2){
+		v1.visit(this);
+		v2.visit(this);
+	}
+	public void traverse(Visitor v1,Visitor v2,Visitor v3){
+		v1.visit(this);
+		v2.visit(this);
+		v3.visit(this);
+	}
 }

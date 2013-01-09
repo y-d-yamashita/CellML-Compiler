@@ -589,6 +589,12 @@ public class MathExpression {
 	public void traverse(Visitor v){
 		m_pRootFactor.traverse(v);
 	}
+	public void traverse(Visitor v1,Visitor v2){
+		m_pRootFactor.traverse(v1,v2);
+	}
+	public void traverse(Visitor v1,Visitor v2,Visitor v3){
+		m_pRootFactor.traverse(v1,v2,v3);
+	}
 
 	/**
 	 * 

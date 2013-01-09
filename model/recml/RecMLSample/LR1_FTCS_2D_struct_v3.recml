@@ -4,8 +4,8 @@
 
 <recml>
 
-	<!-- loop1="inner" has loop2 inside - -->
-	<!-- loop2="inner" has loop3 inside - -->
+	<!-- loop1="inner" has loop2 inside -->
+	<!-- loop2="inner" has loop3 inside -->
 	<loopstruct num="0">
 		<position name="inner">
 			<loopstruct num="1">
@@ -19,6 +19,8 @@
 	<loopindex num="0" name="n" />
 	<loopindex num="1" name="j" />
 	<loopindex num="2" name="l" />
+
+	
 
 	
 	<variable name="deltat" type="constvar" loopcomponent1="1" loopcomponent2="1" loopcomponent3="1" />
@@ -2474,8 +2476,8 @@
 				</apply>
 				</apply>
 				</apply>
-				
-				<!-- loop3 loopcond  -->
+
+	<!-- loop3 loopcond -->
 				<condition loop1 = "inner" loop2 = "inner" loop3 = "loopcond">
 					<apply><eq/>
 						<ci>l</ci>
@@ -2483,7 +2485,7 @@
 					</apply>
 				</condition>
 				
-				<!-- loop3 final  -->
+				<!-- loop3 final -->
 				<apply loop1 = "inner" loop2 = "inner" loop3 = "final"><eq/>
 					<ci>V3end</ci>
 					<apply><selector/>
@@ -2494,7 +2496,7 @@
 					</apply>
 				</apply>
 				
-				<!-- loop3 post  -->
+				<!-- loop3 post -->
 			
 			<condition loop1 = "inner" loop2 = "loopcond">
 				<apply><eq/>
@@ -2503,7 +2505,7 @@
 				</apply>
 			</condition>
 			
-			<!-- loop2 final  -->
+			<!-- loop2 final -->
 			<apply loop1 = "inner" loop2 = "final"><eq/>
 				<ci>V2end</ci>
 				<apply><selector/>
@@ -2514,7 +2516,7 @@
 				</apply>
 			</apply>
 			
-			<!-- loop2 post  -->
+			<!-- loop2 post -->
 			
 		<condition loop1 = "loopcond">
 			<apply><eq/>
@@ -2523,7 +2525,7 @@
 			</apply>
 		</condition>
 		
-		<!-- loop1 final  -->
+		<!-- loop1 final -->
 		<apply loop1 = "final"><eq/>
 			<ci>V1end</ci>
 			<apply><selector/>
@@ -2534,7 +2536,6 @@
 			</apply>
 		</apply>
 			
-		<!-- loop1 post  -->
-					
+				
 	</math>
 </recml>

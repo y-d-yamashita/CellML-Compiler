@@ -95,6 +95,8 @@ public abstract class MathFactor {
 	 * @param v
 	 */
 	public abstract void traverse(Visitor v);
+	public abstract void traverse(Visitor v1,Visitor v2);
+	public abstract void traverse(Visitor v1,Visitor v2,Visitor v3);
 
 	public String getM_strPresentText() {
 		return m_strPresentText;

@@ -975,6 +975,19 @@ public abstract class MathOperator extends MathFactor {
 		for(MathFactor f:m_vecFactor)
 			f.traverse(v);
 	}
+	public void traverse(Visitor v1,Visitor v2){
+		v1.visit(this);
+		v2.visit(this);
+		for(MathFactor f:m_vecFactor)
+			f.traverse(v1,v2);
+	}
+	public void traverse(Visitor v1,Visitor v2,Visitor v3){
+		v1.visit(this);
+		v2.visit(this);
+		v3.visit(this);
+		for(MathFactor f:m_vecFactor)
+			f.traverse(v1,v2,v3);
+	}
 
 	public Vector<MathFactor> getFactorVector(){
 		return this.m_vecFactor;

@@ -230,7 +230,7 @@ public class Labelattr2 extends SimpleRecMLAnalyzer{
 			
 			ArrayList<RelationPattern> fixed_inputList = new ArrayList<RelationPattern>();
 			ArrayList<RelationPattern> inputList_new;
-			
+
 			for(int i=0;i<loop_nameListPair.size();i++){
 				//見つかるまで削除手順を変えて繰り返す.
 				inputList_new= new ArrayList<RelationPattern>();

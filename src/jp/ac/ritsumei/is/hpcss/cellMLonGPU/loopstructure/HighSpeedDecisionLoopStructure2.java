@@ -472,6 +472,7 @@ public class HighSpeedDecisionLoopStructure2 {
 								}
 							}
 							
+							/*
 							//pre/postを割り当てる
 							for(int j=0;j<innerchildNullList_new.size();j++){
 								
@@ -482,6 +483,41 @@ public class HighSpeedDecisionLoopStructure2 {
 									inputList.add(pattern2);
 								}
 
+							}
+							*/
+							//pre/postを割り当てるver.2
+							for(int j=0;j<innerchildNullList_new.size();j++){
+								boolean flag=false;
+								for(int k=0;k<innerchildNullList_new.size();k++){
+									
+									if(j!=k){
+										for(int n=0;n<innerElements.size();n++){
+											if(innerElements.get(n).Parent_name.equals(innerchildNullList_new.get(j))){
+												if(innerElements.get(n).Child_name.equals(innerchildNullList_new.get(k))){
+													if( ! (innerElements.get(n).Attribute_name.equals("null")) ){
+														flag = true;
+													}
+												}
+											}
+											
+											if(innerElements.get(n).Parent_name.equals(innerchildNullList_new.get(k))){
+												if(innerElements.get(n).Child_name.equals(innerchildNullList_new.get(j))){
+													if( ! (innerElements.get(n).Attribute_name.equals("null")) ){
+														flag = true;
+													}
+												}
+											}
+										}
+										if(!flag){
+											RelationPattern pattern = new RelationPattern(innerchildNullList_new.get(j),innerchildNullList_new.get(k),"pre");
+											inputList.add(pattern);
+											innerElements.add(pattern);
+											RelationPattern pattern2 = new RelationPattern(innerchildNullList_new.get(k),innerchildNullList_new.get(j),"post");
+											inputList.add(pattern2);
+											innerElements.add(pattern2);
+										}	
+									}	
+								}
 							}
 						}
 

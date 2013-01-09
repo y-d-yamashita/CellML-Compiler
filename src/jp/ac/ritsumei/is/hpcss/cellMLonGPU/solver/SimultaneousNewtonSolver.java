@@ -31,7 +31,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 public class SimultaneousNewtonSolver {
 	public void writeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e, int max) throws MathException {
 		
-		int n= expList.size();
+		int n= varList.size();
 		Jacobian jc = new Jacobian();
 		jc.makeJacobian(expList, varList);
 		//jc.changeInverseMatrix();
@@ -40,7 +40,7 @@ public class SimultaneousNewtonSolver {
 		Vector<Math_ci> vList= new Vector<Math_ci>();
 		Vector<Math_ci> v2List= new Vector<Math_ci>();
 		for(int i=0;i<expList.size();i++){
-			expList.get(i).getAllVariables(vList);
+			expList.get(i).getAllVariablesWithSelector(vList);
 		}
 		for(int j=0;j<vList.size();j++){
 			boolean flag = false;
@@ -50,8 +50,9 @@ public class SimultaneousNewtonSolver {
 			if(flag==false) v2List.add(vList.get(j));
 		}
 		//main関数に記述される構文
-		
-		System.out.print("simulNewton(");
+		System.out.println("main() {");
+		System.out.println("\tdouble "+varList.get(0).getM_strPresentText()+"[] = 1.0, 1.0;");
+		System.out.print("\tsimulNewton(");
 		System.out.print(varList.get(0).getM_strPresentText());
 		if(v2List.size()!=0){
 			System.out.print(", ");
@@ -63,6 +64,7 @@ public class SimultaneousNewtonSolver {
 			}
 		}
 		System.out.println(");");
+		System.out.println("}");
 		
 		
 		System.out.println();
@@ -137,7 +139,7 @@ public class SimultaneousNewtonSolver {
 		System.out.println("\t\tfor(i=0;i<"+n+";i++){");
 		System.out.println("\t\t\tdet *= cpy[i][i];");
 		System.out.println("\t\t}");
-		System.out.println("\t\tif(det ==0.0){");
+		System.out.println("\t\tif(det == 0.0){");
 		System.out.println("\t\t\tprintf(\"error:det is zero\\n\");break;");
 		System.out.println("\t\t}");
 		
@@ -193,9 +195,6 @@ public class SimultaneousNewtonSolver {
 		System.out.println("i);");
 		System.out.println("\t\t\teps += f[i]*f[i];");
 		System.out.println("\t\t}");
-		System.out.println("\t\tif(max > "+max+"){");
-		System.out.println("\t\t\tprintf(\"error:no convergence\\n\");break;");
-		System.out.println("\t\t}");
 		System.out.println("\t} while ("+e+" < sqrt(eps));");
 		System.out.println("}");
 		System.out.println();
@@ -215,7 +214,7 @@ public class SimultaneousNewtonSolver {
 		}
 		System.out.println();
 		System.out.println("}");
-		
+		System.out.println();
 		
 		//ヤコビ行列
 		System.out.print("double jacobi(");

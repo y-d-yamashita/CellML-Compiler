@@ -3,6 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.Visitor;
 
@@ -57,6 +58,12 @@ public class Math_ci extends MathOperand {
 	/*-----配列インデックス追加メソッド(前方)-----*/
 	public void addArrayIndexToFront(MathFactor pFactor){
 
+		 if(pFactor.matches(eMathMLClassification.MML_OPERAND)){
+				
+			if(((MathOperand)pFactor).matches(eMathOperand.MOPD_CN)){
+					((Math_cn)pFactor).changeType();
+			}
+		}
 		/*オペランドをベクタに追加*/
 		m_vecArrayIndexFactor.add(0, pFactor);
 	}
@@ -68,14 +75,22 @@ public class Math_ci extends MathOperand {
 
 		/*整数より定数オペランドインスタンスを生成*/
 		Math_cn pConst = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, strIndex);
-
+		
+		pConst.changeType();
 		/*オーバーロードメソッドに投げる*/
 		this.addArrayIndexToFront(pConst);
 	}
 
 	/*-----配列インデックス追加メソッド(後方)-----*/
 	public void addArrayIndexToBack(MathFactor pFactor){
-
+		
+		 if(pFactor.matches(eMathMLClassification.MML_OPERAND)){
+				
+			if(((MathOperand)pFactor).matches(eMathOperand.MOPD_CN)){
+					((Math_cn)pFactor).changeType();
+			}
+		}
+		
 		/*オペランドをベクタに追加*/
 		m_vecArrayIndexFactor.add(pFactor);
 	}

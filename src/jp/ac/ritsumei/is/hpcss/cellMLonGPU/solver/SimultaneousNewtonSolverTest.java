@@ -29,9 +29,11 @@ public class SimultaneousNewtonSolverTest {
 		//テスト用変数定義
 		//テスト用変数定義
 		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "x");
-		val1.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+		//val1.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+		val1.addArrayIndexToFront(((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0")));
 		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "x");
-		val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
+		//val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
+		val2.addArrayIndexToFront(((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1")));
 		Math_cn zero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
 		Math_cn num1 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
 		Math_cn num2 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
@@ -88,6 +90,9 @@ public class SimultaneousNewtonSolverTest {
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
 		
+		
+		
+		
 		MathExpression pNewExpression2 = new MathExpression();
 		pNewExpression2.setExID(2);
 		pNewExpression2.addOperator(
@@ -135,6 +140,9 @@ public class SimultaneousNewtonSolverTest {
 		pNewExpression2.breakOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 		
+		
+		//数式リスト及び変数リスト作成
+		/*
 		System.out.println("Input Function 1: ");
 		System.out.println(pNewExpression.toLegalString());
 		System.out.println("");
@@ -142,24 +150,26 @@ public class SimultaneousNewtonSolverTest {
 		System.out.println("Input Function 2: ");
 		System.out.println(pNewExpression2.toLegalString());
 		System.out.println("");
+		*/
 		
-		//数式リスト及び変数リスト作成
+		
+		
+		
 		Vector<MathExpression> eqList = new Vector<MathExpression>();
 		eqList.add(pNewExpression);
 		eqList.add(pNewExpression2);
 		
+		//ある連立式から導出される変数集合は,同じ名称でインデックスが異なる変数として格納する.
 		Vector<Math_ci> varList = new Vector<Math_ci>();
 		varList.add(val1);
 		varList.add(val2);
 		
-		
-		System.out.println("Code　:");
-		System.out.println("");
-		
-		double e = 0.00001;
+		double eps = 0.001;
 		int max = 1000;
+		
+		//コード標準出力
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
-		sns.writeSimultaneousNewtonSolver(eqList, varList, e,max);
+		sns.writeSimultaneousNewtonSolver(eqList, varList, eps ,max);
 		
 		
 	}

@@ -257,21 +257,25 @@ public class StructuredRecMLWiter{
 	public String outPutLoopStructureV2_1(int rootNum, int tab) {
 		String str = "";
 		ArrayList<RelationPattern> rp = pSimpleRecMLAnalyzer.getM_LoopStrucuture();
-		str = str + tabstr(tab) + "<loopstruct num="+ "\""+rootNum+"\""+">\n";
-		tab++;
-		for(RelationPattern soro_rp:rp){
-			int rpRN = soro_rp.Parent_name;
-			if(rootNum == rpRN){
-				str = str + tabstr(tab) + "<position name="+ "\""+soro_rp.Attribute_name+ "\""+">\n";
-				tab++;
-				str = str + outPutLoopStructureV2_1(soro_rp.Child_name, tab);
-				tab--;
-				str = str + tabstr(tab) + "</position>\n";
+		
+		if(rp.size()==1 && rp.get(0).Child_name == -1 ){
+			str ="<loopstruct num= \""+rp.get(0).Parent_name+"\"/>";
+		}else{
+			str = str + tabstr(tab) + "<loopstruct num="+ "\""+rootNum+"\""+">\n";
+			tab++;
+			for(RelationPattern soro_rp:rp){
+				int rpRN = soro_rp.Parent_name;
+				if(rootNum == rpRN){
+					str = str + tabstr(tab) + "<position name="+ "\""+soro_rp.Attribute_name+ "\""+">\n";
+					tab++;
+					str = str + outPutLoopStructureV2_1(soro_rp.Child_name, tab);
+					tab--;
+					str = str + tabstr(tab) + "</position>\n";
+				}
 			}
+			tab--;
+			str = str + tabstr(tab) + "</loopstruct>\n";
 		}
-		tab--;
-		str = str + tabstr(tab) + "</loopstruct>\n";
-
 		return str;
 	}	
 

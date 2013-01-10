@@ -799,7 +799,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 		System.out.println(simpleRecMLVariableTable.toString());
 		
-		//System.out.println(new SimpleRecMLEquationAndVariableContainer(this,simpleRecMLVariableTable).toString());
+		System.out.println(new SimpleRecMLEquationAndVariableContainer(this,simpleRecMLVariableTable).toString());
 		//root.printString(" ");
 		//for(String[] strArray:getAttribute())			
 		//System.out.println(strArray[0]+strArray[1]+strArray[2]+strArray[3]+strArray[4]);
@@ -896,7 +896,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		sa.createVariableTable();
 		
 		/*Attach information about assignment and reference equations*/
-		//sa.setLeftsideRightsideVariable();
+		sa.setLeftsideRightsideVariable();
 
 		/*Set variable type (ex. recvar, constvara)*/
 		sa.setRefVariableType();
@@ -908,20 +908,19 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		List2D<RecMLVertex> resultTestTrajan=null;
 		
 		
-		/*Comment out
+		
 		SimpleRecMLEquationAndVariableContainer container2 = 
 				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable());
 		
-		*/
+		
 		/* Create a bipartite graph */
-		/*
 		try {		
 //			resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);
 			resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph_Simple(container2);
 		} catch (GraphException e) {
 			e.printStackTrace();
 		}
-		*/
+		
 		/*Maximum matching*/
 		try {
 			resultTestMaximumMatching = 
@@ -993,7 +992,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		sa.createVariableTable();
 		
 		/*Attach information about assignment and reference equations*/
-		//sa.setLeftsideRightsideVariable();
+		sa.setLeftsideRightsideVariable();
 
 		/*Set variable type (ex. recvar, constvara)*/
 		sa.setRefVariableType();
@@ -1005,20 +1004,19 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		List2D<RecMLVertex> resultTestTrajan=null;
 		
 		
-		/*
+		
 		SimpleRecMLEquationAndVariableContainer container2 = 
 				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable());
-		*/
+		
 		
 		/* Create a bipartite graph */
-		/*
 		try {		
 //			resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);
 			resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph_Simple(container2);
 		} catch (GraphException e) {
 			e.printStackTrace();
 		}
-		*/
+		
 		/*Maximum matching*/
 		try {
 			resultTestMaximumMatching = 
@@ -1138,13 +1136,13 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 			 expr.getRootFactor().traverse(visitor);
 		 simpleRecMLVariableTable=visitor.getTable();
 	}
-	
+
 	public void setLeftsideRightsideVariable(){
 		SimpleRecML_SetLeftSideRightSideVariableVisitor visitor = new SimpleRecML_SetLeftSideRightSideVariableVisitor(simpleRecMLVariableTable);
 		 for(MathExpression expr :m_vecMathExpression){
 			 visitor.reset(expr.getExpressionNumfromApply());
 			 expr.getRootFactor().traverse(visitor);
-			 visitor.reset();
+//			 visitor.reset();
 		 }
 		 simpleRecMLVariableTable=visitor.getTable();
 	}

@@ -23,7 +23,7 @@ public class SimpleRecMLEquationAndVariableContainer {
 	private List<Integer> variableIdList;
 	private List<SimpleRecMLVariableReference> varRefList;
 
-	/*comment out
+	
 	public SimpleRecMLEquationAndVariableContainer(SimpleRecMLAnalyzer analyzer,SimpleRecMLVariableTable table){
 		simpleRecMLVariableTable=table;
 		simpleRecMLAnalyzer=analyzer;
@@ -32,7 +32,7 @@ public class SimpleRecMLEquationAndVariableContainer {
 		setVariableIDs();
 
 	}
-
+	
 	private void setEquationIDs(){
 		equationIdList = new ArrayList<Integer>();
 //		for(int i =0;i<simpleRecMLAnalyzer.getExpressionCount();i++)
@@ -45,7 +45,7 @@ public class SimpleRecMLEquationAndVariableContainer {
 		}
 		
 	}
-	*/
+	
 	private void setVariableIDs(){
 		variableIdList = new ArrayList<Integer>();
 		for(SimpleRecMLVariableReference r:varRefList){

@@ -63,7 +63,7 @@ public class MathExpression {
 		this();
 		m_pRootFactor = pRootFactor;
 	}
-	
+
 	/**
 	 * 演算子を追加する.
 	 * @param pOperator 追加する演算子
@@ -812,7 +812,6 @@ public class MathExpression {
 		flag = ((MathOperator) m_pRootFactor).K_checkIndexVariable(index,mci);
 		return flag;
 	}
-	
 	//非線形数式判定メソッド
 	public boolean getNonlinearFlag(){
 		return nonlinear;

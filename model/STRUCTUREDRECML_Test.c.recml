@@ -11,12 +11,12 @@
 <variable name="X1" type="recurvar" loopcomponent1 = "1" />
 <variable name="t1" type="recurvar" loopcomponent1 = "1" />
 <variable name="X1end" type="arithvar" />
-<variable name="kX1" type="arithvar" loopcomponent1 = "1" />
-<variable name="t1end" type="arithvar" />
 <variable name="Y1" type="arithvar" loopcomponent1 = "1" />
-<variable name="X1init" type="constvar" />
+<variable name="t1end" type="arithvar" />
+<variable name="kX1" type="arithvar" loopcomponent1 = "1" />
 <variable name="delt1" type="constvar" />
 <variable name="t1init" type="constvar" />
+<variable name="X1init" type="constvar" />
 <variable name="n1" type="stepvar" />
 
 
@@ -30,14 +30,14 @@
 <node id="7" equation="7" variable="10" />
 <node id="8" equation="8" variable="11" />
 
-<edge dest="7" source="3" />
-<edge dest="4" source="1" />
-<edge dest="6" source="1" />
-<edge dest="5" source="4" />
 <edge dest="8" source="6" />
 <edge dest="6" source="5" />
 <edge dest="3" source="2" />
+<edge dest="5" source="4" />
+<edge dest="7" source="3" />
 <edge dest="1" source="0" />
+<edge dest="4" source="1" />
+<edge dest="6" source="1" />
 
 
 

@@ -23,7 +23,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathSepType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.relML.RelMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLDefinition;
 
 /**
@@ -45,6 +44,7 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	/*the vector storing the list of attributes and its index*/
 	Vector<String[]> m_vecAttrList;
 	
+	
 	/**登録待ちオペランド種別*/
 	protected eMathOperand m_NextOperandKind;
 
@@ -57,6 +57,7 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		m_vecMathExpression = new Vector<MathExpression>();
 		m_strSepUsedValue = "";
 		m_vecAttrList = new Vector<String[]>();
+		
 	}
 
 	/**
@@ -117,28 +118,6 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 			String strAttrLoop5 =
 				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_LOOP5);
 			String[] strAttr = new String[] {strAttrLoop1, strAttrLoop2, strAttrLoop3, strAttrLoop4, strAttrLoop5};
-	
-			/* get operator attribute for boundary condition and distributed parameters */
-			String strAttrBoundaryID = 
-				pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_BOUNDARYID);
-			String strAttrBoundaryLoc = 
-					pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_BOUNDARYLOC);
-			String strAttrParameterID = 
-					pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_PARAMETERID);
-			
-			/* put new boundary/parameter attribute to attribute list */
-			String[] strParamAttr = null;
-			if(strAttrBoundaryID != null) {
-				strParamAttr = new String[] {strAttrBoundaryID, strAttrBoundaryLoc}; 
-			} else if(strAttrParameterID != null) {
-				strParamAttr = new String[] {strAttrParameterID, null}; 
-			} else if(strAttrBoundaryLoc != null) {
-				strParamAttr = new String[] {null, strAttrBoundaryLoc};   //applicable to MathML boundary conditions
-			}
-			
-			if (strParamAttr != null) {
-				strAttr = strParamAttr;
-			}
 			
 			/*SimpleRecML*/	
 			/*属性情報リストを取得*/	
@@ -187,7 +166,12 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_CONDREF, strAttrCondref);
 				}
 				
-				
+				intAttrNum = Integer.parseInt(strAttrNum);
+				m_pCurMathExpression.setExID(intAttrNum);
+				if(strAttrCondref!=null){
+					intAttrCondref = Integer.parseInt(strAttrCondref);
+					m_pCurMathExpression.setCondref(intAttrCondref);
+				}
 				m_pCurMathExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId(strTag), strAttr));
 				

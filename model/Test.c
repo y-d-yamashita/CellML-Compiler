@@ -10,17 +10,17 @@ int main ( int argc , char** argv ) {
 	double* X1;
 	double* t1;
 	double* X1end;
-	double* kX1;
-	double* t1end;
 	double* Y1;
-	double X1init;
+	double* t1end;
+	double* kX1;
 	double delt1;
 	double t1init;
+	double X1init;
 
 	X1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
 	t1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
-	kX1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
 	Y1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
+	kX1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
 	
 	
 	X1[0] = X1init;
@@ -49,9 +49,9 @@ int main ( int argc , char** argv ) {
 	free ( X1 ) ; 
 	free ( t1 ) ; 
 	free ( X1end ) ; 
-	free ( kX1 ) ; 
-	free ( t1end ) ; 
 	free ( Y1 ) ; 
+	free ( t1end ) ; 
+	free ( kX1 ) ; 
 }
 
 

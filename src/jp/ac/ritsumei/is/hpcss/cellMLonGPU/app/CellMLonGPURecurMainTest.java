@@ -135,12 +135,29 @@ public class CellMLonGPURecurMainTest {
 		if (args.length > n) {
 			programFilename = args[n++];
 		}
+		
+		boolean dir = false;
 		if (outputDir != null) {
 			if (programFilename != null) {
 				pre_programFilename = outputDir + File.separator + "STRUCTUREDRECML_" + programFilename +".recml";
 				programFilename = outputDir + File.separator + programFilename;
+			}else{
+				pre_programFilename = outputDir + File.separator + "STRUCTUREDRECML_DEFAULT.recml";
+				programFilename = outputDir + File.separator + "STRUCTUREDRECML_DEFAULT.c";
+				dir = true;
+			}
+		}else{
+			dir = true;
+			outputDir = "./model/";
+			if (programFilename != null) {
+				pre_programFilename = outputDir + File.separator + "STRUCTUREDRECML_" + programFilename +".recml";
+				programFilename = outputDir + File.separator + programFilename;
+			}else{
+				pre_programFilename = outputDir + File.separator + "STRUCTUREDRECML_DEFAULT.recml";
+				programFilename = outputDir + File.separator + "STRUCTUREDRECML_DEFAULT.c";				
 			}
 		}
+		
 
 		System.out.println("------------------------------------------------------------------pf---"+programFilename);
 		//---------------------------------------------------
@@ -198,16 +215,19 @@ public class CellMLonGPURecurMainTest {
 					/*目的プログラム出力*/
 					if (outputRecml != null) {
 						PrintWriter out = null;
-						if (pre_programFilename == null) {
-							out = new PrintWriter(System.out);
-						} else {
-							out = new PrintWriter(
-									new BufferedWriter(new FileWriter(pre_programFilename)));
-						}
+//						if (pre_programFilename == null) {
+//							out = new PrintWriter(System.out);
+//						} else {
+//							out = new PrintWriter(
+//									new BufferedWriter(new FileWriter(pre_programFilename)));
+//						}
+						out = new PrintWriter(
+						new BufferedWriter(new FileWriter(pre_programFilename)));
 
 						/*プログラム出力*/
 						for(String str:outputRecml){
 							out.println(str);
+							System.out.println(str);
 						}
 						
 						if (pre_programFilename != null) {
@@ -269,18 +289,20 @@ public class CellMLonGPURecurMainTest {
 					/*目的プログラム出力*/
 					if (pSynProgram != null) {
 						PrintWriter outKST1 = null;
-						if (programFilename == null) {
-							outKST1 = new PrintWriter(System.out);
+						if (dir) {
+							System.out.println(pSynProgram.toLegalString());
 						}else{
-							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
+							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));	
+							/*プログラム出力*/
+							outKST1.println(pSynProgram.toLegalString());
 						}
-						/*プログラム出力*/
-						outKST1.println(pSynProgram.toLegalString());
 						
-						if (programFilename != null) {
-							outKST1.close();
-						} else {
-							outKST1.flush();
+						if(!dir){
+							if (programFilename != null) {
+								outKST1.close();
+							} else {
+								outKST1.flush();
+							}
 						}
 					}
 				} catch (Exception e) {
@@ -291,8 +313,8 @@ public class CellMLonGPURecurMainTest {
 				
 			}
 			
+			/*StructuredRecML*/
 			if(args[1].equals(FILETYPE_STRUCTURED)){
-				/*StructuredRecML*/
 				RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
 				XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
 				parser.setContentHandler(handler);
@@ -347,11 +369,13 @@ public class CellMLonGPURecurMainTest {
 					if (pSynProgram != null) {
 						PrintWriter outKST1 = null;
 						outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));
-						if (programFilename == null) {
-							outKST1 = new PrintWriter(System.out);
+						if (dir) {
+//							outKST1 = new PrintWriter(System.out);
+							System.out.println(pSynProgram.toLegalString());
+						}else{
+							/*プログラム出力*/
+							outKST1.println(pSynProgram.toLegalString());
 						}
-						/*プログラム出力*/
-						outKST1.println(pSynProgram.toLegalString());
 						
 						if (programFilename != null) {
 							outKST1.close();
@@ -372,44 +396,7 @@ public class CellMLonGPURecurMainTest {
 			}
 			
 		}
-		//---------------------------------------------------
-		//出力
-		//---------------------------------------------------
-//		try {
-//			/*目的プログラム出力*/
-//			if (outputRecml != null) {
-//				PrintWriter out = null;
-//				if (programFilename == null) {
-//					out = new PrintWriter(System.out);
-//				} else {
-//					out = new PrintWriter(
-//							new BufferedWriter(new FileWriter(programFilename)));
-//				}
-//
-//				/*出力開始線*/
-//				//out.println("[output]------------------------------------");
-//				/*プログラム出力*/
-//				if(args[0].equals(GENERATOR_KAWABATA)){
-//					if(args[1].equals(FILETYPE_SIMPLE)){
-//						for(String str:outputRecml){
-//							out.println(str);
-//						}
-//					}
-//				}
-//
-//				if (programFilename != null) {
-//					out.close();
-//				} else {
-//					out.flush();
-//				}
-//			}
-//
-//		} catch (Exception e) {
-//			System.err.println(e.getMessage());
-//			e.printStackTrace(System.err);
-//			System.exit(1);
-//		}
-		
+
 	}
 
 	//=============================================================

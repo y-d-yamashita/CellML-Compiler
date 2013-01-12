@@ -13,6 +13,15 @@ public class Math_apply extends MathOperator {
 
 	/*構造情報要素*/
 	HashMap<String, String> m_hashExpInfo;
+	
+	
+	public HashMap<String, String> get_hashExpInfo(){
+		return this.m_hashExpInfo;
+	}
+	public void set_hashExpInfo(HashMap<String, String> info){
+		this.m_hashExpInfo = info;
+	}
+	
 	public void setExpInfo(HashMap<String, String> attrList){
 		/*オペランドをベクタに追加*/
 		m_hashExpInfo = attrList;
@@ -28,6 +37,12 @@ public class Math_apply extends MathOperator {
 	public void setAttrList(HashMap<Integer, String> attrList){
 		/*オペランドをベクタに追加*/
 		m_hashAttr = attrList;
+	}
+	public HashMap<Integer, String> get_hashAttr(){
+		return this.m_hashAttr;
+	}
+	public void set_hashAttr(HashMap<Integer, String> attr){
+		this.m_hashAttr = attr;
 	}
 
 	/*-----コンストラクタ-----*/

@@ -107,20 +107,16 @@ public class NewtonSolverTest {
 
 		
 		
-		System.out.println("Input Function : ");
-		System.out.println(pNewExpression.getLeftExpression().toLegalString());
-		System.out.println("");
+//		System.out.println("Input Function : ");
+//		System.out.println(pNewExpression.getLeftExpression().toLegalString());
+//		System.out.println("");
 
 		//導出変数を設定
 		Math_ci derivedVal = val1;
-
-		
-		System.out.println("Code　:");
-		System.out.println("");
 		
 		double e = 1.0e-50;
 		int max = 1000;
-		NewtonSolverV2 ns = new NewtonSolverV2();
+		NewtonSolver ns = new NewtonSolver();
 		ns.writeNewtonSolver(pNewExpression, derivedVal, e, max);
 		
 		

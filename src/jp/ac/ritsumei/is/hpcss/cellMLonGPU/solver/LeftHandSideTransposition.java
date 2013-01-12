@@ -10,6 +10,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
@@ -33,8 +34,13 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * 
  */
 
-//非線形フラグ対応
-//2012/12/24 BaseTransposition対応
+//2013.1.12
+//変更　イコール直下にciを持たず,applyが間に入っている可能性があるのでこれを考慮する.
+//変更　構造情報を与えるよう変更.SimpleRecML -> C file　テスト完了
+
+//注意　apply直下にapplyを持つような場合は処理できない.
+
+
 public class LeftHandSideTransposition {
 	
 	public MathExpression transporseExpression(MathExpression expression, Math_ci derivedVariable) throws MathException {
@@ -42,22 +48,26 @@ public class LeftHandSideTransposition {
 			//属性情報を取得
 			String[] strAttr=((MathOperator)expression.getRootFactor()).getAttribute();
 			
+			//構造情報取得
+			HashMap<String, String> info = ((Math_apply) expression.getRootFactor()).get_hashExpInfo();
+			HashMap<Integer, String> attr = ((Math_apply) expression.getRootFactor()).get_hashAttr();
+			
 			//導出変数が右辺,左辺どちらにあるか探索
 			Vector<Math_ci> exp_leftValiableList = new Vector<Math_ci>();
 			Vector<Math_ci> exp_rightValiableList = new Vector<Math_ci>();
 			
 			if(expression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-				//expression.getLeftExpression().getAllVariablesWithSelector(exp_leftValiableList);
 				expression.getLeftExpression().getAllVariables_SusceptibleOfOverlapWithSelector(exp_leftValiableList);
 			}else{
 				exp_leftValiableList.add((Math_ci) expression.getLeftExpression().getRootFactor());
 			}
+			
 			if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-				//expression.getRightExpression().getAllVariablesWithSelector(exp_rightValiableList);
 				expression.getRightExpression().getAllVariables_SusceptibleOfOverlapWithSelector(exp_rightValiableList);
 			}else{
 				exp_rightValiableList.add((Math_ci) expression.getRightExpression().getRootFactor());
 			}
+			
 			
 			//導出変数の個数を確認
 			int derivedVariable_count=0;
@@ -74,19 +84,17 @@ public class LeftHandSideTransposition {
 			if(derivedVariable_count!=1){
 				//非線形方程式
 				expression.addNonlinearFlag();
-				//throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 			}
 			boolean targetSide_position=false;
 			for(int j=0;j<exp_rightValiableList.size();j++){
 				if(exp_rightValiableList.get(j).toLegalString().equals(derivedVariable.toLegalString())){
-					//右辺であればtrue
 					targetSide_position=true;
 				}
 			}
 			
 			//導出変数を含む辺を左辺に移動
 			if(targetSide_position==true){
-				expression=replace_TwoSides(expression,strAttr);
+				expression=replace_TwoSides(expression,strAttr,info,attr);
 			}
 			
 			//導出変数がequal直下の左辺であるか検査
@@ -95,13 +103,15 @@ public class LeftHandSideTransposition {
 			
 			
 			//equalの直下が導出変数となるまで移項を繰り返す.(非線形の場合は移項しない)
-			while(goal_flag!=true || expression.getNonlinearFlag()==true){
+			while(goal_flag!=true){
+				if(expression.getNonlinearFlag()==true) break;
 				
 				MathOperator targetSide = null;
 				MathFactor oppositeSide = null;//反対辺はオペレータを含まない可能性があるのでMathFactorとして宣言
 				
 				//両辺をコピー.
 				targetSide =(MathOperator) expression.getLeftExpression().getRootFactor();
+				
 				if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
 					oppositeSide =(MathOperator) expression.getRightExpression().getRootFactor();
 				}else{
@@ -114,7 +124,8 @@ public class LeftHandSideTransposition {
 				//導出変数がオペレータの何番目の要素に含まれているかを調べる.
 				int val_position = ((MathOperator) targetSide.getUnderFactor()).searchVariablePositionWithSelector(derivedVariable);
 				
-				int transpositionType=0;//移項方式を判定.
+				int transpositionType=0;
+				
 				//	1.normal transposition
 				//	2.abnormal transposition(target側の移項要素を反対辺の第1要素にするケース)
 				//	3.base transposition (power第1要素,log第1要素)
@@ -151,35 +162,31 @@ public class LeftHandSideTransposition {
 				else if(directOperatorKind.equals("MOP_POWER")){
 					if(val_position==1){
 						transpositionType=3;
-						//expression.addNonlinearFlag();
-						//throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 					}
 					if(val_position==2)transpositionType=2;
 				}
 				else if(directOperatorKind.equals("MOP_LOG")){
 					if(val_position==1){
 						transpositionType=3;
-						//expression.addNonlinearFlag();
-						//throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
 					}
 					if(val_position==2)transpositionType=2;
 				}
 				else{
-					throw new MathException("LeftSideTransposition","transporseExpression","can't transpose");
+					expression.addNonlinearFlag();
 				}
 				
 				//移項処理メソッドへ
 				if(transpositionType==1){
 					expression=normal_transposition(
-							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position,info,attr);
 				}
 				if(transpositionType==2){
 					expression=abnormal_transposition(
-							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position,info,attr);
 				}
 				if(transpositionType==3){
 					expression=base_transposition(
-							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position);
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position,info,attr);
 				}
 				
 				//移項後の判定
@@ -192,12 +199,14 @@ public class LeftHandSideTransposition {
 	
 	public MathExpression base_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
-			String operatorKind,int val_position) throws MathException{
+			String operatorKind,int val_position,HashMap<String,String> info,HashMap<Integer,String> attr) throws MathException{
 		
 		//pow(x,a) = b  ->  x = exp(ln(b)/a)
 		//log(x,a) = b  ->  x = exp(ln(a)/b)
 		
 		MathExpression pNewExpression = new MathExpression();
+		pNewExpression.setExID((long) expression.getExID());
+		pNewExpression.setCondref((long) expression.getCondRef());
 		String operatorKindString=getOperatorKindString(operatorKind);
 		
 		if(operatorKindString.equals("power")){
@@ -210,12 +219,22 @@ public class LeftHandSideTransposition {
 			
 			//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
 			if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+				if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pNewExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}else{
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pNewExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}
 			} else{
 				pNewExpression.addOperand(
 						((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
@@ -241,11 +260,20 @@ public class LeftHandSideTransposition {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
 			
 					if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand((MathOperand)oppositeSide);
 					}
@@ -254,12 +282,22 @@ public class LeftHandSideTransposition {
 					
 					//divide 第2要素
 					if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(2).matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-						pNewExpression.addOperator(
-								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+							pNewExpression.addOperator(
+									(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+							pNewExpression.addOperand(
+									(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand(
 								((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)));
@@ -283,12 +321,22 @@ public class LeftHandSideTransposition {
 			
 			//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
 			if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
-				pNewExpression.addOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-				pNewExpression.addOperator(
-						(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
-				pNewExpression.breakOperator(
-						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+				if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pNewExpression.addOperator(
+							(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}else{
+					pNewExpression.addOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+					pNewExpression.addOperand(
+							(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				}
 			} else{
 				pNewExpression.addOperand(
 						((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
@@ -314,12 +362,22 @@ public class LeftHandSideTransposition {
 							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("ln"), strAttr));
 					
 					if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(2).matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-						pNewExpression.addOperator(
-								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+							pNewExpression.addOperator(
+									(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+							pNewExpression.addOperand(
+									(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand(
 								((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(2)));
@@ -330,11 +388,20 @@ public class LeftHandSideTransposition {
 					
 					//divide 第2要素
 					if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand((MathOperand)oppositeSide);
 					}
@@ -348,16 +415,21 @@ public class LeftHandSideTransposition {
 		
 		}
 		
+		//構造情報付与
+		((Math_apply)pNewExpression.getRootFactor()).set_hashExpInfo(info);
+		((Math_apply)pNewExpression.getRootFactor()).set_hashAttr(attr);
 		return pNewExpression;
 	}
 
 	public MathExpression normal_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
-			String operatorKind,int val_position) throws MathException{
+			String operatorKind,int val_position,HashMap<String,String> info,HashMap<Integer,String> attr) throws MathException{
 		
 		//移項処理メソッド
 		
 		MathExpression pNewExpression = new MathExpression();
+		pNewExpression.setExID((long) expression.getExID());
+		pNewExpression.setCondref((long) expression.getCondRef());
 		int childFactorNum = ((MathOperator) targetSide.getUnderFactor()).getChildFactorNum();
 		
 		if(childFactorNum==1){//単項演算の場合
@@ -372,12 +444,23 @@ public class LeftHandSideTransposition {
 				
 				//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
 				if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
-					pNewExpression.addOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+					if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pNewExpression.addOperand(
+								(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}
 				} else{
 					pNewExpression.addOperand(
 							((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
@@ -386,11 +469,20 @@ public class LeftHandSideTransposition {
 				//右辺追加
 				if( operatorKindString.equals("plus")){
 					if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand((MathOperand)oppositeSide);
 					}
@@ -402,11 +494,20 @@ public class LeftHandSideTransposition {
 					
 							//Operator第1要素
 							if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-								pNewExpression.addOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-								pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-								pNewExpression.breakOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+								if(((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}else{
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}
 							} else{
 								pNewExpression.addOperand((MathOperand)oppositeSide);
 							}
@@ -423,11 +524,21 @@ public class LeftHandSideTransposition {
 					
 							//correspondingOperator第1要素
 							if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-								pNewExpression.addOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-								pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-								pNewExpression.breakOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								
+								//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+								if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}else{
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}
 							} else{
 								pNewExpression.addOperand((MathOperand)oppositeSide);
 							}
@@ -443,11 +554,21 @@ public class LeftHandSideTransposition {
 						
 							//correspondingOperator第1要素
 							if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-								pNewExpression.addOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-								pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-								pNewExpression.breakOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								
+								//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+								if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}else{
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}
 							} else{
 								pNewExpression.addOperand((MathOperand)oppositeSide);
 							}
@@ -470,11 +591,21 @@ public class LeftHandSideTransposition {
 					
 							//correspondingOperator第2要素
 							if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-								pNewExpression.addOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-								pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-								pNewExpression.breakOperator(
-										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								
+								//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+								if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}else{
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+									pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}
 							} else{
 								pNewExpression.addOperand((MathOperand)oppositeSide);
 							}
@@ -488,6 +619,7 @@ public class LeftHandSideTransposition {
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			
 		} else if(childFactorNum==2){
+			
 			
 			String correspondingOperatorKindString=getCorrespondingOperatorKindString(operatorKind);
 			
@@ -504,13 +636,30 @@ public class LeftHandSideTransposition {
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 				
 				//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
+				
 				if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
-					pNewExpression.addOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+					if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+					
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pNewExpression.addOperand(
+								(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}
+						
+						
+						
 				} else{
 					pNewExpression.addOperand(
 							((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
@@ -524,23 +673,46 @@ public class LeftHandSideTransposition {
 						
 						//correspondingOperator第1要素
 						if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-							pNewExpression.addOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-							pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-							pNewExpression.breakOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+							if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}else{
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}
+							
 						} else{
 							pNewExpression.addOperand((MathOperand)oppositeSide);
 						}
 						
 						//correspondingOperator第2要素
 						if( ((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum).matches(eMathMLClassification.MML_OPERATOR)){
-							pNewExpression.addOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-							pNewExpression.addOperator(
-									(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
-							pNewExpression.breakOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							
+							//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+							if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperator(
+										(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}else{
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperand(
+										(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}
+							
 						} else{
 							pNewExpression.addOperand((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum));
 						}
@@ -575,12 +747,22 @@ public class LeftHandSideTransposition {
 					for(int i=1;i<=childFactorNum;i++){
 						if(i!=notDerivedNum){
 							if( ((MathOperator)targetSide.getUnderFactor()).getChildFactor(i).matches(eMathMLClassification.MML_OPERATOR)){
-								pNewExpression.addOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-								pNewExpression.addOperator(
-										(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(i)).getUnderFactor());
-								pNewExpression.breakOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+								if(  ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(i)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+									pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+									pNewExpression.addOperator(
+											(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(i)).getUnderFactor());
+									pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								} else{
+									pNewExpression.addOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+									pNewExpression.addOperand(
+											(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(i)).getUnderFactor());
+									pNewExpression.breakOperator(
+											MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+								}
 							} else{
 								pNewExpression.addOperand((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(i));
 							}
@@ -599,23 +781,42 @@ public class LeftHandSideTransposition {
 					
 						//correspondingOperator第1要素
 						if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-							pNewExpression.addOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-							pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-							pNewExpression.breakOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+							if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}else{
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}
 						} else{
 							pNewExpression.addOperand((MathOperand)oppositeSide);
 						}
 						
 						//correspondingOperator第2要素
 						if( ((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum).matches(eMathMLClassification.MML_OPERATOR)){
-							pNewExpression.addOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-							pNewExpression.addOperator(
-									(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
-							pNewExpression.breakOperator(
-									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+							if( ((MathOperator) ((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperator(
+										(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}else{
+								pNewExpression.addOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+								pNewExpression.addOperand(
+										(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+								pNewExpression.breakOperator(
+										MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+							}
 						} else{
 							pNewExpression.addOperand((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum));
 						}
@@ -627,14 +828,20 @@ public class LeftHandSideTransposition {
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
 		}
+		
+		//構造情報付与
+		((Math_apply)pNewExpression.getRootFactor()).set_hashExpInfo(info);
+		((Math_apply)pNewExpression.getRootFactor()).set_hashAttr(attr);
 		return pNewExpression;
 	}
 	
 	public MathExpression abnormal_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
-			String operatorKind,int val_position) throws MathException {
+			String operatorKind,int val_position,HashMap<String,String> info,HashMap<Integer,String> attr) throws MathException {
 		
 		MathExpression pNewExpression = new MathExpression();
+		pNewExpression.setExID((long) expression.getExID());
+		pNewExpression.setCondref((long) expression.getCondRef());
 		String operatorKindString=getOperatorKindString(operatorKind);
 		String correspondingOperatorKindString=getCorrespondingOperatorKindString(operatorKind);
 		//移項する要素の番号
@@ -648,12 +855,22 @@ public class LeftHandSideTransposition {
 			
 		//左辺追加 Targetは必ずオペレータ, その直下のファクタを判定
 		if(((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position).matches(eMathMLClassification.MML_OPERATOR)){
-			pNewExpression.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-			pNewExpression.addOperator(
-					(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
-			pNewExpression.breakOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+			if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			}else{
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperand(
+						(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)).getUnderFactor());
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			}
 		} else{
 			pNewExpression.addOperand(
 					((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(val_position)));
@@ -668,23 +885,42 @@ public class LeftHandSideTransposition {
 					
 					//Operator第1要素
 					if( ((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum).matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-						pNewExpression.addOperator(
-								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperator(
+									(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperand(
+									(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum));
 					}
 					
 					//Operator第2要素
 					if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-						pNewExpression.addOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-						pNewExpression.breakOperator(
-								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+						if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}else{
+							pNewExpression.addOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+							pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+							pNewExpression.breakOperator(
+									MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						}
 					} else{
 						pNewExpression.addOperand((MathOperand)oppositeSide);
 					}
@@ -702,23 +938,42 @@ public class LeftHandSideTransposition {
 
 				//Operator第1要素
 				if( ((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum).matches(eMathMLClassification.MML_OPERATOR)){
-					pNewExpression.addOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-					pNewExpression.addOperator(
-							(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+					if( ((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+						pNewExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+						pNewExpression.addOperand(
+								(MathOperand)((MathOperator)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum)).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}
 				} else{
 					pNewExpression.addOperand((MathOperand)((MathOperator)targetSide.getUnderFactor()).getChildFactor(notDerivedNum));
 				}
 				
 				//Operator第2要素
 				if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
-					pNewExpression.addOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
-					pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
-					pNewExpression.breakOperator(
-							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					//オペレータ（apply）であってもその下はオペランドの可能性があるので判定する.
+					if( ((MathOperator)oppositeSide).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+						pNewExpression.addOperator((MathOperator) ((MathOperator) oppositeSide).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}else{
+						pNewExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+						pNewExpression.addOperand((MathOperand) ((MathOperator) oppositeSide).getUnderFactor());
+						pNewExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					}
 				} else{
 					pNewExpression.addOperand((MathOperand)oppositeSide);
 				}
@@ -731,6 +986,10 @@ public class LeftHandSideTransposition {
 		pNewExpression.breakOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 		
+		
+		//構造情報付与
+		((Math_apply)pNewExpression.getRootFactor()).set_hashExpInfo(info);
+		((Math_apply)pNewExpression.getRootFactor()).set_hashAttr(attr);
 		return pNewExpression;
 	}
 	
@@ -775,19 +1034,41 @@ public class LeftHandSideTransposition {
 
 
 	public boolean check_EqDirectLeft(MathExpression expression,Math_ci val) throws MathException {
-
+		
 		//導出変数がequal直下であるかを判定するメソッド
-		if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
-			return true;
-		} else{
-			return false;
+		
+		//2013.1.11
+		//変更 イコール直下にciを持たず,applyが間に入っている可能性があるのでこれを考慮する.
+		if(expression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
+			if( ((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor().toLegalString().equals(val.toLegalString())){
+				return true;
+			} else{
+				return false;
+			}
+		}else{
+			if(expression.getLeftExpression().getRootFactor().toLegalString().equals(val.toLegalString())){
+				return true;
+			} else{
+				return false;
+			}
+			
 		}
 	}
 
-	public MathExpression replace_TwoSides(MathExpression expression, String[] strAttr) throws MathException {
+	public MathExpression replace_TwoSides(MathExpression expression, String[] strAttr, HashMap<String,String> info,HashMap<Integer,String> attr) throws MathException {
+		//2013.1.12
+		//変更 イコール直下にciを持たず,applyが間に入っている可能性があるのでこれを考慮する.
+				
+		//applyであってもその下がoperatorかoperandかを判定する必要がある.
+		
 		
 		//右辺に導出変数を含む際,右辺と左辺を入れ替えるメソッド
-		MathExpression newExpression = new MathExpression();		
+		
+		//数式idとコンディションrefを取得.
+		MathExpression newExpression = new MathExpression();
+		newExpression.setExID((long) expression.getExID());
+		newExpression.setCondref((long) expression.getCondRef());
+		
 		newExpression.addOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 		newExpression.addOperator(
@@ -795,28 +1076,57 @@ public class LeftHandSideTransposition {
 		
 		//左辺追加
 		if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-			//左辺がオペレータの場合
-			MathOperator right =(MathOperator)((MathOperator)expression.getRightExpression().getRootFactor()).getUnderFactor();
-			newExpression.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-			newExpression.addOperator(right);
-			newExpression.breakOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			
+			if(((MathOperator)expression.getRightExpression().getRootFactor()).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+			
+				//右辺apply下がオペレータの場合
+				MathOperator right =(MathOperator)((MathOperator)expression.getRightExpression().getRootFactor()).getUnderFactor();
+				newExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				newExpression.addOperator(right);
+				newExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			} else{
+				//右辺apply下がオペランドの場合
+				MathOperand right =(MathOperand)((MathOperator)expression.getRightExpression().getRootFactor()).getUnderFactor();
+				newExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				newExpression.addOperand(right);
+				newExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+			}
+			
 		}else{
-			//左辺がオペランドの場合
-			MathOperand Right = (MathOperand)expression.getRightExpression().getRootFactor();
-			newExpression.addOperand(Right);
+			//左辺直下がオペランドの場合
+			MathOperand right = (MathOperand)expression.getRightExpression().getRootFactor();
+			newExpression.addOperand(right);
 		}
+		
 		
 		//右辺追加
 		if(expression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
-			//左辺がオペレータの場合
-			MathOperator left =(MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor();
-			newExpression.addOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
-			newExpression.addOperator(left);
-			newExpression.breakOperator(
-					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			
+			if(((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+				
+				//左辺apply下がオペレータの場合
+				MathOperator left =(MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor();
+				newExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				newExpression.addOperator(left);
+				newExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			} else{
+				//左辺apply下がオペランドの場合
+				MathOperand left =(MathOperand)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor();
+				newExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				newExpression.addOperand(left);
+				newExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+			}
+
 		}else{
 			//左辺がオペランドの場合
 			MathOperand left = (MathOperand)expression.getLeftExpression().getRootFactor();
@@ -826,7 +1136,9 @@ public class LeftHandSideTransposition {
 		newExpression.breakOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 		
-		
+		//構造情報付与
+		((Math_apply)newExpression.getRootFactor()).set_hashExpInfo(info);
+		((Math_apply)newExpression.getRootFactor()).set_hashAttr(attr);
 		return newExpression;
 	}
 	

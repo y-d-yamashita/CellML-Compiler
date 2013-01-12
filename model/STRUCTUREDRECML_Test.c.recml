@@ -30,14 +30,14 @@
 <node id="7" equation="7" variable="10" />
 <node id="8" equation="8" variable="11" />
 
+<edge dest="7" source="3" />
+<edge dest="4" source="1" />
+<edge dest="6" source="1" />
+<edge dest="5" source="4" />
 <edge dest="8" source="6" />
 <edge dest="6" source="5" />
 <edge dest="3" source="2" />
-<edge dest="5" source="4" />
-<edge dest="7" source="3" />
 <edge dest="1" source="0" />
-<edge dest="4" source="1" />
-<edge dest="6" source="1" />
 
 
 

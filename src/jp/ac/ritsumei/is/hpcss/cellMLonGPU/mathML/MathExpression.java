@@ -40,7 +40,7 @@ public class MathExpression {
 	/**数式ID*/
 	long exID = -1;
 	/**conditionのreference*/
-	int condref = -1;
+	long condref = -1;
 	
 	//非線形フラグ
 	boolean nonlinear;
@@ -262,14 +262,14 @@ public class MathExpression {
 	/**
 	 * conditionのreference番号を登録する
 	 */
-	public void setCondref(int num){
+	public void setCondref(long num){
 		this.condref = num;
 	}
 	
 	/**
 	 * 数式IDを登録する
 	 */
-	public void setExID(int num){
+	public void setExID(long num){
 		this.exID = num;
 	}
 	
@@ -602,7 +602,7 @@ public class MathExpression {
 	 * conditionのReference番号を返す
 	 * @return conditionのReference番号
 	 */
-	public int getCondRef(){
+	public long getCondRef(){
 		return this.condref;
 	}
 	/**

@@ -167,7 +167,6 @@ public class SimultaneousNewtonSolverTest {
 		double eps = 0.001;
 		int max = 1000;
 		
-		//コード標準出力
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
 		sns.writeSimultaneousNewtonSolver(eqList, varList, eps ,max);
 		

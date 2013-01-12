@@ -66,6 +66,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	private SimpleRecMLVariableTable simpleRecMLVariableTable;
 	private RecMLGraphAnalyzer graphAnlyzer;
 	private DirectedGraph<RecMLVertex,RecMLEdge> graph;
+	public PairList<RecMLVertex,RecMLVertex> resultMaximumMatching;
 	
 	// loop index variable name list (initialized in constructor)
 	// just for test
@@ -128,6 +129,23 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	Vector<MathExpression> m_vecExpression;
 	public Vector<MathExpression> getM_vecExpression() {
 		return m_vecExpression;
+	}
+	
+	
+	//idから数式取得メソッド
+	public MathExpression getExpressionFromID(int id) {
+		MathExpression exp = new MathExpression();
+		for(int i=0;i<m_vecMathExpression.size();i++){
+			if(m_vecMathExpression.get(i).getExID() == id){
+				exp=m_vecMathExpression.get(i);
+			}
+		}
+		return exp;
+	}
+	
+	//数式の置換メソッド
+	public void setM_vecMathExpression(int i,MathExpression exp) {
+		m_vecMathExpression.set(i, exp);
 	}
 
 	/*式中の変数*/
@@ -925,6 +943,9 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		try {
 			resultTestMaximumMatching = 
 					graphManipulator.maximumMatching(resultTestCreateBipartiteGraph);
+			
+			this.resultMaximumMatching = resultTestMaximumMatching;
+			
 		} catch (GraphException e) {
 			e.printStackTrace();
 		}
@@ -972,7 +993,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		sa.setVarLoopcomponent(loopCompo);
 
 		
-		System.out.println("SimpleRecMLAnalyzer Finish.");
+		//System.out.println("SimpleRecMLAnalyzer Finish.");
 
 	}
 	

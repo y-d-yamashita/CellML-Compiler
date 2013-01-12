@@ -93,13 +93,16 @@ String xml=
 //"./model/recml/RecMLSample/LR1_FTCS_2D_struct_v3.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v4_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v5_yamashia.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_3x3_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_5x5_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_50x50_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_30x30_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_10x10_yamashita_3.recml"
-//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_3x3_yamashita.recml"
-//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_5x5_yamashita.recml"
-"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_3x3_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_3x3_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_5x5_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_10x10_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_30x30_yamashita.recml"
+"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_64x64_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_512x512_yamashita.recml"
 ;
 
@@ -167,7 +170,7 @@ public void testLazilyMaximumMatching() {
 	/*Maximum matching*/
 	try {
 		resultTestMaximumMatching = 
-				graphManipulator.lazilyMaximumMatching(resultTestCreateBipartiteGraph,recmlAnalyzer,false);
+				graphManipulator.lazyMaximumMatching(resultTestCreateBipartiteGraph,recmlAnalyzer,false);
 	} catch (GraphException e) {
 		e.printStackTrace();
 	}

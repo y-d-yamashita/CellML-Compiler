@@ -9,6 +9,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.util.MathCollections;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CountVariableNumberVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.IndexReplacingVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.MathFactorStackingVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.Visitor;
@@ -330,6 +331,11 @@ public class MathExpression {
 	 */
 	public int getVariableCount() {
 		return m_vecVariables.size();
+	}
+	public int getRealVariableCount() {
+		CountVariableNumberVisitor vistor = new CountVariableNumberVisitor();
+		this.traverse(vistor);
+		return vistor.getVariableCount();
 	}
 
 	/**
@@ -716,9 +722,7 @@ public class MathExpression {
 					//Indexを持っているなら(定数は持っていない場合もある)
 					if((ci1.getM_vecIndexListFactor().size()>indexPos) &&
 							(ci2.getM_vecIndexListFactor().size()>indexPos)){
-					
-						System.out.println(this.getClass()+":"+ci1.getM_vecIndexListFactor().get(indexPos).toLegalString()+" "+ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
-						
+							
 					Integer index1 = MathCollections.calculate(ci1.getM_vecIndexListFactor().get(indexPos)).decode();
 					Integer index2 = MathCollections.calculate(ci2.getM_vecIndexListFactor().get(indexPos)).decode();
 					if(indexDiff==null){	//一回目のMath_ci
@@ -741,7 +745,6 @@ public class MathExpression {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-					System.out.println(cn1_value+" "+cn2_value+cn1_value.equals(cn2_value));
 					
 				if(!cn1_value.equals(cn2_value)){
 					return null;
@@ -770,7 +773,6 @@ public class MathExpression {
 	public void replaceIndex(MathFactor replaceIndexFactor,int indexPosition) {
 		int baseIndex = -1;
 		try {
-			System.out.println(this.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).toLegalString());
 			baseIndex = decode(this.getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).toLegalString());
 		} catch (MathException e) {
 			// TODO Auto-generated catch block

@@ -288,6 +288,22 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		public Collection<E> getEdges() {
 			return cGroup.keySet();
 		}
+
+		public E getEdge(V src, V dst) throws GraphException{
+			Node srcNode = nGroup.get(src);
+			Node dstNode = nGroup.get(dst);
+			for(E e : srcNode.outEdges){
+				if(dstNode.inEdges.contains(e)){
+					return e;
+				}
+			}
+			throw new GraphException(
+					this.getClass().getName(), 
+					Thread.currentThread().getStackTrace()[1].getMethodName(),
+					"No exists edge:"+src+dst);
+			
+		}
+
 		
 		/**
 		 * Get edges which connect to vertex
@@ -329,6 +345,9 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		 */
 		@Override
 		public void removeVertex(V v) {
+			for(E e : this.getEdges(v)){
+				this.removeEdge(e);
+			}
 			nGroup.remove(v);
 		}
 
@@ -344,6 +363,20 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			cGroup.remove(e);
 
 		}
+
+		public void removeEdge(V src, V dst){
+			Node srcNode = nGroup.get(src);
+			Node dstNode = nGroup.get(dst);
+			for(E e : srcNode.outEdges){
+				if(dstNode.inEdges.contains(e)){
+					srcNode.outEdges.remove(e);
+					dstNode.inEdges.remove(e);
+					cGroup.remove(e);
+					break;
+				}
+			}
+		}
+
 
 		/**
 		 * Reverse a direction of edge.

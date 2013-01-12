@@ -40,6 +40,12 @@ public class BipartiteGraph<V, E> extends DirectedGraph<V, E>{
 		srcVertexes.add(v);
 	}
 	
+	
+	public void removeSourceVertex(V v)throws GraphException{
+		super.removeVertex(v);
+		srcVertexes.remove(v);
+	}
+	
 	/**
 	 * Add vertex to graph and set of dest vertexes
 	 * @param v
@@ -49,6 +55,12 @@ public class BipartiteGraph<V, E> extends DirectedGraph<V, E>{
 		super.addVertex(v);
 		dstVertexes.add(v);
 	}
+
+	public void removeDestVertex(V v)throws GraphException{
+		super.removeVertex(v);
+		dstVertexes.remove(v);
+	}
+
 	
 	/**
 	 * Get set of source vertexes

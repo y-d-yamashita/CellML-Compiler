@@ -40,6 +40,13 @@ public static void log(Class<?> cl,String msg){
 			"[ method]: "+Thread.currentThread().getStackTrace()[2].getMethodName()+"\n"+
 			"[message]: "+msg);
 }
+public static void log(Class<?> cl,int value){
+	logger.info("\n" +
+			"[ class ]: "+cl.getName()+"\n"+
+			"[ method]: "+Thread.currentThread().getStackTrace()[2].getMethodName()+"\n"+
+			"[message]: "+value);
+}
+
 public static void log(Class<?> cl){
 
 	logger.info("\n" +
@@ -48,5 +55,8 @@ public static void log(Class<?> cl){
 }
 public static void log(String msg){
 	logger.info("[message]: "+msg);
+}
+public static void log(int value){
+	logger.info("[message]: "+value);
 }
 }

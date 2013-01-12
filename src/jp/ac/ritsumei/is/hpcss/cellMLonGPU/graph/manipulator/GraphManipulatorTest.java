@@ -95,9 +95,12 @@ String xml=
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v5_yamashia.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_50x50_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_30x30_yamashita.recml"
-"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_10x10_yamashita_3.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_10x10_yamashita_3.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_3x3_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_5x5_yamashita.recml"
+"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_3x3_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_30x30_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_512x512_yamashita.recml"
 ;
 
 
@@ -133,14 +136,14 @@ public void testCreateBipartieGraph() {
 	
 	/* Print result*/
 	System.out.println("<<testCreateBipartieGraph>> -----------------------------");
-	//System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
+	System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
 
 	assertNotNull(resultTestCreateBipartiteGraph);
 
 }
 
 
-@Test
+//@Test
 public void testMaximumMatching() {
 	/*Maximum matching*/
 	try {
@@ -158,20 +161,29 @@ public void testMaximumMatching() {
 	}
 }
 
+
+@Test
+public void testLazilyMaximumMatching() {
+	/*Maximum matching*/
+	try {
+		resultTestMaximumMatching = 
+				graphManipulator.lazilyMaximumMatching(resultTestCreateBipartiteGraph,recmlAnalyzer,false);
+	} catch (GraphException e) {
+		e.printStackTrace();
+	}
+	assertNotNull(resultTestMaximumMatching);
+	
+	/* Print result*/
+	System.out.println("<<testLazilyMaximumMatching>> -----------------------------");
+	for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
+		System.out.println(p.getFirst()+","+p.getSecond());
+	}
+}
+
 @Test
 public void testLeftHandSideTransport() throws MathException, TableException{
 	System.out.println(new Thread().currentThread().getStackTrace()[1].getMethodName()+">>> -----------------");
-	for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
-		System.out.print(p.getFirst()+"("+recmlAnalyzer.getRecMLVariableTable().getVariableReference(p.getFirst().getVarId()).getMathCI().toLegalString()+")"+", ");
-		System.out.print(p.getSecond()+"("+recmlAnalyzer.getExpression(p.getSecond().getEquId()).toLegalString()+")");
-	//	MathExpression lhs = recmlAnalyzer.getExpression(p.getSecond().getEquId()).getLeftExpression();
-	//	MathOperator apply = (MathOperator) lhs.getRootFactor();
-	//	System.out.println(" leftRoot:"+apply.getChildFactor(1).toLegalString());
-	}
-	
-	
-	System.out.println("Transport>>>");
-	for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
+		for(Pair<RecMLVertex, RecMLVertex> p:resultTestMaximumMatching){
 		Math_ci target =  recmlAnalyzer.getRecMLVariableTable().getVariableReference(p.getFirst().getVarId()).getMathCI();
 		MathExpression expr = recmlAnalyzer.getExpression(p.getSecond().getEquId());
 		
@@ -180,7 +192,6 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 	//		System.out.println(p.getSecond()+"("+recmlAnalyzer.getExpression(p.getSecond().getEquId()).toLegalString()+")");
 			LeftHandSideTransposition lst = new LeftHandSideTransposition();
 	//		System.out.println((lst.transporseExpression(expr, target)).toLegalString());
-			CCLogger.log(expr.toLegalString()+target.toLegalString());
 			if(!lst.check_EqDirectLeft(expr, target)){
 				recmlAnalyzer.setExpression(p.getSecond().getEquId(),lst.transporseExpression(expr, target));
 			}
@@ -241,8 +252,7 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 		   
 		resultTestCompressDependencyList = graphManipulator.compressDependencyList(resultTestTrajan, resultTestCreateDependencyGraph);
 		System.out.println("<<testCompressDependencyList>>------------");
-		System.out.println(resultTestTrajan.toString());
-		System.out.println(resultTestCompressDependencyList.toString());
+				System.out.println(resultTestCompressDependencyList.toString());
 
 		List<MathExpression> exprList = new ArrayList<MathExpression>();
 		
@@ -259,17 +269,7 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 			//Sort exprlist based on index number and expression shape
 			Collections.sort(exprList,new ExpressionComparatorByIndex(indexPosition,exprList.size()));
 		
-			System.out.println("[");
-			for(MathExpression expr:exprList){
-				try {
-					System.out.println(expr.toLegalString());
-				} catch (MathException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			System.out.println("]");
-
+			
 			List<MathExpression> mergedExprList = new ArrayList<MathExpression>();
 			MathExpression prevExpr=null;
 			MathExpression pushExpr=null;
@@ -307,15 +307,7 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 					e.printStackTrace();
 				} 
 				
-				System.out.println("result:"+compareResult);
-				try {
-					System.out.println(prevExpr.toLegalString());
-					System.out.println(exprList.get(i).toLegalString());
-				} catch (MathException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+					
 				
 				if(compareResult!=null&&compareResult==1){//It's increment
 							if(!replacedFlag){
@@ -346,18 +338,7 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 					
 				prevExpr=exprList.get(i);
 			}
-			
-			System.out.println("[");
-			for(MathExpression expr:mergedExprList){
-				try {
-					System.out.println(expr.toLegalString());
-				} catch (MathException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			System.out.println("]");
-			
+					
 			//Reset flags and lists
 			replacedFlag=false;
 			mergedExprList.clear();

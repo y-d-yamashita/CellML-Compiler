@@ -14,7 +14,6 @@ public class ReplaceEqualToAssignVisitor implements Visitor {
 		if(factor instanceof Math_apply){
 			Math_apply apply = (Math_apply) factor;
 				if(apply.getFactorVector().get(0) instanceof Math_eq){
-					CCLogger.log("Math_eq");
 					Math_eq eq = (Math_eq) apply.getFactorVector().get(0);
 					Math_assign assign = new Math_assign();
 					for(MathFactor eqFactor : eq.getFactorVector()){

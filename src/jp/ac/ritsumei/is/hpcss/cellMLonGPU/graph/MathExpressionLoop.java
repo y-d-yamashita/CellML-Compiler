@@ -222,7 +222,7 @@ public class MathExpressionLoop{
 			//stringBuilder.append(indent+" /* Expr["+mathExpressionList.indexOf(expression)+"] */  ");
 			stringBuilder.append("		");
 			try {
-				stringBuilder.append(expression.toLegalString()+"\n");
+				stringBuilder.append(expression.toLegalString()+";\n");
 			} catch (MathException e) {
 				e.printStackTrace();
 			}

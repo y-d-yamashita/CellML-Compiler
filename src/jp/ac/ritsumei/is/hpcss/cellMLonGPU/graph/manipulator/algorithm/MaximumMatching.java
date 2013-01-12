@@ -10,6 +10,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.GlobalLogger;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Triple;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.TripleList;
 
 /**
  * Graph algorithm class for maximum matching
@@ -45,7 +47,8 @@ public class MaximumMatching {
 		
 		PairList<RecMLVertex,RecMLVertex> resultPairList = new PairList<RecMLVertex,RecMLVertex>();
 		Stack<RecMLVertex> pathStack = new Stack<RecMLVertex>();
-	
+		
+		
 		RecMLVertex source = new RecMLVertex();
 		RecMLVertex sink = new RecMLVertex();
 	
@@ -54,6 +57,7 @@ public class MaximumMatching {
 
 		//Add source & sink vertexes and edges
 		addSourceAndSinkVertexes(graph,source,sink);
+		
 		
 		do{
 			//Get a path from source vertex to sink vertex
@@ -118,6 +122,10 @@ public class MaximumMatching {
 		
 		return resultPairList;
 	}
+	
+	
+
+	
 	
 	
 	/**

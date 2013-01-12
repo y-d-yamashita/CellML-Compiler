@@ -48,10 +48,46 @@ public class GraphCreator {
 	/**
 	 * Create a dependency graph
 	 * @param pairList
+	 * @param graph
+	 * @return Dependency graph
+	 * @throws GraphException
+	 */
+	
+	public DirectedGraph<RecMLVertex, RecMLEdge> cretateDependencyGraph(
+			PairList<RecMLVertex,RecMLVertex> pairList,
+			DirectedGraph<RecMLVertex,RecMLEdge> graph) throws GraphException{
+		
+		//Reconnect edges and remove variable vertex
+		for(Pair<RecMLVertex,RecMLVertex> pair:pairList){
+			
+			//Change destination vertexes 
+			for(RecMLEdge e : graph.getEdges(pair.getFirst())){
+				RecMLVertex dst = graph.getDestVertex(e);
+				graph.removeEdge(e);
+				graph.addEdge(e, pair.getSecond(), dst);
+			}
+			//Merge a vertex (expVetex --> var&expVertex)
+			pair.getSecond().setVariable(pair.getFirst().getVariableID());
+			
+			//Remove variable vertex
+			graph.removeVertex(pair.getFirst());
+		}
+		
+		return graph;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Create a dependency graph
+	 * @param pairList
 	 * @param oldGraph
 	 * @return Dependency graph
 	 * @throws GraphException
 	 */
+	/*
 	public DirectedGraph<RecMLVertex, RecMLEdge> cretateDependencyGraph(
 			PairList<RecMLVertex,RecMLVertex> pairList,
 			DirectedGraph<RecMLVertex,RecMLEdge> oldGraph) throws GraphException{
@@ -60,6 +96,7 @@ public class GraphCreator {
 	
 		Map<RecMLVertex,RecMLVertex> oldSrcMap = new HashMap<RecMLVertex, RecMLVertex>();
 		Map<RecMLVertex,RecMLVertex> oldDstMap = new HashMap<RecMLVertex, RecMLVertex>();
+	
 		
 		//Add new vertex of variable and expression
 		for(Pair<RecMLVertex,RecMLVertex> p:pairList){
@@ -78,7 +115,7 @@ public class GraphCreator {
 		
 		return dependencyGraph;
 	}
-	
+	*/
 
 	/**
 	 * Create a dependency graph
@@ -396,7 +433,6 @@ public class GraphCreator {
 			RecMLEquationAndVariableContainer contener
 			)throws GraphException {
 		for(Integer exprID: contener.getEquationIDs()){
-			System.out.println("<<<"+this.getClass().getMethods()+":"+exprID);
 			RecMLVertex v = new RecMLVertex();
 			v.setExpression(exprID);
 			graph.addDestVertex(v);
@@ -414,7 +450,6 @@ public class GraphCreator {
 			List<Integer> equationIDs
 			)throws GraphException {
 		for(Integer exprID: equationIDs){
-			System.out.println("<<<"+this.getClass().getMethods()+":"+exprID);
 			RecMLVertex v = new RecMLVertex();
 			v.setExpression(exprID);
 			graph.addDestVertex(v);

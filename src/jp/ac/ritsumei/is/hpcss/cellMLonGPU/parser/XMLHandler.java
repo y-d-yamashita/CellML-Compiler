@@ -1,5 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser;
 
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -15,13 +17,17 @@ public class XMLHandler extends DefaultHandler {
 
 	/**ソース位置*/
 	private Locator locator;
-
+	
+	/**Charactersの文字列バッファ*/ //Added by y-yamashita
+	private StringBuilder stringBuilder;
+	
 	/**
 	 * XMLパーサインスタンスを作成する.
 	 * @param pAnalyzer
 	 */
 	public XMLHandler(XMLAnalyzer pAnalyzer) {
 		m_pAnalyzer = pAnalyzer;
+		stringBuilder = new StringBuilder();
 	}
 
 	/* (非 Javadoc)
@@ -78,6 +84,24 @@ public class XMLHandler extends DefaultHandler {
 		/*終了タグ名取得*/
 		String pszElementName = localName;
 
+		
+		/*************** Characters() processing **********/ //Added by y-yamashita
+		/*解析クラスに投げる*/
+		String pszContent = stringBuilder.toString();
+		if (pszContent.length() > 0) {
+			try {
+//				System.out.println("characters(" +pszContent+ ")");
+				m_pAnalyzer.findText(pszContent);
+			} catch (Exception e) {
+//				System.err.println("Exception characters\t" + start + "\t" + length);
+//				System.err.println("characters(" +new String(ch, start, length)+ ")");
+				throw new SAXException(getLocatorMsg(), e);
+			}
+		}
+		stringBuilder.setLength(0);
+		/***************************************************/
+		
+		
 		/*解析クラスに投げる*/
 		try {
 			m_pAnalyzer.findTagEnd(pszElementName);
@@ -92,9 +116,13 @@ public class XMLHandler extends DefaultHandler {
 	public void characters(char[] ch, int start, int length)
 	throws SAXException {
 		/*バッファより文字列取得*/
-		String pszContent = new String(ch, start, length).trim();
-
+		//String pszContent = new String(ch, start, length).trim();
+		
+		stringBuilder.append(new String(ch, start, length).trim());
+		
+	
 		/*解析クラスに投げる*/
+/*
 		if (pszContent.length() > 0) {
 			try {
 //				System.out.println("characters(" +pszContent+ ")");
@@ -105,6 +133,7 @@ public class XMLHandler extends DefaultHandler {
 				throw new SAXException(getLocatorMsg(), e);
 			}
 		}
+		*/
 	}
 
 	/**

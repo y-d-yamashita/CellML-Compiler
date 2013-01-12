@@ -118,9 +118,7 @@ public class LeftHandSideTransposition {
 				MathOperator targetSide = null;
 				MathFactor oppositeSide = null;//反対辺はオペレータを含まない可能性があるのでMathFactorとして宣言
 				
-				CCLogger.log(expression.toLegalString());
-				
-				
+								
 				//両辺をコピー.
 				targetSide =(MathOperator) expression.getLeftExpression().getRootFactor();
 				if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){

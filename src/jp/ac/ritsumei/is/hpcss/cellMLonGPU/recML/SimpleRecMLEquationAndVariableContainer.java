@@ -51,8 +51,6 @@ public class SimpleRecMLEquationAndVariableContainer {
 	private void setVariableIDs(){
 		variableIdList = new ArrayList<Integer>();
 		for(SimpleRecMLVariableReference r:varRefList){
-			if(r.getRecMLVarType()==null)
-				CCLogger.log(r.toString());
 			switch(r.getRecMLVarType()){
 			case CVAR_TYPE_RECURVAR:
 			case CVAR_TYPE_ARITHVAR:

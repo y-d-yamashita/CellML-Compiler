@@ -84,25 +84,18 @@ public class ImplicitFunctionTransposition {
 			pNewExpression.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("minus"), strAttr));
 			
 			if(leftSide.matches(eMathMLClassification.MML_OPERATOR)){
-				pNewExpression.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator((MathOperator) leftSide);
-				pNewExpression.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				pNewExpression.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			} else{
 				pNewExpression.addOperand((MathOperand) leftSide);
 			}
 			
 			if(rightSide.matches(eMathMLClassification.MML_OPERATOR)){
-				pNewExpression.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator((MathOperator) rightSide);
-				pNewExpression.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 				pNewExpression.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			} else{
 				pNewExpression.addOperand((MathOperand) rightSide);
 			}
-			
-			
-			
 			pNewExpression.breakOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 	
 			//右辺追加

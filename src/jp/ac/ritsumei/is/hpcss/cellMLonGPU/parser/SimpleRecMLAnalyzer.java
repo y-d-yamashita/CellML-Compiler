@@ -133,7 +133,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	
 	
 	//idから数式取得メソッド
-	public MathExpression getExpressionFromID(int id) {
+	public MathExpression getExpressionFromID(long id) {
 		MathExpression exp = new MathExpression();
 		for(int i=0;i<m_vecMathExpression.size();i++){
 			if(m_vecMathExpression.get(i).getExID() == id){

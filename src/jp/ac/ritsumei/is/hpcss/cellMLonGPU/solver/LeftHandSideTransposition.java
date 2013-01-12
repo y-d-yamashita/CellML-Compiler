@@ -35,7 +35,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  */
 
 //2013.1.12
-//変更　イコール直下にciを持たず,applyが間に入っている可能性があるのでこれを考慮する.
+//変更　applyがオペランドを直下に持つ可能性があるのでこれを考慮する.
 //変更　構造情報を与えるよう変更.SimpleRecML -> C file　テスト完了
 
 //注意　apply直下にapplyを持つような場合は処理できない.

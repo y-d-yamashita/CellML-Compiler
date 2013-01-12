@@ -19,6 +19,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_assign;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_eq;
 
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
@@ -123,16 +124,38 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		pSynProgram.addPreprocessor(pSynInclude2);
 		pSynProgram.addPreprocessor(pSynInclude3);
 		
-		SyntaxFunction pSynMainFunc = this.createMainFunction();
-		pSynProgram.addFunction(pSynMainFunc);
 		
-		//String[] strAttr_Original = new String[] {null, null, null};
-		//pSynMainFunc = this.MainFunc1(pSynMainFunc, strAttr_Original);
-
-//		int LoopNumber = 0;
-		//String[] strAttr_Original = new String[] {null, null, null};
-		//pSynMainFunc = this.MainFunc(pSynMainFunc, LoopNumber, strAttr_Original, null);
+		ArrayList<SyntaxFunction> pSynSolverFuncList = new ArrayList<SyntaxFunction>();
+		
+		//非線形数式に対してソルバー関数を作成
+		for(int i=0;i<m_pRecMLAnalyzer.getExpressionCount();i++){
+			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag()){
 				
+				//ニュートン法計算関数
+				SyntaxFunction pSynNewtonSolverFunc = this.createSolverFunction(m_pRecMLAnalyzer.getExpression(i));
+				//左辺関数
+				SyntaxFunction pSynNewtonSolverFunc2 = this.createLeftFunction(m_pRecMLAnalyzer.getExpression(i));
+				//左辺微分関数
+				SyntaxFunction pSynNewtonSolverFunc3 = this.createDiffFunction(m_pRecMLAnalyzer.getExpression(i));
+				
+				//テンプレート処理するため内部宣言は不要
+				pSynSolverFuncList.add(pSynNewtonSolverFunc);
+				pSynSolverFuncList.add(pSynNewtonSolverFunc2);
+				pSynSolverFuncList.add(pSynNewtonSolverFunc3);
+			}
+			
+		}
+		
+		
+		
+		SyntaxFunction pSynMainFunc = this.createMainFunction();
+
+		pSynProgram.addFunction(pSynMainFunc);
+		for(int i=0;i<pSynSolverFuncList.size();i++){
+			pSynProgram.addFunction(pSynSolverFuncList.get(i));
+		}
+		
+
 		/*RecurVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
 
@@ -524,64 +547,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 							   COMPROG_DEFINE_DATANUM_NAME);
 	}
 
-	//========================================================
-	//createExpressions
-	// 計算式部を生成し，ベクタを返す
-	//
-	//@return
-	// 計算式ベクタ
-	//
-	//@throws
-	// TranslateException
-	//
-	//========================================================
-	/*-----計算式生成メソッド-----*/
-//	protected Vector<SyntaxExpression> createExpressions(String[] strAttrCE)
-//	throws TranslateException, MathException {
-//		//---------------------------------------------
-//		//式生成のための前処理
-//		//---------------------------------------------
-//		/*ベクタを初期化*/
-//		Vector<SyntaxExpression> vecExpressions = new Vector<SyntaxExpression>();
-//
-//		//---------------------------------------------
-//		//式の追加
-//		//---------------------------------------------
-//		/*数式数を取得*/
-////		System.out.println("loop1 = " + strAttr2[0] + "\n");
-//		ArrayList expIndex2 = new ArrayList();
-//		expIndex2 = m_pRecMLAnalyzer.getExpressionWithAttr(strAttrCE);
-//			
-//			for (int j=0; j < expIndex2.size(); j++){
-//				int index = Integer.parseInt(expIndex2.get(j).toString());
-//
-//				/*数式の複製を取得*/
-//				MathExpression pMathExp = m_pRecMLAnalyzer.getExpression(index);
-//			
-//				/*左辺式・右辺式取得*/
-//				MathExpression pLeftExp = pMathExp.getLeftExpression();
-//				MathExpression pRightExp = pMathExp.getRightExpression();
-//	
-//				if (pLeftExp == null || pRightExp == null) {
-//					throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-//								     "failed to parse expression");
-//				}
-//	
-//				/*代入文の形成*/
-//				Math_assign pMathAssign =
-//					(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-//				pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-//				pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-//	
-//				/*新たな計算式を生成*/
-//				MathExpression pNewExp = new MathExpression(pMathAssign);
-//	
-//				/*数式ベクタに追加*/
-//				SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-//				vecExpressions.add(pSyntaxExp);
-//
-//			}
-//	}
+
 			
 			
 	protected SyntaxStatementList createStatementList(String[] strAttrCE) throws TranslateException, MathException {
@@ -613,212 +579,76 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			for (int j=0; j < expIndex2.size(); j++){
 				int index = Integer.parseInt(expIndex2.get(j).toString());
 
+				
 				/*数式の複製を取得*/
 				MathExpression pMathExp = m_pRecMLAnalyzer.getExpression(index);
 			
-				/*左辺式・右辺式取得*/
-				MathExpression pLeftExp = pMathExp.getLeftExpression();
-				MathExpression pRightExp = pMathExp.getRightExpression();
-	
-				if (pLeftExp == null || pRightExp == null) {
-					throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-								     "failed to parse expression");
+				
+				if(pMathExp.getNonlinearFlag()){
+					
+					//含まれる変数リストを作成
+					Vector<Math_ci> varList= new Vector<Math_ci>();
+					pMathExp.getAllVariablesWithSelector(varList);
+					
+					//非線形式である場合,ソルバー関数を呼び出す代入文を作成.
+
+					
+					/*代入文の形成*/
+					Math_assign pMathAssign =
+						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+					
+					pMathAssign.addFactor(pMathExp.getDerivedVariable());
+					
+					String[] strAttr = new String[] {null, null, null, null, null};
+					Math_fn func = (Math_fn) MathFactory.createOperator(MathMLDefinition.getMathOperatorId("fn"), strAttr);
+					Math_ci funcOperand = (Math_ci) MathFactory.createOperand( eMathOperand.MOPD_CI, "newton"+pMathExp.getExID());
+					
+					func.setFuncOperand((MathOperand)funcOperand);
+					
+					for(int i=0;i<varList.size();i++){
+						func.addFactor(varList.get(i));
+					}
+					pMathAssign.addFactor(func);
+					
+					MathExpression pNewExp = new MathExpression(pMathAssign);
+					
+					/*数式ベクタに追加*/
+					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+					vecExpressions.add(pSyntaxExp);
+						
+				} else{
+					
+					/*左辺式・右辺式取得*/
+					MathExpression pLeftExp = pMathExp.getLeftExpression();
+					MathExpression pRightExp = pMathExp.getRightExpression();
+		
+					if (pLeftExp == null || pRightExp == null) {
+						throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
+									     "failed to parse expression");
+					}
+		
+					/*代入文の形成*/
+					Math_assign pMathAssign =
+						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
+					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
+		
+					/*新たな計算式を生成*/
+					MathExpression pNewExp = new MathExpression(pMathAssign);
+		
+					/*数式ベクタに追加*/
+					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+					vecExpressions.add(pSyntaxExp);
+					
+					
 				}
-	
-				/*代入文の形成*/
-				Math_assign pMathAssign =
-					(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-				pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-				pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-	
-				/*新たな計算式を生成*/
-				MathExpression pNewExp = new MathExpression(pMathAssign);
-	
-				/*数式ベクタに追加*/
-				SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-				vecExpressions.add(pSyntaxExp);
+				
 
 			}
-//		//---------------------------------------------
-//		//出力変数から入力変数への代入式の追加
-//		// (TecMLには記述されていない式を追加する)
-//		//---------------------------------------------
-//		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-//			/*代入式の構成*/
-//			Math_assign pMathAssign =
-//				(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-//			pMathAssign.addFactor(m_pTecMLAnalyzer.getM_pInputVar().createCopy());
-//			pMathAssign.addFactor(m_pTecMLAnalyzer.getM_pOutputVar().createCopy());
-//			MathExpression pMathExp = new MathExpression(pMathAssign);
-////
-////			/*添え字の追加*/
-////			this.addIndexToTecMLVariables(pMathExp, i);
-//
-//			/*数式ベクタに追加*/
-//			SyntaxExpression pSyntaxExp = new SyntaxExpression(pMathExp);
-//			vecExpressions.add(pSyntaxExp);
-//		}
+
 		return vecExpressions;
 	}
 
-//	/*-----計算式生成メソッド-----*/
-//	protected Vector<SyntaxExpression> createExpressions()
-//	throws TranslateException, MathException {
-//		//---------------------------------------------
-//		//式生成のための前処理
-//		//---------------------------------------------
-//		/*ベクタを初期化*/
-//		Vector<SyntaxExpression> vecExpressions = new Vector<SyntaxExpression>();
-//
-//		//---------------------------------------------
-//		//式の追加
-//		//---------------------------------------------
-//		/*数式数を取得*/
-//		int nExpressionNum = m_pTecMLAnalyzer.getExpressionCount();
-//
-//		for (int i = 0; i < nExpressionNum; i++) {
-//
-//			/*数式の複製を取得*/
-//			MathExpression pMathExp = m_pTecMLAnalyzer.getExpression(i);
-//
-//			/*左辺式・右辺式取得*/
-//			MathExpression pLeftExp = pMathExp.getLeftExpression();
-//			MathExpression pRightExp = pMathExp.getRightExpression();
-//
-//			if (pLeftExp == null || pRightExp == null) {
-//				throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-//							     "failed to parse expression");
-//			}
-//
-//			/*左辺変数取得*/
-//			MathOperand pLeftVar = (MathOperand)pLeftExp.getFirstVariable();
-//
-//			//-------------------------------------------
-//			//左辺式ごとに数式の追加
-//			//-------------------------------------------
-//			/*微係数変数*/
-//			if (m_pTecMLAnalyzer.isDerivativeVar(pLeftVar)) {
-//
-//				/*微分式の数を取得*/
-//				int nDiffExpNum = m_pCellMLAnalyzer.getM_vecDiffExpression().size();
-//
-//				/*数式の出力*/
-//				for (int j = 0; j < nDiffExpNum; j++) {
-//
-//					/*代入文の形成*/
-//					Math_assign pMathAssign =
-//						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-//					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-//					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-//
-//					/*新たな計算式を生成*/
-//					MathExpression pNewExp = new MathExpression(pMathAssign);
-//
-//					/*TecML変数に添え字を付加*/
-//					this.addIndexToTecMLVariables(pNewExp, j);
-//
-//					/*微分式インスタンスのコピー取得*/
-//					MathExpression pDiffExpression =
-//						m_pCellMLAnalyzer.getM_vecDiffExpression().get(j).createCopy();
-//
-//					/*微分関数の展開*/
-//					this.expandDiffFunction(pNewExp, pDiffExpression);
-//
-//					/*数式ベクタに追加*/
-//					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-//					vecExpressions.add(pSyntaxExp);
-//				}
-//
-//			}
-//
-//			/*微分変数*/
-//			else if (m_pTecMLAnalyzer.isDiffVar(pLeftVar)) {
-//
-//				/*微分式の数を取得*/
-//				int nDiffVarNum = m_pCellMLAnalyzer.getM_vecDiffVar().size();
-//
-//				/*数式の出力*/
-//				for (int j = 0; j < nDiffVarNum; j++) {
-//
-//					/*代入文の形成*/
-//					Math_assign pMathAssign =
-//						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-//					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-//					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-//
-//					/*新たな計算式を生成*/
-//					MathExpression pNewExp = new MathExpression(pMathAssign);
-//
-//					/*添え字の付加*/
-//					this.addIndexToTecMLVariables(pNewExp, j);
-//
-//					/*数式ベクタに追加*/
-//					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-//					vecExpressions.add(pSyntaxExp);
-//				}
-//			}
-//
-//			/*通常変数*/
-//			else if (m_pTecMLAnalyzer.isArithVar(pLeftVar)) {
-//				/*微分式の数を取得*/
-//				int nNonDiffExpNum = m_pCellMLAnalyzer.getM_vecNonDiffExpression().size();
-//
-//				/*数式の出力*/
-//				for (int j = 0; j < nNonDiffExpNum; j++) {
-//
-//					/*代入文の形成*/
-//					Math_assign pMathAssign =
-//						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-//					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-//					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-//
-//					/*新たな計算式を生成*/
-//					MathExpression pNewExp = new MathExpression(pMathAssign);
-//
-//					/*TecML変数に添え字を付加*/
-//					this.addIndexToTecMLVariables(pNewExp, j);
-//
-//					/*微分式インスタンスのコピー取得*/
-//					MathExpression pNonDiffExpression =
-//						m_pCellMLAnalyzer.getM_vecNonDiffExpression().get(j).createCopy();
-//
-//					/*微分関数の展開*/
-//					this.expandNonDiffFunction(pNewExp, pNonDiffExpression);
-//
-//					/*数式ベクタに追加*/
-//					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-//					vecExpressions.add(pSyntaxExp);
-//				}
-//			}
-//
-//			/*定数変数*/
-//			else if (m_pTecMLAnalyzer.isConstVar(pLeftVar)) {
-//			}
-//
-//		}
-//
-//		//---------------------------------------------
-//		//出力変数から入力変数への代入式の追加
-//		// (TecMLには記述されていない式を追加する)
-//		//---------------------------------------------
-//		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-//			/*代入式の構成*/
-//			Math_assign pMathAssign =
-//				(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-//			pMathAssign.addFactor(m_pTecMLAnalyzer.getM_pInputVar().createCopy());
-//			pMathAssign.addFactor(m_pTecMLAnalyzer.getM_pOutputVar().createCopy());
-//			MathExpression pMathExp = new MathExpression(pMathAssign);
-//
-//			/*添え字の追加*/
-//			this.addIndexToTecMLVariables(pMathExp, i);
-//
-//			/*数式ベクタに追加*/
-//			SyntaxExpression pSyntaxExp = new SyntaxExpression(pMathExp);
-//			vecExpressions.add(pSyntaxExp);
-//		}
-//
-//		return vecExpressions;
-//	}
 	
 	/*-----関数展開・変数置換メソッド-----*/
 

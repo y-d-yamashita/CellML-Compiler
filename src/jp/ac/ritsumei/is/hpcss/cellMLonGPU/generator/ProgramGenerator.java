@@ -1,6 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator;
 
 import java.io.PrintWriter;
+import java.util.Vector;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
@@ -25,6 +27,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.NewtonSolver;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCallFunction;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
@@ -293,7 +296,7 @@ public abstract class ProgramGenerator {
 
 		return pSynMainFunc;
 	}
-
+	
 	/**
 	 * データ数ループ構文インスタンスを生成する.
 	 * @param pDataNumVariable データ数変数インスタンス
@@ -637,5 +640,103 @@ public abstract class ProgramGenerator {
 		/*生成したインスタンスを返す*/
 		return pSynFreeCall;
 	}
+	
+	
+	//非線形方程式用ソルバー生成@n-washio
+	/**
+	 * ソルバー関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public SyntaxFunction createSolverFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxFunction pSynSolverFunc = new SyntaxFunction("newton"+exp.getExID(),pSynDoubleType);
+
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		Vector<Math_ci> varList= new Vector<Math_ci>();
+		exp.getAllVariablesWithSelector(varList);
+		
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,varList.size());
+		
+		for(int i=0;i<varList.size();i++){
+			/*引数宣言の追加*/
+			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,varList.get(i));
+			pSynSolverFunc.addParam(pSynArgvDec);
+		}
+		NewtonSolver ns = new NewtonSolver();
+		//デフォルトで設定.手入力も検討.
+		
+		double e = 1.0e-50;//収束判定値
+		int max = 1000;//最大反復数
+		
+		String str = ns.makeNewtonSolver(exp, exp.getDerivedVariable(),e,max);
+		
+		pSynSolverFunc.addString(str);
+
+		return pSynSolverFunc;
+	}
+	/**
+	 * 左辺関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public SyntaxFunction createLeftFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxFunction pSynLeftFunc = new SyntaxFunction("func"+exp.getExID(),pSynDoubleType);
+
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		Vector<Math_ci> varList= new Vector<Math_ci>();
+		exp.getAllVariablesWithSelector(varList);
+		
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,varList.size());
+		
+		for(int i=0;i<varList.size();i++){
+			/*引数宣言の追加*/
+			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,varList.get(i));
+			pSynLeftFunc.addParam(pSynArgvDec);
+		}
+		NewtonSolver ns = new NewtonSolver();
+		String str = ns.makeLeftFunc(exp, exp.getDerivedVariable());
+		
+		pSynLeftFunc.addString(str);
+		return pSynLeftFunc;
+	}
+	/**
+	 * 左辺微分関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public SyntaxFunction createDiffFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxFunction pSynDiffrFunc = new SyntaxFunction("dfunc"+exp.getExID(),pSynDoubleType);
+
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		Vector<Math_ci> varList= new Vector<Math_ci>();
+		exp.getAllVariablesWithSelector(varList);
+		
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,varList.size());
+		
+		for(int i=0;i<varList.size();i++){
+			/*引数宣言の追加*/
+			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,varList.get(i));
+			pSynDiffrFunc.addParam(pSynArgvDec);
+		}
+		NewtonSolver ns = new NewtonSolver();
+		String str = ns.makeDiffFunc(exp, exp.getDerivedVariable());
+		
+		pSynDiffrFunc.addString(str);
+
+		return pSynDiffrFunc;
+	}
+	
 
 }

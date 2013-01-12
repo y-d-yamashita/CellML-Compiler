@@ -216,13 +216,23 @@ public class ODECommonProgramGeneratorMain {
 					Math_ci derivedVar = derivedTable.getMathCI();
 					if(exp.getExID()!=-1){
 						MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
-					
+						exp_new.setDerivedVariable(derivedVar);
 						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
 						//非線形数式であれば非線形フラグがMathExpressionに付与される.
+						//導出変数は数式が保持する.
 						simpleRecMLAnalyzer.setM_vecMathExpression(i, exp_new);
 					}
 				}
 				
+				//非線形数式idを登録
+				Vector<Long> nonLinearId = new Vector<Long>();
+				for(int i=0;i<pairList.size();i++){
+					if(simpleRecMLAnalyzer.getExpression(i).getNonlinearFlag()){
+						nonLinearId.add(simpleRecMLAnalyzer.getExpression(i).getExID());
+					}
+				}
+				
+				//今のところ連立方程式はないものとする.
 				
 				/*StructuredRecMLの表示形式に変更する*/
 				StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
@@ -281,7 +291,16 @@ public class ODECommonProgramGeneratorMain {
 				/*selector削除*/
 				ｒecMLAnalyzer.removeAllSelector();
 				
-				
+				//非線形フラグを付与
+				for(int i=0;i<nonLinearId.size();i++){
+					for(int j=0;j<ｒecMLAnalyzer.getExpressionCount();j++){
+						if(ｒecMLAnalyzer.getExpression(j).getExID()==nonLinearId.get(i)){
+							ｒecMLAnalyzer.getExpression(j).addNonlinearFlag();
+							ｒecMLAnalyzer.getExpression(j).setDerivedVariable(
+									simpleRecMLAnalyzer.getExpressionFromID(ｒecMLAnalyzer.getExpression(j).getExID()).getDerivedVariable());
+						}
+					}
+				}
 				
 				//---------------------------------------------------
 				//目的プログラム生成
@@ -315,7 +334,7 @@ public class ODECommonProgramGeneratorMain {
 							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
 						}
 						/*プログラム出力*/
-					
+						
 						
 						
 						outKST1.println(pSynProgram.toLegalString());

@@ -24,6 +24,9 @@ public class MathExpression {
 
 	/**式のルートとなる要素*/
 	MathFactor m_pRootFactor;
+	
+	/**式が導出する変数*/
+	Math_ci m_derivedVariable;
 
 	/**現在オペランドを探している演算子を保持するスタック*/
 	Stack<MathOperator> m_stackCurOperator;
@@ -812,12 +815,20 @@ public class MathExpression {
 		flag = ((MathOperator) m_pRootFactor).K_checkIndexVariable(index,mci);
 		return flag;
 	}
+	
 	//非線形数式判定メソッド
 	public boolean getNonlinearFlag(){
-		return nonlinear;
+		return this.nonlinear;
 	}
 	public void addNonlinearFlag(){
 		nonlinear=true;
+	}
+	
+	public Math_ci getDerivedVariable(){
+		return this.m_derivedVariable;
+	}
+	public void setDerivedVariable(Math_ci var){
+		this.m_derivedVariable = var;
 	}
 	
 	public int getExpressionNumfromApply() {

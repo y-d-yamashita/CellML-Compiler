@@ -7,11 +7,8 @@ import java.util.Set;
 import java.util.Vector;
 
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.DecisionLoopStructure;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.HighSpeedDecisionLoopStructure;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.RelationPattern;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.MathMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
 
 public class Labelattr extends SimpleRecMLAnalyzer{

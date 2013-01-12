@@ -27,6 +27,7 @@ public class SyntaxFunction extends Syntax {
 	/**内部の構文*/
 	protected Vector<SyntaxDeclaration> m_vecSynDeclaration;
 	protected Vector<SyntaxStatement> m_vecSynStatement;
+	protected String m_str; //追加
 
 	/**
 	 * 関数構文インスタンスを作成する.
@@ -146,7 +147,10 @@ public class SyntaxFunction extends Syntax {
 				strPresentText.append(getIndentString() + it.toLegalString() + StringUtil.lineSep);
 			}
 		}
-
+		
+		//テンプレート構文追加 @n-washio
+		strPresentText.append(this.m_str);
+		
 		/*インデントデクリメント*/
 		decIndent();
 
@@ -314,6 +318,16 @@ public class SyntaxFunction extends Syntax {
 		/*要素追加*/
 		m_vecSynStatement.add(pStatement);
 	}
+	
+	/**
+	 * string構文を追加する.
+	 * @param pStatement 追加する構文インスタンス
+	 */
+	public void addString(String str) {
+		/*要素追加*/
+		m_str = str;
+	}
+
 
 	/**
 	 * 宣言指定子を追加する.

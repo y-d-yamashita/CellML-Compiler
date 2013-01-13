@@ -46,6 +46,15 @@ public class BipartiteGraph<V, E> extends DirectedGraph<V, E>{
 		srcVertexes.remove(v);
 	}
 	
+	@Override
+	public void removeVertex(V v){
+		System.err.println(this.getClass().getName()+"."+
+							Thread.currentThread().getStackTrace()[1].getMethodName()+":");
+		System.err.println("removeSourceVertex(V v) or removeDestVertex(V v) " +
+							"is recomended in BipartiteGraph class");
+		super.removeVertex(v);
+	}
+	
 	/**
 	 * Add vertex to graph and set of dest vertexes
 	 * @param v

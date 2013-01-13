@@ -151,7 +151,6 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		
 		//Register vertex "v"
 		nGroup.put(v,new Node(v));
-		
 		}
 
 	/**
@@ -174,7 +173,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		Node d = getNode(dst);
 		
 		//If new edge "e" was already added, throw exception 
-		if(cGroup.containsKey(e)==true) 
+		if(cGroup.containsKey(e)) 
 			throw new GraphException(this.getClass().getName(),
 					new Throwable().getStackTrace()[0].getMethodName(),
 					"Error:"+e+"["+src+","+dst+"]"+
@@ -253,11 +252,14 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 		 */
 		@Override
 		public Collection<V> getVertexes(E e) {
+			/*--- ToDo: remove after test -----
 			List<V> list = new ArrayList<V>();
 			Connection c = getConnection(e);
 			list.add(c.src);
 			list.add(c.dst);
 			return list;
+			-----------------------------------*/
+			return nGroup.keySet();
 		}
 
 		/**
@@ -316,7 +318,7 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			Node n = nGroup.get(v);
 			list.addAll(n.inEdges);
 			list.addAll(n.outEdges);
-			return list;
+			return list;			
 		}
 
 		/**
@@ -361,7 +363,6 @@ public class DirectedGraph<V,E> implements Graph<V, E>{
 			nGroup.get(c.src).outEdges.remove(e);
 			nGroup.get(c.dst).inEdges.remove(e);
 			cGroup.remove(e);
-
 		}
 
 		public void removeEdge(V src, V dst){

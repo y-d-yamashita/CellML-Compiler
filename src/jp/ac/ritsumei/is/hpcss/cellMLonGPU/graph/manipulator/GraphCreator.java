@@ -11,6 +11,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -323,12 +324,17 @@ public class GraphCreator {
 	
 	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph_Simple(SimpleRecMLEquationAndVariableContainer contener) throws GraphException{
 		BipartiteGraph<RecMLVertex,RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
+
+		
+		Map<Integer,RecMLVertex> varVertexMap = new TreeMap<Integer, RecMLVertex>();
+		Map<Integer,RecMLVertex> equVertexMap = new TreeMap<Integer, RecMLVertex>();
+
 		
 		//Add src side vertexes
-		addSimpleRecMLVariableVertex(graph,contener);
+		addSimpleRecMLVariableVertex(graph,contener,varVertexMap);
 		
 		//Add dst side vertexes
-		addSimpleRecMLExpressionVertex(graph,contener);
+		addSimpleRecMLExpressionVertex(graph,contener,equVertexMap);
 		
 		//Add edges
 		addSimpleRecMLEdges(graph,contener);
@@ -345,6 +351,7 @@ public class GraphCreator {
 	 */
 	private void removeNotConnectedVertexes(
 			Graph<RecMLVertex, RecMLEdge> graph) {
+
 		List<RecMLVertex> removeVertexList = new ArrayList<RecMLVertex>();
 		for(RecMLVertex v:graph.getVertexes()){
 			if(graph.getEdges(v).isEmpty()){
@@ -387,6 +394,24 @@ public class GraphCreator {
 				RecMLVertex src = findVarRecMLVertexes(varID, graph);
 				RecMLVertex dst = findExpRecMLVertexes(exprID, graph);
 				graph.addEdge(edge, src, dst);
+				
+			}
+	}
+
+	private void addSimpleRecMLEdges(
+			Graph<RecMLVertex, RecMLEdge> graph,
+			SimpleRecMLEquationAndVariableContainer contener,
+			Map<Integer,RecMLVertex> varVertexMap,
+			Map<Integer,RecMLVertex> equVertexMap
+			) throws GraphException {
+		for(Integer varID:contener.getVariableIDs())
+			for(Integer exprID:contener.getEqautionIDsOfVariable(varID)){
+				RecMLEdge edge = new RecMLEdge();
+				//RecMLVertex src = findVarRecMLVertexes(varID, graph);
+				//RecMLVertex dst = findExpRecMLVertexes(exprID, graph);
+				//graph.addEdge(edge, src, dst);
+				
+				graph.addEdge(edge, varVertexMap.get(varID), equVertexMap.get(exprID));
 				
 			}
 	}
@@ -467,6 +492,20 @@ public class GraphCreator {
 			v.setExpression(exprID);
 			graph.addDestVertex(v);
 		}
+	}
+
+	
+	private void addSimpleRecMLExpressionVertex(
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph,
+			SimpleRecMLEquationAndVariableContainer contener,
+			Map<Integer,RecMLVertex> equVertexMap
+			)throws GraphException {
+		for(Integer exprID: contener.getEquationIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setExpression(exprID);
+			equVertexMap.put(exprID, v);
+			graph.addDestVertex(v);
+		}
 		
 	}
 
@@ -516,4 +555,19 @@ public class GraphCreator {
 			graph.addSourceVertex(v);
 		}
 	}
+	
+	private void addSimpleRecMLVariableVertex(
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph, 
+			SimpleRecMLEquationAndVariableContainer contener,
+			Map<Integer,RecMLVertex> varVertexMap
+			) throws GraphException {
+		/* Add new vertexes of recvar*/
+		for(Integer varID: contener.getVariableIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setVariable(varID);
+			varVertexMap.put(varID, v);
+			graph.addSourceVertex(v);
+		}
+	}
+
 }

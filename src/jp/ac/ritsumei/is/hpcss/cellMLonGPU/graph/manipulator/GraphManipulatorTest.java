@@ -100,9 +100,9 @@ String xml=
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v6_10x10_yamashita_3.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_3x3_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_5x5_yamashita.recml"
-//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_10x10_yamashita.recml"
+"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_10x10_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_30x30_yamashita.recml"
-"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_64x64_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_64x64_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_512x512_yamashita.recml"
 ;
 

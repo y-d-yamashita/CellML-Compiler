@@ -1236,7 +1236,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	}
 	
 	public void structureAnalysis() throws MathException {
-				
+		
 		HashMap<Integer, Integer> finalAttrLists = getM_HashMapFinalAttrLists();
 		HashMap<Integer, Integer> initendAttrLists = getM_HashMapInitendAttrLists();
 		HashMap<Integer, Integer> condrefAttrLists = getM_HashMapCondrefAttrLists();
@@ -1250,7 +1250,8 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		finalAttrLists,
 		initendAttrLists,
 		condrefAttrLists,
-		getM_HashMapIndexList());
+		getM_HashMapIndexList(),
+		getSimulEquList());
 		
 		lb.getLoopStructure();
 		
@@ -1268,7 +1269,6 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 //			e.printStackTrace();
 //		}	
 	}
-	
 	
 	public int getLoopSize() {
 		int LoopSize = indexHashMapList.size();
@@ -1316,7 +1316,8 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		Vector<MathExpression> v_ex = (Vector<MathExpression>) m_vecMathExpression.clone();
 		m_vecMathExpression.clear();
 		for(int i=0;i<v_ex.size();i++){
-			if(condrefAttrLists.containsKey(i)){
+			int ENum = v_ex.get(i).getExpressionNumfromApply();
+			if(condrefAttrLists.containsKey(ENum)){
 				MathExpression me = v_ex.get(i);
 				ar.add(me);
 			}else{

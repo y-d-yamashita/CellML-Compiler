@@ -7,8 +7,11 @@ import java.util.Set;
 import java.util.Vector;
 
 
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.DecisionLoopStructure;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.HighSpeedDecisionLoopStructure;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.RelationPattern;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.MathMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
 
 public class Labelattr extends SimpleRecMLAnalyzer{
@@ -33,6 +36,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 	HashMap<Integer, HashMap<Integer, String>> m_AttrLists;
 	
 	ArrayList<RelationPattern> m_LoopStructure;
+	ArrayList<ArrayList<Integer>> simulEquList;
 	
 	public Labelattr(
 			HashMap<Integer, HashMap<String, Integer>> NodeHashMap,
@@ -41,20 +45,19 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			HashMap<Integer, Integer> finalAttr,
 			HashMap<Integer, Integer> initendAttr,
 			HashMap<Integer, Integer> CondrefAttr,
-			HashMap<Integer, String> indexList){
+			HashMap<Integer, String> indexList,
+			ArrayList<ArrayList<Integer>> simul){
 
 		m_HashMapNodeList = NodeHashMap;
 		m_HashMapEdgeList = EdgeHashMap;
 		m_VecEquOder = EquOderVec;
-		
 		m_finalAttrEquNumLists = finalAttr;
 		m_initendAttrEquNumLists = initendAttr;
 		m_condrefAttrEquNumLists = CondrefAttr;
-		m_indexList = indexList;
-		
+		m_indexList = indexList;		
 		m_AttrLists = new HashMap<Integer, HashMap<Integer, String>>();
-		
 		m_LoopStructure = new ArrayList<RelationPattern>();
+		simulEquList = simul;
 
 	}
 	
@@ -503,9 +506,6 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 		for(int i=0 ; i < loopSize;i++){
 			attrList.put(i, "null");
 		}
-//		attrList.put(0, "null");
-//		attrList.put(1, "null");
-//		attrList.put(2, "null");
 		
 		/*スタートNodeの属性情報を登録する*/
 		HashMapDownAttrLists.put(-1, attrList);
@@ -514,31 +514,63 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 		for(int i = 0;i<this.m_VecEquOder.size();i++){
 			/*数式番号を取得する*/
 			int checkEquNum = m_VecEquOder.get(i);
-//				/*debug*/
-//				System.out.println("EquNum: " + checkEquNum);
+//			/*debug*/
+//			System.out.println("EquNum: " + checkEquNum);
 			
+			ArrayList<Integer> checkSorceIdList = null;
 			/*数式番号が登録されているNodeIdを取得する*/
 			int checkNodeId;
 			checkNodeId =  getNodeId(checkEquNum, NodeList);
-			
-			/*destにNodeIdを持つsourceのリストを取得する*/
-			ArrayList<Integer> checkSorceIdList;
-			checkSorceIdList =  getSourceId(checkNodeId, EdgeList);
-//			/*debug*/
-//			System.out.println("checkSorceIdList_size:"+checkSorceIdList.size());
+			/*check of simultaneous equations*/
+
+			boolean normalEqu = true;
+			for(ArrayList<Integer> siENumList :simulEquList){
+				if(siENumList.contains(checkEquNum)){
+					normalEqu = false;
+					/*simultaneous equations*/
+					boolean first = true;
+					for(int Enum:siENumList){					
+						int simulNodeId =  getNodeId(Enum, NodeList);
+						ArrayList<Integer> ar = getSourceId(simulNodeId, EdgeList);
+						if(first){
+							checkSorceIdList = ar;
+							first = false;
+						}else{
+							checkSorceIdList.addAll(ar);
+						}
+					}
+				}
+			}
+			if(normalEqu){
+				checkSorceIdList =  getSourceId(checkNodeId, EdgeList);
+			}
+
 			
 			/*checkSorceIdListの0番目のものを決定する属性情報としてまず選択する*/
 			HashMap<Integer, String> cheakAttrList = new HashMap<Integer, String>();
 			int sourceNodeEquNum_0 = NodeList.get(checkSorceIdList.get(0)).get("equation");
+			
+			for(int oder=0;oder<checkSorceIdList.size();oder++){
+				sourceNodeEquNum_0 = NodeList.get(checkSorceIdList.get(oder)).get("equation");
+				if(HashMapDownAttrLists.containsKey(sourceNodeEquNum_0)){
+					break;
+				}
+			}
 			cheakAttrList = HashMapDownAttrLists.get(sourceNodeEquNum_0);
 			
 			/*checkSorceIdListのk番目のものを決定する属性情報とと比較する*/
 			for(int k=0;k<checkSorceIdList.size();k++){
 				int sourceNodeEquNum_k = NodeList.get(checkSorceIdList.get(k)).get("equation");
-//				/*debug*/
-//				System.out.println("sourceNodeEquNum_k:" + sourceNodeEquNum_k );
-				HashMap<Integer, String> sourceAttrList = HashMapDownAttrLists.get(sourceNodeEquNum_k);
-				cheakAttrList = mergeDownAttrList(cheakAttrList,sourceAttrList);	
+//				/*debug*/			
+//				System.out.println(checkEquNum+" , "+sourceNodeEquNum_k);
+		
+				if(HashMapDownAttrLists.containsKey(sourceNodeEquNum_k)){
+//					/*debug*/
+//					System.out.println("sourceNodeEquNum_k:" + sourceNodeEquNum_k );
+					HashMap<Integer, String> sourceAttrList = HashMapDownAttrLists.get(sourceNodeEquNum_k);
+					cheakAttrList = mergeDownAttrList(cheakAttrList,sourceAttrList);	
+				}
+				
 			}	
 			/*finalの処理*/			
 			if(m_finalAttrEquNumLists.containsKey(checkEquNum)){
@@ -607,37 +639,88 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 		for(int i = m_VecEquOder.size()-1; -1<i ;i--){
 			/*数式番号を取得する*/
 			int checkEquNum = m_VecEquOder.get(i);
-//				/*debug*/
-//				System.out.println("EquNum: " + checkEquNum);
+//			/*debug*/
+//			System.out.println("EquNum: " + checkEquNum);
+
+			for(int xx:HashMapUpAttrList.keySet()){
+				System.out.print(xx+", ");
+			}
+			System.out.println();
 			
+			ArrayList<Integer> checkDestIdList = null;
 			/*数式番号が登録されているNodeIdを取得する*/
 			int checkNodeId;
 			checkNodeId =  getNodeId(checkEquNum, NodeList);
 			
+			
+			boolean normalEqu = true;
+			for(ArrayList<Integer> siENumList :simulEquList){
+				if(siENumList.contains(checkEquNum)){
+					normalEqu = false;
+					/*simultaneous equations*/
+					boolean first = true;
+					for(int Enum:siENumList){					
+						int simulNodeId =  getNodeId(Enum, NodeList);
+						ArrayList<Integer> ar = getDestId(simulNodeId, EdgeList);
+						if(first){
+							checkDestIdList = ar;
+							first = false;
+						}else{
+							checkDestIdList.addAll(ar);
+						}
+					}
+				}
+			}
+			if(normalEqu){
+				checkDestIdList =  getDestId(checkNodeId, EdgeList);
+			}
 			/*sourceにNodeIdを持つdestのリストを取得する*/
-			ArrayList<Integer> checkDestIdList;
-			checkDestIdList =  getDestId(checkNodeId, EdgeList);
+//			ArrayList<Integer> checkDestIdList;
+//			checkDestIdList =  getDestId(checkNodeId, EdgeList);
+			
+			
 			HashMap<Integer, String> cheakAttrList = new HashMap<Integer, String>();
 			int destNodeEquNum_0 = NodeList.get(checkDestIdList.get(0)).get("equation");
+
+			for(int oder=0;oder<checkDestIdList.size();oder++){
+				destNodeEquNum_0 = NodeList.get(checkDestIdList.get(oder)).get("equation");
+				if(HashMapUpAttrList.containsKey(destNodeEquNum_0)){
+					System.out.println("destNodeEquNum_0:" + destNodeEquNum_0 );
+					break;
+				}
+			}
+			
 			cheakAttrList = HashMapUpAttrList.get(destNodeEquNum_0);
+			
 			for(int k=0;k<checkDestIdList.size();k++){	
 				int destNodeEquNum_k = NodeList.get(checkDestIdList.get(k)).get("equation");
-				HashMap<Integer, String> destAttrList = HashMapUpAttrList.get(destNodeEquNum_k);
-				cheakAttrList = mergeUpAttrList(cheakAttrList,destAttrList);			
-			}
-				/*finalの処理*/	
-				int intSetLoopNum;			
-				if(m_finalAttrEquNumLists.containsKey(checkEquNum)){
-					intSetLoopNum = m_finalAttrEquNumLists.get(checkEquNum);
-					cheakAttrList.put(intSetLoopNum, "final");
+				
+				if(HashMapUpAttrList.containsKey(destNodeEquNum_k)){
+//					/*debug*/
+					System.out.println("checkEquNum:" + checkEquNum );
+					System.out.println("destNodeEquNum_0:" + destNodeEquNum_0 );
+					System.out.println("sourceNodeEquNum_k:" + destNodeEquNum_k );
+					System.out.println();
+					HashMap<Integer, String> destAttrList = HashMapUpAttrList.get(destNodeEquNum_k);
+					cheakAttrList = mergeUpAttrList(cheakAttrList,destAttrList);
 				}
+		
+			}
+			
+			
+			/*finalの処理*/	
+			int intSetLoopNum;			
+			if(m_finalAttrEquNumLists.containsKey(checkEquNum)){
+				intSetLoopNum = m_finalAttrEquNumLists.get(checkEquNum);
+				cheakAttrList.put(intSetLoopNum, "final");
+			}
 //					/*initに変更する処理を行う*/
 //					/*checkNodeIdのdestのidを取得する*/
 //					/*destにNodeIdを持つsourceのNodeIDを取得する*/
-				if(m_initendAttrEquNumLists.containsKey(checkEquNum)){
-					intSetLoopNum =m_initendAttrEquNumLists.get(checkEquNum);
-					cheakAttrList.put(intSetLoopNum, "initend");
-				}
+			if(m_initendAttrEquNumLists.containsKey(checkEquNum)){
+				intSetLoopNum =m_initendAttrEquNumLists.get(checkEquNum);
+				cheakAttrList.put(intSetLoopNum, "initend");
+			}
 			HashMapUpAttrList.put(checkEquNum,cheakAttrList);
 		}
 		
@@ -703,7 +786,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 	public HashMap<Integer, String> mergeDownAttrList(HashMap<Integer, String> destAttrList, HashMap<Integer, String> sourceAttrList){
 		HashMap<Integer, String> returnAttrList = new HashMap<Integer, String>();
 		
-		for(int i = 0;i<destAttrList.size();i++){
+		for(int i:destAttrList.keySet()){
 			returnAttrList.put(i,selectAttrDownward(destAttrList.get(i),sourceAttrList.get(i)));
 		}
 		

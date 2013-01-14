@@ -4,9 +4,9 @@
 
 
 int main ( int argc , char** argv ) ;
-double newton5 ( double** kX1[n1] , double** Y1[n1] ) ;
-double func5 ( double** kX1[n1] , double** Y1[n1] ) ;
-double dfunc5 ( double** kX1[n1] , double** Y1[n1] ) ;
+double newton5 ( double kX1 , double Y1 ) ;
+double func5 ( double kX1 , double Y1 ) ;
+double dfunc5 ( double kX1 , double Y1 ) ;
 
 int main ( int argc , char** argv ) {
 
@@ -33,7 +33,7 @@ int main ( int argc , char** argv ) {
 	n1 = 0;
 	do{
 
-		Y1[n1] =  (  ( - (double)1 )  * X1[n1] ) ;
+		Y1[n1] =  ( X1[n1] /  ( - (double)1 )  ) ;
 		kX1[n1] = newton5 ( kX1[n1] , Y1[n1] ) ;
 		X1[ ( n1 + 1 ) ] =  ( X1[n1] +  ( kX1[n1] * delt1 )  ) ;
 		t1[ ( n1 + 1 ) ] =  ( t1[n1] + delt1 ) ;
@@ -58,12 +58,12 @@ int main ( int argc , char** argv ) {
 null}
 
 
-double newton5 ( double** kX1[n1] , double** Y1[n1] ) {
+double newton5 ( double kX1 , double Y1 ) {
 
 
 	int max = 0;
 	double eps;
-	double kX1[n1]_next;
+	double kX1_next;
 
 	do {
 
@@ -71,28 +71,28 @@ double newton5 ( double** kX1[n1] , double** Y1[n1] ) {
 		if(max > 1000){
 			printf("error:no convergence\n");break;
 		}
-		kX1[n1]_next = kX1[n1] - ( func5(kX1[n1],Y1[n1]) / 	dfunc5(kX1[n1],Y1[n1]) );
-		kX1[n1] = kX1[n1]_next;
-		eps = func5(kX1[n1],Y1[n1]);
+		kX1_next = kX1 - ( func5(kX1,Y1) / 	dfunc5(kX1,Y1) );
+		kX1 = kX1_next;
+		eps = func5(kX1,Y1);
 
 	} while( eps < -1.0E-50 || 1.0E-50 < eps );
 
-	return kX1[n1];
+	return kX1;
 }
 
 
-double func5 ( double** kX1[n1] , double** Y1[n1] ) {
+double func5 ( double kX1 , double Y1 ) {
 
 
-	return  (  ( kX1[n1] + kX1[n1] )  - Y1[n1] ) ;
+	return  (  ( kX1 * kX1 )  - Y1 ) ;
 
 }
 
 
-double dfunc5 ( double** kX1[n1] , double** Y1[n1] ) {
+double dfunc5 ( double kX1 , double Y1 ) {
 
 
-	return  (  ( (double)1 + (double)1 )  - (double)0 ) ;
+	return  (  (  ( (double)1 * kX1 )  +  ( kX1 * (double)1 )  )  - (double)0 ) ;
 
 }
 

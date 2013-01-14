@@ -131,17 +131,23 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		for(int i=0;i<m_pRecMLAnalyzer.getExpressionCount();i++){
 			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag()){
 				
+				
+				MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
+				
 				//ニュートン法計算関数
-				SyntaxFunction pSynNewtonSolverFunc = this.createSolverFunction(m_pRecMLAnalyzer.getExpression(i));
+				SyntaxFunction pSynNewtonSolverFunc = this.createSolverFunction(exp);
+				
 				//左辺関数
-				SyntaxFunction pSynNewtonSolverFunc2 = this.createLeftFunction(m_pRecMLAnalyzer.getExpression(i));
+				SyntaxFunction pSynNewtonSolverFunc2 = this.createLeftFunction(exp);
 				//左辺微分関数
-				SyntaxFunction pSynNewtonSolverFunc3 = this.createDiffFunction(m_pRecMLAnalyzer.getExpression(i));
+				SyntaxFunction pSynNewtonSolverFunc3 = this.createDiffFunction(exp);
 				
 				//テンプレート処理するため内部宣言は不要
 				pSynSolverFuncList.add(pSynNewtonSolverFunc);
+				
 				pSynSolverFuncList.add(pSynNewtonSolverFunc2);
 				pSynSolverFuncList.add(pSynNewtonSolverFunc3);
+				
 			}
 			
 		}
@@ -562,6 +568,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			
 	protected Vector<SyntaxExpression> createExpressions(String[] strAttrCE)
 	throws TranslateException, MathException {
+		
 		//---------------------------------------------
 		//式生成のための前処理
 		//---------------------------------------------
@@ -586,6 +593,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				
 				if(pMathExp.getNonlinearFlag()){
 					
+					
 					//含まれる変数リストを作成
 					Vector<Math_ci> varList= new Vector<Math_ci>();
 					pMathExp.getAllVariablesWithSelector(varList);
@@ -607,6 +615,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					
 					for(int i=0;i<varList.size();i++){
 						func.addFactor(varList.get(i));
+						
 					}
 					pMathAssign.addFactor(func);
 					

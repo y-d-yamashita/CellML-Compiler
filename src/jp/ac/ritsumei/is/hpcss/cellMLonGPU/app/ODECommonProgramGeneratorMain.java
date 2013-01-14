@@ -298,6 +298,8 @@ public class ODECommonProgramGeneratorMain {
 							ｒecMLAnalyzer.getExpression(j).addNonlinearFlag();
 							ｒecMLAnalyzer.getExpression(j).setDerivedVariable(
 									simpleRecMLAnalyzer.getExpressionFromID(ｒecMLAnalyzer.getExpression(j).getExID()).getDerivedVariable());
+							
+							
 						}
 					}
 				}
@@ -323,6 +325,7 @@ public class ODECommonProgramGeneratorMain {
 				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
 				
 				pSynProgram = pProgramGenerator.getSyntaxProgram();
+				
 				/*プログラム構文出力*/
 				try {
 					/*目的プログラム出力*/
@@ -434,44 +437,7 @@ public class ODECommonProgramGeneratorMain {
 			}
 			
 		}
-		//---------------------------------------------------
-		//出力
-		//---------------------------------------------------
-//		try {
-//			/*目的プログラム出力*/
-//			if (outputRecml != null) {
-//				PrintWriter out = null;
-//				if (programFilename == null) {
-//					out = new PrintWriter(System.out);
-//				} else {
-//					out = new PrintWriter(
-//							new BufferedWriter(new FileWriter(programFilename)));
-//				}
-//
-//				/*出力開始線*/
-//				//out.println("[output]------------------------------------");
-//				/*プログラム出力*/
-//				if(args[0].equals(GENERATOR_KAWABATA)){
-//					if(args[1].equals(FILETYPE_SIMPLE)){
-//						for(String str:outputRecml){
-//							out.println(str);
-//						}
-//					}
-//				}
-//
-//				if (programFilename != null) {
-//					out.close();
-//				} else {
-//					out.flush();
-//				}
-//			}
-//
-//		} catch (Exception e) {
-//			System.err.println(e.getMessage());
-//			e.printStackTrace(System.err);
-//			System.exit(1);
-//		}
-		
+
 	}
 
 	//=============================================================

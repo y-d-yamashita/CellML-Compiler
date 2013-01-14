@@ -234,6 +234,14 @@ public class MathExpression {
 	}
 	
 	/**
+	 *index情報削除
+	 * @throws MathException 
+	 */
+	public void removeIndexInfomation() throws MathException{
+		((MathOperator) m_pRootFactor).removeIndexInfomation(m_pRootFactor);
+	}
+	
+	/**
 	 * 構造情報をapplyへ割り当てる
 	 */
 	public void assignStruAttrToApply(HashMap<Integer, String> attrList){

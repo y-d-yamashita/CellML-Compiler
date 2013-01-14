@@ -650,6 +650,10 @@ public abstract class ProgramGenerator {
 	 */
 	public SyntaxFunction createSolverFunction(MathExpression exp)
 	throws MathException {
+		
+		MathExpression expression = new MathExpression();
+		expression = exp.clone();
+		expression.setExID(exp.getExID());
 		/*関数本体の生成*/
 		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		SyntaxFunction pSynSolverFunc = new SyntaxFunction("newton"+exp.getExID(),pSynDoubleType);
@@ -659,7 +663,13 @@ public abstract class ProgramGenerator {
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		exp.getAllVariablesWithSelector(varList);
 		
-		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,varList.size());
+		for(int i=0;i<varList.size();i++){
+			if(varList.get(i).getIndexList().size()!=0){
+				varList.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,varList.get(i).getM_strPresentText()) );
+			}
+		}
+		
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		
 		for(int i=0;i<varList.size();i++){
 			/*引数宣言の追加*/
@@ -672,8 +682,16 @@ public abstract class ProgramGenerator {
 		double e = 1.0e-50;//収束判定値
 		int max = 1000;//最大反復数
 		
-		String str = ns.makeNewtonSolver(exp, exp.getDerivedVariable(),e,max);
-		
+		//DerivedVariableがセレクターを含む場合,変数名だけを扱うようにする.
+		//同変数名で競合する可能性(x[n],x[n+1]等)は存在しないものとする.
+		String str="";
+		if(exp.getDerivedVariable().getIndexList().size()!=0){
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, exp.getDerivedVariable().getM_strPresentText());
+			str = ns.makeNewtonSolver(expression, var,e,max);
+		}else{
+			str = ns.makeNewtonSolver(expression, exp.getDerivedVariable(),e,max);
+		}
+
 		pSynSolverFunc.addString(str);
 
 		return pSynSolverFunc;
@@ -693,8 +711,13 @@ public abstract class ProgramGenerator {
 		//含まれる変数リストを作成
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		exp.getAllVariablesWithSelector(varList);
+		for(int i=0;i<varList.size();i++){
+			if(varList.get(i).getIndexList().size()!=0){
+				varList.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,varList.get(i).getM_strPresentText()) );
+			}
+		}
 		
-		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,varList.size());
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		
 		for(int i=0;i<varList.size();i++){
 			/*引数宣言の追加*/
@@ -723,7 +746,12 @@ public abstract class ProgramGenerator {
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		exp.getAllVariablesWithSelector(varList);
 		
-		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,varList.size());
+		for(int i=0;i<varList.size();i++){
+			if(varList.get(i).getIndexList().size()!=0){
+				varList.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,varList.get(i).getM_strPresentText()) );
+			}
+		}
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		
 		for(int i=0;i<varList.size();i++){
 			/*引数宣言の追加*/

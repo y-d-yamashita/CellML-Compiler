@@ -110,29 +110,36 @@
 	<ci> n1 </ci>
 </apply>
 	<apply >
+	<divide/>
 	<apply >
-		<times/>
-<apply >
+		<selector/>
+	<ci> X1 </ci>
+	<ci> n1 </ci>
+</apply>
+	<apply >
 	<minus/>
    <apply >
 	<cn> 1 </cn>
 </apply>
 
 </apply>
-	<apply >
-		<selector/>
-	<ci> X1 </ci>
-	<ci> n1 </ci>
-</apply>
-</apply>
+
 </apply>
 </apply>
 <apply  num = "5" loop1 = "inner">
 	<eq/>
 	<apply >
+		<times/>
+<apply >
 		<selector/>
 	<ci> kX1 </ci>
 	<ci> n1 </ci>
+</apply>
+	<apply >
+		<selector/>
+	<ci> kX1 </ci>
+	<ci> n1 </ci>
+</apply>
 </apply>
 	<apply >
 		<selector/>

@@ -548,6 +548,26 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+	
+	/**
+	 * Index情報を削除する
+	 * @throws MathException 
+	 */
+	public void removeIndexInfomation(MathFactor rootFactor) throws MathException{
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERAND)){
+			
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					 m_vecFactor.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, it.getM_strPresentText()));
+					 break;
+				}
+				
+			} else{
+				((MathOperator)it).removeIndexInfomation(rootFactor);
+			}
+		}
+	}
 
 	/**
 	 * 構造情報をapplyへ割り当てる

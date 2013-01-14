@@ -31,17 +31,25 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 public class NewtonSolver {
 	
 	public String makeLeftFunc(MathExpression expression, Math_ci derivedVariable) throws MathException {
+		MathExpression exp = new MathExpression();
+
 		
 		ImplicitFunctionTransposition it = new ImplicitFunctionTransposition();
 		expression = it.transporseExpression(expression, derivedVariable);
+		
+		exp = expression.clone();
+		exp.removeIndexInfomation();
+		
 		String outputStr = "";
-		outputStr=outputStr.concat("\treturn "+expression.getLeftExpression().toLegalString()+";\n");
+		outputStr=outputStr.concat("\treturn "+exp.getLeftExpression().toLegalString()+";\n");
 		outputStr=outputStr.concat("\n");
 		return outputStr;
 		
 	}
 	
 	public String makeDiffFunc(MathExpression expression, Math_ci derivedVariable) throws MathException {
+		MathExpression exp = new MathExpression();
+		
 		
 		Differentiation diff = new Differentiation();
 		MathExpression pDiffExpression = new MathExpression();
@@ -52,8 +60,12 @@ public class NewtonSolver {
 		//数式の左辺を微分して取得
 		pDiffExpression = diff.differentiate(expression ,derivedVariable);
 		
+		exp = pDiffExpression.clone();
+		exp.removeIndexInfomation();
+		
 		String outputStr = "";
-		outputStr=outputStr.concat("\treturn "+pDiffExpression.getLeftExpression().toLegalString()+";\n");
+
+		outputStr=outputStr.concat("\treturn "+exp.getLeftExpression().toLegalString()+";\n");
 		outputStr=outputStr.concat("\n");
 		return outputStr;
 		
@@ -61,16 +73,13 @@ public class NewtonSolver {
 	
 	public String makeNewtonSolver(MathExpression expression, Math_ci derivedVariable, double e, int max) throws MathException {
 		
-		
+		//変数がインデックスを持つ場合,全て削除する必要がある.
+		expression.removeIndexInfomation();
 		
 		//含まれる変数リストを作成
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		expression.getAllVariablesWithSelector(varList);
 		
-		//main関数に記述される呼び出しサンプル
-		
-		String main = "";
-
 		
 		String outputStr = "";
 		//ニュートン法計算関数
@@ -114,113 +123,8 @@ public class NewtonSolver {
 
 		return outputStr;
 	}
-	public String writeNewtonSolver(MathExpression expression, Math_ci derivedVariable, double e, int max) throws MathException {
-		
-		Differentiation diff = new Differentiation();
-		MathExpression pDiffExpression = new MathExpression();
-		//数式の左辺を微分して取得
-		pDiffExpression = diff.differentiate(expression ,derivedVariable);
-		
-		//含まれる変数リストを作成
-		Vector<Math_ci> varList= new Vector<Math_ci>();
-		expression.getAllVariablesWithSelector(varList);
-		
-		//main関数に記述される呼び出しサンプル
-		
-		String main = "";
-		main=main.concat("main() {\n");
-		for(int i=0;i<varList.size();i++){
-			main=main.concat("\tdouble "+varList.get(i).toLegalString()+" = 1.0;\n");
-		}
-		
-		main=main.concat("\t"+derivedVariable.toLegalString()+" = newton"+expression.getExID()+"(");
-		for(int i=0;i<varList.size();i++){
-			
-			main=main.concat(varList.get(i).toLegalString());
-			if(i!=varList.size()-1)main=main.concat(",");
-		}
-		main=main.concat(");\n");
-		main=main.concat("}\n");
-		main=main.concat("\n");
-		
-		
-		String outputStr = "";
-		//ニュートン法計算関数
-		outputStr=outputStr.concat("double newton"+expression.getExID()+"(");
-		
-		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat("double "+varList.get(i).toLegalString());
-			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
-		}
-		outputStr=outputStr.concat(") {\n");
-		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("\tint max = 0;\n");
-		outputStr=outputStr.concat("\tdouble eps;\n");
-		outputStr=outputStr.concat("\tdouble " +derivedVariable.toLegalString()+"_next;\n");
-		
-		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("\tdo {\n");
-		outputStr=outputStr.concat("\t\tmax ++;\n");
-		outputStr=outputStr.concat("\t\tif(max > "+max+"){\n");
-		outputStr=outputStr.concat("\t\t\tprintf(\"error:no convergence\\n\");break;\n");
-		outputStr=outputStr.concat("\t\t}\n");
-		outputStr=outputStr.concat("\t\t"+derivedVariable.toLegalString()+"_next = "+derivedVariable.toLegalString()+" - ( func"+expression.getExID()+ "(");
-		
-		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat(varList.get(i).toLegalString());
-			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
-		}
-		outputStr=outputStr.concat(") / ");
-		outputStr=outputStr.concat( "dfunc"+expression.getExID()+ "(");
-		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat(varList.get(i).toLegalString());
-			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
-		}
-		outputStr=outputStr.concat(") );\n");
-		outputStr=outputStr.concat("\t\t"+derivedVariable.toLegalString()+" = "+derivedVariable.toLegalString()+"_next;\n");
-		
-		outputStr=outputStr.concat("\t\teps = func" +expression.getExID()+ "(");
-		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat(varList.get(i).toLegalString());
-			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
-		}
-		outputStr=outputStr.concat(");\n");
-		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("\t} while( eps < "+-1.0*e+" || "+e+" < eps );\n");
-		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("\treturn "+ derivedVariable.toLegalString()+";\n");
-		outputStr=outputStr.concat("}\n");
-		outputStr=outputStr.concat("\n");
-		
-		//左辺関数
-		outputStr=outputStr.concat( "double func"+expression.getExID()+ "(");
-		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat("double "+varList.get(i).toLegalString());
-			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
-		}
-		outputStr=outputStr.concat(") {\n");
-		outputStr=outputStr.concat("\treturn "+expression.getLeftExpression().toLegalString()+";\n");
-		outputStr=outputStr.concat("}\n");
-		
-		
-		//左辺微分関数
-		outputStr=outputStr.concat( "double dfunc"+expression.getExID()+ "(");
-		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat("double "+varList.get(i).toLegalString());
-			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
-		}
-		outputStr=outputStr.concat(") {\n");
-		outputStr=outputStr.concat("\treturn "+pDiffExpression.getLeftExpression().toLegalString()+";\n");
-		outputStr=outputStr.concat("}\n");
-		
-		
-		//標準出力
-		//System.out.println(main);
-		//System.out.println(outputStr);
-		
-		return outputStr;
-	}
-public static void main(String[] args) throws MathException {
+
+	public static void main(String[] args) throws MathException {
 		
 		//数式の属性情報
 		String[] strAttr = new String[] {"null", "null", "null", "null", "null"};

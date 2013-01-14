@@ -167,25 +167,24 @@ public class Math_ci extends MathOperand {
 		/*Selector要素*/
 		if(m_vecIndexListFactor.size()>0){
 			/*文字列を追加していく*/
-			strExpression = "\t" + "<selector/>" + "\n";
+			strExpression = "\t" + "<apply>" + "\n";
+			strExpression += "\t" + "<selector/>" + "\n";
 			strExpression += "\t" + "<ci> " + m_strPresentText + " </ci>" + "\n";
 
 			/*Selector要素*/
 			/*配列インデックスの追加*/
 			for(int i=0; i < m_vecIndexListFactor.size(); i++) {
-				if(i != 0){
-					strExpression += "\n";
-				}
 				/*項を追加*/
-				strExpression += "\t" +(m_vecIndexListFactor.get(i)).toMathMLString();
+				strExpression += "\t" +(m_vecIndexListFactor.get(i)).toMathMLString() + "\n";
 			}
+			
+			strExpression += "\t" + "</apply>";
 			
 		}else{
 			strExpression += "<ci> " + m_strPresentText + " </ci>";
 		}
 		return 	strExpression;
 	}
-
 	/* override hashcode and equals of Math_ci to make objects work as hash map keys */
 	@Override
 	public int hashCode() {

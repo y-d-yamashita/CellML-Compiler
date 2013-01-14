@@ -173,7 +173,7 @@ public class ODECommonProgramGeneratorMain {
 		if(args[0].equals(GENERATOR_RUSTY)){
 			
 		}
-		
+
 		ArrayList<String> outputRecml = new ArrayList<String>();
 		/*Kawabata作成生成系*/
 		if(args[0].equals(GENERATOR_KAWABATA)){
@@ -269,8 +269,6 @@ public class ODECommonProgramGeneratorMain {
 					System.exit(1);
 				}
 				
-				
-				
 				/*StructuredRecML*/
 				RecMLAnalyzer ｒecMLAnalyzer = new RecMLAnalyzer();
 				handler = new XMLHandler(ｒecMLAnalyzer);
@@ -284,12 +282,16 @@ public class ODECommonProgramGeneratorMain {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+			
+
 				
 //				/*selector内cnのInteger*/
 				ｒecMLAnalyzer.changeAllSelectorInteger();
 				/*selector削除*/
 				ｒecMLAnalyzer.removeAllSelector();
+				
+				
+
 				
 				//非線形フラグを付与
 				for(int i=0;i<nonLinearId.size();i++){

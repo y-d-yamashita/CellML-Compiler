@@ -528,13 +528,14 @@ public abstract class MathOperator extends MathFactor {
 				if(((MathOperator)it).matches(eMathOperator.MOP_SELECTOR)){
 					/*selectorの親要素検索*/
 					MathOperator parent = findParentOperator((MathOperator)rootFactor, it);
-					int setNum = parent.findObj((MathOperator)it);
+					MathOperator grandparent = findParentOperator((MathOperator)rootFactor, parent);
+					int setNum = grandparent.findObj((MathOperator)parent);
 					/*selectorの子要素を取得*/
 					Math_ci selectorFactor = null;
 					for(MathFactor it2 : ((MathOperator)it).m_vecFactor){
 						if(selectorFactor == null){
 							/*１つ目ならselector親要素につなげる*/
-							parent.replace(setNum,it2);
+							grandparent.replace(setNum,it2);
 							MathOperand temp = (MathOperand)it2;
 							selectorFactor = (Math_ci)temp;
 						}else{
@@ -548,6 +549,8 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+	
+	
 	
 	/**
 	 * Index情報を削除する

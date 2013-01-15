@@ -83,12 +83,24 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 
 	/*共通変数*/
 	protected Math_ci m_pDefinedDataSizeVar;		//データ数として#defineされる定数
-
+	
+	public Vector<Math_ci> m_vecMaxArraySizeName;
+	public Vector<Math_ci> getMaxArraySizeName() {
+		return m_vecMaxArraySizeName;
+	}
+	public void setMaxArraySizeName(int maxLoopIndexNum) 
+	throws MathException {
+		for (int i=0; i<maxLoopIndexNum; i++) {
+			m_vecMaxArraySizeName.add( (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, COMPROG_DEFINE_MAXARRAYNUM_NAME ));
+		}
+	}
+	
 	/*-----コンストラクタ-----*/
 	public ODECommonProgramGenerator(RecMLAnalyzer pRecMLAnalyzer)
 	throws MathException 	{
 		super(pRecMLAnalyzer);
 		m_pDefinedDataSizeVar = null;
+		m_vecMaxArraySizeName = new Vector<Math_ci>();
 		initialize();
 	}
 
@@ -127,11 +139,12 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		
 		ArrayList<SyntaxFunction> pSynSolverFuncList = new ArrayList<SyntaxFunction>();
 		
+		ArrayList<Long> simulIDList = new ArrayList<Long>();
+		
 		//非線形数式に対してソルバー関数を作成
 		for(int i=0;i<m_pRecMLAnalyzer.getExpressionCount();i++){
-			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag()){
-				
-				
+			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag() && m_pRecMLAnalyzer.getExpression(i).getSimulID()==-1){
+
 				MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
 				
 				//ニュートン法計算関数
@@ -148,7 +161,42 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynSolverFuncList.add(pSynNewtonSolverFunc2);
 				pSynSolverFuncList.add(pSynNewtonSolverFunc3);
 				
+			}else if(m_pRecMLAnalyzer.getExpression(i).getSimulID()!=-1){
+				
+				//連立方程式処理
+				//ここで重複処理をする.(idにつき3つ生成)
+				boolean flag=false;
+				for(int j=0;j<simulIDList.size();j++){
+					if(m_pRecMLAnalyzer.getExpression(i).getSimulID()==simulIDList.get(j)){
+						flag=true;
+					}
+				}
+				if(!flag){
+					MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
+					
+					//ニュートン法計算関数
+					SyntaxFunction pSynSimulNewtonSolverFunc = this.createSimulNewtonFunction(exp);
+					
+					//左辺関数
+					SyntaxFunction pSynSimulNewtonSolverFunc2 = this.createSimulFunction(exp);
+					//左辺微分関数
+					SyntaxFunction pSynSimulNewtonSolverFunc3 = this.createJacobiFunction(exp);
+					
+					//テンプレート処理するため内部宣言は不要
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc);
+					
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc2);
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc3);
+					
+				}
+				
+				simulIDList.add(m_pRecMLAnalyzer.getExpression(i).getSimulID());
+				
 			}
+			
+			
+			
+			
 			
 		}
 		
@@ -160,27 +208,21 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		for(int i=0;i<pSynSolverFuncList.size();i++){
 			pSynProgram.addFunction(pSynSolverFuncList.get(i));
 		}
-		
+
 
 		/*RecurVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
 
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
-			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
 			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
 			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapRecurVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
-			String parenthesis = "";
-			for(int j = 0; j < parenthesisnum-1; j++){
-				parenthesis += "[" + COMPROG_DEFINE_MAXARRAYNUM_NAME + "]";
-			}
+			int parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
+			
+			/*double型ポインタ配列構文生成*/
+			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, parenthesisnum);
 			
 			/*宣言用変数の生成*/
 			Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-					m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i).toLegalString()+ parenthesis);
+					m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i).toLegalString());
 
 			/*宣言の生成*/
 			SyntaxDeclaration pSynVarDec =
@@ -192,23 +234,17 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		
 		/*ArithVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
-
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
 			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
-			String parenthesis = "";
-			for(int j = 0; j < parenthesisnum-1; j++){
-				parenthesis += "[" + COMPROG_DEFINE_MAXARRAYNUM_NAME + "]";
-			}
+			HashMap<Math_ci, Integer> ArithVarHM_G = new HashMap<Math_ci, Integer>();
+			ArithVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
+			int parenthesisnum = ArithVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
+			
+			/*double型ポインタ配列構文生成*/
+			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, parenthesisnum);
 			
 			/*宣言用変数の生成*/
 			Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-					m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i).toLegalString()+ parenthesis);
+					m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i).toLegalString());
 
 			/*宣言の生成*/
 			SyntaxDeclaration pSynVarDec =
@@ -221,8 +257,12 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		/*Constの宣言*/
 		for (int i = 0; i <m_pRecMLAnalyzer.getM_ArrayListConstVar().size(); i++) {
 
+			HashMap<Math_ci, Integer> ConstVarHM_G = new HashMap<Math_ci, Integer>();
+			ConstVarHM_G = m_pRecMLAnalyzer.getM_HashMapConstVar();
+			int parenthesisnum = ConstVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i));
+			
 			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
+			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, parenthesisnum);
 
 			/*宣言用変数の生成*/
 			Math_ci pDecVar =
@@ -240,74 +280,101 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		/*OutputVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
 			
-			/*[]の数を取得する*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
+			HashMap<Math_ci, Integer> OutputVarHM_G = new HashMap<Math_ci, Integer>();
+			OutputVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
+			int parenthesisnum = OutputVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
 
-			if(parenthesisnum < 2){
-				/*double型ポインタ配列構文生成*/
-				SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
-				/*宣言用変数の生成*/
-				Math_ci pDecVar =
+			/*double型ポインタ配列構文生成*/
+			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, parenthesisnum);
+			
+			/*宣言用変数の生成*/
+			Math_ci pDecVar =
 					(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
 							m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalString());
+			
+			/*宣言の生成*/
+			SyntaxDeclaration pSynConstVarDec =
+				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
-				/*宣言の生成*/
-				SyntaxDeclaration pSynConstVarDec =
-					new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-				/*宣言の追加*/
-				pSynMainFunc.addDeclaration(pSynConstVarDec);
-			}else{
-				/*double型ポインタ配列構文生成*/
-				SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
-				String parenthesis = "";
-				for(int j = 0; j < parenthesisnum-2; j++){
-					parenthesis += "[" + COMPROG_DEFINE_MAXARRAYNUM_NAME + "]";
-				}
-				
-				/*宣言用変数の生成*/
-				Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalString()+ parenthesis);
-	
-				/*宣言の生成*/
-				SyntaxDeclaration pSynVarDec =
-					new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-	
-				/*宣言の追加*/
-				pSynMainFunc.addDeclaration(pSynVarDec);
-			}
+			/*宣言の追加*/
+			pSynMainFunc.addDeclaration(pSynConstVarDec);
 		}
 		
-		/*RecurVar変数へのmallocによるメモリ割り当て*/
+		/*OutputVar変数の宣言*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListStepVar().size(); i++) {
+			
+			HashMap<Math_ci, Integer> StepVarHM_G = new HashMap<Math_ci, Integer>();
+			StepVarHM_G = m_pRecMLAnalyzer.getM_HashMapStepVar();
+			int parenthesisnum = StepVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListStepVar().get(i));
+
+			/*double型ポインタ配列構文生成*/
+			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_INT, parenthesisnum);
+			
+			/*宣言用変数の生成*/
+			Math_ci pDecVar =
+					(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+							m_pRecMLAnalyzer.getM_ArrayListStepVar().get(i).toLegalString());
+			
+			/*宣言の生成*/
+			SyntaxDeclaration pSynConstVarDec =
+				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
+
+			/*宣言の追加*/
+			pSynMainFunc.addDeclaration(pSynConstVarDec);
+		}
+		
+		//------------------------------------------------------
+		// Memory allocation codes for the simulation variables
+		//------------------------------------------------------
+
+		/* Get the maximum number of loop indices in the Recurrence Relation file and set max index number names */
+		int maxIndexNum = m_pRecMLAnalyzer.getM_HashMapIndexList().size();
+		this.setMaxArraySizeName(maxIndexNum);
+		String strIndex0 = "i0";
+		String strIndex1 = "i1";
+		Math_ci loopIndex0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strIndex0);
+		Math_ci loopIndex1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strIndex1);
+		
+		/*Declare a blank loop for allocating one-dimensional arrays*/
+		SyntaxControl pSynMallocBlank = createSyntaxBlankLoop();
+		
+		/*Declare the for loops for allocating multidimensional arrays*/
+		SyntaxControl pSynMallocFor1 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(0),loopIndex0);
+		SyntaxControl pSynMallocFor2 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(1),loopIndex1);
+		
+		/*Declare the for loops for freeing multidimensional arrays*/
+		SyntaxControl pSynFreeFor1 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(0),loopIndex0);
+		SyntaxControl pSynFreeFor2 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(1),loopIndex1);
+
+		
+		/*RecurVar変数へのmallocによるメモリ割り当て: Use the multidimensional arrays*/
+		//TODO: the variable name can be created as dynamic and changes during compilation using Java Reflection
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
 
 			int parenthesisnum = 0;
 			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
 			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapRecurVar();
 			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
-			if(parenthesisnum ==1 ){
-				Math_ci pMathRecurSize =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_DEFINE_MAXARRAYNUM_NAME);
-				
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i),
-						pMathRecurSize));
-				
-			}else if(1 < parenthesisnum){
-				Math_times pMathTimes =
-					(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-				for(int j = 0; j < parenthesisnum; j++){
-					Math_ci pMathRecurSize =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								COMPROG_DEFINE_MAXARRAYNUM_NAME);
-					pMathTimes.addFactor(pMathRecurSize);
-				}
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i),
-						pMathTimes));
+			Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i).toLegalString());
+			Math_ci pNewVariable0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "["+ strIndex0 +"]");
+			Math_ci pNewVariable1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "["+ strIndex0 +"]" + "["+ strIndex1 +"]");
+			
+			/* Allocate and free memory for different number of loop indices*/
+			if(parenthesisnum == 1 ){	
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 1));	
+				/* free 1D memory after use */
+				pSynMallocBlank.addStatement(createFree(pVariable));
+			}else if(parenthesisnum == 2){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+				/* free 2D memory after use */
+				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+			}else if(parenthesisnum == 3){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
+				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
+				/* free 3D memory after use */
+				pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
 			}
 		}
 			
@@ -318,25 +385,56 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
 			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
 			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
-			if(parenthesisnum ==1 ){
-				Math_ci pMathRecurSize =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_DEFINE_MAXARRAYNUM_NAME);
-				
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i),
-						pMathRecurSize));
-				
-			}else if(1 < parenthesisnum){
-				Math_times pMathTimes =
-					(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-				for(int j = 0; j < parenthesisnum; j++){
-					Math_ci pMathRecurSize =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								COMPROG_DEFINE_MAXARRAYNUM_NAME);
-					pMathTimes.addFactor(pMathRecurSize);
-				}
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i),
-						pMathTimes));
+			Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i).toLegalString());
+			Math_ci pNewVariable0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "[i0]");
+			Math_ci pNewVariable1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "[i0][i1]");
+			
+			/* Allocate and free memory for different number of loop indices*/
+			if(parenthesisnum == 1 ){	
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 1));		
+				/* free 1D memory after use */
+				pSynMallocBlank.addStatement(createFree(pVariable));
+			}else if(parenthesisnum == 2){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+				/* free 2D memory after use */
+				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+			}else if(parenthesisnum == 3){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
+				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
+				/* free 3D memory after use */
+				pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
+			}
+		}
+		
+		/*ConstVar変数へのmallocによるメモリ割り当て*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListConstVar().size(); i++) {
+
+			int parenthesisnum = 0;
+			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
+			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapConstVar();
+			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i));
+			Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i).toLegalString());
+			Math_ci pNewVariable0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "[i0]");
+			Math_ci pNewVariable1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "[i0][i1]");
+			
+			/* Allocate and free memory for different number of loop indices*/
+			if(parenthesisnum == 1){	
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 1));		
+				/* free 1D memory after use */
+				pSynMallocBlank.addStatement(createFree(pVariable));
+			}else if(parenthesisnum == 2){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+				/* free 2D memory after use */
+				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+			}else if(parenthesisnum == 3){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
+				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
+				/* free 3D memory after use */
+				pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
 			}
 		}
 		
@@ -348,59 +446,53 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
 			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
 			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
-
-			if(parenthesisnum-1 == 1 ){
-				Math_ci pMathRecurSize =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_DEFINE_MAXARRAYNUM_NAME);
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i),
-						pMathRecurSize));
-				
-			}else if(1 < parenthesisnum-1){
-				Math_times pMathTimes =
-					(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-				for(int j = 0; j < parenthesisnum; j++){
-					Math_ci pMathRecurSize =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								COMPROG_DEFINE_MAXARRAYNUM_NAME);
-					pMathTimes.addFactor(pMathRecurSize);
-				}
-				pSynMainFunc.addStatement(createMalloc(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i),
-						pMathTimes));
+			Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalString());
+			Math_ci pNewVariable0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "[i0]");
+			Math_ci pNewVariable1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, pVariable.toLegalString() + "[i0][i1]");
+			
+			if(parenthesisnum == 1 ){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 1));		
+				/* free 1D memory after use */
+				pSynMallocBlank.addStatement(createFree(pVariable));
+			}else if(parenthesisnum == 2 ){
+				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
+				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+				/* free 2D memory after use */
+				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
 			}
 		}
 		
-		
+		/* Put the memory allocation for loops in the main program. Check for the number of loop index*/
+		if (m_pRecMLAnalyzer.getM_HashMapIndexList().size() == 2) {
+			pSynMainFunc.addStatement(pSynMallocFor1);
+		}
+		if (m_pRecMLAnalyzer.getM_HashMapIndexList().size() == 3) {
+			pSynMainFunc.addStatement(pSynMallocFor1);
+			pSynMallocFor1.addStatement(pSynMallocFor2);
+		}
 		
 		int MaxLoopNumber = 1;
 		pSynMainFunc.addStatement(this.MainFuncSyntaxStatementList(MaxLoopNumber));
 		
 		
-//		----------------------------------------------
+		//----------------------------------------------
 		//free関数呼び出しの追加
 		//----------------------------------------------
-		/*RecurVar変数のfree*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createFree( m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i)));
+		
+		/* Put the memory release for loops in the main program. Check for the number of loop index*/
+		if (m_pRecMLAnalyzer.getM_HashMapIndexList().size() == 1) {
+			pSynMainFunc.addStatement(pSynMallocBlank);
 		}
-		/*ArithVar変数のfree*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createFree( m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i)));
+		else if (m_pRecMLAnalyzer.getM_HashMapIndexList().size() == 2) {
+			pSynMainFunc.addStatement(pSynMallocBlank);
+			pSynMainFunc.addStatement(pSynFreeFor1);
 		}
-		/*OutputVar変数のfree*/
-		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
-			/*宣言の追加*/
-			int parenthesisnum = 0;
-			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
-			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
-			parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
-			if(1 < parenthesisnum){
-				pSynMainFunc.addStatement(createFree( m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i)));
-			}
-		}
-
+		else if (m_pRecMLAnalyzer.getM_HashMapIndexList().size() == 3) {
+			pSynMainFunc.addStatement(pSynMallocBlank);
+			pSynMainFunc.addStatement(pSynFreeFor1);
+			pSynFreeFor1.addStatement(pSynFreeFor2);
+		}	
+		
 		/*プログラム構文を返す*/
 		return pSynProgram;
 	}
@@ -589,9 +681,9 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				
 				/*数式の複製を取得*/
 				MathExpression pMathExp = m_pRecMLAnalyzer.getExpression(index);
+			
 				
-				
-				if(pMathExp.getNonlinearFlag()){
+				if(pMathExp.getNonlinearFlag() && pMathExp.getSimulID()==-1){
 					
 					
 					//含まれる変数リストを作成
@@ -600,6 +692,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					
 					//非線形式である場合,ソルバー関数を呼び出す代入文を作成.
 
+					
 					/*代入文の形成*/
 					Math_assign pMathAssign =
 						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
@@ -613,7 +706,6 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					func.setFuncOperand((MathOperand)funcOperand);
 					
 					for(int i=0;i<varList.size();i++){
-						//1数式なのでソートは不要.
 						func.addFactor(varList.get(i));
 						
 					}
@@ -625,7 +717,93 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
 					vecExpressions.add(pSyntaxExp);
 						
-				} else{
+				} 
+				else if(pMathExp.getSimulID()!=-1){
+					
+					//連立方程式処理
+					
+					int SimulEquNum = -1;
+					for(int k=0;k<m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();k++){
+						if(m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(k).getExID()==pMathExp.getExID()){
+							SimulEquNum=k;
+						}
+					}
+					
+					if(SimulEquNum==0){
+						
+						
+						//連立成分の最初の式であれば,ソルバーをコールする構文を付加
+						
+
+						Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+						for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();i++){
+							derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(i).getDerivedVariable());
+						}
+
+						String[] strAttr = new String[] {null, null, null, null, null};
+						Math_fn func = (Math_fn) MathFactory.createOperator(MathMLDefinition.getMathOperatorId("fn"), strAttr);
+						Math_ci funcOperand = (Math_ci) MathFactory.createOperand( eMathOperand.MOPD_CI, "simulNewton"+pMathExp.getSimulID());
+						
+						func.setFuncOperand((MathOperand)funcOperand);
+						
+						func.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"));
+						
+						
+						//含まれる変数リストを作成
+						Vector<Math_ci> varList;
+						Vector<Math_ci> varList_all = new Vector<Math_ci>();
+						
+						
+						//連立成分の数式全ての変数を格納する.
+						for(int k=0;k<m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();k++){
+							
+							varList = new Vector<Math_ci>();
+							//各数式の変数リストを取得
+							m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(k).getAllVariablesWithSelector(varList);
+							
+							for(int i=0;i<varList.size();i++){
+		
+								//導出変数でなく重複しない場合,引数リストに追加 
+								boolean overlap=false;
+								for(int j1=0;j1<derivedVarList.size();j1++){
+									if(varList.get(i).getName().equals(derivedVarList.get(j1).getName())){
+										overlap=true;
+									}
+								}
+								if(!overlap){
+									varList_all.add(varList.get(i));
+								}
+							}
+						}
+						for(int k=0;k<varList_all.size();k++){
+							func.addFactor(varList_all.get(k));
+						}
+						
+						
+						/*新たな計算式を生成*/
+						MathExpression pNewExp = new MathExpression(func);
+						/*数式ベクタに追加*/
+						SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+						vecExpressions.add(pSyntaxExp);
+					}
+					
+					
+					/*代入文の形成*/
+					
+					Math_assign pMathAssign2 =
+							(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+					
+					pMathAssign2.addFactor(pMathExp.getDerivedVariable());
+					pMathAssign2.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet["+SimulEquNum+"]"));
+		
+					/*新たな計算式を生成*/
+					MathExpression pNewExp = new MathExpression(pMathAssign2);
+		
+					/*数式ベクタに追加*/
+					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+					vecExpressions.add(pSyntaxExp);
+					
+				}else{
 					
 					/*左辺式・右辺式取得*/
 					MathExpression pLeftExp = pMathExp.getLeftExpression();

@@ -207,6 +207,7 @@ public class ODECommonProgramGeneratorMain {
 					int expID = pairList.get(i).getSecond().getEquId();
 					int varID = pairList.get(i).getFirst().getVarId();
 					
+					
 					//数式を取得
 					MathExpression exp = simpleRecMLAnalyzer.getExpressionFromID(expID);
 					 
@@ -232,7 +233,66 @@ public class ODECommonProgramGeneratorMain {
 					}
 				}
 				
-				//今のところ連立方程式はないものとする.
+				
+				//連立成分を抽出
+				ArrayList<ArrayList<Integer>> simulEquList = simpleRecMLAnalyzer.getSimulEquList();
+				
+				
+				//idでソート(なんとなくバブル)
+				for(int i=0;i<simulEquList.size();i++){
+					
+					for(int j=0;j<simulEquList.get(i).size();j++){
+						
+						Integer temp;
+						for(int x=0;x<simulEquList.get(i).size()-1;x++){
+							
+							for(int y=simulEquList.get(i).size()-1;y>x;y--){
+								if(simulEquList.get(i).get(y)<simulEquList.get(i).get(y-1)){
+									temp=simulEquList.get(i).get(y);
+									simulEquList.get(i).set(y, simulEquList.get(i).get(y-1));
+									simulEquList.get(i).set(y-1, temp);
+								}
+							}
+							
+						}
+
+					}
+					
+				}
+				
+				
+				
+				
+				
+				
+				ArrayList<ArrayList<MathExpression>> simulEquationList = new ArrayList<ArrayList<MathExpression>>();
+				
+				//連立成分のidから数式をベクターに格納
+				ArrayList<MathExpression> simulEquSet;
+				
+				for(int i=0;i<simulEquList.size();i++){
+					simulEquSet = new ArrayList<MathExpression>();
+					for(int j=0;j<simulEquList.get(i).size();j++){
+						
+						simpleRecMLAnalyzer.getExpressionFromID((long)simulEquList.get(i).get(j)).setSimulID(i);//連立id付加
+						simulEquSet.add(simpleRecMLAnalyzer.getExpressionFromID((long)simulEquList.get(i).get(j)));
+						
+					}
+					
+					
+					
+					
+					simulEquationList.add(simulEquSet);
+					
+				}
+				
+				//各連立成分を数式idでソートしておく. 
+				
+				
+				
+				
+				
+				simpleRecMLAnalyzer.setSimulEquationList(simulEquationList);
 				
 				/*StructuredRecMLの表示形式に変更する*/
 				StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
@@ -298,13 +358,44 @@ public class ODECommonProgramGeneratorMain {
 					for(int j=0;j<ｒecMLAnalyzer.getExpressionCount();j++){
 						if(ｒecMLAnalyzer.getExpression(j).getExID()==nonLinearId.get(i)){
 							ｒecMLAnalyzer.getExpression(j).addNonlinearFlag();
-							ｒecMLAnalyzer.getExpression(j).setDerivedVariable(
-									simpleRecMLAnalyzer.getExpressionFromID(ｒecMLAnalyzer.getExpression(j).getExID()).getDerivedVariable());
-							
 							
 						}
 					}
 				}
+				//導出変数情報を付与
+				for(int j=0;j<ｒecMLAnalyzer.getExpressionCount();j++){
+					ｒecMLAnalyzer.getExpression(j).setDerivedVariable(
+							simpleRecMLAnalyzer.getExpressionFromID(ｒecMLAnalyzer.getExpression(j).getExID()).getDerivedVariable());
+				}
+				
+				
+				//連立成分のidから数式をベクターに格納
+				
+				
+				
+
+				
+				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
+				Vector<MathExpression> simulEquSetRec;
+				
+				for(int i=0;i<simulEquList.size();i++){
+					simulEquSetRec = new Vector<MathExpression>();
+					for(int j=0;j<simulEquList.get(i).size();j++){
+						
+						ｒecMLAnalyzer.getExpressionFromID((long)simulEquList.get(i).get(j)).setSimulID(i);//連立id付加
+						
+						simulEquSetRec.add(simpleRecMLAnalyzer.getExpressionFromID((long)simulEquList.get(i).get(j)));
+						
+					}
+					simulEquationListRec.add(simulEquSetRec);
+					
+				}
+				
+				
+				
+				ｒecMLAnalyzer.setSimulEquationList(simulEquationListRec);
+				
+				
 				
 				//---------------------------------------------------
 				//目的プログラム生成

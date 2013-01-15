@@ -28,6 +28,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.NewtonSolver;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.SimultaneousNewtonSolver;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCallFunction;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
@@ -654,6 +655,8 @@ public abstract class ProgramGenerator {
 		MathExpression expression = new MathExpression();
 		expression = exp.clone();
 		expression.setExID(exp.getExID());
+		expression.setDerivedVariable(exp.getDerivedVariable());
+		
 		/*関数本体の生成*/
 		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		SyntaxFunction pSynSolverFunc = new SyntaxFunction("newton"+exp.getExID(),pSynDoubleType);
@@ -663,17 +666,20 @@ public abstract class ProgramGenerator {
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		exp.getAllVariablesWithSelector(varList);
 		
+		
+		//CodeNameを登録.
 		for(int i=0;i<varList.size();i++){
-			if(varList.get(i).getIndexList().size()!=0){
-				varList.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,varList.get(i).getM_strPresentText()) );
-			}
+			varList.get(i).setCodeName("var"+i);
 		}
+		exp.setCodeVariable(varList);
+		exp.setDerivedVariableCodeName();
 		
 		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		
 		for(int i=0;i<varList.size();i++){
 			/*引数宣言の追加*/
-			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,varList.get(i));
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList.get(i).codeName);
+			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,var);
 			pSynSolverFunc.addParam(pSynArgvDec);
 		}
 		NewtonSolver ns = new NewtonSolver();
@@ -685,13 +691,7 @@ public abstract class ProgramGenerator {
 		//DerivedVariableがセレクターを含む場合,変数名だけを扱うようにする.
 		//同変数名で競合する可能性(x[n],x[n+1]等)は存在しないものとする.
 		String str="";
-		if(exp.getDerivedVariable().getIndexList().size()!=0){
-			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, exp.getDerivedVariable().getM_strPresentText());
-			str = ns.makeNewtonSolver(expression, var,e,max);
-		}else{
-			str = ns.makeNewtonSolver(expression, exp.getDerivedVariable(),e,max);
-		}
-
+		str = ns.makeNewtonSolver(exp, exp.getDerivedVariable(),e,max);
 		pSynSolverFunc.addString(str);
 
 		return pSynSolverFunc;
@@ -711,17 +711,20 @@ public abstract class ProgramGenerator {
 		//含まれる変数リストを作成
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		exp.getAllVariablesWithSelector(varList);
+		
+		//CodeNameを登録.
 		for(int i=0;i<varList.size();i++){
-			if(varList.get(i).getIndexList().size()!=0){
-				varList.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,varList.get(i).getM_strPresentText()) );
-			}
+			varList.get(i).setCodeName("var"+i);
 		}
+		exp.setCodeVariable(varList);
+		exp.setDerivedVariableCodeName();
 		
 		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		
 		for(int i=0;i<varList.size();i++){
 			/*引数宣言の追加*/
-			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,varList.get(i));
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList.get(i).codeName);
+			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,var);
 			pSynLeftFunc.addParam(pSynArgvDec);
 		}
 		NewtonSolver ns = new NewtonSolver();
@@ -737,6 +740,8 @@ public abstract class ProgramGenerator {
 	 */
 	public SyntaxFunction createDiffFunction(MathExpression exp)
 	throws MathException {
+		
+		
 		/*関数本体の生成*/
 		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		SyntaxFunction pSynDiffrFunc = new SyntaxFunction("dfunc"+exp.getExID(),pSynDoubleType);
@@ -746,25 +751,307 @@ public abstract class ProgramGenerator {
 		Vector<Math_ci> varList= new Vector<Math_ci>();
 		exp.getAllVariablesWithSelector(varList);
 		
+		//CodeNameを登録
 		for(int i=0;i<varList.size();i++){
-			if(varList.get(i).getIndexList().size()!=0){
-				varList.set(i, (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,varList.get(i).getM_strPresentText()) );
-			}
+			varList.get(i).setCodeName("var"+i);
 		}
+		
+		exp.setCodeVariable(varList);
+		exp.setDerivedVariableCodeName();
+		
+		
 		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
 		
 		for(int i=0;i<varList.size();i++){
 			/*引数宣言の追加*/
-			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,varList.get(i));
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList.get(i).codeName);
+			SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,var);
 			pSynDiffrFunc.addParam(pSynArgvDec);
 		}
 		NewtonSolver ns = new NewtonSolver();
 		String str = ns.makeDiffFunc(exp, exp.getDerivedVariable());
+		
+		
 		
 		pSynDiffrFunc.addString(str);
 
 		return pSynDiffrFunc;
 	}
 	
+	/**
+	 * ヤコビ行列関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public SyntaxFunction createJacobiFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxFunction pSynDiffrFunc = new SyntaxFunction("jacobi"+exp.getSimulID(),pSynDoubleType);
+		
+		Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getDerivedVariable());
+		}
+		
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		//連立成分の数式全てを取得
+		Vector<Math_ci> varList;
+		Vector<Math_ci> varList_new = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			varList= new Vector<Math_ci>();
+			this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getAllVariablesWithSelector(varList);
+			
+			for(int j=0;j<varList.size();j++){
+				boolean flag=false;
+				for(int k=0;k<varList_new.size();k++){
+					if(varList_new.get(k).toLegalString().equals(varList.get(j).toLegalString())){
+						flag=true;
+					}
+				}
+				if(!flag) varList_new.add(varList.get(j));
+			}
+		}
+		
+		//CodeNameを登録
+		for(int i=0;i<varList_new.size();i++){
+			varList_new.get(i).setCodeName("var"+i);
+		}
+
+
+		
+		//連立成分の数式全てにCodeNameを共有
+		for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+		
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setCodeVariable(varList_new);
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setDerivedVariableCodeName();
+			
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setAllVariableCodeName();
+		}
+		
+
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,1);
+		SyntaxDataType pSynPPCharType2 = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxDataType pSynPPIntType = new SyntaxDataType(eDataType.DT_INT,0);
+		
+		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet");
+		
+		
+		/*引数宣言の追加*/
+		SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,set);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		for(int i=0;i<varList_new.size();i++){
+
+			//導出変数でない場合,引数リストに追加 idによるソートが必要　保留
+			boolean overlap=false;
+			for(int j=0;j<derivedVarList.size();j++){
+				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
+					overlap=true;
+				}
+			}
+			if(!overlap){
+				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
+				pSynArgvDec = new SyntaxDeclaration(pSynPPCharType2,var);
+				pSynDiffrFunc.addParam(pSynArgvDec);
+			}
+		}
+		
+		//int i, j 追加
+		Math_ci i=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "i");
+		Math_ci j=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "j");
+		pSynArgvDec = new SyntaxDeclaration(pSynPPIntType,i);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		pSynArgvDec = new SyntaxDeclaration(pSynPPIntType,j);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		
+		
+		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
+		String str = sns.makeJacobiFunc(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList);
+		
+		pSynDiffrFunc.addString(str);
+
+		return pSynDiffrFunc;
+	}
+	/**
+	 * 連立関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public SyntaxFunction createSimulFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxFunction pSynDiffrFunc = new SyntaxFunction("simulFunc"+exp.getSimulID(),pSynDoubleType);
+		
+		
+		Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getDerivedVariable());
+		}
+		
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		//連立成分の数式全てを取得
+		Vector<Math_ci> varList;
+		Vector<Math_ci> varList_new = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			varList= new Vector<Math_ci>();
+			this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getAllVariablesWithSelector(varList);
+			
+			for(int j=0;j<varList.size();j++){
+				boolean flag=false;
+				for(int k=0;k<varList_new.size();k++){
+					if(varList_new.get(k).toLegalString().equals(varList.get(j).toLegalString())){
+						flag=true;
+					}
+				}
+				if(!flag) varList_new.add(varList.get(j));
+			}
+		}
+		//CodeNameを登録
+		for(int i=0;i<varList_new.size();i++){
+			varList_new.get(i).setCodeName("var"+i);
+		}
+				
+		//連立成分の数式全てにCodeNameを共有
+		for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+		
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setCodeVariable(varList_new);
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setDerivedVariableCodeName();
+			
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setAllVariableCodeName();
+		}
+		
+
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,1);
+		SyntaxDataType pSynPPCharType2 = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		SyntaxDataType pSynPPIntType = new SyntaxDataType(eDataType.DT_INT,0);
+		
+		
+		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet");
+		
+		
+		/*引数宣言の追加*/
+		SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,set);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		for(int i=0;i<varList_new.size();i++){
+
+			//導出変数でない場合,引数リストに追加  idによるソートが必要　保留
+			boolean overlap=false;
+			for(int j=0;j<derivedVarList.size();j++){
+				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
+					overlap=true;
+				}
+			}
+			if(!overlap){
+				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
+				pSynArgvDec = new SyntaxDeclaration(pSynPPCharType2,var);
+				pSynDiffrFunc.addParam(pSynArgvDec);
+			}
+		}
+		
+		//int i 追加
+		Math_ci i=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "i");
+		pSynArgvDec = new SyntaxDeclaration(pSynPPIntType,i);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		
+		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
+		String str = sns.makeFunc(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList);
+		
+		pSynDiffrFunc.addString(str);
+
+		return pSynDiffrFunc;
+	}
+	
+	/**
+	 * 連立方程式ニュートン法計算関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public SyntaxFunction createSimulNewtonFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		SyntaxDataType pSynDoubleType = new SyntaxDataType(eDataType.DT_VOID,0);
+		SyntaxFunction pSynDiffrFunc = new SyntaxFunction("simulNewton"+exp.getSimulID(),pSynDoubleType);
+	
+		
+		Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getDerivedVariable());
+		}
+		
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		//連立成分の数式全てを取得
+		Vector<Math_ci> varList;
+		Vector<Math_ci> varList_new = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			varList= new Vector<Math_ci>();
+			this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getAllVariablesWithSelector(varList);
+			
+			for(int j=0;j<varList.size();j++){
+				boolean flag=false;
+				for(int k=0;k<varList_new.size();k++){
+					if(varList_new.get(k).toLegalString().equals(varList.get(j).toLegalString())){
+						flag=true;
+					}
+				}
+				if(!flag) varList_new.add(varList.get(j));
+			}
+		}
+		//CodeNameを登録
+		for(int i=0;i<varList_new.size();i++){
+			varList_new.get(i).setCodeName("var"+i);
+		}
+				
+		//連立成分の数式全てにCodeNameを共有
+		for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+		
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setCodeVariable(varList_new);
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setDerivedVariableCodeName();
+			
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setAllVariableCodeName();
+		}
+		
+
+		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_DOUBLE,1);
+		SyntaxDataType pSynPPCharType2 = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		
+		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet");
+		
+		
+		/*引数宣言の追加*/
+		SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,set);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		for(int i=0;i<varList_new.size();i++){
+
+			//導出変数でない場合,引数リストに追加 idによるソートが必要　保留
+			boolean overlap=false;
+			for(int j=0;j<derivedVarList.size();j++){
+				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
+					overlap=true;
+				}
+			}
+			if(!overlap){
+				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
+				pSynArgvDec = new SyntaxDeclaration(pSynPPCharType2,var);
+				pSynDiffrFunc.addParam(pSynArgvDec);
+			}
+		}
+		
+		double e = 1.0e-50;//収束判定値
+		int max = 1000;//最大反復数
+		
+		
+		//導出変数リストにインデックスを含む変数が出現しないことを確認する必要がある. 保留
+	
+		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
+		String str = sns.makeSimultaneousNewtonSolver(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList,e,max);
+		
+		pSynDiffrFunc.addString(str);
+
+		return pSynDiffrFunc;
+	}
 
 }

@@ -38,6 +38,8 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	private boolean m_bMathParsing;
 	private boolean m_bAttrParsing;
 	
+	public ArrayList<Vector<MathExpression>> simulEquationList;
+	
 
 	// loop index variable name list (initialized in constructor)
 	// just for test
@@ -102,6 +104,33 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		return m_vecExpression;
 	}
 
+	
+	//連立方程式セットの追加
+	public void setSimulEquationList(ArrayList<Vector<MathExpression>> list){
+		this.simulEquationList=list;
+	}
+	
+	//連立方程式セットの取得
+	public ArrayList<Vector<MathExpression>> getSimulEquationList(){
+		return this.simulEquationList;
+	}
+	
+	
+	//idから数式取得メソッド
+	public MathExpression getExpressionFromID(long id) {
+		MathExpression exp = new MathExpression();
+		for(int i=0;i<m_vecMathExpression.size();i++){
+			if(m_vecMathExpression.get(i).getExID() == id){
+				exp=m_vecMathExpression.get(i);
+			}
+		}
+		return exp;
+	}
+	
+	//数式の置換メソッド
+	public void setM_vecMathExpression(int i,MathExpression exp) {
+		m_vecMathExpression.set(i, exp);
+	}
 	/*式中の変数*/
 	Vector<Math_ci> m_vecRecurVar;
 	public Vector<Math_ci> getM_vecRecurVar() {

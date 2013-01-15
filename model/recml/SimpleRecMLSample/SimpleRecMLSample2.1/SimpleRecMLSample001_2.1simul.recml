@@ -101,19 +101,17 @@
 				<ci>n1</ci>
 			</apply>
 			<apply>
+				<times/>
 				<apply>
-					<times/>
+					<minus/>
 					<apply>
-						<minus/>
-						<apply>
-							<cn>1</cn>
-						</apply>
-					</apply>	
-					<apply>
-						<selector/>
-						<ci>X1</ci>
-						<ci>n1</ci>
+						<cn>1</cn>
 					</apply>
+				</apply>	
+				<apply>
+					<selector/>
+					<ci>X1</ci>
+					<ci>n1</ci>
 				</apply>
 			</apply>
 		</apply>

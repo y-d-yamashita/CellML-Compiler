@@ -17,6 +17,10 @@ public class Math_ci extends MathOperand {
 	
 	/*Selector追加要素*/
 	Vector<MathFactor> m_vecIndexListFactor;
+	
+	/*CodeName*/
+	public String codeName;
+	
 	public void addIndexList(MathFactor pFactor){
 		/*オペランドをベクタに追加*/
 		m_vecIndexListFactor.add(pFactor);
@@ -52,6 +56,16 @@ public class Math_ci extends MathOperand {
 	/*-----名前を返すメソッド-----*/
 	public String getName(){
 		return m_strPresentText;
+	}
+	
+	/*-----コード名を返すメソッド-----*/
+	public String getCodeName(){
+		return codeName;
+	}
+	
+	/*-----コード名を設定するメソッド-----*/
+	public void setCodeName(String name){
+		codeName = name;
 	}
 	
 

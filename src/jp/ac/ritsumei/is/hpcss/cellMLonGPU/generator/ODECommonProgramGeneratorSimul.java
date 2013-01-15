@@ -72,7 +72,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * 逐次プログラム構文生成クラス
  */
-public class ODECommonProgramGenerator extends ProgramGenerator {
+public class ODECommonProgramGeneratorSimul extends ProgramGenerator {
 
 	//========================================================
 	//DEFINE
@@ -85,7 +85,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 	protected Math_ci m_pDefinedDataSizeVar;		//データ数として#defineされる定数
 
 	/*-----コンストラクタ-----*/
-	public ODECommonProgramGenerator(RecMLAnalyzer pRecMLAnalyzer)
+	public ODECommonProgramGeneratorSimul(RecMLAnalyzer pRecMLAnalyzer)
 	throws MathException 	{
 		super(pRecMLAnalyzer);
 		m_pDefinedDataSizeVar = null;
@@ -127,11 +127,12 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		
 		ArrayList<SyntaxFunction> pSynSolverFuncList = new ArrayList<SyntaxFunction>();
 		
+		ArrayList<Long> simulIDList = new ArrayList<Long>();
+		
 		//非線形数式に対してソルバー関数を作成
 		for(int i=0;i<m_pRecMLAnalyzer.getExpressionCount();i++){
-			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag()){
-				
-				
+			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag() && m_pRecMLAnalyzer.getExpression(i).getSimulID()==-1){
+
 				MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
 				
 				//ニュートン法計算関数
@@ -148,7 +149,42 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynSolverFuncList.add(pSynNewtonSolverFunc2);
 				pSynSolverFuncList.add(pSynNewtonSolverFunc3);
 				
+			}else if(m_pRecMLAnalyzer.getExpression(i).getSimulID()!=-1){
+				
+				//連立方程式処理
+				//ここで重複処理をする.(idにつき3つ生成)
+				boolean flag=false;
+				for(int j=0;j<simulIDList.size();j++){
+					if(m_pRecMLAnalyzer.getExpression(i).getSimulID()==simulIDList.get(j)){
+						flag=true;
+					}
+				}
+				if(!flag){
+					MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
+					
+					//ニュートン法計算関数
+					SyntaxFunction pSynSimulNewtonSolverFunc = this.createSimulNewtonFunction(exp);
+					
+					//左辺関数
+					SyntaxFunction pSynSimulNewtonSolverFunc2 = this.createSimulFunction(exp);
+					//左辺微分関数
+					SyntaxFunction pSynSimulNewtonSolverFunc3 = this.createJacobiFunction(exp);
+					
+					//テンプレート処理するため内部宣言は不要
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc);
+					
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc2);
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc3);
+					
+				}
+				
+				simulIDList.add(m_pRecMLAnalyzer.getExpression(i).getSimulID());
+				
 			}
+			
+			
+			
+			
 			
 		}
 		
@@ -160,7 +196,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		for(int i=0;i<pSynSolverFuncList.size();i++){
 			pSynProgram.addFunction(pSynSolverFuncList.get(i));
 		}
-		
+
 
 		/*RecurVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
@@ -589,9 +625,9 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				
 				/*数式の複製を取得*/
 				MathExpression pMathExp = m_pRecMLAnalyzer.getExpression(index);
+			
 				
-				
-				if(pMathExp.getNonlinearFlag()){
+				if(pMathExp.getNonlinearFlag() && pMathExp.getSimulID()==-1){
 					
 					
 					//含まれる変数リストを作成
@@ -600,6 +636,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					
 					//非線形式である場合,ソルバー関数を呼び出す代入文を作成.
 
+					
 					/*代入文の形成*/
 					Math_assign pMathAssign =
 						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
@@ -613,7 +650,6 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					func.setFuncOperand((MathOperand)funcOperand);
 					
 					for(int i=0;i<varList.size();i++){
-						//1数式なのでソートは不要.
 						func.addFactor(varList.get(i));
 						
 					}
@@ -625,7 +661,93 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
 					vecExpressions.add(pSyntaxExp);
 						
-				} else{
+				} 
+				else if(pMathExp.getSimulID()!=-1){
+					
+					//連立方程式処理
+					
+					int SimulEquNum = -1;
+					for(int k=0;k<m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();k++){
+						if(m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(k).getExID()==pMathExp.getExID()){
+							SimulEquNum=k;
+						}
+					}
+					
+					if(SimulEquNum==0){
+						
+						
+						//連立成分の最初の式であれば,ソルバーをコールする構文を付加
+						
+
+						Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+						for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();i++){
+							derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(i).getDerivedVariable());
+						}
+
+						String[] strAttr = new String[] {null, null, null, null, null};
+						Math_fn func = (Math_fn) MathFactory.createOperator(MathMLDefinition.getMathOperatorId("fn"), strAttr);
+						Math_ci funcOperand = (Math_ci) MathFactory.createOperand( eMathOperand.MOPD_CI, "simulNewton"+pMathExp.getSimulID());
+						
+						func.setFuncOperand((MathOperand)funcOperand);
+						
+						func.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"));
+						
+						
+						//含まれる変数リストを作成
+						Vector<Math_ci> varList;
+						Vector<Math_ci> varList_all = new Vector<Math_ci>();
+						
+						
+						//連立成分の数式全ての変数を格納する.
+						for(int k=0;k<m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();k++){
+							
+							varList = new Vector<Math_ci>();
+							//各数式の変数リストを取得
+							m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(k).getAllVariablesWithSelector(varList);
+							
+							for(int i=0;i<varList.size();i++){
+		
+								//導出変数でなく重複しない場合,引数リストに追加 
+								boolean overlap=false;
+								for(int j1=0;j1<derivedVarList.size();j1++){
+									if(varList.get(i).getName().equals(derivedVarList.get(j1).getName())){
+										overlap=true;
+									}
+								}
+								if(!overlap){
+									varList_all.add(varList.get(i));
+								}
+							}
+						}
+						for(int k=0;k<varList_all.size();k++){
+							func.addFactor(varList_all.get(k));
+						}
+						
+						
+						/*新たな計算式を生成*/
+						MathExpression pNewExp = new MathExpression(func);
+						/*数式ベクタに追加*/
+						SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+						vecExpressions.add(pSyntaxExp);
+					}
+					
+					
+					/*代入文の形成*/
+					
+					Math_assign pMathAssign2 =
+							(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+					
+					pMathAssign2.addFactor(pMathExp.getDerivedVariable());
+					pMathAssign2.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet["+SimulEquNum+"]"));
+		
+					/*新たな計算式を生成*/
+					MathExpression pNewExp = new MathExpression(pMathAssign2);
+		
+					/*数式ベクタに追加*/
+					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+					vecExpressions.add(pSyntaxExp);
+					
+				}else{
 					
 					/*左辺式・右辺式取得*/
 					MathExpression pLeftExp = pMathExp.getLeftExpression();

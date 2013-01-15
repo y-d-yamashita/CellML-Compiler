@@ -33,12 +33,17 @@ public class NewtonSolver {
 	public String makeLeftFunc(MathExpression expression, Math_ci derivedVariable) throws MathException {
 		MathExpression exp = new MathExpression();
 
-		
 		ImplicitFunctionTransposition it = new ImplicitFunctionTransposition();
-		expression = it.transporseExpression(expression, derivedVariable);
+		exp=expression.createCopy();
 		
-		exp = expression.clone();
-		exp.removeIndexInfomation();
+		
+		exp = it.transporseExpression(exp, derivedVariable);
+		
+		//変数をコード用に置換する
+		exp.setDerivedVariable(expression.getDerivedVariable());
+		exp.setCodeVariable(expression.getCodeVariable());
+		exp.setAllVariableCodeName();
+		exp.replaceCodeVariable();
 		
 		String outputStr = "";
 		outputStr=outputStr.concat("\treturn "+exp.getLeftExpression().toLegalString()+";\n");
@@ -48,24 +53,34 @@ public class NewtonSolver {
 	}
 	
 	public String makeDiffFunc(MathExpression expression, Math_ci derivedVariable) throws MathException {
+		
+		
 		MathExpression exp = new MathExpression();
+		exp=expression.createCopy();
 		
 		
 		Differentiation diff = new Differentiation();
 		MathExpression pDiffExpression = new MathExpression();
 		
 		ImplicitFunctionTransposition it = new ImplicitFunctionTransposition();
-		expression = it.transporseExpression(expression, derivedVariable);
+		exp = it.transporseExpression(exp, derivedVariable);
 		
 		//数式の左辺を微分して取得
-		pDiffExpression = diff.differentiate(expression ,derivedVariable);
+		pDiffExpression = diff.differentiate(exp ,derivedVariable);
 		
-		exp = pDiffExpression.clone();
-		exp.removeIndexInfomation();
+	
+		//変数をコード用に置換する
+		
+		pDiffExpression.setDerivedVariable(expression.getDerivedVariable());
+		pDiffExpression.setCodeVariable(expression.getCodeVariable());
+		pDiffExpression.setAllVariableCodeName();
+		
+		pDiffExpression.replaceCodeVariable();
+		
 		
 		String outputStr = "";
 
-		outputStr=outputStr.concat("\treturn "+exp.getLeftExpression().toLegalString()+";\n");
+		outputStr=outputStr.concat("\treturn "+pDiffExpression.getLeftExpression().toLegalString()+";\n");
 		outputStr=outputStr.concat("\n");
 		return outputStr;
 		
@@ -73,20 +88,18 @@ public class NewtonSolver {
 	
 	public String makeNewtonSolver(MathExpression expression, Math_ci derivedVariable, double e, int max) throws MathException {
 		
-		//変数がインデックスを持つ場合,全て削除する必要がある.
-		expression.removeIndexInfomation();
 		
 		//含まれる変数リストを作成
-		Vector<Math_ci> varList= new Vector<Math_ci>();
+		Vector<Math_ci> varList= expression.getCodeVariable();
 		expression.getAllVariablesWithSelector(varList);
 		
-		
+
 		String outputStr = "";
 		//ニュートン法計算関数
 
 		outputStr=outputStr.concat("\tint max = 0;\n");
 		outputStr=outputStr.concat("\tdouble eps;\n");
-		outputStr=outputStr.concat("\tdouble " +derivedVariable.toLegalString()+"_next;\n");
+		outputStr=outputStr.concat("\tdouble " +derivedVariable.getCodeName()+"_next;\n");
 		
 		outputStr=outputStr.concat("\n");
 		outputStr=outputStr.concat("\tdo {\n");
@@ -95,7 +108,7 @@ public class NewtonSolver {
 		outputStr=outputStr.concat("\t\tif(max > "+max+"){\n");
 		outputStr=outputStr.concat("\t\t\tprintf(\"error:no convergence\\n\");break;\n");
 		outputStr=outputStr.concat("\t\t}\n");
-		outputStr=outputStr.concat("\t\t"+derivedVariable.toLegalString()+"_next = "+derivedVariable.toLegalString()+" - ( func"+expression.getExID()+ "(");
+		outputStr=outputStr.concat("\t\t"+derivedVariable.codeName+"_next = "+derivedVariable.codeName+" - ( func"+expression.getExID()+ "(");
 		
 		for(int i=0;i<varList.size();i++){
 			outputStr=outputStr.concat(varList.get(i).toLegalString());
@@ -108,7 +121,7 @@ public class NewtonSolver {
 			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
 		}
 		outputStr=outputStr.concat(") );\n");
-		outputStr=outputStr.concat("\t\t"+derivedVariable.toLegalString()+" = "+derivedVariable.toLegalString()+"_next;\n");
+		outputStr=outputStr.concat("\t\t"+derivedVariable.codeName+" = "+derivedVariable.codeName+"_next;\n");
 		
 		outputStr=outputStr.concat("\t\teps = func" +expression.getExID()+ "(");
 		for(int i=0;i<varList.size();i++){
@@ -119,7 +132,7 @@ public class NewtonSolver {
 		outputStr=outputStr.concat("\n");
 		outputStr=outputStr.concat("\t} while( eps < "+-1.0*e+" || "+e+" < eps );\n");
 		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("\treturn "+ derivedVariable.toLegalString()+";\n");
+		outputStr=outputStr.concat("\treturn "+ derivedVariable.codeName+";\n");
 
 		return outputStr;
 	}

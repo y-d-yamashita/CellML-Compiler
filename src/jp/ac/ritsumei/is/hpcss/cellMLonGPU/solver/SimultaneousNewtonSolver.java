@@ -28,64 +28,45 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * ln,log
  * 
  */
+
+
+
 public class SimultaneousNewtonSolver {
-	public void writeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e, int max) throws MathException {
+	
+	
+	
+	public String makeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e, int max) throws MathException {
 		
 		int n= varList.size();
-		Jacobian jc = new Jacobian();
-		jc.makeJacobian(expList, varList);
 		
 		//含まれる変数リスト(導出する変数以外)を作成
 		Vector<Math_ci> vList= new Vector<Math_ci>();
 		Vector<Math_ci> v2List= new Vector<Math_ci>();
+		
 		for(int i=0;i<expList.size();i++){
 			expList.get(i).getAllVariablesWithSelector(vList);
-		}
-		for(int j=0;j<vList.size();j++){
-			boolean flag = false;
-			for(int k=0;k<n;k++){
-				if(vList.get(j).toLegalString().equals(varList.get(k).toLegalString())) flag = true;
-			}
-			if(flag==false) v2List.add(vList.get(j));
-		}
-		
-		//main関数に記述される呼び出しサンプル
-		String main = "";
-		main=main.concat("main() {\n");
-		main=main.concat("\tdouble "+varList.get(0).getM_strPresentText()+"[] = {10.0, 10.0};\n");
-		main=main.concat("\tsimulNewton(");
-		main=main.concat(varList.get(0).getM_strPresentText());
-		if(v2List.size()!=0){
-			main=main.concat(", ");
-		}
-		for(int j=0;j<v2List.size();j++){
-			main=main.concat("double "+ v2List.get(j).toLegalString());
-			if(j!=v2List.size()-1){
-				main=main.concat(", ");
+			for(int j=0;j<vList.size();j++){
+				boolean flag = false;
+				for(int k=0;k<v2List.size();k++){
+					if(vList.get(j).toLegalString().equals(v2List.get(k).toLegalString())) flag = true;
+				}
+				if(!flag){
+					boolean d_flag=false;
+					//導出変数かどうか判定
+					for(int d=0;d<varList.size();d++){
+						if(varList.get(d).toLegalString().equals(vList.get(j).toLegalString())){
+							d_flag=true;
+						}
+					}
+					
+					if(!d_flag)v2List.add(vList.get(j));
+				}
 			}
 		}
-		main=main.concat(");\n");
-		main=main.concat("}\n");
-		main=main.concat("\n");
-	
-		
+				
 		//ニュートン法計算関数
 		String outputStr = "";
-			
-		outputStr=outputStr.concat("void simulNewton(");
-		outputStr=outputStr.concat("double *"+ varList.get(0).getM_strPresentText());
-		if(v2List.size()!=0){
-			outputStr=outputStr.concat(", ");
-		}
-		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat("double "+ v2List.get(j).toLegalString());
-			if(j!=v2List.size()-1){
-				outputStr=outputStr.concat(", ");
-			}
-		}
 		
-		outputStr=outputStr.concat(") {\n");
-		outputStr=outputStr.concat("\n");
 		
 		outputStr=outputStr.concat("\tint max = 0;\n");
 		outputStr=outputStr.concat("\tint i, j, k;\n");
@@ -97,7 +78,7 @@ public class SimultaneousNewtonSolver {
 		outputStr=outputStr.concat("\tdouble jac["+n+"]["+n+"];\n");
 		outputStr=outputStr.concat("\tdouble cpy["+n+"]["+n+"];\n");
 		outputStr=outputStr.concat("\tdouble inv["+n+"]["+n+"];\n");
-		outputStr=outputStr.concat("\tdouble " +varList.get(0).getM_strPresentText()+"_next["+n+"];\n");
+		outputStr=outputStr.concat("\tdouble simulSet_next["+n+"];\n");
 		outputStr=outputStr.concat("\n\n");
 		outputStr=outputStr.concat("\tdo {\n");
 		outputStr=outputStr.concat("\t\tmax ++;\n");
@@ -109,14 +90,14 @@ public class SimultaneousNewtonSolver {
 		outputStr=outputStr.concat("\n");
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
 		outputStr=outputStr.concat("\t\t\tfor(j=0;j<"+n+";j++){\n");
-		outputStr=outputStr.concat("\t\t\t\tjac[i][j] = jacobi("+varList.get(0).getM_strPresentText()+",");
+		outputStr=outputStr.concat("\t\t\t\tjac[i][j] = jacobi(simulSet,");
 		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat(v2List.get(j).toLegalString()+",");
+			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
 		outputStr=outputStr.concat("i,j);\n");
-		outputStr=outputStr.concat("\t\t\t\tcpy[i][j] = jacobi("+varList.get(0).getM_strPresentText()+",");
+		outputStr=outputStr.concat("\t\t\t\tcpy[i][j] = jacobi(simulSet,");
 		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat(v2List.get(j).toLegalString()+",");
+			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
 		outputStr=outputStr.concat("i,j);\n");
 		outputStr=outputStr.concat("\n");
@@ -172,73 +153,170 @@ public class SimultaneousNewtonSolver {
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
 		outputStr=outputStr.concat("\t\t\tpro = 0.0;\n");
 		outputStr=outputStr.concat("\t\t\tfor(j=0;j<"+n+";j++){\n");
-		outputStr=outputStr.concat("\t\t\t\tpro += inv[i][j] * func("+varList.get(0).getM_strPresentText()+",");
+		outputStr=outputStr.concat("\t\t\t\tpro += inv[i][j] * func(simulSet,");
 		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat(v2List.get(j).toLegalString()+",");
+			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
 		outputStr=outputStr.concat("j);\n");
 		outputStr=outputStr.concat("\t\t\t}\n");
-		outputStr=outputStr.concat("\t\t\t"+varList.get(0).getM_strPresentText()+"_next[i] = "+varList.get(0).getM_strPresentText()+"[i] - pro;\n");
+		outputStr=outputStr.concat("\t\t\tsimulSet_next[i] = simulSet[i] - pro;\n");
 		outputStr=outputStr.concat("\t\t}\n");
 		
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
-		outputStr=outputStr.concat("\t\t\t"+varList.get(0).getM_strPresentText()+"[i] = "+varList.get(0).getM_strPresentText()+"_next[i];\n");
+		outputStr=outputStr.concat("\t\t\tsimulSet[i] = simulSet_next[i];\n");
 		outputStr=outputStr.concat("\t\t}\n");
 		
 		//判定値の計算
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
-		outputStr=outputStr.concat("\t\t\tf[i] = func("+varList.get(0).getM_strPresentText()+",");
+		outputStr=outputStr.concat("\t\t\tf[i] = func(simulSet,");
 		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat(v2List.get(j).toLegalString()+",");
+			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
 		outputStr=outputStr.concat("i);\n");
 		outputStr=outputStr.concat("\t\t\teps += f[i]*f[i];\n");
 		outputStr=outputStr.concat("\t\t}\n");
 		outputStr=outputStr.concat("\t} while ("+e+" < sqrt(eps));\n");
-		outputStr=outputStr.concat("}\n");
 		outputStr=outputStr.concat("\n");
 		
 		
-		//左辺関数
-		outputStr=outputStr.concat("double func(");
-		outputStr=outputStr.concat("double *"+ varList.get(0).getM_strPresentText()+", ");
-		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat("double "+ v2List.get(j).toLegalString());
-			outputStr=outputStr.concat(", ");
+
+		return(outputStr);
+		
+	}
+
+	public String makeJacobiFunc(Vector<MathExpression> expList, Vector<Math_ci> varList) throws MathException {
+	
+		int n= varList.size();
+		Jacobian jc = new Jacobian();
+		Vector<Vector<MathFactor>> JacobianMatrix = new Vector<Vector<MathFactor>>();
+		Vector<MathExpression> expressionList = new Vector<MathExpression>();
+		
+		for(int i=0;i<expList.size();i++){
+			expressionList.add(expList.get(i).createCopy());
 		}
-		outputStr=outputStr.concat("int i) {\n");
-		outputStr=outputStr.concat("\n");
-		for(int i=0;i<n;i++){
-			outputStr=outputStr.concat("\tif(i=="+i+") return "+expList.get(i).getLeftExpression().toLegalString()+";\n");
+		
+		ImplicitFunctionTransposition it = new ImplicitFunctionTransposition();
+		
+		for(int i=0;i<expressionList.size();i++){
+			
+			expressionList.set(i,it.transporseExpression(expressionList.get(i), expressionList.get(i).getDerivedVariable()));
 		}
-		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("}\n");
-		outputStr=outputStr.concat("\n");
+		for(int i=0;i<expressionList.size();i++){
+			
+			expressionList.set(i,it.transporseExpression(expressionList.get(i), expressionList.get(i).getDerivedVariable()));
+			expressionList.get(i).setDerivedVariable(expList.get(i).getDerivedVariable());
+			expressionList.get(i).setCodeVariable(expList.get(i).getCodeVariable());
+			expressionList.get(i).setAllVariableCodeName();
+		}
+		
+		
+		JacobianMatrix = jc.makeJacobian(expressionList, varList);
+		
+		
 		
 		//ヤコビ行列
-		outputStr=outputStr.concat("double jacobi(");
-		outputStr=outputStr.concat("double *"+ varList.get(0).getM_strPresentText()+", ");
-		for(int j=0;j<v2List.size();j++){
-			outputStr=outputStr.concat("double "+ v2List.get(j).toLegalString());
-			outputStr=outputStr.concat(", ");
+		String outputStr = "";
+		outputStr=outputStr.concat("\n");
+		for(int i=0;i<varList.size();i++){
+			outputStr=outputStr.concat("\tdouble "+varList.get(i).codeName+" = simulSet["+i+"];\n");
 		}
-		outputStr=outputStr.concat("int i, int j) {\n");
+		
+		
+		//コード文字列へ変換
+		
+		Vector<Vector<MathExpression>> JacobianRoot = new  Vector<Vector<MathExpression>>();
+		
+		String[] strAttr = new String[] {"null", "null", "null", "null", "null"};
+		for(int i=0;i<JacobianMatrix.size();i++){
+			Vector<MathExpression> JacobianSet = new Vector<MathExpression>();
+			for(int j=0;j<JacobianMatrix.size();j++){
+				
+				MathExpression exp = new MathExpression();
+				exp.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				if(JacobianMatrix.get(i).get(j).matches(eMathMLClassification.MML_OPERATOR)){
+					exp.addOperator((MathOperator) JacobianMatrix.get(i).get(j));
+					exp.setCodeVariable(expList.get(0).getCodeVariable());
+				}else{
+					exp.addOperator((MathOperator) JacobianMatrix.get(i).get(j));
+					exp.setCodeVariable(expList.get(0).getCodeVariable());
+				}
+				JacobianSet.add(exp);
+			}
+			
+			JacobianRoot.add(JacobianSet);
+		}
+		
+		for(int i=0;i<JacobianMatrix.size();i++){
+			
+			for(int j=0;j<JacobianMatrix.size();j++){
+				
+				JacobianRoot.get(i).get(j).replaceCodeVariable();
+			}
+		}
+		
 		outputStr=outputStr.concat("\n");
 		for(int i=0;i<n;i++){
 			for(int j=0;j<n;j++){
-				outputStr=outputStr.concat("\tif(i=="+i+" && j=="+j+") return "+jc.getFactor(i,j).toLegalString()+";\n");
+				outputStr=outputStr.concat("\tif(i=="+i+" && j=="+j+") return "+JacobianRoot.get(i).get(j).toLegalString()+";\n");
 			}
 		}
 		outputStr=outputStr.concat("\n");
-		outputStr=outputStr.concat("}\n");
+
+	
+		return outputStr;
 		
-		//標準出力
-		System.out.println(main);
-		System.out.println(outputStr);
+	}
+
+	public String makeFunc(Vector<MathExpression> expList, Vector<Math_ci> varList) throws MathException {
+		
+		int n= varList.size();
+		
+		Vector<MathExpression> expressionList = new Vector<MathExpression>();
+		
+		for(int i=0;i<expList.size();i++){
+			expressionList.add(expList.get(i).createCopy());
+		}
+		
+		ImplicitFunctionTransposition it = new ImplicitFunctionTransposition();
+		
+		for(int i=0;i<expressionList.size();i++){
+			
+			expressionList.set(i,it.transporseExpression(expressionList.get(i), expressionList.get(i).getDerivedVariable()).createCopy());
+			expressionList.get(i).setDerivedVariable(expList.get(i).getDerivedVariable());
+			expressionList.get(i).setCodeVariable(expList.get(i).getCodeVariable());
+			expressionList.get(i).setAllVariableCodeName();
+		}
+		
+		
+
+		//左辺関数
+		String outputStr = "";
+		outputStr=outputStr.concat("\n");
+		
+		for(int i=0;i<varList.size();i++){
+			outputStr=outputStr.concat("\tdouble "+varList.get(i).getCodeName()+" = simulSet["+i+"];\n");
+		}
+		
+
+		//コード文字列へ変換
+		for(int i=0;i<expressionList.size();i++){
+			expressionList.get(i).replaceCodeVariable();
+		}
+
+		outputStr=outputStr.concat("\n");
+		for(int i=0;i<n;i++){
+			outputStr=outputStr.concat("\tif(i=="+i+") return "+expressionList.get(i).getLeftExpression().toLegalString()+";\n");
+		}
+		outputStr=outputStr.concat("\n");
+
+
+
+		return(outputStr);
 		
 	}
 	
-public static void main(String[] args) throws MathException {
+	public static void main(String[] args) throws MathException {
 		
 		//数式の属性情報
 		String[] strAttr = new String[] {"null", "null", "null", "null", "null"};
@@ -246,12 +324,12 @@ public static void main(String[] args) throws MathException {
 
 		//テスト用変数定義
 		//テスト用変数定義
-		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "x");
+		Math_ci val1=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "A");
 		//val1.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
-		val1.addArrayIndexToFront(((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0")));
-		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "x");
+		//val1.addArrayIndexToFront(((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0")));
+		Math_ci val2=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
 		//val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
-		val2.addArrayIndexToFront(((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1")));
+		//val2.addArrayIndexToFront(((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1")));
 		Math_cn zero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
 		Math_cn num1 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
 		Math_cn num2 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
@@ -357,21 +435,7 @@ public static void main(String[] args) throws MathException {
 
 		pNewExpression2.breakOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
-		
-		
-		//数式リスト及び変数リスト作成
-		/*
-		System.out.println("Input Function 1: ");
-		System.out.println(pNewExpression.toLegalString());
-		System.out.println("");
-		
-		System.out.println("Input Function 2: ");
-		System.out.println(pNewExpression2.toLegalString());
-		System.out.println("");
-		*/
-		
-		
-		
+				
 		
 		Vector<MathExpression> eqList = new Vector<MathExpression>();
 		eqList.add(pNewExpression);
@@ -386,7 +450,7 @@ public static void main(String[] args) throws MathException {
 		int max = 1000;
 		
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
-		sns.writeSimultaneousNewtonSolver(eqList, varList, eps ,max);
+		sns.makeSimultaneousNewtonSolver(eqList, varList, eps ,max);
 		
 		
 	}

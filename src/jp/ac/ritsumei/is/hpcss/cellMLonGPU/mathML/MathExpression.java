@@ -40,6 +40,9 @@ public class MathExpression {
 	/**変数リスト保持ベクタ*/
 	Vector<MathOperand> m_vecVariables;
 	
+	/**コード変数名保持ベクタ*/
+	Vector<Math_ci> m_vecCodeVariables;
+	
 	/**数式ID*/
 	long exID = -1;
 	/**conditionのreference*/
@@ -47,6 +50,9 @@ public class MathExpression {
 	
 	//非線形フラグ
 	boolean nonlinear;
+
+	//連立成分id
+	long simulID = -1;
 	
 	/**
 	 * MathML数式インスタンスを作成する.
@@ -66,7 +72,34 @@ public class MathExpression {
 		this();
 		m_pRootFactor = pRootFactor;
 	}
-
+	
+	
+	
+	//コード変数名リストを設定する
+	public void setCodeVariable(Vector<Math_ci> list){
+		this.m_vecCodeVariables=list;
+	}
+	//コード変数名リストを取得する
+	public Vector<Math_ci> getCodeVariable(){
+		return m_vecCodeVariables;
+	}
+	
+	//導出変数にコード変数名を割り当てる
+	public void setDerivedVariableCodeName() throws MathException{
+		for(int i=0;i<m_vecCodeVariables.size();i++){
+			if(m_derivedVariable.toLegalString().equals(m_vecCodeVariables.get(i).toLegalString())){
+				m_derivedVariable.setCodeName(m_vecCodeVariables.get(i).getCodeName());
+			}
+		}
+	}
+	//変数にコード変数名を割り当てる
+	public void setAllVariableCodeName() throws MathException {
+		((MathOperator) m_pRootFactor).setAllVariableCodeName(this.m_vecCodeVariables);
+		
+	}
+	
+	
+	
 	/**
 	 * 演算子を追加する.
 	 * @param pOperator 追加する演算子
@@ -233,13 +266,6 @@ public class MathExpression {
 		((MathOperator) m_pRootFactor).removeSelector(m_pRootFactor);
 	}
 	
-	/**
-	 *index情報削除
-	 * @throws MathException 
-	 */
-	public void removeIndexInfomation() throws MathException{
-		((MathOperator) m_pRootFactor).removeIndexInfomation(m_pRootFactor);
-	}
 	
 	/**
 	 * 構造情報をapplyへ割り当てる
@@ -829,7 +855,15 @@ public class MathExpression {
 		return this.nonlinear;
 	}
 	public void addNonlinearFlag(){
-		nonlinear=true;
+		this.nonlinear=true;
+	}
+	
+	//連立id関連メソッド
+	public long getSimulID(){
+		return this.simulID;
+	}
+	public void setSimulID(long id){
+		this.simulID=id;
 	}
 	
 	public Math_ci getDerivedVariable(){
@@ -842,5 +876,11 @@ public class MathExpression {
 	public int getExpressionNumfromApply() {
 		int num = ((Math_apply)m_pRootFactor).getExpNum();
 		return num;
+	}
+	
+	//コード用変数名に置換するメソッド
+	public void replaceCodeVariable() throws MathException {
+		((MathOperator) m_pRootFactor).replaceCodeVariable(m_vecCodeVariables);
+		
 	}
 }

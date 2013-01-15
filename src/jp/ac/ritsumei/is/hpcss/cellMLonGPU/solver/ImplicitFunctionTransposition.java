@@ -36,6 +36,7 @@ public class ImplicitFunctionTransposition {
 	public MathExpression transporseExpression(MathExpression expression, Math_ci derivedVariable) throws MathException {
 			
 			MathExpression pNewExpression = new MathExpression();
+			pNewExpression.setDerivedVariable(expression.getDerivedVariable());
 			//属性情報を取得
 			String[] strAttr=((MathOperator)expression.getRootFactor()).getAttribute();
 			
@@ -74,6 +75,8 @@ public class ImplicitFunctionTransposition {
 		//f(x)=0移項処理メソッド
 		
 		MathExpression pNewExpression = new MathExpression();
+		pNewExpression.setDerivedVariable(expression.getDerivedVariable());
+		
 		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
 		
 		pNewExpression.addOperator(MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));

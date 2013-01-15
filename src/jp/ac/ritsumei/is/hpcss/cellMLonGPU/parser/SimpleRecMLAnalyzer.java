@@ -67,6 +67,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	private RecMLGraphAnalyzer graphAnlyzer;
 	private DirectedGraph<RecMLVertex,RecMLEdge> graph;
 	public PairList<RecMLVertex,RecMLVertex> resultMaximumMatching;
+	public ArrayList<ArrayList<MathExpression>> simulEquationList;
 	
 	// loop index variable name list (initialized in constructor)
 	// just for test
@@ -131,6 +132,16 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		return m_vecExpression;
 	}
 	
+	
+	//連立方程式セットの追加
+	public void setSimulEquationList(ArrayList<ArrayList<MathExpression>> list){
+		this.simulEquationList=list;
+	}
+	
+	//連立方程式セットの取得
+	public ArrayList<ArrayList<MathExpression>> getSimulEquationList(){
+		return this.simulEquationList;
+	}
 	
 	//idから数式取得メソッド
 	public MathExpression getExpressionFromID(long id) {

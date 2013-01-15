@@ -340,12 +340,16 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		
 		/*Declare the for loops for allocating multidimensional arrays*/
 		SyntaxControl pSynMallocFor1 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(0),loopIndex0);
-		SyntaxControl pSynMallocFor2 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(1),loopIndex1);
-		
+		SyntaxControl pSynMallocFor2 = new SyntaxControl(null, null);
+		if(this.m_vecMaxArraySizeName.size()>1){
+			pSynMallocFor2 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(1),loopIndex1);
+		}
 		/*Declare the for loops for freeing multidimensional arrays*/
 		SyntaxControl pSynFreeFor1 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(0),loopIndex0);
-		SyntaxControl pSynFreeFor2 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(1),loopIndex1);
-
+		SyntaxControl pSynFreeFor2 = new SyntaxControl(null, null);
+		if(this.m_vecMaxArraySizeName.size()>1){
+			pSynFreeFor2 = createSyntaxDataNumLoop(this.m_vecMaxArraySizeName.get(1),loopIndex1);
+		}
 		
 		/*RecurVar変数へのmallocによるメモリ割り当て: Use the multidimensional arrays*/
 		//TODO: the variable name can be created as dynamic and changes during compilation using Java Reflection
@@ -366,15 +370,20 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynMallocBlank.addStatement(createFree(pVariable));
 			}else if(parenthesisnum == 2){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+				}
 				/* free 2D memory after use */
 				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
 			}else if(parenthesisnum == 3){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
-				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
-				/* free 3D memory after use */
-				pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
+					pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
+					/* free 3D memory after use */
+					pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
+				}
+				
 			}
 		}
 			
@@ -401,6 +410,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
 			}else if(parenthesisnum == 3){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
+				
 				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
 				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
 				/* free 3D memory after use */

@@ -111,13 +111,13 @@ public class NewtonSolver {
 		outputStr=outputStr.concat("\t\t"+derivedVariable.codeName+"_next = "+derivedVariable.codeName+" - ( func"+expression.getExID()+ "(");
 		
 		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat(varList.get(i).toLegalString());
+			outputStr=outputStr.concat(varList.get(i).getCodeName());
 			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
 		}
 		outputStr=outputStr.concat(") / ");
 		outputStr=outputStr.concat( "\tdfunc"+expression.getExID()+ "(");
 		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat(varList.get(i).toLegalString());
+			outputStr=outputStr.concat(varList.get(i).getCodeName());
 			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
 		}
 		outputStr=outputStr.concat(") );\n");
@@ -125,7 +125,7 @@ public class NewtonSolver {
 		
 		outputStr=outputStr.concat("\t\teps = func" +expression.getExID()+ "(");
 		for(int i=0;i<varList.size();i++){
-			outputStr=outputStr.concat(varList.get(i).toLegalString());
+			outputStr=outputStr.concat(varList.get(i).getCodeName());
 			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
 		}
 		outputStr=outputStr.concat(");\n");

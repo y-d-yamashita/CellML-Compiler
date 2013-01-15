@@ -10,32 +10,42 @@ double jacobi0 ( double* simulSet , double var2 , int i , int j ) ;
 
 int main ( int argc , char** argv ) {
 
-	double* t1;
 	double* X1;
-	double* X2[__MAX_ARRAY_NUM];
+	double* t1;
+	double** X2;
+	double** Y2;
+	double** kX2;
+	double X1end;
 	double* Y1;
+	double t1end;
 	double* kX1;
-	double* Y2[__MAX_ARRAY_NUM];
-	double* kX2[__MAX_ARRAY_NUM];
 	double* Z1;
-	double* t1end;
-	double* X1end;
 	double* X2end;
+	double X2init;
+	double delt1;
 	double t1init;
 	double X1init;
 	double delt2;
-	double X2init;
-	double delt1;
+	int n1;
+	int n2;
 
-	t1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
-	X1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
-	X2 = malloc (  ( sizeof( double ) *  ( __MAX_ARRAY_NUM * __MAX_ARRAY_NUM )  )  ) ; ;
-	Y1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
-	kX1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
-	Y2 = malloc (  ( sizeof( double ) *  ( __MAX_ARRAY_NUM * __MAX_ARRAY_NUM )  )  ) ; ;
-	kX2 = malloc (  ( sizeof( double ) *  ( __MAX_ARRAY_NUM * __MAX_ARRAY_NUM )  )  ) ; ;
-	Z1 = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
-	X2end = malloc (  ( sizeof( double ) * __MAX_ARRAY_NUM )  ) ; ;
+	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	t1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	X2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
+	Y2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
+	kX2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
+	Y1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	kX1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	Z1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	X2end = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	for(i0 = 0; ( i0 < __MAX_ARRAY_NUM ) ;i0++){
+
+		X2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+		Y2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+		kX2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+
+	}
+
 	
 	
 	X1[0] = X1init;
@@ -86,17 +96,25 @@ int main ( int argc , char** argv ) {
 	
 	
 	
-	free ( t1 ) ; 
-	free ( X1 ) ; 
-	free ( X2 ) ; 
-	free ( Y1 ) ; 
-	free ( kX1 ) ; 
-	free ( Y2 ) ; 
-	free ( kX2 ) ; 
-	free ( Z1 ) ; 
-	free ( t1end ) ; 
-	free ( X1end ) ; 
-	free ( X2end ) ; 
+	{
+
+		free ( X1 ) ; 
+		free ( t1 ) ; 
+		free ( Y1 ) ; 
+		free ( kX1 ) ; 
+		free ( Z1 ) ; 
+		free ( X2end ) ; 
+
+	}
+
+	for(i0 = 0; ( i0 < __MAX_ARRAY_NUM ) ;i0++){
+
+		free ( X2[i0] ) ; 
+		free ( Y2[i0] ) ; 
+		free ( kX2[i0] ) ; 
+
+	}
+
 null}
 
 

@@ -238,7 +238,7 @@ public class ODECommonProgramGeneratorMain {
 				ArrayList<ArrayList<Integer>> simulEquList = simpleRecMLAnalyzer.getSimulEquList();
 				
 				
-				//idでソート(なんとなくバブル)
+				//idでソート
 				for(int i=0;i<simulEquList.size();i++){
 					
 					for(int j=0;j<simulEquList.get(i).size();j++){
@@ -259,12 +259,7 @@ public class ODECommonProgramGeneratorMain {
 					}
 					
 				}
-				
-				
-				
-				
-				
-				
+
 				ArrayList<ArrayList<MathExpression>> simulEquationList = new ArrayList<ArrayList<MathExpression>>();
 				
 				//連立成分のidから数式をベクターに格納
@@ -285,11 +280,6 @@ public class ODECommonProgramGeneratorMain {
 					simulEquationList.add(simulEquSet);
 					
 				}
-				
-				//各連立成分を数式idでソートしておく. 
-				
-				
-				
 				
 				
 				simpleRecMLAnalyzer.setSimulEquationList(simulEquationList);
@@ -345,13 +335,10 @@ public class ODECommonProgramGeneratorMain {
 			
 
 				
-//				/*selector内cnのInteger*/
+				/*selector内cnのInteger*/
 				ｒecMLAnalyzer.changeAllSelectorInteger();
 				/*selector削除*/
 				ｒecMLAnalyzer.removeAllSelector();
-				
-				
-
 				
 				//非線形フラグを付与
 				for(int i=0;i<nonLinearId.size();i++){
@@ -370,11 +357,6 @@ public class ODECommonProgramGeneratorMain {
 				
 				
 				//連立成分のidから数式をベクターに格納
-				
-				
-				
-
-				
 				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
 				Vector<MathExpression> simulEquSetRec;
 				

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType.eDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration.eDeclarationSpecifier;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.StringUtil;
 
@@ -148,12 +149,22 @@ public class SyntaxFunction extends Syntax {
 			}
 		}
 		
-		//テンプレート構文追加 @n-washio
-		strPresentText.append(this.m_str);
 		
+		//テンプレート構文追加 
+		if(this.m_str!=null){
+			strPresentText.append(this.m_str);
+		}
+		
+		
+
+		if(m_pFuncType.toLegalString().equals("int")){
+			//デフォルトのリターンを記述(設定できるように変更が必要)
+			strPresentText.append(getIndentString() +"return 0;\n");
+		}
 		/*インデントデクリメント*/
 		decIndent();
-
+		
+		
 		/*関数内部構文終了*/
 		strPresentText.append(getIndentString() + "}" + StringUtil.lineSep + StringUtil.lineSep);
 

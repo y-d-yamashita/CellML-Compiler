@@ -203,13 +203,47 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		
 		
 		SyntaxFunction pSynMainFunc = this.createMainFunction();
-
+		
 		pSynProgram.addFunction(pSynMainFunc);
+		
+		//ソルバー関数を追加
 		for(int i=0;i<pSynSolverFuncList.size();i++){
 			pSynProgram.addFunction(pSynSolverFuncList.get(i));
 		}
+		
+		//連立式セットの配列を宣言に追加
+		/*Declare a blank loop for allocating one-dimensional arrays*/
+		SyntaxControl pSynMallocBlank_simul = createSyntaxBlankLoop();
+		if(m_pRecMLAnalyzer.simulEquationList.size()!=0){
+			
+			for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.size();i++){
+				/*double型ポインタ配列構文生成*/
+				SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
+				
+				/*宣言用変数の生成*/
+				Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+i);
+				
+				/*宣言の生成*/
+				SyntaxDeclaration pSynVarDec =
+					new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
+				/*宣言の追加*/
+				pSynMainFunc.addDeclaration(pSynVarDec);
+				
+				
+				/*Declare a blank loop for allocating one-dimensional arrays*/
+				pSynMallocBlank_simul = createSyntaxBlankLoop();
+				
+				String size = String.valueOf(m_pRecMLAnalyzer.simulEquationList.get(i).size());
+				Math_cn sizeNum = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,size );
+				pSynMainFunc.addStatement(createMalloc(pDecVar, sizeNum, 1));
+				
+				/* free 1D memory after use */
+				pSynMallocBlank_simul.addStatement(createFree(pDecVar));
 
+			}
+
+		}
 		/*RecurVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
 
@@ -300,7 +334,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			pSynMainFunc.addDeclaration(pSynConstVarDec);
 		}
 		
-		/*OutputVar変数の宣言*/
+		/*StepVar変数の宣言*/
 		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListStepVar().size(); i++) {
 			
 			HashMap<Math_ci, Integer> StepVarHM_G = new HashMap<Math_ci, Integer>();
@@ -372,9 +406,9 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
 				if(this.m_vecMaxArraySizeName.size()>1){
 					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
-				}
-				/* free 2D memory after use */
-				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+					/* free 2D memory after use */
+					pSynFreeFor1.addStatement(createFree(pNewVariable0));
+				} 
 			}else if(parenthesisnum == 3){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
 				if(this.m_vecMaxArraySizeName.size()>1){
@@ -405,16 +439,19 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynMallocBlank.addStatement(createFree(pVariable));
 			}else if(parenthesisnum == 2){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
-				/* free 2D memory after use */
-				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+					/* free 2D memory after use */
+					pSynFreeFor1.addStatement(createFree(pNewVariable0));
+				}
 			}else if(parenthesisnum == 3){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
-				
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
-				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
-				/* free 3D memory after use */
-				pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
+					pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
+					/* free 3D memory after use */
+					pSynFreeFor2.addStatement(createFree(pNewVariable1));
+				}
 			}
 		}
 		
@@ -436,15 +473,19 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynMallocBlank.addStatement(createFree(pVariable));
 			}else if(parenthesisnum == 2){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
-				/* free 2D memory after use */
-				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+					/* free 2D memory after use */
+					pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+				}
 			}else if(parenthesisnum == 3){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 3));
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
-				pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
-				/* free 3D memory after use */
-				pSynFreeFor2.addStatement(createFree(pNewVariable1)); 
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 2));				
+					pSynMallocFor2.addStatement(createMalloc(pNewVariable1, this.m_vecMaxArraySizeName.get(2), 1));
+					/* free 3D memory after use */
+					pSynFreeFor2.addStatement(createFree(pNewVariable1));
+				}
 			}
 		}
 		
@@ -466,9 +507,11 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 				pSynMallocBlank.addStatement(createFree(pVariable));
 			}else if(parenthesisnum == 2 ){
 				pSynMainFunc.addStatement(createMalloc(pVariable, this.m_vecMaxArraySizeName.get(0), 2));
-				pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
-				/* free 2D memory after use */
-				pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+				if(this.m_vecMaxArraySizeName.size()>1){
+					pSynMallocFor1.addStatement(createMalloc(pNewVariable0, this.m_vecMaxArraySizeName.get(1), 1));
+					/* free 2D memory after use */
+					pSynFreeFor1.addStatement(createFree(pNewVariable0)); 
+				}
 			}
 		}
 		
@@ -503,6 +546,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			pSynFreeFor1.addStatement(pSynFreeFor2);
 		}	
 		
+		pSynMainFunc.addStatement(pSynMallocBlank_simul);
 		/*プログラム構文を返す*/
 		return pSynProgram;
 	}
@@ -744,19 +788,46 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 						
 						//連立成分の最初の式であれば,ソルバーをコールする構文を付加
 						
-
+						
+						//simulSetへ導出変数の初期値を代入
+						//simulSetをソルバーへ渡す
+						//simulSetの値を導出変数へ代入
+						
+						
 						Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
 						for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();i++){
 							derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(i).getDerivedVariable());
 						}
+						
+						for(int i=0;i<derivedVarList.size();i++){
+							
+							Math_assign pMathInitAssign =
+									(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+							
+							
+							pMathInitAssign.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+pMathExp.getSimulID()+"["+i+"]"));
+				
+							pMathInitAssign.addFactor(derivedVarList.get(i));
+							/*新たな計算式を生成*/
+							MathExpression pNewExp = new MathExpression(pMathInitAssign);
+				
+							/*数式ベクタに追加*/
+							SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+							vecExpressions.add(pSyntaxExp);
+							
+						}
 
+						
+						
+						
+						
 						String[] strAttr = new String[] {null, null, null, null, null};
 						Math_fn func = (Math_fn) MathFactory.createOperator(MathMLDefinition.getMathOperatorId("fn"), strAttr);
 						Math_ci funcOperand = (Math_ci) MathFactory.createOperand( eMathOperand.MOPD_CI, "simulNewton"+pMathExp.getSimulID());
 						
 						func.setFuncOperand((MathOperand)funcOperand);
 						
-						func.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"));
+						func.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+pMathExp.getSimulID()));
 						
 						
 						//含まれる変数リストを作成

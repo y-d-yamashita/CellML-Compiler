@@ -14,19 +14,19 @@ int main ( int argc , char** argv ) {
 	double* X1;
 	double* t1;
 	double** X2;
+	double** Y2;
 	double** kX2;
 	double X1end;
-	double** Y2;
-	double* kX1;
-	double t1end;
-	double* X2end;
-	double* Z1;
 	double* Y1;
+	double t1end;
+	double* kX1;
+	double* Z1;
+	double* X2end;
 	double X2init;
-	double X1init;
 	double delt1;
-	double delt2;
 	double t1init;
+	double X1init;
+	double delt2;
 	int n1;
 	int n2;
 
@@ -34,17 +34,17 @@ int main ( int argc , char** argv ) {
 	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	t1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	X2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
-	kX2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
 	Y2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
-	kX1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
-	X2end = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
-	Z1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	kX2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
 	Y1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	kX1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	Z1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	X2end = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	for(i0 = 0; ( i0 < __MAX_ARRAY_NUM ) ;i0++){
 
 		X2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
-		kX2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 		Y2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+		kX2[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 
 	}
 
@@ -60,8 +60,8 @@ int main ( int argc , char** argv ) {
 		simulSet0[0] = Y1[n1];
 		simulSet0[1] = Z1[n1];
 		simulNewton0 ( simulSet0 , X1[n1] ) ;
-		Y1[n1] = simulSet[0];
-		Z1[n1] = simulSet[1];
+		Y1[n1] = simulSet0[0];
+		Z1[n1] = simulSet0[1];
 		t1[ ( n1 + 1 ) ] =  ( t1[n1] + delt1 ) ;
 		
 		
@@ -104,18 +104,18 @@ int main ( int argc , char** argv ) {
 
 		free ( X1 ) ; 
 		free ( t1 ) ; 
-		free ( kX1 ) ; 
-		free ( X2end ) ; 
-		free ( Z1 ) ; 
 		free ( Y1 ) ; 
+		free ( kX1 ) ; 
+		free ( Z1 ) ; 
+		free ( X2end ) ; 
 
 	}
 
 	for(i0 = 0; ( i0 < __MAX_ARRAY_NUM ) ;i0++){
 
 		free ( X2[i0] ) ; 
-		free ( kX2[i0] ) ; 
 		free ( Y2[i0] ) ; 
+		free ( kX2[i0] ) ; 
 
 	}
 

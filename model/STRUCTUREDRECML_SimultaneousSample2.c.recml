@@ -18,19 +18,19 @@
 <variable name="X1" type="recurvar" loopcomponent1 = "1" />
 <variable name="t1" type="recurvar" loopcomponent1 = "1" />
 <variable name="X2" type="recurvar" loopcomponent1 = "1" loopcomponent2 = "1" />
+<variable name="Y2" type="arithvar" loopcomponent1 = "1" loopcomponent2 = "1" />
 <variable name="kX2" type="arithvar" loopcomponent1 = "1" loopcomponent2 = "1" />
 <variable name="X1end" type="arithvar" />
-<variable name="Y2" type="arithvar" loopcomponent1 = "1" loopcomponent2 = "1" />
-<variable name="kX1" type="arithvar" loopcomponent1 = "1" />
-<variable name="t1end" type="arithvar" />
-<variable name="X2end" type="arithvar" loopcomponent1 = "1" />
-<variable name="Z1" type="arithvar" loopcomponent1 = "1" />
 <variable name="Y1" type="arithvar" loopcomponent1 = "1" />
+<variable name="t1end" type="arithvar" />
+<variable name="kX1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Z1" type="arithvar" loopcomponent1 = "1" />
+<variable name="X2end" type="arithvar" loopcomponent1 = "1" />
 <variable name="X2init" type="constvar" />
-<variable name="X1init" type="constvar" />
 <variable name="delt1" type="constvar" />
-<variable name="delt2" type="constvar" />
 <variable name="t1init" type="constvar" />
+<variable name="X1init" type="constvar" />
+<variable name="delt2" type="constvar" />
 <variable name="n1" type="stepvar" />
 <variable name="n2" type="stepvar" />
 
@@ -53,24 +53,24 @@
 <node id="15" equation="14" variable="19" />
 <node id="16" equation="16" variable="20" />
 
-<edge dest="14" source="3" />
-<edge dest="10" source="9" />
-<edge dest="9" source="8" />
-<edge dest="15" source="13" />
-<edge dest="1" source="0" />
-<edge dest="4" source="5" />
-<edge dest="7" source="6" />
-<edge dest="8" source="7" />
-<edge dest="10" source="7" />
-<edge dest="12" source="11" />
-<edge dest="13" source="12" />
-<edge dest="3" source="2" />
-<edge dest="4" source="1" />
-<edge dest="13" source="1" />
 <edge dest="5" source="4" />
 <edge dest="6" source="4" />
-<edge dest="16" source="14" />
 <edge dest="12" source="4" />
+<edge dest="12" source="11" />
+<edge dest="9" source="8" />
+<edge dest="16" source="14" />
+<edge dest="13" source="12" />
+<edge dest="7" source="6" />
+<edge dest="1" source="0" />
+<edge dest="4" source="1" />
+<edge dest="13" source="1" />
+<edge dest="14" source="3" />
+<edge dest="3" source="2" />
+<edge dest="15" source="13" />
+<edge dest="4" source="5" />
+<edge dest="8" source="7" />
+<edge dest="10" source="9" />
+<edge dest="10" source="7" />
 <edge dest="11" source="10" />
 
 

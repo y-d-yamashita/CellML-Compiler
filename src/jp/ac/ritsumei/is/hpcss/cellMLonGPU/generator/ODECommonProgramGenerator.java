@@ -875,7 +875,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 							(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
 					
 					pMathAssign2.addFactor(pMathExp.getDerivedVariable());
-					pMathAssign2.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet["+SimulEquNum+"]"));
+					pMathAssign2.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+pMathExp.getSimulID()+"["+SimulEquNum+"]"));
 		
 					/*新たな計算式を生成*/
 					MathExpression pNewExp = new MathExpression(pMathAssign2);

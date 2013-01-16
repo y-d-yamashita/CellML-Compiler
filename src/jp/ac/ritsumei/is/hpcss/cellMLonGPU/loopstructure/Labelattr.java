@@ -277,8 +277,8 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			//生成に必要のない属性情報を削る
 			//---------------------------------------------------
 			removeAttr(m_LoopStructure, m_AttrLists);
-			System.out.println("------------- debug Ouptup removeAttr -------------");
-			outputLabelSample(m_AttrLists);
+			//System.out.println("------------- debug Ouptup removeAttr -------------");
+			//outputLabelSample(m_AttrLists);
 
 			//---------------------------------------------------
 			//conditionに対して属性情報を割り振る
@@ -423,18 +423,18 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 		
 		/*依存関係グラフに対してStartからGoalに向かって属性情報を決定していく*/
 		HashMapDownAttrList = downwardLabel(NodeList,EdgeList);
-		System.out.println("------------- debug Ouptup downwardLabel -------------");
-		outputLabelSample(HashMapDownAttrList);
+		//System.out.println("------------- debug Ouptup downwardLabel -------------");
+		//outputLabelSample(HashMapDownAttrList);
 
 		/*依存関係グラフに対してGoalからStartに向かって属性情報を決定していく*/
 		HashMapUpAttrList = upLabel(NodeList, EdgeList);
-		System.out.println("------------- debug Ouptup upLabel -------------");
-		outputLabelSample(HashMapUpAttrList);
+		//System.out.println("------------- debug Ouptup upLabel -------------");
+		//outputLabelSample(HashMapUpAttrList);
 		
 		/*2種類の探索結果の統合を行う*/
 		HashMapMargeAttrList = mergeDownWithUp(HashMapDownAttrList, HashMapUpAttrList);
-		System.out.println("------------- debug Ouptup mergeDownWithUp -------------");
-		outputLabelSample(HashMapMargeAttrList);
+		//System.out.println("------------- debug Ouptup mergeDownWithUp -------------");
+		//outputLabelSample(HashMapMargeAttrList);
 		
 		/*StartとGoalに対する属性情報を削除する*/
 		HashMapMargeAttrList.remove(-1);
@@ -643,9 +643,9 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 //			System.out.println("EquNum: " + checkEquNum);
 
 			for(int xx:HashMapUpAttrList.keySet()){
-				System.out.print(xx+", ");
+				//System.out.print(xx+", ");
 			}
-			System.out.println();
+			//System.out.println();
 			
 			ArrayList<Integer> checkDestIdList = null;
 			/*数式番号が登録されているNodeIdを取得する*/
@@ -685,7 +685,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			for(int oder=0;oder<checkDestIdList.size();oder++){
 				destNodeEquNum_0 = NodeList.get(checkDestIdList.get(oder)).get("equation");
 				if(HashMapUpAttrList.containsKey(destNodeEquNum_0)){
-					System.out.println("destNodeEquNum_0:" + destNodeEquNum_0 );
+					//System.out.println("destNodeEquNum_0:" + destNodeEquNum_0 );
 					break;
 				}
 			}
@@ -696,11 +696,11 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 				int destNodeEquNum_k = NodeList.get(checkDestIdList.get(k)).get("equation");
 				
 				if(HashMapUpAttrList.containsKey(destNodeEquNum_k)){
-//					/*debug*/
-					System.out.println("checkEquNum:" + checkEquNum );
-					System.out.println("destNodeEquNum_0:" + destNodeEquNum_0 );
-					System.out.println("sourceNodeEquNum_k:" + destNodeEquNum_k );
-					System.out.println();
+////					/*debug*/
+//					System.out.println("checkEquNum:" + checkEquNum );
+//					System.out.println("destNodeEquNum_0:" + destNodeEquNum_0 );
+//					System.out.println("sourceNodeEquNum_k:" + destNodeEquNum_k );
+//					System.out.println();
 					HashMap<Integer, String> destAttrList = HashMapUpAttrList.get(destNodeEquNum_k);
 					cheakAttrList = mergeUpAttrList(cheakAttrList,destAttrList);
 				}
@@ -891,11 +891,11 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 	public void outputLabelSample(HashMap<Integer, HashMap<Integer, String>> AttrLists){
 		for(Integer i:AttrLists.keySet()){
 			HashMap<Integer, String> hm = AttrLists.get(i);
-			System.out.print("equNum"+ i);
+			//System.out.print("equNum"+ i);
 			for(Integer j:hm.keySet()){
-				System.out.print("-" + AttrLists.get(i).get(j) + "-");
+				//System.out.print("-" + AttrLists.get(i).get(j) + "-");
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 	
@@ -1032,14 +1032,14 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 //		kawabataTest1212_3(PARENT_ID,childID, ATTR);
 		
 		kawabataTest1212_2(PARENT_ID, childID, ATTR);
-		System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
+		//System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
 
 		for(int i=0;i<m_LoopStructure.size();i++){
 			int pa = m_LoopStructure.get(i).Parent_name;
 			int ch = m_LoopStructure.get(i).Child_name;
 			if(childID == pa){
 				/*二重処理が生じている*/
-//				kawabataTest1212_2(PARENT_ID, childID, ATTR);
+				kawabataTest1212_2(PARENT_ID, childID, ATTR);
 //				System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
 				kawabataTest1212_1(PARENT_ID, ch, ATTR);
 			}
@@ -1088,7 +1088,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 	private void kawabataTest1212_4(int PARENT_ID, int childID, String ATTR) {
 		// TODO Auto-generated method stub
 		kawabataTest1212_5(PARENT_ID, childID, ATTR);
-		System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
+		//System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
 
 		for(int i=0;i<m_LoopStructure.size();i++){
 			int pa = m_LoopStructure.get(i).Parent_name;
@@ -1118,14 +1118,14 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 	private void kawabataTest1212_3(int PARENT_ID, int childID, String ATTR) {
 		// TODO Auto-generated method stub
 		kawabataTest1212_2(PARENT_ID, childID, ATTR);
-		System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
+		//System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
 
 		for(int i=0;i<m_LoopStructure.size();i++){
 			int pa = m_LoopStructure.get(i).Parent_name;
 			int ch = m_LoopStructure.get(i).Child_name;
 			if(childID == pa){
 				kawabataTest1212_2(PARENT_ID, childID, ATTR);
-				System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
+				//System.out.println("-----------------debug----------- PARENT_ID:"+ PARENT_ID + " -- childID: " + childID +" -- ATTR:"+ATTR);
 				kawabataTest1212_3(PARENT_ID, ch, ATTR);
 			}
 		}

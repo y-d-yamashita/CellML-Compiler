@@ -35,7 +35,7 @@ public class SimultaneousNewtonSolver {
 	
 	
 	
-	public String makeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e, int max) throws MathException {
+	public String makeSimultaneousNewtonSolver(Vector<MathExpression> expList, Vector<Math_ci> varList, double e, int max, int id) throws MathException {
 		
 		int n= varList.size();
 		
@@ -90,12 +90,12 @@ public class SimultaneousNewtonSolver {
 		outputStr=outputStr.concat("\n");
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
 		outputStr=outputStr.concat("\t\t\tfor(j=0;j<"+n+";j++){\n");
-		outputStr=outputStr.concat("\t\t\t\tjac[i][j] = jacobi(simulSet,");
+		outputStr=outputStr.concat("\t\t\t\tjac[i][j] = jacobi"+id+"(simulSet,");
 		for(int j=0;j<v2List.size();j++){
 			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
 		outputStr=outputStr.concat("i,j);\n");
-		outputStr=outputStr.concat("\t\t\t\tcpy[i][j] = jacobi(simulSet,");
+		outputStr=outputStr.concat("\t\t\t\tcpy[i][j] = jacobi"+id+"(simulSet,");
 		for(int j=0;j<v2List.size();j++){
 			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
@@ -153,7 +153,7 @@ public class SimultaneousNewtonSolver {
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
 		outputStr=outputStr.concat("\t\t\tpro = 0.0;\n");
 		outputStr=outputStr.concat("\t\t\tfor(j=0;j<"+n+";j++){\n");
-		outputStr=outputStr.concat("\t\t\t\tpro += inv[i][j] * func(simulSet,");
+		outputStr=outputStr.concat("\t\t\t\tpro += inv[i][j] * simulFunc"+id+"(simulSet,");
 		for(int j=0;j<v2List.size();j++){
 			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
@@ -168,7 +168,7 @@ public class SimultaneousNewtonSolver {
 		
 		//判定値の計算
 		outputStr=outputStr.concat("\t\tfor(i=0;i<"+n+";i++){\n");
-		outputStr=outputStr.concat("\t\t\tf[i] = func(simulSet,");
+		outputStr=outputStr.concat("\t\t\tf[i] = simulFunc"+id+"(simulSet,");
 		for(int j=0;j<v2List.size();j++){
 			outputStr=outputStr.concat(v2List.get(j).getCodeName()+",");
 		}
@@ -448,9 +448,10 @@ public class SimultaneousNewtonSolver {
 		
 		double eps = 0.001;
 		int max = 1000;
+		int id =0;
 		
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
-		sns.makeSimultaneousNewtonSolver(eqList, varList, eps ,max);
+		sns.makeSimultaneousNewtonSolver(eqList, varList, eps ,max, id);
 		
 		
 	}

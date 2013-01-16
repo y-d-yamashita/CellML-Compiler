@@ -1026,7 +1026,6 @@ public abstract class ProgramGenerator {
 		pSynDiffrFunc.addParam(pSynArgvDec);
 		for(int i=0;i<varList_new.size();i++){
 
-			//導出変数でない場合,引数リストに追加 idによるソートが必要　保留
 			boolean overlap=false;
 			for(int j=0;j<derivedVarList.size();j++){
 				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
@@ -1042,12 +1041,10 @@ public abstract class ProgramGenerator {
 		
 		double e = 1.0e-50;//収束判定値
 		int max = 1000;//最大反復数
-		
-		
-		//導出変数リストにインデックスを含む変数が出現しないことを確認する必要がある. 保留
+	
 	
 		SimultaneousNewtonSolver sns = new SimultaneousNewtonSolver();
-		String str = sns.makeSimultaneousNewtonSolver(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList,e,max);
+		String str = sns.makeSimultaneousNewtonSolver(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList,e,max,(int) exp.getSimulID());
 		
 		pSynDiffrFunc.addString(str);
 

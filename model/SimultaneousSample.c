@@ -10,6 +10,7 @@ double jacobi0 ( double* simulSet , double var2 , int i , int j ) ;
 
 int main ( int argc , char** argv ) {
 
+	double* simulSet0;
 	double* X1;
 	double* t1;
 	double** X2;
@@ -29,6 +30,7 @@ int main ( int argc , char** argv ) {
 	int n1;
 	int n2;
 
+	simulSet0 = (double*)malloc (  ( sizeof(double ) * (double)2 )  ) ; ;
 	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	t1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	X2 = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
@@ -55,9 +57,11 @@ int main ( int argc , char** argv ) {
 	n1 = 0;
 	do{
 
-		simulNewton0 ( simulSet , X1[n1] ) ;
-		Y1[n1] = simulSet[0];
-		Z1[n1] = simulSet[1];
+		simulSet0[0] = Y1[n1];
+		simulSet0[1] = Z1[n1];
+		simulNewton0 ( simulSet0 , X1[n1] ) ;
+		Y1[n1] = simulSet0[0];
+		Z1[n1] = simulSet0[1];
 		t1[ ( n1 + 1 ) ] =  ( t1[n1] + delt1 ) ;
 		
 		
@@ -115,7 +119,14 @@ int main ( int argc , char** argv ) {
 
 	}
 
-null}
+	{
+
+		free ( simulSet0 ) ; 
+
+	}
+
+	return 0;
+}
 
 
 void simulNewton0 ( double* simulSet , double var2 ) {
@@ -144,8 +155,8 @@ void simulNewton0 ( double* simulSet , double var2 ) {
 
 		for(i=0;i<2;i++){
 			for(j=0;j<2;j++){
-				jac[i][j] = jacobi(simulSet,var2,i,j);
-				cpy[i][j] = jacobi(simulSet,var2,i,j);
+				jac[i][j] = jacobi0(simulSet,var2,i,j);
+				cpy[i][j] = jacobi0(simulSet,var2,i,j);
 
 			}
 		}
@@ -191,7 +202,7 @@ void simulNewton0 ( double* simulSet , double var2 ) {
 		for(i=0;i<2;i++){
 			pro = 0.0;
 			for(j=0;j<2;j++){
-				pro += inv[i][j] * func(simulSet,var2,j);
+				pro += inv[i][j] * simulFunc0(simulSet,var2,j);
 			}
 			simulSet_next[i] = simulSet[i] - pro;
 		}
@@ -199,7 +210,7 @@ void simulNewton0 ( double* simulSet , double var2 ) {
 			simulSet[i] = simulSet_next[i];
 		}
 		for(i=0;i<2;i++){
-			f[i] = func(simulSet,var2,i);
+			f[i] = simulFunc0(simulSet,var2,i);
 			eps += f[i]*f[i];
 		}
 	} while (1.0E-50 < sqrt(eps));

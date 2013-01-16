@@ -1,7 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#define __MAX_ARRAY_NUM 100 //手動入力(1)
 
+//gcc コンパイルテスト済みサンプルコード
+//自動生成ファイルに1箇所手動入力
+
+//SimpleRecML input file:
+//model/recml/SimpleRecMLSample/SimpleRecMLSample2.1/SimpleRecMLSample001_2.1nl2.recml
 
 int main ( int argc , char** argv ) ;
 double newton5 ( double var0 , double var1 ) ;

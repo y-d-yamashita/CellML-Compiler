@@ -1,12 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#define __MAX_ARRAY_NUM 100 //手動入力(1)
+#define __MAX_ARRAY_NUM 100 //手動入力(1) 配列最大値
 
 //gcc コンパイルテスト済みサンプルコード
 //自動生成ファイルに2箇所手動入力
-
-//Code file: SimultaneousSample3.c
 
 //SimpleRecML input file:
 //model/recml/SimpleRecMLSample/SimpleRecMLSample2.1/SimpleRecMLSample002_simul_2.1.recml
@@ -37,7 +35,7 @@ int main ( int argc , char** argv ) {
 	double delt2;
 	int n1;
 	int n2;
-	int i0;//手動入力(2)
+	int i0;//手動入力(2) メモリ確保時のループ変数
 
 	simulSet0 = (double*)malloc (  ( sizeof(double ) * (double)2 )  ) ; ;
 	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;

@@ -136,6 +136,10 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		pSynProgram.addPreprocessor(pSynInclude2);
 		pSynProgram.addPreprocessor(pSynInclude3);
 		
+		SyntaxPreprocessor pSynDefine =
+				new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE, "__MAX_ARRAY_NUM 100");
+		
+		pSynProgram.addPreprocessor(pSynDefine);
 		
 		ArrayList<SyntaxFunction> pSynSolverFuncList = new ArrayList<SyntaxFunction>();
 		
@@ -210,6 +214,8 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		for(int i=0;i<pSynSolverFuncList.size();i++){
 			pSynProgram.addFunction(pSynSolverFuncList.get(i));
 		}
+		
+
 		
 		//連立式セットの配列を宣言に追加
 		/*Declare a blank loop for allocating one-dimensional arrays*/
@@ -360,14 +366,32 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		//------------------------------------------------------
 		// Memory allocation codes for the simulation variables
 		//------------------------------------------------------
-
+		
+		/*int型変数構文生成*/
+		SyntaxDataType pSynTypeINTArray = new SyntaxDataType(eDataType.DT_INT, 0);
+		
+		/*宣言用変数の生成*/
+		Math_ci loopIndex0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "i0");
+		Math_ci loopIndex1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "i1");
+		
+		/*宣言の生成*/
+		SyntaxDeclaration pSynVarDec1 =
+			new SyntaxDeclaration(pSynTypeINTArray, loopIndex0);
+		SyntaxDeclaration pSynVarDec2 =
+				new SyntaxDeclaration(pSynTypeINTArray, loopIndex1);
+		
+		/*宣言の追加*/
+		pSynMainFunc.addDeclaration(pSynVarDec1);
+		pSynMainFunc.addDeclaration(pSynVarDec2);
+		
+		
+		
 		/* Get the maximum number of loop indices in the Recurrence Relation file and set max index number names */
 		int maxIndexNum = m_pRecMLAnalyzer.getM_HashMapIndexList().size();
 		this.setMaxArraySizeName(maxIndexNum);
 		String strIndex0 = "i0";
 		String strIndex1 = "i1";
-		Math_ci loopIndex0 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strIndex0);
-		Math_ci loopIndex1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strIndex1);
+
 		
 		/*Declare a blank loop for allocating one-dimensional arrays*/
 		SyntaxControl pSynMallocBlank = createSyntaxBlankLoop();

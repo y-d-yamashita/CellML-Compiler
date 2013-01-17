@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#define __MAX_ARRAY_NUM 100
 
 
 int main ( int argc , char** argv ) ;
@@ -29,6 +30,8 @@ int main ( int argc , char** argv ) {
 	double delt2;
 	int n1;
 	int n2;
+	int i0;
+	int i1;
 
 	simulSet0 = (double*)malloc (  ( sizeof(double ) * (double)2 )  ) ; ;
 	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;

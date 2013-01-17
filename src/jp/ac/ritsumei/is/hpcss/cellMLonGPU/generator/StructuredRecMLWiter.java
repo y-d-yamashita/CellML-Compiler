@@ -506,11 +506,12 @@ public class StructuredRecMLWiter{
 	public ArrayList<String> outPutSimulEqu() {
 		ArrayList<String> out = new ArrayList<String>();
 		ArrayList<ArrayList<Integer>> se = pSimpleRecMLAnalyzer.getSimulEquList();
+		
 		int id=0;
-		for(ArrayList<Integer> al:se){
+		for(int i=0;i<se.size();i++){
 			String str = "";
-			for(Integer in:al){
-				str = "<simulltaneous id = \"" + id + "\" equation = \""+ in +"\"/>";
+			for(int j=0;j<se.get(i).size();j++){
+				str += "<simultaneous id = \"" + id + "\" equation = \""+ se.get(i).get(j) +"\"/>\n";
 			}
 			id++;
 			out.add(str);

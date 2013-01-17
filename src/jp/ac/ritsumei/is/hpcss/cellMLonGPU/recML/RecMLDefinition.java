@@ -23,7 +23,7 @@ public class RecMLDefinition {
 	public static final String RECML_TAG_STR_NODE = "node";
 	public static final String RECML_TAG_STR_EDGE = "edge";
 	public static final String RECML_TAG_STR_REFVARIABLE = "refvariable";
-	public static final String RECML_TAG_STR_SIMULLTANEOUS = "simulltaneous";
+	public static final String RECML_TAG_STR_SIMULLTANEOUS = "simultaneous";
 	
 	/*RecML変数型文字列定義*/
 	public static final String RECML_VARTYPE_STR_RECURVAR = "recurvar";

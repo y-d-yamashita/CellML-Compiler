@@ -115,7 +115,7 @@ public class NewtonSolver {
 			if(i!=varList.size()-1)outputStr=outputStr.concat(",");
 		}
 		outputStr=outputStr.concat(") / ");
-		outputStr=outputStr.concat( "\tdfunc"+expression.getExID()+ "(");
+		outputStr=outputStr.concat( "dfunc"+expression.getExID()+ "(");
 		for(int i=0;i<varList.size();i++){
 			outputStr=outputStr.concat(varList.get(i).getCodeName());
 			if(i!=varList.size()-1)outputStr=outputStr.concat(",");

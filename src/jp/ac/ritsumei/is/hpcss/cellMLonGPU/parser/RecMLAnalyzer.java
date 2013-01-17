@@ -15,6 +15,9 @@ import org.xml.sax.SAXParseException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition.eRecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition.eRecMLVarType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.EqnDepTree.EqnDepTree;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
@@ -23,10 +26,14 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.XMLException;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CreateRecMLVariableTableVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CreateSimpleRecMLVariableTableVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.SimpleRecML_SetLeftSideRightSideVariableVisitor;
 
 
 /**
@@ -38,9 +45,11 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	private boolean m_bMathParsing;
 	private boolean m_bAttrParsing;
 	
+	private RecMLVariableTable recMLVariableTable;
+	public HashMap<Integer,Vector<Integer>> simulEquationIDList;
 	public ArrayList<Vector<MathExpression>> simulEquationList;
+	public ArrayList<Vector<Integer>> resultMaximumMatching;
 	
-
 	// loop index variable name list (initialized in constructor)
 	// just for test
 	// should be implemented as hashmap or new class
@@ -50,6 +59,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	EqnDepTree root, now;
 	int type; // 0=pre, 1=init, 2=inner, 3=loopcond, 4=final, 5=post
 	
+
 	//HashMap
 	private HashMap<Integer, String> indexHashMapList;
 	public HashMap<Integer, String> getM_HashMapIndexList() {
@@ -158,13 +168,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		m_bMathParsing = false;
 		m_bAttrParsing = false;
 		m_vecExpression = new Vector<MathExpression>();
-		// just for test
-		// should be implemented as hashmap?
-//		String[] indexList = {"tn", "tm", "to"};
-//		indexStringList = indexList;
-		
-				
-		// equation dependent tree init
+		this.simulEquationIDList = new HashMap<Integer,Vector<Integer>>();
+		this.simulEquationList = new ArrayList<Vector<MathExpression>>();
+		this.resultMaximumMatching = new ArrayList<Vector<Integer>>();
 		root = null;
 		now = null;
 		
@@ -320,45 +326,6 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 					/*変数名から変数インスタンス生成*/
 					Math_ci pVariable =
 						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName);
-	
-//					/*input変数の登録*/
-//					if (tagId == eTecMLTag.TTAG_INPUTVAR) {
-//						m_pInputVar = pVariable;
-//					}
-//					/*output変数の登録*/
-//					else if (tagId == eTecMLTag.TTAG_OUTPUTVAR) {
-//						m_pOutputVar = pVariable;
-//					}
-	
-//					/*タイプごとに変数追加*/
-//					switch (varType) {
-//	
-//						//----------------------------------RECURVAR変数型
-//					case CVAR_TYPE_RECURVAR:
-//						m_vecRecurVar.add(pVariable);
-//						break;
-//	
-//						//----------------------------------ARITHVAR変数型
-//					case CVAR_TYPE_ARITHVAR:
-//						m_vecArithVar.add(pVariable);
-//						break;
-//	
-//						//----------------------------------CONSTVAR変数型
-//					case CVAR_TYPE_CONSTVAR:
-//						m_vecConstVar.add(pVariable);
-//						break;
-//	
-//						//----------------------------------CONDITION変数型
-//					case CVAR_TYPE_STR_CONDITION:
-//						m_vecCondition.add(pVariable);
-//						break;
-//	
-//						//----------------------------------OUTPUT変数型
-//					case CVAR_TYPE_OUTPUT:
-//						m_vecOutput.add(pVariable);
-//						break;
-//
-//					}
 					
 					String[] LoopComponent = new String[5];
 					LoopComponent[0] = pXMLAttr.getValue("loopcomponent1");
@@ -415,6 +382,42 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 					break;
 				}
 				//--------------------------------------変数宣言
+				
+				
+				case CTAG_NODE:
+				{
+					String equation = pXMLAttr.getValue("equation");
+					String variable = pXMLAttr.getValue("variable");
+					
+					Vector<Integer> pairID = new Vector<Integer>();
+					pairID.add(Integer.parseInt(equation));
+					pairID.add(Integer.parseInt(variable));
+					this.resultMaximumMatching.add(pairID);
+					break;
+				}
+		
+				
+				
+				case CTAG_SIMULLTANEOUS:
+				{
+					/*連立IDと数式IDを取得*/
+					String strID = pXMLAttr.getValue("id");
+					String strEqID = pXMLAttr.getValue("equation");
+					
+					if(this.simulEquationIDList.containsKey(Integer.parseInt(strID))){
+						Vector<Integer> list =  this.simulEquationIDList.get(Integer.parseInt(strID));
+						list.add(Integer.parseInt(strEqID));
+						this.simulEquationIDList.put(Integer.parseInt(strID),list);
+						break;
+					}else{
+						Vector<Integer> list = new Vector<Integer>();
+						list.add(Integer.parseInt(strEqID));
+						this.simulEquationIDList.put(Integer.parseInt(strID),list);
+						break;
+					}
+				}
+				
+
 			}
 		}
 	}
@@ -583,29 +586,13 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			}
 		}
 
-//		try {
-//			recMLAnalyzer.printContents();
-//		} catch (MathException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 	
-	// <loopindex num="0" name="tn"/> tag registration
-	// should be implemented as hashmap or new class
-//	protected void setIndexString(int LoopNumber, String varName) {
-//		indexStringList[LoopNumber] = varName;
-//	}
 	//HashMap
 	protected void setIndexHashMap(int LoopNumber, String varName) {
 		indexHashMapList.put(LoopNumber, varName);
 	}
 	
-	// get loop index variable name
-	// should be implemented as hashmap or new class
-//	public String getIndexString(int LoopNumber) {
-//		return indexStringList[LoopNumber];
-//	}
 	//HashMap
 	public String getIndexHashMap(int LoopNumber) {
 		return indexHashMapList.get(LoopNumber);
@@ -629,12 +616,6 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	// just for debug
 	// should be implemented to refer recml tree structure
 	public boolean hasChild(String[] strAttr) {
-		// for test4.recml
-//		if (strAttr[0].equals("inner") && (strAttr[1]==null) && (strAttr[2]==null)) {
-//			return true;
-//		} else {
-//			return false;
-//		}
 		
 		if (nextChildLoopNumber(strAttr) != -1) {
 			return true;
@@ -645,13 +626,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	
 	// LoopNumber for the child of strAttr
 	public int nextChildLoopNumber(String[] strAttr) {
-		// for test4.recml
-//		if (strAttr[0].equals("inner") && (strAttr[1]==null) && (strAttr[2]==null)) {
-//			return 1;
-//		} else {
-//			return 0;
-//		}
-		
+
 		return nextChildLoopNumber(strAttr, root);
 	}
 	
@@ -677,5 +652,17 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			childLoopNum = nextChildLoopNumber(strAttr, node.n_post);
 		} 
 		return childLoopNum;
+	}
+	
+	public void createVariableTable() {
+		CreateRecMLVariableTableVisitor visitor = new CreateRecMLVariableTableVisitor();
+		
+		 for(MathExpression expr :m_vecMathExpression)
+			 expr.getRootFactor().traverse(visitor);
+		 recMLVariableTable=visitor.getTable();
+	}
+	
+	public RecMLVariableTable getRecMLVariableTable() {
+		return recMLVariableTable;
 	}
 }

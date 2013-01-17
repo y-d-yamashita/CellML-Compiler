@@ -11,12 +11,12 @@
 <variable name="X1" type="recurvar" loopcomponent1 = "1" />
 <variable name="t1" type="recurvar" loopcomponent1 = "1" />
 <variable name="X1end" type="arithvar" />
-<variable name="Y1" type="arithvar" loopcomponent1 = "1" />
-<variable name="t1end" type="arithvar" />
 <variable name="kX1" type="arithvar" loopcomponent1 = "1" />
+<variable name="t1end" type="arithvar" />
+<variable name="Y1" type="arithvar" loopcomponent1 = "1" />
+<variable name="X1init" type="constvar" />
 <variable name="delt1" type="constvar" />
 <variable name="t1init" type="constvar" />
-<variable name="X1init" type="constvar" />
 <variable name="n1" type="stepvar" />
 
 

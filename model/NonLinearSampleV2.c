@@ -87,7 +87,7 @@ double newton5 ( double var0 , double var1 ) {
 		if(max > 1000){
 			printf("error:no convergence\n");break;
 		}
-		var0_next = var0 - ( func5(var0,var1) / 	dfunc5(var0,var1) );
+		var0_next = var0 - ( func5(var0,var1) / dfunc5(var0,var1) );
 		var0 = var0_next;
 		eps = func5(var0,var1);
 

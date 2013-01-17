@@ -13,18 +13,18 @@ int main ( int argc , char** argv ) {
 	double* X1;
 	double* t1;
 	double X1end;
-	double* Y1;
-	double t1end;
 	double* kX1;
+	double t1end;
+	double* Y1;
+	double X1init;
 	double delt1;
 	double t1init;
-	double X1init;
 	int n1;
 
 	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	t1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
-	Y1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	kX1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	Y1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	
 	
 	X1[0] = X1init;
@@ -54,8 +54,8 @@ int main ( int argc , char** argv ) {
 
 		free ( X1 ) ; 
 		free ( t1 ) ; 
-		free ( Y1 ) ; 
 		free ( kX1 ) ; 
+		free ( Y1 ) ; 
 
 	}
 
@@ -81,7 +81,7 @@ double newton5 ( double var0 , double var1 ) {
 		if(max > 1000){
 			printf("error:no convergence\n");break;
 		}
-		var0_next = var0 - ( func5(var0,var1) / 	dfunc5(var0,var1) );
+		var0_next = var0 - ( func5(var0,var1) / dfunc5(var0,var1) );
 		var0 = var0_next;
 		eps = func5(var0,var1);
 

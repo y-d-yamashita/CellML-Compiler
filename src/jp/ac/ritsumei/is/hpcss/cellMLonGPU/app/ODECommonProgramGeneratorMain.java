@@ -291,10 +291,33 @@ public class ODECommonProgramGeneratorMain {
 
 				//連立成分のidから解析情報数式をベクターに格納
 				
+				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
+				
+				for(int i=0;i<simulEquationIDList.size();i++){
+					
+					for(int j=0;j<simulEquationIDList.get(i).size();j++){
+						
+						Integer temp;
+						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
+							
+							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
+								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
+									temp=simulEquationIDList.get(i).get(y);
+									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
+									simulEquationIDList.get(i).set(y-1, temp);
+								}
+							}
+							
+						}
+
+					}
+					
+				}
+				
 				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
 				Vector<MathExpression> simulEquSetRec;
 				
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
+				
 				
 				for(int i=0;i<simulEquationIDList.size();i++){
 					Vector<Integer> setID =simulEquationIDList.get(i);
@@ -311,6 +334,7 @@ public class ODECommonProgramGeneratorMain {
 				recMLAnalyzer.setSimulEquationList(simulEquationListRec);
 				
 				
+
 				
 				//---------------------------------------------------
 				//目的プログラム生成
@@ -419,11 +443,33 @@ public class ODECommonProgramGeneratorMain {
 				}
 
 				//連立成分のidから解析情報数式をベクターに格納
+
+				
+				HashMap<Integer,Vector<Integer>> simulEquationIDList = pRecMLAnalyzer.simulEquationIDList;
+				
+				for(int i=0;i<simulEquationIDList.size();i++){
+					
+					for(int j=0;j<simulEquationIDList.get(i).size();j++){
+						
+						Integer temp;
+						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
+							
+							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
+								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
+									temp=simulEquationIDList.get(i).get(y);
+									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
+									simulEquationIDList.get(i).set(y-1, temp);
+								}
+							}
+							
+						}
+
+					}
+					
+				}
 				
 				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
 				Vector<MathExpression> simulEquSetRec;
-				
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = pRecMLAnalyzer.simulEquationIDList;
 				
 				for(int i=0;i<simulEquationIDList.size();i++){
 					Vector<Integer> setID =simulEquationIDList.get(i);

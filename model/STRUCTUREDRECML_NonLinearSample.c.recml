@@ -11,12 +11,12 @@
 <variable name="X1" type="recurvar" loopcomponent1 = "1" />
 <variable name="t1" type="recurvar" loopcomponent1 = "1" />
 <variable name="X1end" type="arithvar" />
-<variable name="kX1" type="arithvar" loopcomponent1 = "1" />
-<variable name="t1end" type="arithvar" />
 <variable name="Y1" type="arithvar" loopcomponent1 = "1" />
-<variable name="X1init" type="constvar" />
+<variable name="t1end" type="arithvar" />
+<variable name="kX1" type="arithvar" loopcomponent1 = "1" />
 <variable name="delt1" type="constvar" />
 <variable name="t1init" type="constvar" />
+<variable name="X1init" type="constvar" />
 <variable name="n1" type="stepvar" />
 
 
@@ -106,24 +106,23 @@
 	<eq/>
 		<apply>
 	<selector/>
-	<ci> Y1 </ci>
-	<ci> n1 </ci>
-	</apply>
-	<apply >
-	<divide/>
-		<apply>
-	<selector/>
 	<ci> X1 </ci>
 	<ci> n1 </ci>
 	</apply>
 	<apply >
+		<times/>
+<apply >
 	<minus/>
    <apply >
 	<cn> 1 </cn>
 </apply>
 
 </apply>
-
+		<apply>
+	<selector/>
+	<ci> Y1 </ci>
+	<ci> n1 </ci>
+	</apply>
 </apply>
 </apply>
 <apply  num = "5" loop1 = "inner">

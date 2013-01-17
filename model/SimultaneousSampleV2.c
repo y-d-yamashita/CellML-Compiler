@@ -35,7 +35,7 @@ int main ( int argc , char** argv ) {
 	double delt2;
 	int n1;
 	int n2;
-	int i0;//手動入力(2) メモリ確保時のループ変数
+	int i0;//手動入力(2) メモリ確保時のループ変数	
 
 	simulSet0 = (double*)malloc (  ( sizeof(double ) * (double)2 )  ) ; ;
 	X1 = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
@@ -64,11 +64,11 @@ int main ( int argc , char** argv ) {
 	n1 = 0;
 	do{
 
-		simulSet0[0] = Y1[n1];
-		simulSet0[1] = Z1[n1];
+		Y1[n1] = simulSet0[1];
+		simulSet0[0] = Z1[n1];
+		simulSet0[1] = Y1[n1];
 		simulNewton0 ( simulSet0 , X1[n1] ) ;
-		Y1[n1] = simulSet0[0];
-		Z1[n1] = simulSet0[1];
+		Z1[n1] = simulSet0[0];
 		t1[ ( n1 + 1 ) ] =  ( t1[n1] + delt1 ) ;
 		
 		
@@ -232,8 +232,8 @@ double simulFunc0 ( double* simulSet , double var2 , int i ) {
 	double var0 = simulSet[0];
 	double var1 = simulSet[1];
 
-	if(i==0) return  ( var0 -  ( var1 +  (  ( - (double)1 )  * var2 )  )  ) ;
-	if(i==1) return  ( var1 -  (  (  ( - (double)1 )  * var0 )  + (double)1 )  ) ;
+	if(i==0) return  ( var0 -  (  (  ( - (double)1 )  * var1 )  + (double)1 )  ) ;
+	if(i==1) return  ( var1 -  ( var0 +  (  ( - (double)1 )  * var2 )  )  ) ;
 
 }
 
@@ -245,10 +245,10 @@ double jacobi0 ( double* simulSet , double var2 , int i , int j ) {
 	double var0 = simulSet[0];
 	double var1 = simulSet[1];
 
-	if(i==0 && j==0) return  (  ( (double)1 -  ( (double)0 +  (  (  ( - (double)0 )  * var2 )  +  (  ( - (double)1 )  * (double)0 )  )  )  )  - (double)0 ) ;
-	if(i==0 && j==1) return  (  ( (double)0 -  ( (double)1 +  (  (  ( - (double)0 )  * var2 )  +  (  ( - (double)1 )  * (double)0 )  )  )  )  - (double)0 ) ;
-	if(i==1 && j==0) return  (  ( (double)0 -  (  (  (  ( - (double)0 )  * var0 )  +  (  ( - (double)1 )  * (double)1 )  )  + (double)0 )  )  - (double)0 ) ;
-	if(i==1 && j==1) return  (  ( (double)1 -  (  (  (  ( - (double)0 )  * var0 )  +  (  ( - (double)1 )  * (double)0 )  )  + (double)0 )  )  - (double)0 ) ;
+	if(i==0 && j==0) return  (  ( (double)1 -  (  (  (  ( - (double)0 )  * var1 )  +  (  ( - (double)1 )  * (double)0 )  )  + (double)0 )  )  - (double)0 ) ;
+	if(i==0 && j==1) return  (  ( (double)0 -  (  (  (  ( - (double)0 )  * var1 )  +  (  ( - (double)1 )  * (double)1 )  )  + (double)0 )  )  - (double)0 ) ;
+	if(i==1 && j==0) return  (  ( (double)0 -  ( (double)1 +  (  (  ( - (double)0 )  * var2 )  +  (  ( - (double)1 )  * (double)0 )  )  )  )  - (double)0 ) ;
+	if(i==1 && j==1) return  (  ( (double)1 -  ( (double)0 +  (  (  ( - (double)0 )  * var2 )  +  (  ( - (double)1 )  * (double)0 )  )  )  )  - (double)0 ) ;
 
 }
 

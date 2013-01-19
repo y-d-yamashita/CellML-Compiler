@@ -85,8 +85,13 @@ String xml=
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_yamashita.recml"
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v3_yamashita_strict.recml" //TEST CLEAR!
 //"./model/recml/RecMLSample/ArbitraryModel_1D_simple_v2_notime_yamashita.recml"
+
+/*----------- FHN ---------------*/
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1_yamashita.recml"
+//"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v2_yamashita.recml"
+//"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v3_4x4_yamashita.recml"
+
 //"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_struct_v3.recml"
 //"./model/recml/SimpleRecMLSample/SimpleRecMLSampleRustyYamashita/LR1_FTCS_2D_simple_generated.recml"
@@ -104,6 +109,9 @@ String xml=
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_30x30_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_64x64_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_512x512_yamashita.recml"
+
+/*--------------- FSK2008 --------------------*/
+//"./model/recml/RecMLSample/FSK2008_FTCS_SimpleRecML5x5_array_yamashita.recml"
 ;
 
 
@@ -139,7 +147,7 @@ public void testCreateBipartieGraph() {
 	
 	/* Print result*/
 	System.out.println("<<testCreateBipartieGraph>> -----------------------------");
-	System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
+	//System.out.println(graphManipulator.toRecMLXMLString(resultTestCreateBipartiteGraph,null));
 
 	assertNotNull(resultTestCreateBipartiteGraph);
 
@@ -254,8 +262,8 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 		
 		   
 		resultTestCompressDependencyList = graphManipulator.compressDependencyList(resultTestTrajan, resultTestCreateDependencyGraph);
-		System.out.println("<<testCompressDependencyList>>------------");
-				System.out.println(resultTestCompressDependencyList.toString());
+		//System.out.println("<<testCompressDependencyList>>------------");
+		//		System.out.println(resultTestCompressDependencyList.toString());
 
 		List<MathExpression> exprList = new ArrayList<MathExpression>();
 		
@@ -271,12 +279,15 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 
 			//Sort exprlist based on index number and expression shape
 			Collections.sort(exprList,new ExpressionComparatorByIndex(indexPosition,exprList.size()));
-		
+			System.out.println("<<testCompressDependencyList>>------------");
+			System.out.println(resultTestCompressDependencyList.toString());
+
 			
 			List<MathExpression> mergedExprList = new ArrayList<MathExpression>();
 			MathExpression prevExpr=null;
 			MathExpression pushExpr=null;
 			boolean replacedFlag=false;
+			int loopID =0;
 			
 			prevExpr = exprList.get(0);
 			pushExpr = exprList.get(0);
@@ -284,6 +295,7 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 			MathExpressionLoop loop = new MathExpressionLoop();
 			loop.addMathExpression(pushExpr);
 			root.addLoop(loop);
+			loop.setIDofLoopHasDummy(loopID);
 			
 			//Specify loop index
 			loop.setIndexFactor(new Math_ci("i"));
@@ -298,6 +310,8 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 			}
 			mergedExprList.add(pushExpr);
 			
+			
+			//Compress expression (Create kernel loop)
 			for(int i=1;i<exprList.size();i++){
 				Integer compareResult = null;
 				try {
@@ -312,13 +326,24 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 				
 					
 				
-				if(compareResult!=null&&compareResult==1){//It's increment
-							if(!replacedFlag){
-							pushExpr.replaceIndex(new Math_ci("i"), indexPosition);
-							replacedFlag=true;
+				if(compareResult!=null){
+					if(!replacedFlag){
+						pushExpr.replaceIndex(new Math_ci("i"), indexPosition);
+						replacedFlag=true;
+						}
+			
+					if(compareResult==1){//It's just increment
+				
+							loop.setEndLoopIndex(exprList.get(i).getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).decode());
+					}else if(compareResult > 0){//Add dummy calculation (Assign a variable itself)
+						try {
+							loop.addSimpleDumpyExpr(exprList.get(i).getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).decode());
+						} catch (MathException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 						loop.setEndLoopIndex(exprList.get(i).getLeftExpression().getFirstVariable().getIndexList().get(indexPosition).decode());
-						
+					}
 				}else{
 						
 					pushExpr=exprList.get(i);
@@ -334,6 +359,9 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 						loop.setSatrtLoopIndex(index_cn.decode());
 						loop.setEndLoopIndex(index_cn.decode());
 					}
+					loopID++;
+					loop.setIDofLoopHasDummy(loopID);
+
 					root.addLoop(loop);
 					
 					replacedFlag=false;
@@ -347,6 +375,8 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 			mergedExprList.clear();
 			exprList.clear();
 		}
+		
+		//Kernel loop union
 		List<MathExpressionLoop> newLoopList = new ArrayList<MathExpressionLoop>();
 		for(MathExpressionLoop loop: root.getMathExpressionLoopList()){
 			if(newLoopList.size()==0){
@@ -378,8 +408,10 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 					newLoopList.add(loop);
 				}
 			}
+			
 			root.setMathExpressionLoopList(newLoopList);
 		}
+		
 		System.out.println(root.toString());
 		
 	}

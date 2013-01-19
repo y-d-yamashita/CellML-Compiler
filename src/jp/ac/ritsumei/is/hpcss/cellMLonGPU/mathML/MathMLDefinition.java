@@ -43,7 +43,7 @@ public class MathMLDefinition {
 	public static final String MATH_OPERATOR_STR_LN		 = "ln";
 	public static final String MATH_OPERATOR_STR_ROOT	 = "root";
 	public static final String MATH_OPERATOR_STR_FLOOR	 = "floor";
-	public static final String MATH_OPERATOR_STR_CEIL	 = "ceil";
+	public static final String MATH_OPERATOR_STR_CEILING = "ceiling";
 	public static final String MATH_OPERATOR_STR_PIECEWISE	 = "piecewise";
 	public static final String MATH_OPERATOR_STR_PIECE	 = "piece";
 	public static final String MATH_OPERATOR_STR_OTHERWISE	 = "otherwise";
@@ -52,6 +52,7 @@ public class MathMLDefinition {
 	public static final String MATH_OPERATOR_STR_PARTIALDIFF = "partialdiff";
 	public static final String MATH_OPERATOR_STR_LAPLACIAN = "laplacian";
 	public static final String MATH_OPERATOR_STR_DEGREE = "degree";
+	public static final String MATH_OPERATOR_STR_ABS	 = "abs";
 
 	/*演算子における非演算子の最低個数*/
 	public static final int MATH_OPERATOR_MIN_FACTOR_APPLY = 1;
@@ -82,7 +83,7 @@ public class MathMLDefinition {
 	public static final int MATH_OPERATOR_MIN_FACTOR_LN	 = 1;
 	public static final int MATH_OPERATOR_MIN_FACTOR_ROOT = 1;
 	public static final int MATH_OPERATOR_MIN_FACTOR_FLOOR = 1;
-	public static final int MATH_OPERATOR_MIN_FACTOR_CEIL = 1;
+	public static final int MATH_OPERATOR_MIN_FACTOR_CEILING = 1;
 	public static final int MATH_OPERATOR_MIN_FACTOR_PIECEWISE = 1;
 	public static final int MATH_OPERATOR_MIN_FACTOR_PIECE	 = 2;
 	public static final int MATH_OPERATOR_MIN_FACTOR_OTHERWISE = 1;
@@ -91,6 +92,7 @@ public class MathMLDefinition {
 	public static final int MATH_OPERATOR_MIN_FACTOR_PARTIALDIFF = 2;
 	public static final int MATH_OPERATOR_MIN_FACTOR_LAPLACIAN = 1;
 	public static final int MATH_OPERATOR_MIN_FACTOR_DEGREE = 1;
+	public static final int MATH_OPERATOR_MIN_FACTOR_ABS = 1;
 
 	/*オペレータ文字列定義*/
 	public static final String MATH_OPERAND_STR_CI		 = "ci";
@@ -150,7 +152,7 @@ public class MathMLDefinition {
 		MOP_LN		(MATH_OPERATOR_STR_LN),
 		MOP_ROOT	(MATH_OPERATOR_STR_ROOT),
 		MOP_FLOOR	(MATH_OPERATOR_STR_FLOOR),
-		MOP_CEIL	(MATH_OPERATOR_STR_CEIL),
+		MOP_CEILING	(MATH_OPERATOR_STR_CEILING),
 		MOP_PIECEWISE	(MATH_OPERATOR_STR_PIECEWISE),
 		MOP_PIECE	(MATH_OPERATOR_STR_PIECE),
 		MOP_OTHERWISE	(MATH_OPERATOR_STR_OTHERWISE),
@@ -159,6 +161,7 @@ public class MathMLDefinition {
 		MOP_PARTIALDIFF	(MATH_OPERATOR_STR_PARTIALDIFF),
 		MOP_LAPLACIAN	(MATH_OPERATOR_STR_LAPLACIAN),
 		MOP_DEGREE	(MATH_OPERATOR_STR_DEGREE),
+		MOP_ABS		(MATH_OPERATOR_STR_ABS),
 			;
 		private final String operatorStr;
 		private eMathOperator(String operatorstr) {

@@ -2,6 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * MathML演算子eqクラス
@@ -34,9 +35,11 @@ public class Math_eq extends MathOperator {
 
 	/*-----文字列変換メソッド-----*/
 	public String toLegalString() throws MathException {
-
 		/*被演算子の個数チェック*/
 		if(m_vecFactor.size() != 2) {
+			CCLogger.log(m_vecFactor.get(0).toLegalString());
+			CCLogger.log(m_vecFactor.get(1).toLegalString());
+
 			throw new MathException("Math_eq","toLegalString","lack of operand");
 		}
 

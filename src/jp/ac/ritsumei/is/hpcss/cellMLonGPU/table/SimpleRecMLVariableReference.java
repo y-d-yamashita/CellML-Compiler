@@ -46,7 +46,7 @@ public class SimpleRecMLVariableReference implements Comparable< SimpleRecMLVari
 		sb.append("Name: ").append(strVariableName).append("  ");
 		sb.append("Type: ").append(this.getRecMLVarType());
 
-		sb.append("  ").append("AssignExpr: ");
+		sb.append("  ").append("LHS: ");
 		if(leftHandSideExpressions.isEmpty()){
 			sb.append("None");
 		}else{
@@ -55,7 +55,7 @@ public class SimpleRecMLVariableReference implements Comparable< SimpleRecMLVari
 			sb.setLength(sb.length()-2);
 		}
 		
-		sb.append("  ").append("RefExpr: ");
+		sb.append("  ").append("RHS: ");
 		if(rightHandSideExpressions.isEmpty()){
 			sb.append("None");
 		}else{

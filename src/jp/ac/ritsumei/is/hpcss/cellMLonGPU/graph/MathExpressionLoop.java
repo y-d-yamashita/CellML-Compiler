@@ -7,9 +7,18 @@ import java.util.Vector;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_eq;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_minus;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_plus;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_selector;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_times;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.AttachVariableNameAndIndexVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.ReplaceEqualToAssignVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.ReplacePartOfVariableNameVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 
 public class MathExpressionLoop{
@@ -30,6 +39,11 @@ public class MathExpressionLoop{
 	private ReplacePartOfVariableNameVisitor replaceNameVisitor = new ReplacePartOfVariableNameVisitor("\\.", "_");
 	private ReplaceEqualToAssignVisitor replaceEqualVisitor = new ReplaceEqualToAssignVisitor();
 	
+	private boolean dummyExpressionFlag;
+	private List<Integer> dummpyExpressionNumList;
+	
+	private Integer idOfLoopHasDummy;
+	
 	public MathExpressionLoop() {
 		this.startLoopIndex=null;
 		this.endLoopIndex=null;
@@ -38,6 +52,8 @@ public class MathExpressionLoop{
 		mathExpressionList=new ArrayList<MathExpression>();
 		mathExpressionLoopList=new ArrayList<MathExpressionLoop>();
 		baseMathExpressionList=new ArrayList<MathExpression>();
+		dummyExpressionFlag=false;
+		
 	}
 
 	public Integer getSatrtLoopIndex() {
@@ -99,6 +115,99 @@ public class MathExpressionLoop{
 		this.mathExpressionLoopList.add(loop);
 	}
 
+	public void addSimpleDumpyExpr(int nextLoopStartIndex) throws MathException{
+		if(dummyExpressionFlag == false){ //Not setted dummy expression
+			dummpyExpressionNumList = new ArrayList<Integer>();
+			List<MathExpression> newExpressionList = new ArrayList<MathExpression>();
+		for(MathExpression expr : this.getAllExpressions()){
+			MathExpression lhs = expr.getLeftExpression();
+			MathExpression lhs_copy = lhs.createCopy();
+			MathExpression rhs = expr.getRightExpression();
+			Math_apply rootFactor =  new Math_apply();
+			Math_eq eq = new Math_eq();
+			rootFactor.addFactor(eq);
+			eq.addFactor(lhs.getRootFactor());
+			Math_apply applyOfPlus = new Math_apply();
+			Math_plus plus = new Math_plus();
+			eq.addFactor(applyOfPlus);
+			applyOfPlus.addFactor(plus);
+			
+			//Create an expression with dummy
+			//ex. x=y ->> x=y*f[0] + x*f[1]
+			
+			//Flag variable creation
+			//__flag(id)[n][i-startLoopIndex]
+			Math_ci d_ci1 = new Math_ci("__flag"+this.idOfLoopHasDummy);
+			d_ci1.addIndexList(new Math_ci("n"));
+				//Create i - startLoopIndex
+			Math_apply applyOfIndex1 = new Math_apply();
+			Math_minus minusOfIndex1 = new Math_minus();
+			Math_ci ci1_index1 = new Math_ci("i");
+			Math_cn offsetOfIndex1 = new Math_cn(startLoopIndex.toString());
+			applyOfIndex1.addFactor(minusOfIndex1);
+			minusOfIndex1.addFactor(ci1_index1);
+			minusOfIndex1.addFactor(offsetOfIndex1);
+			d_ci1.addIndexList(applyOfIndex1);
+			
+			//(1 - __flag(id)[n][i-startLoopIndex])
+			Math_ci d_ci2 = new Math_ci("__flag"+this.idOfLoopHasDummy);
+			d_ci2.addIndexList(new Math_ci("n"));
+				//Create i - startLoopIndex
+			Math_apply applyOfIndex2 = new Math_apply();
+			Math_minus minusOfIndex2 = new Math_minus();
+			Math_ci ci1_index2 = new Math_ci("i");
+			Math_cn offsetOfIndex2 = new Math_cn(startLoopIndex.toString());
+			applyOfIndex1.addFactor(minusOfIndex2);
+			minusOfIndex2.addFactor(ci1_index2);
+			minusOfIndex2.addFactor(offsetOfIndex2);
+			d_ci2.addIndexList(applyOfIndex2);
+				//Create 1 - __flag(id)[n][i-startLoopIndex
+			Math_apply d_negate_apply = new Math_apply();
+			Math_minus d_minus = new Math_minus();
+			d_negate_apply.addFactor(d_minus);
+			Math_cn one = new Math_cn("1");
+			one.autoChangeType();
+			d_minus.addFactor(one);
+			d_minus.addFactor(d_ci2);
+			
+			
+			//f(x)* __flag
+			Math_apply apply1 = new Math_apply();
+			Math_times times1 = new Math_times();
+			apply1.addFactor(times1);
+			times1.addFactor(rhs.getRootFactor());
+			times1.addFactor(d_ci1);
+			
+			//Add dummy expr
+			//x * (1 - __flag)
+			Math_apply apply2 = new Math_apply();
+			Math_times times2 = new Math_times();
+			apply2.addFactor(times2);
+			times2.addFactor(lhs_copy.getRootFactor());
+			times2.addFactor(d_negate_apply);
+			
+			plus.addFactor(apply1);
+			plus.addFactor(apply2);
+			
+			newExpressionList.add(new MathExpression(rootFactor));
+		}
+			this.setMathExpressionList(newExpressionList);
+			for(MathExpression expr:this.getMathExpressionList()){
+				try {
+					CCLogger.log(expr.toLegalString());
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			dummyExpressionFlag = true;
+		}
+		for(int i=this.endLoopIndex+1; i<nextLoopStartIndex;i++){
+			dummpyExpressionNumList.add(i);
+		}
+
+	}
+	
 	public MathExpressionLoop getLoop(int index) {
 		return this.mathExpressionLoopList.get(index);
 	}
@@ -203,6 +312,15 @@ public class MathExpressionLoop{
 	}
 	
 	private void toString(StringBuilder stringBuilder,String indent){
+	
+		if(dummyExpressionFlag){
+			stringBuilder.append(indent+"//Zero flag:");
+			for(Integer f: this.dummpyExpressionNumList){
+					stringBuilder.append("["+f+"], ");
+			}
+			stringBuilder.append("\n");
+		}
+
 		if(indexFactor==null||startLoopIndex==endLoopIndex){
 			stringBuilder.append(indent+"//----------------------------  NO LOOP: start:"+startLoopIndex+" end:"+endLoopIndex+" ----------------------------//\n");
 		}else{
@@ -213,6 +331,10 @@ public class MathExpressionLoop{
 				e1.printStackTrace();
 			}
 		}
+		
+		
+		
+		
 		for(MathExpressionLoop loop:this.mathExpressionLoopList){
 			loop.toString(stringBuilder,indent+indent);
 		}
@@ -234,5 +356,13 @@ public class MathExpressionLoop{
 			stringBuilder.append(indent+"//----------------------------- LOOP END -----------------------------//\n");
 		}
 		stringBuilder.append("\n");
+	}
+
+	public Integer getIDofLoopHasDummy() {
+		return idOfLoopHasDummy;
+	}
+
+	public void setIDofLoopHasDummy(Integer loopID) {
+		this.idOfLoopHasDummy = loopID;
 	}
 }

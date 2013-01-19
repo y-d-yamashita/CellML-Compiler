@@ -95,7 +95,14 @@ public class CellMLonGPUCudaGeneratorFromSimpleRecMLMain {
 			e.printStackTrace();
 		}
 		
-		
+		/** 内容確認 ***/
+		try {
+			pRecMLAnalyzer.printContents();
+		} catch (MathException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	
 	
 //		/*selector内cnのInteger*/
 		pRecMLAnalyzer.changeAllSelectorInteger();

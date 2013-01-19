@@ -4,6 +4,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathSepType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * Math要素インスタンス生成クラス
@@ -100,8 +101,8 @@ public class MathFactory {
 			return new Math_root(strAttr);
 		case MOP_FLOOR:
 			return new Math_floor(strAttr);
-		case MOP_CEIL:
-			return new Math_ceil(strAttr);
+		case MOP_CEILING:
+			return new Math_ceiling(strAttr);
 		case MOP_PIECEWISE:
 			return new Math_piecewise(strAttr);
 		case MOP_PIECE:
@@ -118,7 +119,8 @@ public class MathFactory {
 			return new Math_laplacian(strAttr);
 		case MOP_DEGREE:
 			return new Math_degree(strAttr);
-
+		case MOP_ABS:
+			return new Math_abs(strAttr);
 			/*例外*/
 		default:
 			throw new MathException("MathFactory","createOperator",

@@ -2,6 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 /**
  * MathML演算子gtクラス
@@ -19,11 +20,12 @@ public class Math_gt extends MathOperator {
 
 	/*-----演算命令メソッド-----*/
 	public double calculate() throws MathException {
+		CCLogger.log(m_vecFactor.get(0).getValue()+","+m_vecFactor.get(0).getValue());
+		
 		/*被演算子の個数チェック*/
 		if(m_vecFactor.size() != 2) {
 			throw new MathException("Math_gt","calculate","lack of operand");
 		}
-
 		/*左辺値・右辺値取得*/
 		double dLeftValue = m_vecFactor.get(0).getValue();
 		double dRightValue = m_vecFactor.get(1).getValue();

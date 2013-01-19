@@ -630,9 +630,9 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			System.out.print("("+value.toLegalString()+"),");
 		System.out.println("\n -----------------------------------------");
 		
-		
-		System.out.println(recMLVariableTable.toString());
-		
+		if(recMLVariableTable != null){
+			System.out.println(recMLVariableTable.toString());
+		}
 		//In case of using struct RecML file, Exception is thrown
 		//System.out.println(new RecMLEquationAndVariableContainer(this,recMLVariableTable).toString());
 		

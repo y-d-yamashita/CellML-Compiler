@@ -51,10 +51,14 @@ public static void log(Class<?> cl){
 
 	logger.info("\n" +
 			"[ class ]: "+cl.getName()+"\n"+
-			"[ method]: "+new Thread().currentThread().getStackTrace()[2].getMethodName()+"\n");
+			"[ method]: "+Thread.currentThread().getStackTrace()[2].getMethodName()+"\n");
 }
 public static void log(String msg){
-	logger.info("[message]: "+msg);
+	logger.info("\n" +
+			"[ class ]: "+Thread.currentThread().getStackTrace()[2].getClassName()+"\n"+
+			"[ method]: "+Thread.currentThread().getStackTrace()[2].getMethodName()+"\n"+
+			"[message]: "+msg);
+
 }
 public static void log(int value){
 	logger.info("[message]: "+value);

@@ -49,6 +49,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	public HashMap<Integer,Vector<Integer>> simulEquationIDList;
 	public ArrayList<Vector<MathExpression>> simulEquationList;
 	public ArrayList<Vector<Integer>> resultMaximumMatching;
+	public HashMap<Integer,String> variableNameMap;
 	
 	// loop index variable name list (initialized in constructor)
 	// just for test
@@ -171,6 +172,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		this.simulEquationIDList = new HashMap<Integer,Vector<Integer>>();
 		this.simulEquationList = new ArrayList<Vector<MathExpression>>();
 		this.resultMaximumMatching = new ArrayList<Vector<Integer>>();
+		this.variableNameMap = new HashMap<Integer,String>();
 		root = null;
 		now = null;
 		
@@ -417,6 +419,16 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 					}
 				}
 				
+				
+				case CTAG_REFVARIABLE:
+				{
+					/*変数IDと変数文字列を取得*/
+					String strID = pXMLAttr.getValue("id");
+					String strVarName = pXMLAttr.getValue("variableName");
+					
+					variableNameMap.put(Integer.parseInt(strID), strVarName);
+					break;
+				}
 
 			}
 		}

@@ -23,7 +23,9 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.*;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLVariableAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
@@ -260,10 +262,10 @@ public class ODECommonProgramGeneratorMain {
 				
 				
 				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
+				LeftHandSideTransposition lst = new LeftHandSideTransposition();
 				
 				recMLAnalyzer.createVariableTable();
-				RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
+				//RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
 				ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
 				
 				for(int i=0;i<pairList2.size();i++){
@@ -275,22 +277,23 @@ public class ODECommonProgramGeneratorMain {
 					//数式を取得
 					MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
 					 
-					//導出変数を取得
-					RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
+					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
 					
-					Math_ci derivedVar = derivedTable.getMathCI();
+					//導出変数を取得
+					String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
+					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
+					
 					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst2.transporseExpression(exp, derivedVar);
+						MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
 						exp_new.setDerivedVariable(derivedVar);
 						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.
-						//導出変数は数式が保持する.
+						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
 						recMLAnalyzer.setM_vecMathExpression(i, exp_new);
 					}
 				}
 
-				//連立成分のidから解析情報数式をベクターに格納
 				
+				//連立方程式をIDでソートする.(取得する変数の順序を統一する必要があるため)
 				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
 				
 				for(int i=0;i<simulEquationIDList.size();i++){
@@ -314,11 +317,10 @@ public class ODECommonProgramGeneratorMain {
 					
 				}
 				
+				//連立式をベクターに格納
 				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
 				Vector<MathExpression> simulEquSetRec;
-				
-				
-				
+
 				for(int i=0;i<simulEquationIDList.size();i++){
 					Vector<Integer> setID =simulEquationIDList.get(i);
 					simulEquSetRec = new Vector<MathExpression>();
@@ -428,23 +430,22 @@ public class ODECommonProgramGeneratorMain {
 					//数式を取得
 					MathExpression exp = pRecMLAnalyzer.getExpressionFromID(expID);
 					 
-					//導出変数を取得
-					RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
+					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
 					
-					Math_ci derivedVar = derivedTable.getMathCI();
+					//導出変数を取得
+					String derivedVarName =  pRecMLAnalyzer.variableNameMap.get(varID);
+					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
+
 					if(exp.getExID()!=-1){
 						MathExpression exp_new = lst2.transporseExpression(exp, derivedVar);
 						exp_new.setDerivedVariable(derivedVar);
 						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.
-						//導出変数は数式が保持する.
+						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
 						pRecMLAnalyzer.setM_vecMathExpression(i, exp_new);
 					}
 				}
 
-				//連立成分のidから解析情報数式をベクターに格納
-
-				
+				//連立方程式をIDでソートする.(取得する変数の順序を統一する必要があるため)
 				HashMap<Integer,Vector<Integer>> simulEquationIDList = pRecMLAnalyzer.simulEquationIDList;
 				
 				for(int i=0;i<simulEquationIDList.size();i++){
@@ -468,6 +469,7 @@ public class ODECommonProgramGeneratorMain {
 					
 				}
 				
+				//連立式をベクターに格納
 				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
 				Vector<MathExpression> simulEquSetRec;
 				

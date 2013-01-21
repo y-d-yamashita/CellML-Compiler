@@ -871,7 +871,12 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 								//導出変数でなく重複しない場合,引数リストに追加 
 								boolean overlap=false;
 								for(int j1=0;j1<derivedVarList.size();j1++){
-									if(varList.get(i).getName().equals(derivedVarList.get(j1).getName())){
+									if(varList.get(i).toLegalString().equals(derivedVarList.get(j1).toLegalString())){
+										overlap=true;
+									}
+								}
+								for(int j1=0;j1<varList_all.size();j1++){
+									if(varList.get(i).toLegalString().equals(varList_all.get(j1).toLegalString())){
 										overlap=true;
 									}
 								}

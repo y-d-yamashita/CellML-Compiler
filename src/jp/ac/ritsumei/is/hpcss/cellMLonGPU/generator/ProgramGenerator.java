@@ -846,7 +846,7 @@ public abstract class ProgramGenerator {
 			//導出変数でない場合,引数リストに追加 idによるソートが必要　保留
 			boolean overlap=false;
 			for(int j=0;j<derivedVarList.size();j++){
-				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
+				if(varList_new.get(i).toLegalString().equals(derivedVarList.get(j).toLegalString())){
 					overlap=true;
 				}
 			}
@@ -940,7 +940,7 @@ public abstract class ProgramGenerator {
 			//導出変数でない場合,引数リストに追加  idによるソートが必要　保留
 			boolean overlap=false;
 			for(int j=0;j<derivedVarList.size();j++){
-				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
+				if(varList_new.get(i).toLegalString().equals(derivedVarList.get(j).toLegalString())){
 					overlap=true;
 				}
 			}
@@ -997,6 +997,7 @@ public abstract class ProgramGenerator {
 						flag=true;
 					}
 				}
+
 				if(!flag) varList_new.add(varList.get(j));
 			}
 		}
@@ -1021,6 +1022,7 @@ public abstract class ProgramGenerator {
 		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet");
 		
 		
+		
 		/*引数宣言の追加*/
 		SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,set);
 		pSynDiffrFunc.addParam(pSynArgvDec);
@@ -1028,10 +1030,11 @@ public abstract class ProgramGenerator {
 
 			boolean overlap=false;
 			for(int j=0;j<derivedVarList.size();j++){
-				if(varList_new.get(i).getName().equals(derivedVarList.get(j).getName())){
+				if(varList_new.get(i).toLegalString().equals(derivedVarList.get(j).toLegalString())){
 					overlap=true;
 				}
 			}
+			
 			if(!overlap){
 				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
 				pSynArgvDec = new SyntaxDeclaration(pSynPPCharType2,var);

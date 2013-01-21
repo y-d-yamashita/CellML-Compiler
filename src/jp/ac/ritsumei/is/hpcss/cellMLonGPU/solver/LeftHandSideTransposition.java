@@ -59,13 +59,18 @@ public class LeftHandSideTransposition {
 			if(expression.getLeftExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
 				expression.getLeftExpression().getAllVariables_SusceptibleOfOverlapWithSelector(exp_leftValiableList);
 			}else{
-				exp_leftValiableList.add((Math_ci) expression.getLeftExpression().getRootFactor());
+				
+				if( ((MathOperand)expression.getLeftExpression().getRootFactor()).matches(eMathOperand.MOPD_CI)){
+					exp_leftValiableList.add((Math_ci) expression.getLeftExpression().getRootFactor());
+				}
 			}
 			
 			if(expression.getRightExpression().getRootFactor().matches(eMathMLClassification.MML_OPERATOR)){
 				expression.getRightExpression().getAllVariables_SusceptibleOfOverlapWithSelector(exp_rightValiableList);
 			}else{
-				exp_rightValiableList.add((Math_ci) expression.getRightExpression().getRootFactor());
+				if( ((MathOperand)expression.getRightExpression().getRootFactor()).matches(eMathOperand.MOPD_CI)){
+					exp_rightValiableList.add((Math_ci) expression.getRightExpression().getRootFactor());
+				}
 			}
 			
 			

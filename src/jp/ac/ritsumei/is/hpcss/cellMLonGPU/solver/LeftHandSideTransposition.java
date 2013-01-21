@@ -34,11 +34,11 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
  * 
  */
 
-//2013.1.12
+//2013.1.21
+//変更　apply直下にapplyを持つような場合に対応
 //変更　applyがオペランドを直下に持つ可能性があるのでこれを考慮する.
 //変更　構造情報を与えるよう変更.SimpleRecML -> C file　テスト完了
 
-//注意　apply直下にapplyを持つような場合は処理できない.
 
 
 public class LeftHandSideTransposition {
@@ -171,6 +171,9 @@ public class LeftHandSideTransposition {
 					}
 					if(val_position==2)transpositionType=2;
 				}
+				else if(directOperatorKind.equals("MOP_APPLY")){
+					transpositionType=4;
+				}
 				else{
 					expression.addNonlinearFlag();
 				}
@@ -188,6 +191,10 @@ public class LeftHandSideTransposition {
 					expression=base_transposition(
 							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position,info,attr);
 				}
+				if(transpositionType==4){
+					expression=apply_transposition(
+							expression,strAttr,targetSide,oppositeSide,directOperatorKind,val_position,info,attr);
+				}
 				
 				//移項後の判定
 				goal_flag=check_EqDirectLeft(expression,derivedVariable);
@@ -197,6 +204,55 @@ public class LeftHandSideTransposition {
 	}
 	
 	
+	public MathExpression apply_transposition(MathExpression expression,
+			String[] strAttr, MathOperator targetSide, MathFactor oppositeSide,
+			String directOperatorKind, int val_position,
+			HashMap<String, String> info, HashMap<Integer, String> attr) throws MathException {
+		
+		MathExpression pNewExpression = new MathExpression();
+		pNewExpression.setExID((long) expression.getExID());
+		pNewExpression.setCondref((long) expression.getCondRef());
+		
+		pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+			
+			//左辺追加
+			//applyの下がオペレータかどうか判定
+			if(((MathOperator)targetSide.getUnderFactor()).getUnderFactor().matches(eMathMLClassification.MML_OPERATOR)){
+				
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						(MathOperator) ((MathOperator)targetSide.getUnderFactor()).getUnderFactor());
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
+			}else{
+				pNewExpression.addOperand(
+						(MathOperand) ((MathOperator)targetSide.getUnderFactor()).getUnderFactor());
+			}
+			
+			//右辺追加
+			if(oppositeSide.matches(eMathMLClassification.MML_OPERATOR)){
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));	
+				pNewExpression.addOperator((MathOperator)oppositeSide);
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+			}else{
+				pNewExpression.addOperand((MathOperand)oppositeSide);
+			}
+				
+		
+		//構造情報付与
+		((Math_apply)pNewExpression.getRootFactor()).set_hashExpInfo(info);
+		((Math_apply)pNewExpression.getRootFactor()).set_hashAttr(attr);
+		return pNewExpression;
+	}
+
+
 	public MathExpression base_transposition(
 			MathExpression expression,String[] strAttr,MathOperator targetSide,MathFactor oppositeSide,
 			String operatorKind,int val_position,HashMap<String,String> info,HashMap<Integer,String> attr) throws MathException{
@@ -1171,7 +1227,8 @@ public class LeftHandSideTransposition {
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
 	
 			
-			
+		pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 			//左辺追加
 			pNewExpression.addOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
@@ -1192,6 +1249,8 @@ public class LeftHandSideTransposition {
 			pNewExpression.addOperand(val2);
 			
 			
+			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			pNewExpression.breakOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			//右辺追加

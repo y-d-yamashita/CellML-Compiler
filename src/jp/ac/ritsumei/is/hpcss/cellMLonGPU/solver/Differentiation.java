@@ -1537,7 +1537,61 @@ public class Differentiation {
 					}
 					
 				}
+				//apply下にapplyがある場合の処理
+				else if(underOperatorKind.equals("MOP_APPLY")){
+					
+					
+					//apply下のapplyの下がオペレータの場合
+					if( ((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getUnderFactor().matches(
+							eMathMLClassification.MML_OPERATOR) ){
+						
+						//微分する関数を左辺とし,再帰取得して追加.
+						MathExpression pExpression = new MathExpression();
+						pExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+						pExpression.addOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("eq"), strAttr));
+						
+						
+						pExpression.addOperator(
+								(MathOperator)((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()));
+						
+						pExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						
+						pExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+						
+						
+						pExpression.breakOperator(
+								MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+						
+						
+						pExpression = differentiate( pExpression , val );
+						
+						pNewExpression.addOperator((MathOperator) pExpression.getLeftExpression().getRootFactor());
+					
+					//apply下のapplyの下がオペランドの場合
+					}else{
+						
+						//導出変数であれば1,それ以外の変数または定数は全て0とする
+						if(((MathOperator)((MathOperator)expression.getLeftExpression().getRootFactor()).getUnderFactor()).getUnderFactor().toLegalString().equals(
+								val.toLegalString())){
+							pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
+						}else{
+						
+							pNewExpression.addOperand((Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
+						}	
+						
+					}
+
+					
+					pNewExpression.breakOperator(
+							MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+					
+					
+				}
 				
+				//想定しないオペレータの場合
 				else{
 					throw new MathException("Differentiation","differentiate","can't differentiate(not supported operator)");
 				}
@@ -1607,8 +1661,12 @@ public static void main(String[] args) throws MathException {
 			
 			
 			//左辺追加
+		pNewExpression.addOperator(
+				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+		
 			pNewExpression.addOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+			
 			pNewExpression.addOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
 			pNewExpression.addOperator(
@@ -1630,6 +1688,8 @@ public static void main(String[] args) throws MathException {
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 
 			pNewExpression.breakOperator(
+					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+		pNewExpression.breakOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
 			//右辺追加
 			pNewExpression.addOperand(zero);

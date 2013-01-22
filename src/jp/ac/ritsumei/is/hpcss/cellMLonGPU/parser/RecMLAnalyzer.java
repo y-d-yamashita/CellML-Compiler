@@ -133,9 +133,21 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		for(int i=0;i<m_vecMathExpression.size();i++){
 			if(m_vecMathExpression.get(i).getExID() == id){
 				exp=m_vecMathExpression.get(i);
+				break;
 			}
 		}
 		return exp;
+	}
+	
+	//idから数式位置取得メソッド
+	public int getLocationFromID(long id) {
+		int here = -1;
+		for(int i=0;i<m_vecMathExpression.size();i++){
+			if(m_vecMathExpression.get(i).getExID() == id){
+				here=i;
+			}
+		}
+		return here;
 	}
 	
 	//数式の置換メソッド

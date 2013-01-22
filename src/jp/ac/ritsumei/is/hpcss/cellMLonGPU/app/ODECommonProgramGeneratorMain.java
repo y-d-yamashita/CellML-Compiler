@@ -288,7 +288,7 @@ public class ODECommonProgramGeneratorMain {
 						exp_new.setDerivedVariable(derivedVar);
 						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
 						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						recMLAnalyzer.setM_vecMathExpression(i, exp_new);
+						recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
 					}
 				}
 

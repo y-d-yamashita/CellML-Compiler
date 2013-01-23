@@ -15,17 +15,14 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassi
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
- * 数式ライブラリ対応 Newton法ソルバーテストクラス
+ *Newton-Solver class
+ *
+ *  limitation of expression:
+ * 	The operator contained in expression limits to the following one. 
+ *	-plus,minus,times,divide,inc,dec,exp,ln,root,power,log,sin,cos,tan
+ * 
  * @author n-washio
  * 
- * plus(1,2項,多項)
- * minus(1,2項,多項)
- * times(2項,多項)
- * divide
- * sin,cos,tan
- * inc,dec
- * power,root,exp
- * ln,log
  * 
  */
 public class NewtonSolver {

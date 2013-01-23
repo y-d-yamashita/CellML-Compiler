@@ -17,7 +17,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassi
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
- * This class is Implicit Function Transposition for code generator.
+ * Implicit Function Transposition class for code generator.
  * 
  * Implicit Function means f(x) = 0
  * 

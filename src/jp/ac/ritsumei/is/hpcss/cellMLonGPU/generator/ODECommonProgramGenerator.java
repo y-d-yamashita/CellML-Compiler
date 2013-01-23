@@ -70,7 +70,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
- * 逐次プログラム構文生成クラス
+ * ODE Common Program Generator class 
+ * 
+ * Transposition of Derived variable
+ * Newton-Solver for Non-linear equation
+ * Simultaneous Newton-Solver for Simultaneous equation and Non-linear Simultaneous equation
+ * 
+ * @author n-washio
+ * 
  */
 public class ODECommonProgramGenerator extends ProgramGenerator {
 

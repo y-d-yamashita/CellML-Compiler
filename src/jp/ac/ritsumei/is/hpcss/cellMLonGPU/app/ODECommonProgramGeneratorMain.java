@@ -1,6 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.app;
 
 import java.io.BufferedWriter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -46,6 +47,25 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+/**
+ * ODE Common Program Generator main class 
+ * 
+ * Transposition of Derived variable
+ * Newton-Solver for Non-linear equation
+ * Simultaneous Newton-Solver for Simultaneous equation and Non-linear Simultaneous equation
+ * 
+ * 
+ * input file:  
+ * 	SimpleRecML, StructuredRecML
+
+ * output file:
+ *  C program code
+ * 
+ * 
+ * @author n-washio
+ * 
+ */
 
 public class ODECommonProgramGeneratorMain {
 

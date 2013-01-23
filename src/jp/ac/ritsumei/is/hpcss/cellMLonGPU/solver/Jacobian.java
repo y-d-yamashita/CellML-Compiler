@@ -16,7 +16,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassi
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
- * This class is Jacobian for code generator.
+ * Jacobian class for code generator.
  * 
  * @author n-washio
  * 

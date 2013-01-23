@@ -685,7 +685,7 @@ public abstract class ProgramGenerator {
 		NewtonSolver ns = new NewtonSolver();
 		//デフォルトで設定.手入力も検討.
 		
-		double e = 1.0e-50;//収束判定値
+		double e = 1.0e-5;//収束判定値
 		int max = 1000;//最大反復数
 		
 		//DerivedVariableがセレクターを含む場合,変数名だけを扱うようにする.
@@ -1042,7 +1042,7 @@ public abstract class ProgramGenerator {
 			}
 		}
 		
-		double e = 1.0e-50;//収束判定値
+		double e = 1.0e-5;//収束判定値
 		int max = 1000;//最大反復数
 	
 	

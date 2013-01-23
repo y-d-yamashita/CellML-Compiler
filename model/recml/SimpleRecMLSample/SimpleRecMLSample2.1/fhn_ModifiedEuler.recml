@@ -501,8 +501,8 @@
 	<gt/>
 		<apply>
 	<selector/>
-	<ci> Main_time_t </ci>
-	<ci> n </ci>
+	<ci> Main_time_t1 </ci>
+	<ci> n1 </ci>
 	</apply>
 	<cn> 400 </cn>
 

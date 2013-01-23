@@ -137,7 +137,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		pSynProgram.addPreprocessor(pSynInclude3);
 		
 		SyntaxPreprocessor pSynDefine =
-				new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE, "__MAX_ARRAY_NUM 100");
+				new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE, "__MAX_ARRAY_NUM 100000");
 		
 		pSynProgram.addPreprocessor(pSynDefine);
 		
@@ -219,9 +219,9 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		
 		//連立式セットの配列を宣言に追加
 		/*Declare a blank loop for allocating one-dimensional arrays*/
-		SyntaxControl pSynMallocBlank_simul = createSyntaxBlankLoop();
+		SyntaxControl pSynMallocBlank_simul = null;
 		if(m_pRecMLAnalyzer.simulEquationList.size()!=0){
-			
+			pSynMallocBlank_simul = createSyntaxBlankLoop();
 			for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.size();i++){
 				/*double型ポインタ配列構文生成*/
 				SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 1);
@@ -570,7 +570,9 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			pSynFreeFor1.addStatement(pSynFreeFor2);
 		}	
 		
-		pSynMainFunc.addStatement(pSynMallocBlank_simul);
+		if(pSynMallocBlank_simul!=null){
+			pSynMainFunc.addStatement(pSynMallocBlank_simul);
+		}
 		/*プログラム構文を返す*/
 		return pSynProgram;
 	}

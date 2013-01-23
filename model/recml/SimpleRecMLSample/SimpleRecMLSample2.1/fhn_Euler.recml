@@ -291,10 +291,10 @@
 
 
 <apply  num = "12" type = "condition">
-	<lt/>
+	<gt/>
 		<apply>
 	<selector/>
-	<ci> t </ci>
+	<ci> Main_time_t </ci>
 	<ci> n1 </ci>
 	</apply>
 	<cn> 400 </cn>

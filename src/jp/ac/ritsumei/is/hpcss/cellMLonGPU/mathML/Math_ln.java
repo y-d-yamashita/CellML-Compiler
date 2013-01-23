@@ -36,7 +36,7 @@ public class Math_ln extends MathOperator {
 			throw new MathException("Math_ln","toLegalString","lack of operand");
 		}
 
-		return "ln( " + m_vecFactor.get(0).toLegalString() + " )";
+		return "log( " + m_vecFactor.get(0).toLegalString() + " )";
 	}
 	
 	/*-----Method for converting Expression to MathML-----*/

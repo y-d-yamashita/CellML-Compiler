@@ -169,7 +169,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			
 			/*Hight Speed Ver*/
 			
-			HighSpeedDecisionLoopStructure hsdls = new HighSpeedDecisionLoopStructure();
+			HighSpeedDecisionLoopStructure2 hsdls = new HighSpeedDecisionLoopStructure2();
 
 			//---------------------------------------------------
 			//入力情報作成メソッド
@@ -182,10 +182,8 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			//重複処理
 			//---------------------------------------------------
 			inputList= removeOverlap(inputList);
-//			for(int i=0;i<inputList.size();i++){
-//				System.out.print("--------------------------------washio1--" );
-//				inputList.get(i).printContents();
-//			}
+			
+			
 			
 			Set<Integer> loopName = m_indexList.keySet();
 			Integer[] loopNameList = (Integer[]) loopName.toArray(new Integer[loopName.size()]);
@@ -203,7 +201,10 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			//入力情報に対するnull処理
 			//ここで完全に独立しているノードは消えることになるのでリストに登録する.
 			//---------------------------------------------------
-		
+			
+			//属性競合不可避なケースに対するnullへのpre/post割り当て
+			inputList=hsdls.innerDependency(inputList, loopNameList);
+			
 			ArrayList<Integer> separateNodeList = new ArrayList<Integer>();
 			separateNodeList=hsdls.make_separateNodeList(inputList,m_indexList);
 			

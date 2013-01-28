@@ -805,7 +805,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 		System.out.println(simpleRecMLVariableTable.toString());
 		
-		System.out.println(new SimpleRecMLEquationAndVariableContainer(this,simpleRecMLVariableTable).toString());
+		System.out.println(new SimpleRecMLEquationAndVariableContainer(this,simpleRecMLVariableTable,true).toString());
 		//root.printString(" ");
 		//for(String[] strArray:getAttribute())			
 		//System.out.println(strArray[0]+strArray[1]+strArray[2]+strArray[3]+strArray[4]);
@@ -915,7 +915,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 		
 		SimpleRecMLEquationAndVariableContainer container2 = 
-				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable());
+				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable(),true);
 		
 		
 		/* Create a bipartite graph */
@@ -1011,7 +1011,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 		
 		SimpleRecMLEquationAndVariableContainer container2 = 
-				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable());
+				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable(),true);
 		
 		
 		/* Create a bipartite graph */
@@ -1144,8 +1144,9 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 
 	public void setLeftsideRightsideVariable(){
 		SimpleRecML_SetLeftSideRightSideVariableVisitor visitor = new SimpleRecML_SetLeftSideRightSideVariableVisitor(simpleRecMLVariableTable);
-		 for(MathExpression expr :m_vecMathExpression){
-			 expr.getRootFactor().traverse(visitor);
+		visitor.setExpIdProperty(true);
+		for(MathExpression expr :m_vecMathExpression){
+			 expr.traverse(visitor);
 			 visitor.reset();
 		 }
 		 simpleRecMLVariableTable=visitor.getTable();

@@ -43,6 +43,7 @@ public class MathExpressionLoop{
 	private List<Integer> dummpyExpressionNumList;
 	
 	private Integer idOfLoopHasDummy;
+	private Integer shortestCalOrderNum;
 	
 	public MathExpressionLoop() {
 		this.startLoopIndex=null;
@@ -52,7 +53,8 @@ public class MathExpressionLoop{
 		mathExpressionList=new ArrayList<MathExpression>();
 		mathExpressionLoopList=new ArrayList<MathExpressionLoop>();
 		baseMathExpressionList=new ArrayList<MathExpression>();
-		dummyExpressionFlag=false;
+		setDummyExpressionFlag(false);
+		shortestCalOrderNum=null;
 		
 	}
 
@@ -116,8 +118,8 @@ public class MathExpressionLoop{
 	}
 
 	public void addSimpleDumpyExpr(int nextLoopStartIndex) throws MathException{
-		if(dummyExpressionFlag == false){ //Not setted dummy expression
-			dummpyExpressionNumList = new ArrayList<Integer>();
+		if(isDummyExpressionFlag() == false){ //Not setted dummy expression
+			setDummpyExpressionNumList(new ArrayList<Integer>());
 			List<MathExpression> newExpressionList = new ArrayList<MathExpression>();
 		for(MathExpression expr : this.getAllExpressions()){
 			MathExpression lhs = expr.getLeftExpression();
@@ -144,6 +146,7 @@ public class MathExpressionLoop{
 			Math_minus minusOfIndex1 = new Math_minus();
 			Math_ci ci1_index1 = new Math_ci("i");
 			Math_cn offsetOfIndex1 = new Math_cn(startLoopIndex.toString());
+			offsetOfIndex1.autoChangeType();
 			applyOfIndex1.addFactor(minusOfIndex1);
 			minusOfIndex1.addFactor(ci1_index1);
 			minusOfIndex1.addFactor(offsetOfIndex1);
@@ -155,10 +158,11 @@ public class MathExpressionLoop{
 				//Create i - startLoopIndex
 			Math_apply applyOfIndex2 = new Math_apply();
 			Math_minus minusOfIndex2 = new Math_minus();
-			Math_ci ci1_index2 = new Math_ci("i");
+			Math_ci ci2_index2 = new Math_ci("i");
 			Math_cn offsetOfIndex2 = new Math_cn(startLoopIndex.toString());
-			applyOfIndex1.addFactor(minusOfIndex2);
-			minusOfIndex2.addFactor(ci1_index2);
+			offsetOfIndex2.autoChangeType();
+			applyOfIndex2.addFactor(minusOfIndex2);
+			minusOfIndex2.addFactor(ci2_index2);
 			minusOfIndex2.addFactor(offsetOfIndex2);
 			d_ci2.addIndexList(applyOfIndex2);
 				//Create 1 - __flag(id)[n][i-startLoopIndex
@@ -200,10 +204,10 @@ public class MathExpressionLoop{
 					e.printStackTrace();
 				}
 			}
-			dummyExpressionFlag = true;
+			setDummyExpressionFlag(true);
 		}
 		for(int i=this.endLoopIndex+1; i<nextLoopStartIndex;i++){
-			dummpyExpressionNumList.add(i);
+			getDummpyExpressionNumList().add(i);
 		}
 
 	}
@@ -312,13 +316,14 @@ public class MathExpressionLoop{
 	}
 	
 	private void toString(StringBuilder stringBuilder,String indent){
-	
-		if(dummyExpressionFlag){
-			stringBuilder.append(indent+"//Zero flag:");
-			for(Integer f: this.dummpyExpressionNumList){
-					stringBuilder.append("["+f+"], ");
+		stringBuilder.append(indent+"//Shortest Calculation Order:"+this.getShortestCalOrderNum()+"\n");
+		
+		if(isDummyExpressionFlag()){
+			stringBuilder.append(indent+"/*** Zero flag *****\n");
+			for(Integer f: this.getDummpyExpressionNumList()){
+					stringBuilder.append(indent+"__flag"+this.idOfLoopHasDummy+"__n["+f+"-"+this.startLoopIndex+"] = 0; \n ");
 			}
-			stringBuilder.append("\n");
+			stringBuilder.append(indent+" *******************/\n");
 		}
 
 		if(indexFactor==null||startLoopIndex==endLoopIndex){
@@ -364,5 +369,29 @@ public class MathExpressionLoop{
 
 	public void setIDofLoopHasDummy(Integer loopID) {
 		this.idOfLoopHasDummy = loopID;
+	}
+
+	public Integer getShortestCalOrderNum() {
+		return shortestCalOrderNum;
+	}
+
+	public void setShortestCalOrderNum(Integer shortestCalOrderNum) {
+		this.shortestCalOrderNum = shortestCalOrderNum;
+	}
+
+	public boolean isDummyExpressionFlag() {
+		return dummyExpressionFlag;
+	}
+
+	public void setDummyExpressionFlag(boolean dummyExpressionFlag) {
+		this.dummyExpressionFlag = dummyExpressionFlag;
+	}
+
+	public List<Integer> getDummpyExpressionNumList() {
+		return dummpyExpressionNumList;
+	}
+
+	public void setDummpyExpressionNumList(List<Integer> dummpyExpressionNumList) {
+		this.dummpyExpressionNumList = dummpyExpressionNumList;
 	}
 }

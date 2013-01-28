@@ -46,8 +46,8 @@ public class ExpressionComparatorByIndex implements Comparator<MathExpression> {
 		
 		
 		
-		int index1 = 0;
-		int index2 = 0;
+		int index1 = -listSize;
+		int index2 = -listSize;
 		
 		if(var1.getIndexList().size() > indexPosition){
 			//Calculate index ex. (1+2) -> Math_cn(3)
@@ -74,7 +74,6 @@ public class ExpressionComparatorByIndex implements Comparator<MathExpression> {
 				break;
 			}
 		}
-
 		//Not found a pattern
 		if(expr1Pattern==-1){
 			//Set pattern number

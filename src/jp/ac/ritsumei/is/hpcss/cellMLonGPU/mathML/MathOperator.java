@@ -829,7 +829,6 @@ public abstract class MathOperator extends MathFactor {
 	public MathFactor getRightExpression() {
 		/*=演算子の場合*/
 		if (this.matches(eMathOperator.MOP_EQ)) {
-
 			/*右辺式を返す*/
 			return m_vecFactor.get(1);
 		}

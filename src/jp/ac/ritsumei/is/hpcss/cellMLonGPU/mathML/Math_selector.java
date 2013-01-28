@@ -63,7 +63,14 @@ public class Math_selector extends MathOperator {
 		}
 		/* if there are more than two indices (can add more indices but now, limit is 2) */
 		else {
-			throw new MathException("Math_selector","toLegalString","too many operands");
+			String indexes =  "\n" +
+					"[0]:"+ m_vecFactor.get(0).toLegalString() + "\n" +
+					"[1]:"+ m_vecFactor.get(1).toLegalString() + "\n" +
+					"[2]:"+ m_vecFactor.get(2).toLegalString() + "\n" +
+					"[3]:"+ m_vecFactor.get(3).toLegalString() + "\n" +
+					"[4]:"+ m_vecFactor.get(4).toLegalString() + "\n" +
+					"[5]:"+ m_vecFactor.get(5).toLegalString() + "\n" ;
+			throw new MathException("Math_selector","toLegalString","too many operands"+indexes);
 		}
 		
 		

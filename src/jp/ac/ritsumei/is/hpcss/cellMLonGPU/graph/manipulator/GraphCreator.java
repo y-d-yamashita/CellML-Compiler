@@ -443,7 +443,7 @@ public class GraphCreator {
 		
 		throw new GraphException(this.getClass().getName(),
 				new Throwable().getStackTrace()[0].getMethodName(),
-				"Can not find");
+				"Can not find an exp vertex:"+exprID);
 	}
 
 	

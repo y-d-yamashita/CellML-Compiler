@@ -535,6 +535,9 @@ public class MathExpression {
 	 * @return 数式ID
 	 */
 	public long getExID(){
+		if(exID == -1){
+			exID = ((Math_apply)this.getRootFactor()).getExpNum();
+		}
 		return this.exID;
 	}
 	

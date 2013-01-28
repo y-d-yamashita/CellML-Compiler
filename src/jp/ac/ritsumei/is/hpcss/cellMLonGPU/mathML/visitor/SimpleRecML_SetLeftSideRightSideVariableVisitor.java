@@ -5,10 +5,12 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_eq;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.CCLogger;
 
 public class SimpleRecML_SetLeftSideRightSideVariableVisitor implements Visitor {
 
@@ -17,11 +19,13 @@ public class SimpleRecML_SetLeftSideRightSideVariableVisitor implements Visitor 
 	int exprID;
 	MathFactor leftSide;
 	MathFactor rightSide;
+	boolean ignoreExpNumFlag;
 	
 	public SimpleRecML_SetLeftSideRightSideVariableVisitor(SimpleRecMLVariableTable table) {
 		this.table = table;
 		mode=Mode.None;
 		exprID=0;
+		ignoreExpNumFlag = false;
 	}
 	enum Mode{
 		Assign,
@@ -29,7 +33,15 @@ public class SimpleRecML_SetLeftSideRightSideVariableVisitor implements Visitor 
 		None;
 	}
 	@Override
-	public void visit(MathFactor factor) {		
+	public void visit(MathFactor factor) {
+		
+		if(!ignoreExpNumFlag && factor instanceof Math_apply){
+			Math_apply apply = (Math_apply) factor;
+			Integer num = apply.getExpNum();
+			if(num != null){
+				exprID=num;
+			}
+		}
 		
 			
 		if(factor instanceof Math_eq){
@@ -41,6 +53,7 @@ public class SimpleRecML_SetLeftSideRightSideVariableVisitor implements Visitor 
 		}else if(factor==rightSide){
 			mode=Mode.Refer;
 		}
+		
 		if(factor instanceof Math_ci){
 			SimpleRecMLVariableReference variable = null;
 		
@@ -71,8 +84,18 @@ public class SimpleRecML_SetLeftSideRightSideVariableVisitor implements Visitor 
 		mode=Mode.None;
 		exprID++;
 	}
+	
+	public void reset(int i){
+		mode=Mode.None;
+		exprID = i;
+	}
+
+	
 	public SimpleRecMLVariableTable getTable(){
 		return table;
 	}
-
+	
+	public void setExpIdProperty(boolean flag){
+		this.ignoreExpNumFlag = flag;
+	}
 }

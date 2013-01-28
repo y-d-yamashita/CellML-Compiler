@@ -23,22 +23,35 @@ public class SimpleRecMLEquationAndVariableContainer {
 	private List<Integer> equationIdList;
 	private List<Integer> variableIdList;
 	private List<SimpleRecMLVariableReference> varRefList;
-
+	private boolean ignoreFlag;
 	
 	public SimpleRecMLEquationAndVariableContainer(SimpleRecMLAnalyzer analyzer,SimpleRecMLVariableTable table){
 		simpleRecMLVariableTable=table;
 		simpleRecMLAnalyzer=analyzer;
+		ignoreFlag = false;
+		
 		setEquationIDs();
 		setVarRefList();
 		setVariableIDs();
-
 	}
+	
+	public SimpleRecMLEquationAndVariableContainer(SimpleRecMLAnalyzer analyzer,SimpleRecMLVariableTable table,boolean flag){
+		simpleRecMLVariableTable=table;
+		simpleRecMLAnalyzer=analyzer;
+		ignoreFlag = flag;
+			
+		setEquationIDs();
+		setVarRefList();
+		setVariableIDs();
+	}
+
+	
 
 	private void setEquationIDs(){
 		equationIdList = new ArrayList<Integer>();
 
 		for(int i =0;i<simpleRecMLAnalyzer.getExpressionCount();i++){
-			if(simpleRecMLAnalyzer.getExpressionNumfromApply(i)==null){
+			if(ignoreFlag || simpleRecMLAnalyzer.getExpressionNumfromApply(i)==null){
 				equationIdList.add(i);
 			}else{
 				int id = simpleRecMLAnalyzer.getExpressionNumfromApply(i);
@@ -51,6 +64,7 @@ public class SimpleRecMLEquationAndVariableContainer {
 	private void setVariableIDs(){
 		variableIdList = new ArrayList<Integer>();
 		for(SimpleRecMLVariableReference r:varRefList){
+			try{
 			switch(r.getRecMLVarType()){
 			case CVAR_TYPE_RECURVAR:
 			case CVAR_TYPE_ARITHVAR:
@@ -63,6 +77,10 @@ public class SimpleRecMLEquationAndVariableContainer {
 //			case CVAR_TYPE_CONSTVAR:
 			default:
 				
+			}
+			}catch(NullPointerException e){
+				CCLogger.log("Type is null. "+ r.toString());
+				e.getStackTrace();
 			}
 		}
 		

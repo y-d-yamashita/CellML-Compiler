@@ -10,11 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.JavaBigDecimalProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.JavaProgramGenerator;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ODECommonProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.RecRelCommonProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
@@ -22,26 +20,18 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.*;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLVariableAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.LeftHandSideTransposition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableReference;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
+
 
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

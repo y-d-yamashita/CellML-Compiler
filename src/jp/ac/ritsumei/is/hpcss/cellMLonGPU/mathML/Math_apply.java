@@ -81,7 +81,7 @@ public class Math_apply extends MathOperator {
 
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
-		
+//		System.out.println("make StructuredRecML MathML Output Start MathML_Apply-1.");
 		String strExpression = "";
 
 		/*被演算子の個数チェック*/
@@ -92,20 +92,16 @@ public class Math_apply extends MathOperator {
 		String expinfo = "";
 		if(m_hashExpInfo.size()>0){
 			for(String key:m_hashExpInfo.keySet()){
+//				System.out.println("make StructuredRecML MathML Output Start MathML_Apply-2.");
 				expinfo += " " + key + " = " + "\"" + m_hashExpInfo.get(key) + "\"";
 			}
 		}
 		
 		String Attrinfo = "";
-		int loopnum = 0;
+//		int loopnum = 0;
 		if(m_hashAttr.size()>0){
-			int flag = m_hashAttr.size();
-			while(flag>0){
-				if(m_hashAttr.containsKey(loopnum)){
-					Attrinfo += " loop" + (loopnum+1) + " = \"" + m_hashAttr.get(loopnum) + "\"";
-					flag--;
-					loopnum++;
-				}
+			for(Integer lnum:m_hashAttr.keySet()){
+				Attrinfo += " loop" + (lnum+1) + " = \"" + m_hashAttr.get(lnum) + "\"";
 			}
 		}
 		

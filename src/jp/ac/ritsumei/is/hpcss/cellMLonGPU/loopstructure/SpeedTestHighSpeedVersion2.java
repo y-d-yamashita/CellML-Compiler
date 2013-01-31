@@ -10,10 +10,9 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure;
 
 import java.util.*;
 
-//修正 2013/1/30 メモリ消費を抑える + スタートとゴールの選択方法を最適化
+//修正 2013/1/31 メモリ消費を抑える + スタートとゴールの選択方法を最適化
 
-
-//再帰的に継承関係を判定しない方式にしたもの(こちらの方が少し処理が速いケースが多い)
+//再帰的に継承関係を判定しない方式にしたもの(こちらの方が少し処理が速いケースが多いので比較検証用に採用）
 
 public class SpeedTestHighSpeedVersion2 {
 
@@ -165,125 +164,110 @@ public class SpeedTestHighSpeedVersion2 {
 		}
 		
 		
-
-		//setの最適化部分
 		
-			//inner条件からStart順列を削減できる(removeするとゴール順列に支障があるので行わない)
-			ArrayList<Integer> ignore_setList = new ArrayList<Integer>();
-				
-			//childに対してparentが先行して配置される要素を削除
-			for(int i=0;i<loop_nameList.size();i++){
-					
-				boolean ignore = false;
-						
-				for(int j=0;j<inputList.size();j++){
-					if(inputList.get(j).Attribute_name.equals("inner")){
-						boolean child = false;
-						boolean flag = false;
+		boolean findFlag = false;
+		for(int s=0;s<loop_nameList.size();s++){
+			
+			boolean ignore_flag = false;
+
+			//inner条件から削減可能
+			//前処理で全てチェックしてもいいが,loop数が10を超えるとメモリを多量に使ってしまうので内部で逐次処理.
+			boolean ignore = false;
+			
+			for(int j=0;j<inputList.size();j++){
+				if(inputList.get(j).Attribute_name.equals("inner")){
+					boolean child = false;
+					boolean flag = false;
+							
+					//childに対してparentが先行して配置される要素を判定
+					for(int k=0;k<loop_nameList.get(s).length;k++){
 								
-						//childに対してparentが先行して配置される要素を削除
-						for(int k=0;k<loop_nameList.get(i).length;k++){
-									
-							if(loop_nameList.get(i)[k].equals(inputList.get(j).Child_name)){
-								child=true;
-							}
-							if(loop_nameList.get(i)[k].equals(inputList.get(j).Parent_name)){
-								if(!child) flag = true;break;
-							}
+						if(loop_nameList.get(s)[k].equals(inputList.get(j).Child_name)){
+							child=true;
 						}
-								
-						if(flag){
-							ignore=true;
-							break;
+						if(loop_nameList.get(s)[k].equals(inputList.get(j).Parent_name)){
+							if(!child) flag = true;break;
 						}
-					}	
-				}
-				if(ignore){
-					ignore_setList.add(i);
-				}
+					}
+							
+					if(flag){
+						ignore=true;
+						break;
+					}
+				}	
 			}
-		
-		
-			boolean findFlag = false;
-			for(int x=0;x<loop_nameList.size();x++){
-				
-				
-				boolean ignore_flag = false;
-				
-				for(int a=0;a<ignore_setList.size();a++){
-					if(x==ignore_setList.get(a)){
-						ignore_flag=true;
-					}
-				}
-				
-				for(int y=0;y<loop_nameList.size();y++){
-					
-					if(ignore_flag)break;
-					//start順列の末尾とgoal順列の先頭(すなわちリーフノードでない部分)は一致しているという条件でも決定に十分
-					int rootFactorSize = loop_name.length - leafList.size();
-					
-					int count=0;
-					for(int i=0;i<rootFactorSize;i++){
-						if(loop_nameList.get(y)[i]==loop_nameList.get(x)[(loop_name.length-1) - i ]){
-							count++;
-						}
-					}
-					
-					if(count==rootFactorSize){
-						
-					
-						ArrayList<Integer[]> Pair_Pattern = new ArrayList<Integer[]>();
-						
-						
-						Pair_Pattern.add(loop_nameList.get(x));
-						Pair_Pattern.add(loop_nameList.get(y));
-
-						
-						ArrayList<RelationPattern> inputList_new = new ArrayList<RelationPattern>();
-			    		
-			    		//見つかるまで削除手順を変えて繰り返す.
-						inputList_new= new ArrayList<RelationPattern>();
-						
-						//---------------------------------------------------
-						//継承関係の削除
-						//---------------------------------------------------
-						inputList_new = remove_inhPath(inputList, Pair_Pattern);
-						
-						//---------------------------------------------------
-						//双方向パスの処理
-						//---------------------------------------------------
-						
-						ArrayList<Integer> pre_num = new ArrayList<Integer>();
-						for(int j=0;j<inputList_new.size();j++){
-							if(inputList_new.get(j).Attribute_name.equals("pre")) pre_num.add(j);
-						}
-						
-						make_prepostList(0, new Integer[pre_num.size()]);
-
-						inputList_new = fix_interactivePath(inputList_new);
-						
-						if(inputList_new!=null && check_inh(inputList_new,inputList)){
-							
-							//継承判定をして矛盾しなければbreak
-							for(int l=0;l<loop_nameList.get(x).length;l++){
-								System.out.print(loop_nameList.get(x)[l]);
-							}System.out.println();
-							
-							
-							loopStructure=inputList_new;
-							findFlag=true;
-							System.out.println("find");
-							break;
-						}
-						else{
-							prepostList.clear();
-							inh_set.clear();
-						}
-					}
-		
-				}
-				if(findFlag)break;
+			if(ignore){
+				ignore_flag=true;
 			}
+			
+			for(int g=0;g<loop_nameList.size();g++){
+				
+				if(ignore_flag)break;
+				//start順列の末尾とgoal順列の先頭(すなわちリーフノードでない部分)は一致しているという条件でも決定に十分
+				int rootFactorSize = loop_name.length - leafList.size();
+				
+				int count=0;
+				for(int i=0;i<rootFactorSize;i++){
+					if(loop_nameList.get(g)[i]==loop_nameList.get(s)[(loop_name.length-1) - i ]){
+						count++;
+					}
+				}
+				
+				if(count==rootFactorSize){
+					
+				
+					ArrayList<Integer[]> Pair_Pattern = new ArrayList<Integer[]>();
+					
+					
+					Pair_Pattern.add(loop_nameList.get(s));
+					Pair_Pattern.add(loop_nameList.get(g));
+
+					
+					ArrayList<RelationPattern> inputList_new = new ArrayList<RelationPattern>();
+		    		
+		    		//見つかるまで削除手順を変えて繰り返す.
+					inputList_new= new ArrayList<RelationPattern>();
+					
+					//---------------------------------------------------
+					//継承関係の削除
+					//---------------------------------------------------
+					inputList_new = remove_inhPath(inputList, Pair_Pattern);
+					
+					//---------------------------------------------------
+					//双方向パスの処理
+					//---------------------------------------------------
+					
+					ArrayList<Integer> pre_num = new ArrayList<Integer>();
+					for(int j=0;j<inputList_new.size();j++){
+						if(inputList_new.get(j).Attribute_name.equals("pre")) pre_num.add(j);
+					}
+					
+					make_prepostList(0, new Integer[pre_num.size()]);
+
+					inputList_new = fix_interactivePath(inputList_new);
+					
+					if(inputList_new!=null && check_inh(inputList_new,inputList)){
+						
+						//継承判定をして矛盾しなければbreak
+						for(int l=0;l<loop_nameList.get(s).length;l++){
+							System.out.print(loop_nameList.get(s)[l]);
+						}System.out.println();
+						
+						
+						loopStructure=inputList_new;
+						findFlag=true;
+						System.out.println("find");
+						break;
+					}
+					else{
+						prepostList.clear();
+						inh_set.clear();
+					}
+				}
+	
+			}
+			if(findFlag)break;
+		}
 		//---------------------------------------------------
 		//null置換
 		//---------------------------------------------------

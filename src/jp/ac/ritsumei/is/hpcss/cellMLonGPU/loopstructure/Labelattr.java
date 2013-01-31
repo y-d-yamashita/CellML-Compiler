@@ -96,10 +96,9 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 		}else{
 			
 			/**
-			 * To decide Loop Structure part.
-			 * This is a high-speed version. 
+			 * To decide Loop Structure part (high-speed version). 
 			 * @author n-washio
-			 * 2013/1/30 Latest Update
+			 * 2013/1/31 Latest Update
 			 */
 
 			LoopStructureHandler lsh = new LoopStructureHandler();
@@ -166,28 +165,29 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 			}
 			
 			
-			//setの最適化部分
-			//inner条件からStart順列を削減できる(removeするとゴール順列に支障があるので行わない)
-			ArrayList<Integer> ignore_setList = new ArrayList<Integer>();
-				
-			//childに対してparentが先行して配置される要素を判定
+			boolean findFlag=false;
 			
-			for(int i=0;i<lsh.loop_nameList.size();i++){
-					
+			for(int start=0;start<lsh.loop_nameList.size();start++){
+				
+
+				boolean ignore_flag = false;
+
+				//inner条件から削減可能
+				//前処理で全てチェックしてもいいが,loop数が10を超えるとメモリを多量に使ってしまうので内部で逐次処理.
 				boolean ignore = false;
-						
+				
 				for(int j=0;j<inputList.size();j++){
 					if(inputList.get(j).Attribute_name.equals("inner")){
 						boolean child = false;
 						boolean flag = false;
 								
-						//childに対してparentが先行して配置される要素を削除
-						for(int k=0;k<lsh.loop_nameList.get(i).length;k++){
+						//childに対してparentが先行して配置される要素を判定
+						for(int k=0;k<lsh.loop_nameList.get(start).length;k++){
 									
-							if(lsh.loop_nameList.get(i)[k].equals(inputList.get(j).Child_name)){
+							if(lsh.loop_nameList.get(start)[k].equals(inputList.get(j).Child_name)){
 								child=true;
 							}
-							if(lsh.loop_nameList.get(i)[k].equals(inputList.get(j).Parent_name)){
+							if(lsh.loop_nameList.get(start)[k].equals(inputList.get(j).Parent_name)){
 								if(!child) flag = true;break;
 							}
 						}
@@ -199,21 +199,8 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 					}	
 				}
 				if(ignore){
-					ignore_setList.add(i);
+					ignore_flag=true;
 				}
-			}
-			boolean flag=false;
-			for(int start=0;start<lsh.loop_nameList.size();start++){
-				
-				
-				boolean ignore_flag = false;
-				
-				for(int a=0;a<ignore_setList.size();a++){
-					if(start==ignore_setList.get(a)){
-						ignore_flag=true;
-					}
-				}
-				
 				
 				for(int goal=0;goal<lsh.loop_nameList.size();goal++){
 					
@@ -263,7 +250,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 							
 							//継承判定をして矛盾しなければbreak
 							lsh.loopStructure=inputList_new;
-							flag=true;
+							findFlag=true;
 							break;
 						}
 						else{
@@ -273,7 +260,7 @@ public class Labelattr extends SimpleRecMLAnalyzer{
 					}
 		
 				}
-				if(flag)break;
+				if(findFlag)break;
 			}	
 			//---------------------------------------------------
 			//null置換およびループ構造の決定

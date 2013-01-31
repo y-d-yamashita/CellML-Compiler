@@ -158,6 +158,19 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	public void setM_vecMathExpression(int i,MathExpression exp) {
 		m_vecMathExpression.set(i, exp);
 	}
+	
+	
+	//数式順序解析を用いて格納順を更新するメソッド
+	public void sortM_vecMathExpression() {
+		Vector<MathExpression> m_vecMathExpression_new = new Vector<MathExpression>();
+		
+		for(int i=0;i<this.EquOrder.size();i++){
+			m_vecMathExpression_new.add(this.getExpressionFromID(this.EquOrder.get(i)));
+		}
+		
+		super.m_vecMathExpression = m_vecMathExpression_new;
+	}
+	
 
 	/*式中の変数*/
 	Vector<Math_ci> m_vecRecurVar;
@@ -196,10 +209,12 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	public void setM_HashMapEdgeList(HashMap<Integer, HashMap<String, Integer>> hm) {
 		m_HashMapEdgeList = hm;
 	}
+	
 	Vector<Integer> EquOrder; 
 	public Vector<Integer> getEquOder() {
 		return EquOrder;
 	}
+	
 	public void setEquOder(Vector<Integer> vec) {
 		EquOrder = vec;
 	}
@@ -975,7 +990,12 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 		sa.setM_HashMapNodeList(graphManipulator.getRecMLNode(resultTestCreateDependencyGraph));
 		sa.setM_HashMapEdgeList(graphManipulator.getRecMLEdge(resultTestCreateDependencyGraph));
-		sa.setEquOder(graphManipulator.getEquOder(resultTestCreateDependencyGraph, resultTestTrajan));	
+		sa.setEquOder(graphManipulator.getEquOder(resultTestCreateDependencyGraph, resultTestTrajan));
+		
+		//数式順序をソートしてベクターに格納する@ n-washio
+		sa.sortM_vecMathExpression();
+		
+		
 		sa.setRefVariableList(sa.simpleRecMLVariableTable.getVariableList());
 		
 		sa.setSimulEquList(graphManipulator.getSimulEquList(resultTestCreateDependencyGraph, resultTestTrajan));

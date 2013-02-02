@@ -14,7 +14,7 @@ import java.util.*;
 
 //継承関係の判定を再帰処理にして読みやすいように改良(スピードは僅かに劣化) コード生成系にはこの方式を採用
 
-public class SpeedTestHighSpeedVersion {
+public class SpeedTestHighSpeedVersion1 {
 
 	public static ArrayList<Integer> path_length;
 	public static ArrayList<String[]> prepostList = new  ArrayList<String[]>();

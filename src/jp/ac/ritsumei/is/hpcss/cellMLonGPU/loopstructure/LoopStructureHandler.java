@@ -1,8 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure;
 
 /**
- * This class is used "Labelattr" to decide Loop Structure for Structured RecML generator.
- * This is a high-speed version. 
+ * LoopStructureHandler class is used "Labelattr"(@ m-Kawabata)
+ *  to decide Loop Structure for Structured RecML generator.
  * 
  * @author n-washio
  * 
@@ -320,143 +320,143 @@ public class LoopStructureHandler {
 	
 	public ArrayList<RelationPattern> AssignInnerDependency(ArrayList<RelationPattern> inputList, Integer[] loopNameList) {
 		
+	
+		//innerを複数持っているノードをリスト化する.
+		ArrayList<Integer> multiInnerNode = new ArrayList<Integer>();
+		for(int i=0;i<loopNameList.length;i++){
+			int innerCount=0;
+			for(int j=0;j<inputList.size();j++){
+				if(loopNameList[i].equals(inputList.get(j).Parent_name)){
+					if(inputList.get(j).Attribute_name.equals("inner")) innerCount++;
+				}
+			}
+			if(innerCount>1) multiInnerNode.add(loopNameList[i]);
+		}
 		
-				//innerを複数持っているノードをリスト化する.
-				ArrayList<Integer> multiInnerNode = new ArrayList<Integer>();
-				for(int i=0;i<loopNameList.length;i++){
-					int innerCount=0;
-					for(int j=0;j<inputList.size();j++){
-						if(loopNameList[i].equals(inputList.get(j).Parent_name)){
-							if(inputList.get(j).Attribute_name.equals("inner")) innerCount++;
+		ArrayList<Integer> innerchildList;
+		ArrayList<Integer> innerchildNullList;
+		ArrayList<Integer> innerchildNullList_new;
+		ArrayList<Integer> innerchildInnerList;
+		ArrayList<RelationPattern> innerElements;
+		
+		
+		if(multiInnerNode.size()!=0){
+			for(int i=0;i<multiInnerNode.size();i++){
+
+				//inner子要素を全て格納する
+				innerchildList = new ArrayList<Integer>();
+				for(int j=0;j<inputList.size();j++){
+					if(inputList.get(j).Parent_name.equals(multiInnerNode.get(i))){
+						if(inputList.get(j).Attribute_name.equals("inner")){
+							innerchildList.add(inputList.get(j).Child_name);
 						}
 					}
-					if(innerCount>1) multiInnerNode.add(loopNameList[i]);
 				}
 				
-				ArrayList<Integer> innerchildList;
-				ArrayList<Integer> innerchildNullList;
-				ArrayList<Integer> innerchildNullList_new;
-				ArrayList<Integer> innerchildInnerList;
-				ArrayList<RelationPattern> innerElements;
+				//inner子要素だけで構成される構造要素を抽出する
+				innerElements = new ArrayList<RelationPattern>();
+				for(int j=0;j<inputList.size();j++){
+					boolean f1 = false;
+					boolean f2 = false;
+					for(int k=0;k<innerchildList.size();k++){
+						if(inputList.get(j).Parent_name.equals(innerchildList.get(k))) f1=true;
+						else if(inputList.get(j).Child_name.equals(innerchildList.get(k))) f2=true;
+					}
+					if(f1 && f2){
+						innerElements.add(inputList.get(j));
+					}
+				}
+				
+				//null関係が存在する場合,そのノードを格納する.
+				innerchildNullList = new ArrayList<Integer>();
+				for(int j=0;j<innerElements.size();j++){
+					if(innerElements.get(j).Attribute_name.equals("null")){
+						boolean overlap_p =false;
+						boolean overlap_c =false;
+						for(int k=0;k<innerchildNullList.size();k++){
+							if(innerchildNullList.get(k).equals(innerElements.get(j).Parent_name)) overlap_p = true;
+							else if(innerchildNullList.get(k).equals(innerElements.get(j).Child_name)) overlap_c = true;
+						}
+						if(!overlap_p){
+							innerchildNullList.add(innerElements.get(j).Parent_name);
+						}
+						if(!overlap_c){
+							innerchildNullList.add(innerElements.get(j).Child_name);
+						}
+					}
+				}
 				
 				
-				if(multiInnerNode.size()!=0){
-					for(int i=0;i<multiInnerNode.size();i++){
+				if(innerchildNullList.size()!=0){
+					
+					//innerの中にnullが存在する場合,pre/postを割り当てる必要がある.
+					//innerの子要素になっているノードにpre/postを割り当てることはできないので,nullのリストから外す.
+					innerchildInnerList = new ArrayList<Integer>();
+					for(int j=0;j<innerElements.size();j++){
+						if(innerElements.get(j).Attribute_name.equals("inner")){
+							boolean overlap = false;
+							for(int k=0;k<innerchildInnerList.size();k++){
+								if(innerchildInnerList.get(k).equals(innerElements.get(j).Child_name)) overlap = true;
 
-						//inner子要素を全て格納する
-						innerchildList = new ArrayList<Integer>();
-						for(int j=0;j<inputList.size();j++){
-							if(inputList.get(j).Parent_name.equals(multiInnerNode.get(i))){
-								if(inputList.get(j).Attribute_name.equals("inner")){
-									innerchildList.add(inputList.get(j).Child_name);
-								}
+							}
+							if(!overlap){
+								innerchildInnerList.add(innerElements.get(j).Child_name);
 							}
 						}
-						
-						//inner子要素だけで構成される構造要素を抽出する
-						innerElements = new ArrayList<RelationPattern>();
-						for(int j=0;j<inputList.size();j++){
-							boolean f1 = false;
-							boolean f2 = false;
-							for(int k=0;k<innerchildList.size();k++){
-								if(inputList.get(j).Parent_name.equals(innerchildList.get(k))) f1=true;
-								else if(inputList.get(j).Child_name.equals(innerchildList.get(k))) f2=true;
-							}
-							if(f1 && f2){
-								innerElements.add(inputList.get(j));
-							}
+					}
+
+					innerchildNullList_new = new ArrayList<Integer>();
+					for(int j=0;j<innerchildNullList.size();j++){
+						boolean flag =false;
+						for(int k=0;k<innerchildInnerList.size();k++){
+							if(innerchildInnerList.get(k).equals(innerchildNullList.get(j))) flag = true;
 						}
-						
-						//null関係が存在する場合,そのノードを格納する.
-						innerchildNullList = new ArrayList<Integer>();
-						for(int j=0;j<innerElements.size();j++){
-							if(innerElements.get(j).Attribute_name.equals("null")){
-								boolean overlap_p =false;
-								boolean overlap_c =false;
-								for(int k=0;k<innerchildNullList.size();k++){
-									if(innerchildNullList.get(k).equals(innerElements.get(j).Parent_name)) overlap_p = true;
-									else if(innerchildNullList.get(k).equals(innerElements.get(j).Child_name)) overlap_c = true;
-								}
-								if(!overlap_p){
-									innerchildNullList.add(innerElements.get(j).Parent_name);
-								}
-								if(!overlap_c){
-									innerchildNullList.add(innerElements.get(j).Child_name);
-								}
-							}
+						if(!flag){
+							innerchildNullList_new.add(innerchildNullList.get(j));
 						}
-						
-						
-						if(innerchildNullList.size()!=0){
+					}
+					
+
+					//pre/postを割り当てる
+					for(int j=0;j<innerchildNullList_new.size();j++){
+						boolean flag=false;
+						for(int k=0;k<innerchildNullList_new.size();k++){
 							
-							//innerの中にnullが存在する場合,pre/postを割り当てる必要がある.
-							//innerの子要素になっているノードにpre/postを割り当てることはできないので,nullのリストから外す.
-							innerchildInnerList = new ArrayList<Integer>();
-							for(int j=0;j<innerElements.size();j++){
-								if(innerElements.get(j).Attribute_name.equals("inner")){
-									boolean overlap = false;
-									for(int k=0;k<innerchildInnerList.size();k++){
-										if(innerchildInnerList.get(k).equals(innerElements.get(j).Child_name)) overlap = true;
-
-									}
-									if(!overlap){
-										innerchildInnerList.add(innerElements.get(j).Child_name);
-									}
-								}
-							}
-
-							innerchildNullList_new = new ArrayList<Integer>();
-							for(int j=0;j<innerchildNullList.size();j++){
-								boolean flag =false;
-								for(int k=0;k<innerchildInnerList.size();k++){
-									if(innerchildInnerList.get(k).equals(innerchildNullList.get(j))) flag = true;
-								}
-								if(!flag){
-									innerchildNullList_new.add(innerchildNullList.get(j));
-								}
-							}
-							
-
-							//pre/postを割り当てる
-							for(int j=0;j<innerchildNullList_new.size();j++){
-								boolean flag=false;
-								for(int k=0;k<innerchildNullList_new.size();k++){
-									
-									if(j!=k){
-										for(int n=0;n<innerElements.size();n++){
-											if(innerElements.get(n).Parent_name.equals(innerchildNullList_new.get(j))){
-												if(innerElements.get(n).Child_name.equals(innerchildNullList_new.get(k))){
-													if( ! (innerElements.get(n).Attribute_name.equals("null")) ){
-														flag = true;
-													}
-												}
-											}
-											
-											if(innerElements.get(n).Parent_name.equals(innerchildNullList_new.get(k))){
-												if(innerElements.get(n).Child_name.equals(innerchildNullList_new.get(j))){
-													if( ! (innerElements.get(n).Attribute_name.equals("null")) ){
-														flag = true;
-													}
-												}
+							if(j!=k){
+								for(int n=0;n<innerElements.size();n++){
+									if(innerElements.get(n).Parent_name.equals(innerchildNullList_new.get(j))){
+										if(innerElements.get(n).Child_name.equals(innerchildNullList_new.get(k))){
+											if( ! (innerElements.get(n).Attribute_name.equals("null")) ){
+												flag = true;
 											}
 										}
-										if(!flag){
-											RelationPattern pattern = new RelationPattern(innerchildNullList_new.get(j),innerchildNullList_new.get(k),"pre");
-											inputList.add(pattern);
-											innerElements.add(pattern);
-											RelationPattern pattern2 = new RelationPattern(innerchildNullList_new.get(k),innerchildNullList_new.get(j),"post");
-											inputList.add(pattern2);
-											innerElements.add(pattern2);
-										}	
-									}	
+									}
+									
+									if(innerElements.get(n).Parent_name.equals(innerchildNullList_new.get(k))){
+										if(innerElements.get(n).Child_name.equals(innerchildNullList_new.get(j))){
+											if( ! (innerElements.get(n).Attribute_name.equals("null")) ){
+												flag = true;
+											}
+										}
+									}
 								}
-							}
+								if(!flag){
+									RelationPattern pattern = new RelationPattern(innerchildNullList_new.get(j),innerchildNullList_new.get(k),"pre");
+									inputList.add(pattern);
+									innerElements.add(pattern);
+									RelationPattern pattern2 = new RelationPattern(innerchildNullList_new.get(k),innerchildNullList_new.get(j),"post");
+									inputList.add(pattern2);
+									innerElements.add(pattern2);
+								}	
+							}	
 						}
-
 					}
 				}
-				
-				return inputList;
+
+			}
+		}
+		
+		return inputList;
 	}
 	
 public ArrayList<RelationPattern> fix_interactivePath(ArrayList<RelationPattern> inputList, int loop_num) {

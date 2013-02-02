@@ -79,6 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author n-washio
  * 
  */
+
 public class ODECommonProgramGenerator extends ProgramGenerator {
 
 	//========================================================
@@ -556,7 +557,10 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		}
 		
 		int MaxLoopNumber = 1;
-		pSynMainFunc.addStatement(this.MainFuncSyntaxStatementList(MaxLoopNumber));
+		
+		//rootとなるループ番号を取得
+		int rootNum = m_pRecMLAnalyzer.getRoot().loopNumber;
+		pSynMainFunc.addStatement(this.MainFuncSyntaxStatementList(MaxLoopNumber,rootNum));
 		
 		
 		//----------------------------------------------
@@ -584,7 +588,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		return pSynProgram;
 	}
 	
-	protected SyntaxStatementList MainFuncSyntaxStatementList(int MaxLoopNumber) throws SyntaxException {
+	protected SyntaxStatementList MainFuncSyntaxStatementList(int MaxLoopNumber, int root) throws SyntaxException {
 		SyntaxStatementList aStatementList = null;
 
 		// add declaration for main function
@@ -594,9 +598,9 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		//String[] strAttr_Now = new String[] {"pre", null, null};
 		String[] strAttr_Now = new String[] {null, null, null, null, null};
 		try {
-			// for debug
-			//aStatementList = MakeDowhileLoop(MaxLoopNumber, 1, strAttr_Now);
-			aStatementList = MakeDowhileLoop(MaxLoopNumber, 0, strAttr_Now);
+
+			//取得したルート要素のループ番号から生成
+			aStatementList = MakeDowhileLoop(MaxLoopNumber, root, strAttr_Now);
 		} catch (TranslateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -614,6 +618,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		/*----- process "pre" -----*/
 		String[] strAttr_pre = strAttr_Now.clone();
 		strAttr_pre[LoopNumber] = "pre";
+		
 		SyntaxStatementList aStatementList_pre = new SyntaxStatementList();
 		if (m_pRecMLAnalyzer.hasChild(strAttr_pre)) {
 			// strAttr[LoopNumber] = "pre" has inner loopStructure
@@ -624,10 +629,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			aStatementList_pre.addStatement(createStatementList(strAttr_pre));
 		}
 		aStatementList.addStatement(aStatementList_pre);
-		// for debug
-		String strNow = null;
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
+
 		
 		/*----- process init -----*/
 		String[] strAttr_init = strAttr_Now.clone();
@@ -641,9 +643,7 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			aStatementList_init.addStatement(createStatementList(strAttr_init));
 		}
 		aStatementList.addStatement(aStatementList_init);
-		// for debug
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
+
 
 		/*----- process loop structure -----*/
 		// strAttr[LoopNumber] has 
@@ -651,16 +651,11 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			/* create loop structure */
 			/*----- create "tn" = 0 (loop index string = RecMLAnalyzer.getIndexString(LoopNumber)) -----*/
 			aStatementList.addStatement(createInitEqu(LoopNumber));
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
+
 
 			/*----- create loop condition -----*/
 			SyntaxControl pSynDowhile = createSyntaxDowhile(LoopNumber, strAttr_Now);
 			aStatementList.addStatement(pSynDowhile);
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
 
 			/*----- create inner Statements and add to Do While loop -----*/
 			String[] strAttr_inner = strAttr_Now.clone();
@@ -668,21 +663,17 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 			SyntaxStatementList aStatementList_inner = new SyntaxStatementList();
 			if (m_pRecMLAnalyzer.hasChild(strAttr_inner)) {
 				//strAttr[LoopNumber] = "inner" has inner loop structure
-				aStatementList_inner.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_inner), strAttr_inner));
+				aStatementList_inner.addStatement(
+						MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_inner), strAttr_inner));
 			} else {
 				//strAttr[LoopNumber] = "inner" has no inner loop
 				aStatementList_inner.addStatement(createStatementList(strAttr_inner));
 			}
 			pSynDowhile.addStatement(aStatementList_inner);
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
-
+			
 			/*----- insert loop counter increment -----*/
 			pSynDowhile.addStatement(createIndexIncrementEqu(LoopNumber));
-			// for debug
-			strNow = aStatementList.toLegalString();
-			//System.out.println(strNow);
+
 		}
 		
 		/*----- process final -----*/
@@ -691,15 +682,13 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		SyntaxStatementList aStatementList_final = new SyntaxStatementList();
 		if (m_pRecMLAnalyzer.hasChild(strAttr_final)) {
 			// strAttr[LoopNumber] = "final" has inner loopStructure
-			aStatementList_final.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_final), strAttr_final));
+			aStatementList_final.addStatement(
+					MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_final), strAttr_final));
 		} else {
 			// strAttr[LoopNumber] = "final" has no inner loop
 			aStatementList_final.addStatement(createStatementList(strAttr_final));
 		}
 		aStatementList.addStatement(aStatementList_final);
-		// for debug
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
 		
 		/*----- process post -----*/
 		String[] strAttr_post = strAttr_Now.clone();
@@ -707,15 +696,13 @@ public class ODECommonProgramGenerator extends ProgramGenerator {
 		SyntaxStatementList aStatementList_post = new SyntaxStatementList();
 		if (m_pRecMLAnalyzer.hasChild(strAttr_post)) {
 			// strAttr[LoopNumber] = "post" has inner loopStructure
-			aStatementList_post.addStatement(MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_post), strAttr_post));
+			aStatementList_post.addStatement(
+					MakeDowhileLoop(MaxLoopNumber, m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_post), strAttr_post));
 		} else {
 			// strAttr[LoopNumber] = "post" has no inner loop
 			aStatementList_post.addStatement(createStatementList(strAttr_post));
 		}
 		aStatementList.addStatement(aStatementList_post);
-		// for debug
-		strNow = aStatementList.toLegalString();
-		//System.out.println(strNow);
 		
 		return aStatementList;
 	}

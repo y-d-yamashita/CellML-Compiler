@@ -57,7 +57,8 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 //	private String[] indexStringList;
 	
 	// equation dependent tree root node
-	EqnDepTree root, now;
+	private EqnDepTree root;
+	EqnDepTree now;
 	int type; // 0=pre, 1=init, 2=inner, 3=loopcond, 4=final, 5=post
 	
 
@@ -185,7 +186,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		this.simulEquationList = new ArrayList<Vector<MathExpression>>();
 		this.resultMaximumMatching = new ArrayList<Vector<Integer>>();
 		this.variableNameMap = new HashMap<Integer,String>();
-		root = null;
+		setRoot(null);
 		now = null;
 		
 		//HashMap
@@ -271,11 +272,11 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 				{
 					// loop structure construction
 					int loopNum = Integer.parseInt(pXMLAttr.getValue("num"));
-					if (root == null) {
-						root = new EqnDepTree(loopNum);
-						now = root;
+					if (getRoot() == null) {
+						setRoot(new EqnDepTree(loopNum));
+						now = getRoot();
 					} else {
-						root.push(now);
+						getRoot().push(now);
 						EqnDepTree child = new EqnDepTree(loopNum);
 						switch (type) {
 						case 0: now.n_pre = child; break;
@@ -483,8 +484,8 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 			switch (tagId) {
 			case CTAG_LOOPSTRUCT:
 				// end of loop tag
-				if (!root.emptyStack()) {
-					now = root.pop();
+				if (!getRoot().emptyStack()) {
+					now = getRoot().pop();
 				} else {
 					;
 				}
@@ -651,7 +652,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	// LoopNumber for the child of strAttr
 	public int nextChildLoopNumber(String[] strAttr) {
 
-		return nextChildLoopNumber(strAttr, root);
+		return nextChildLoopNumber(strAttr, getRoot());
 	}
 	
 	private int nextChildLoopNumber(String[] strAttr, EqnDepTree node) {
@@ -688,5 +689,15 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	
 	public RecMLVariableTable getRecMLVariableTable() {
 		return recMLVariableTable;
+	}
+
+
+	public EqnDepTree getRoot() {
+		return root;
+	}
+
+
+	public void setRoot(EqnDepTree root) {
+		this.root = root;
 	}
 }

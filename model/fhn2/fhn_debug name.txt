@@ -1,1 +1,0 @@
-S:\GPGPU\VC++Project\CellMLonGPU\CellMLonGPU\model\fhn2\fhn_RungeKutta.relml > S:\GPGPU\VC++Project\CellMLonGPU\fhn2_RungeKutta.c

@@ -19,8 +19,8 @@ public class SimpleRecMLEquationAndVariableContainer {
 
 	private SimpleRecMLVariableTable simpleRecMLVariableTable;
 	private SimpleRecMLAnalyzer simpleRecMLAnalyzer;
-	private List<Integer> equationIdList;
-	private List<Integer> variableIdList;
+	public List<Integer> equationIdList;
+	public List<Integer> variableIdList;
 	private List<SimpleRecMLVariableReference> varRefList;
 
 	

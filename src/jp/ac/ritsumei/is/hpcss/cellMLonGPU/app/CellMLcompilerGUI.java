@@ -390,19 +390,19 @@ public class CellMLcompilerGUI  extends JFrame {
     	/*生成系1*/
     	String genCode0 = null;
     	if (gRustyButton.isSelected()) {
-    		genCode0 = ODECommonProgramGeneratorMain.GENERATOR_RUSTY;
+    		genCode0 = CommonProgramGeneratorMain.GENERATOR_RUSTY;
     	}else if(gKawabataButton.isSelected()){
-    		genCode0 = ODECommonProgramGeneratorMain.GENERATOR_KAWABATA;
+    		genCode0 = CommonProgramGeneratorMain.GENERATOR_KAWABATA;
     	}
 
     	/*生成系2*/
     	String genCode1 = null;
     	if (rSimpleButton.isSelected()) {
-    		genCode1 = ODECommonProgramGeneratorMain.FILETYPE_SIMPLE;
+    		genCode1 = CommonProgramGeneratorMain.FILETYPE_SIMPLE;
     	}else if(rStructuredButton.isSelected()){
-    		genCode1 = ODECommonProgramGeneratorMain.FILETYPE_STRUCTURED;    		
+    		genCode1 = CommonProgramGeneratorMain.FILETYPE_STRUCTURED;    		
     	}else if(rRelmlButton.isSelected()){
-    		genCode1 = ODECommonProgramGeneratorMain.FILETYPE_RELML;
+    		genCode1 = CommonProgramGeneratorMain.FILETYPE_RELML;
     	}
     	
     	if (genCode0 != null && genCode1 != null) {

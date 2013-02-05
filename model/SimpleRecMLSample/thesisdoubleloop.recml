@@ -1,0 +1,242 @@
+<recml>
+
+
+<loopindex num="0" name="n" />
+<loopindex num="1" name="m" />
+
+
+
+<variable name="Main_d_x" type="recurvar" initial_value="0.0" />
+<variable name="Main_a_xr" type="recurvar" initial_value="0.0" />
+<variable name="Main_ka_kr" type="arithvar" initial_value="0.0" />
+<variable name="Main_a" type="arithvar" initial_value="0.0" />
+<variable name="Main_kd_k" type="arithvar" initial_value="0.0" />
+<variable name="xend" type="arithvar" initial_value="0.0" />
+<variable name="Main_e_i" type="arithvar" initial_value="0.0" />
+<variable name="Main_c_zr" type="constvar" initial_value="0.0" />
+<variable name="d" type="constvar" initial_value="0.01" />
+<variable name="Main_b_zr" type="constvar" initial_value="0.0" />
+<variable name="n" type="stepvar" />
+<variable name="m" type="stepvar" />
+
+
+<math >
+<!--    equation    -->
+<apply  num = "0" type = "init" loopnum = "1">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.0 </cn>
+</apply>
+
+
+<apply  num = "1" type = "initend" loopnum = "1">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> m </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+
+
+<apply  num = "2" type = "init" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_a_xr </ci>
+	<ci> m </ci>
+	<cn> 0 </cn>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> m </ci>
+	</apply>
+</apply>
+
+
+<apply  num = "3" type = "initend" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_a_xr </ci>
+	<ci> m </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_a_xr </ci>
+	<ci> m </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+
+
+<apply  num = "4">
+	<eq/>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_ka_kr </ci>
+	<ci> m </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<ci> Main_b_zr </ci>
+	<ci> Main_c_zr </ci>
+</apply>
+</apply>
+	<cn> 0 </cn>
+</apply>
+
+
+<apply  num = "5">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_a_xr </ci>
+	<ci> m </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_ka_kr </ci>
+	<ci> m </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+
+<apply  num = "6" type = "condition">
+	<gt/>
+	<ci> n </ci>
+	<cn> 100 </cn>
+
+</apply>
+
+
+<apply  num = "7" type = "final" condref = "6" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_a </ci>
+	<ci> m </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_a_xr </ci>
+	<ci> m </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+
+
+<apply  num = "8">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_a </ci>
+	<ci> m </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_e_i </ci>
+	<ci> m </ci>
+	</apply>
+</apply>
+
+
+<apply  num = "9">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kd_k </ci>
+	<ci> m </ci>
+	</apply>
+	<apply >
+		<times/>
+<cn> 3 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_e_i </ci>
+	<ci> m </ci>
+	</apply>
+</apply>
+</apply>
+
+
+<apply  num = "10">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<apply >
+	<plus/>
+	<ci> m </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> m </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kd_k </ci>
+	<ci> m </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+
+
+<apply  num = "11" type = "condition">
+	<gt/>
+	<ci> m </ci>
+	<cn> 300 </cn>
+
+</apply>
+
+
+<apply  num = "12" type = "final" condref = "11" loopnum = "1">
+	<eq/>
+	<ci> xend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<apply >
+	<plus/>
+	<ci> m </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+
+
+</math>
+</recml>

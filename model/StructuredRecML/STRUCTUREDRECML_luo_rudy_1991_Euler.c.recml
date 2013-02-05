@@ -1,0 +1,2937 @@
+<recml>
+
+
+<loopindex num="0" name="n" />
+
+
+
+<loopstruct num= "0"/>
+
+
+<variable name="Main_j_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_h_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_X_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_V_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_f_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_d_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_Cai_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_time_t" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_m_x" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_beta_j_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="fend" type="arithvar" />
+<variable name="Main_E_K1_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kf_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_f_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kV_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_d_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_si_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kCai_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_d_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="dend" type="arithvar" />
+<variable name="Main_i_si_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_km_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_X_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K1_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Xend" type="arithvar" />
+<variable name="Main_alpha_f_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Caiend" type="arithvar" />
+<variable name="Main_kd_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_K1_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="hend" type="arithvar" />
+<variable name="Main_kX_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_K1_infinity_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Na_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_m_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="mend" type="arithvar" />
+<variable name="Main_i_Kp_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_m_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Vend" type="arithvar" />
+<variable name="Main_kj_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_I_stim_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_h_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Na_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_K1_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_j_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Kp_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_X_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K1_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kh_k" type="arithvar" loopcomponent1 = "1" />
+<variable name="jend" type="arithvar" />
+<variable name="Main_i_b_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_h_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Kp_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="t" type="arithvar" />
+<variable name="Main_Xi_i" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_b_z" type="constvar" initial_value="-59.87" />
+<variable name="Main_stim_amplitude_z" type="constvar" initial_value="-25.5" />
+<variable name="Main_T_z" type="constvar" initial_value="310.0" />
+<variable name="Main_stim_start_z" type="constvar" initial_value="100.0" />
+<variable name="Main_g_Na_z" type="constvar" initial_value="23.0" />
+<variable name="Main_Ki_z" type="constvar" initial_value="145.0" />
+<variable name="Main_Ko_z" type="constvar" initial_value="5.4" />
+<variable name="Main_stim_duration_z" type="constvar" initial_value="2.0" />
+<variable name="Main_Nai_z" type="constvar" initial_value="18.0" />
+<variable name="Main_R_z" type="constvar" initial_value="8314.0" />
+<variable name="Main_PR_NaK_z" type="constvar" initial_value="0.01833" />
+<variable name="Main_g_Kp_z" type="constvar" initial_value="0.0183" />
+<variable name="d" type="constvar" initial_value="0.01" />
+<variable name="Main_C_z" type="constvar" initial_value="1.0" />
+<variable name="Main_Nao_z" type="constvar" initial_value="140.0" />
+<variable name="Main_stim_period_z" type="constvar" initial_value="1000.0" />
+<variable name="Main_g_b_z" type="constvar" initial_value="0.03921" />
+<variable name="Main_F_z" type="constvar" initial_value="96484.6" />
+<variable name="Main_stim_end_z" type="constvar" initial_value="1.0E11" />
+<variable name="n" type="stepvar" />
+
+
+<node id="0" equation="0" variable="0" />
+<node id="1" equation="1" variable="1" />
+<node id="2" equation="2" variable="2" />
+<node id="3" equation="3" variable="3" />
+<node id="4" equation="4" variable="4" />
+<node id="5" equation="5" variable="5" />
+<node id="6" equation="6" variable="6" />
+<node id="7" equation="7" variable="7" />
+<node id="8" equation="8" variable="8" />
+<node id="9" equation="9" variable="9" />
+<node id="10" equation="10" variable="10" />
+<node id="11" equation="11" variable="11" />
+<node id="12" equation="12" variable="12" />
+<node id="13" equation="13" variable="13" />
+<node id="14" equation="14" variable="14" />
+<node id="15" equation="15" variable="15" />
+<node id="17" equation="17" variable="17" />
+<node id="16" equation="16" variable="16" />
+<node id="19" equation="19" variable="24" />
+<node id="18" equation="18" variable="18" />
+<node id="21" equation="21" variable="32" />
+<node id="20" equation="20" variable="30" />
+<node id="23" equation="23" variable="34" />
+<node id="22" equation="22" variable="33" />
+<node id="25" equation="25" variable="36" />
+<node id="24" equation="24" variable="35" />
+<node id="27" equation="27" variable="38" />
+<node id="26" equation="26" variable="37" />
+<node id="29" equation="29" variable="40" />
+<node id="28" equation="28" variable="39" />
+<node id="31" equation="31" variable="42" />
+<node id="30" equation="30" variable="41" />
+<node id="34" equation="34" variable="46" />
+<node id="35" equation="35" variable="49" />
+<node id="32" equation="32" variable="43" />
+<node id="33" equation="33" variable="44" />
+<node id="38" equation="38" variable="50" />
+<node id="39" equation="39" variable="53" />
+<node id="36" equation="36" variable="51" />
+<node id="37" equation="37" variable="52" />
+<node id="42" equation="42" variable="57" />
+<node id="43" equation="43" variable="58" />
+<node id="40" equation="40" variable="54" />
+<node id="41" equation="41" variable="55" />
+<node id="46" equation="46" variable="60" />
+<node id="47" equation="47" variable="61" />
+<node id="44" equation="44" variable="56" />
+<node id="45" equation="45" variable="59" />
+<node id="51" equation="51" variable="69" />
+<node id="50" equation="50" variable="68" />
+<node id="49" equation="49" variable="66" />
+<node id="48" equation="48" variable="63" />
+<node id="55" equation="55" variable="73" />
+<node id="54" equation="54" variable="72" />
+<node id="53" equation="53" variable="71" />
+<node id="52" equation="52" variable="70" />
+<node id="59" equation="59" variable="78" />
+<node id="58" equation="58" variable="77" />
+<node id="57" equation="57" variable="75" />
+<node id="56" equation="56" variable="74" />
+<node id="63" equation="63" variable="82" />
+<node id="62" equation="62" variable="81" />
+<node id="61" equation="61" variable="80" />
+<node id="60" equation="60" variable="79" />
+<node id="68" equation="69" variable="87" />
+<node id="69" equation="70" variable="88" />
+<node id="70" equation="71" variable="89" />
+<node id="71" equation="72" variable="90" />
+<node id="64" equation="64" variable="83" />
+<node id="65" equation="65" variable="84" />
+<node id="66" equation="67" variable="85" />
+<node id="67" equation="68" variable="86" />
+<node id="72" equation="73" variable="91" />
+<node id="73" equation="74" variable="92" />
+<node id="74" equation="75" variable="93" />
+
+<edge dest="50" source="21" />
+<edge dest="5" source="4" />
+<edge dest="54" source="11" />
+<edge dest="62" source="11" />
+<edge dest="28" source="11" />
+<edge dest="67" source="58" />
+<edge dest="59" source="51" />
+<edge dest="49" source="35" />
+<edge dest="53" source="29" />
+<edge dest="11" source="10" />
+<edge dest="35" source="34" />
+<edge dest="41" source="44" />
+<edge dest="47" source="45" />
+<edge dest="72" source="63" />
+<edge dest="49" source="20" />
+<edge dest="1" source="0" />
+<edge dest="74" source="65" />
+<edge dest="44" source="43" />
+<edge dest="35" source="1" />
+<edge dest="44" source="42" />
+<edge dest="38" source="1" />
+<edge dest="32" source="1" />
+<edge dest="37" source="1" />
+<edge dest="36" source="1" />
+<edge dest="43" source="1" />
+<edge dest="42" source="1" />
+<edge dest="46" source="1" />
+<edge dest="41" source="1" />
+<edge dest="48" source="1" />
+<edge dest="47" source="1" />
+<edge dest="20" source="1" />
+<edge dest="21" source="1" />
+<edge dest="25" source="1" />
+<edge dest="24" source="1" />
+<edge dest="23" source="1" />
+<edge dest="22" source="1" />
+<edge dest="29" source="1" />
+<edge dest="28" source="1" />
+<edge dest="57" source="1" />
+<edge dest="26" source="1" />
+<edge dest="57" source="49" />
+<edge dest="69" source="60" />
+<edge dest="31" source="1" />
+<edge dest="30" source="1" />
+<edge dest="66" source="57" />
+<edge dest="58" source="50" />
+<edge dest="9" source="8" />
+<edge dest="3" source="2" />
+<edge dest="49" source="47" />
+<edge dest="50" source="22" />
+<edge dest="73" source="64" />
+<edge dest="28" source="27" />
+<edge dest="55" source="37" />
+<edge dest="61" source="53" />
+<edge dest="70" source="61" />
+<edge dest="49" source="41" />
+<edge dest="71" source="62" />
+<edge dest="17" source="16" />
+<edge dest="52" source="26" />
+<edge dest="47" source="46" />
+<edge dest="54" source="32" />
+<edge dest="56" source="28" />
+<edge dest="49" source="28" />
+<edge dest="7" source="6" />
+<edge dest="60" source="7" />
+<edge dest="51" source="24" />
+<edge dest="54" source="31" />
+<edge dest="60" source="52" />
+<edge dest="15" source="14" />
+<edge dest="55" source="36" />
+<edge dest="20" source="7" />
+<edge dest="52" source="7" />
+<edge dest="52" source="25" />
+<edge dest="64" source="56" />
+<edge dest="63" source="55" />
+<edge dest="49" source="18" />
+<edge dest="13" source="12" />
+<edge dest="18" source="17" />
+<edge dest="65" source="17" />
+<edge dest="41" source="39" />
+<edge dest="68" source="59" />
+<edge dest="53" source="30" />
+<edge dest="27" source="15" />
+<edge dest="64" source="15" />
+<edge dest="35" source="13" />
+<edge dest="35" source="33" />
+<edge dest="63" source="13" />
+<edge dest="55" source="13" />
+<edge dest="20" source="19" />
+<edge dest="35" source="38" />
+<edge dest="20" source="3" />
+<edge dest="50" source="3" />
+<edge dest="51" source="5" />
+<edge dest="56" source="15" />
+<edge dest="59" source="5" />
+<edge dest="20" source="5" />
+<edge dest="42" source="40" />
+<edge dest="43" source="40" />
+<edge dest="28" source="9" />
+<edge dest="61" source="9" />
+<edge dest="62" source="54" />
+<edge dest="53" source="9" />
+<edge dest="58" source="3" />
+<edge dest="51" source="23" />
+<edge dest="49" source="48" />
+<edge dest="41" source="40" />
+<edge dest="45" source="40" />
+
+
+
+
+
+<refvariable id="0" variableName="Main_V_x[0]"/>
+<refvariable id="1" variableName="Main_V_x[n]"/>
+<refvariable id="2" variableName="Main_m_x[0]"/>
+<refvariable id="3" variableName="Main_m_x[n]"/>
+<refvariable id="4" variableName="Main_h_x[0]"/>
+<refvariable id="5" variableName="Main_h_x[n]"/>
+<refvariable id="6" variableName="Main_j_x[0]"/>
+<refvariable id="7" variableName="Main_j_x[n]"/>
+<refvariable id="8" variableName="Main_d_x[0]"/>
+<refvariable id="9" variableName="Main_d_x[n]"/>
+<refvariable id="10" variableName="Main_f_x[0]"/>
+<refvariable id="11" variableName="Main_f_x[n]"/>
+<refvariable id="12" variableName="Main_X_x[0]"/>
+<refvariable id="13" variableName="Main_X_x[n]"/>
+<refvariable id="14" variableName="Main_Cai_x[0]"/>
+<refvariable id="15" variableName="Main_Cai_x[n]"/>
+<refvariable id="17" variableName="Main_time_t[n]"/>
+<refvariable id="16" variableName="Main_time_t[0]"/>
+<refvariable id="19" variableName="Main_stim_amplitude_z"/>
+<refvariable id="18" variableName="Main_I_stim_i[n]"/>
+<refvariable id="21" variableName="Main_stim_end_z"/>
+<refvariable id="20" variableName="Main_stim_start_z"/>
+<refvariable id="23" variableName="Main_stim_duration_z"/>
+<refvariable id="22" variableName="Main_stim_period_z"/>
+<refvariable id="25" variableName="Main_R_z"/>
+<refvariable id="24" variableName="Main_E_Na_i[n]"/>
+<refvariable id="27" variableName="Main_F_z"/>
+<refvariable id="26" variableName="Main_T_z"/>
+<refvariable id="29" variableName="Main_Nai_z"/>
+<refvariable id="28" variableName="Main_Nao_z"/>
+<refvariable id="31" variableName="Main_g_Na_z"/>
+<refvariable id="30" variableName="Main_i_Na_i[n]"/>
+<refvariable id="34" variableName="Main_alpha_h_i[n]"/>
+<refvariable id="35" variableName="Main_beta_h_i[n]"/>
+<refvariable id="32" variableName="Main_alpha_m_i[n]"/>
+<refvariable id="33" variableName="Main_beta_m_i[n]"/>
+<refvariable id="38" variableName="Main_E_si_i[n]"/>
+<refvariable id="39" variableName="Main_i_si_i[n]"/>
+<refvariable id="36" variableName="Main_alpha_j_i[n]"/>
+<refvariable id="37" variableName="Main_beta_j_i[n]"/>
+<refvariable id="42" variableName="Main_alpha_f_i[n]"/>
+<refvariable id="43" variableName="Main_beta_f_i[n]"/>
+<refvariable id="40" variableName="Main_alpha_d_i[n]"/>
+<refvariable id="41" variableName="Main_beta_d_i[n]"/>
+<refvariable id="46" variableName="Main_E_K_i[n]"/>
+<refvariable id="47" variableName="Main_PR_NaK_z"/>
+<refvariable id="44" variableName="Main_g_K_i[n]"/>
+<refvariable id="45" variableName="Main_Ko_z"/>
+<refvariable id="51" variableName="Main_alpha_X_i[n]"/>
+<refvariable id="50" variableName="Main_Xi_i[n]"/>
+<refvariable id="49" variableName="Main_i_K_i[n]"/>
+<refvariable id="48" variableName="Main_Ki_z"/>
+<refvariable id="55" variableName="Main_i_K1_i[n]"/>
+<refvariable id="54" variableName="Main_E_K1_i[n]"/>
+<refvariable id="53" variableName="Main_g_K1_i[n]"/>
+<refvariable id="52" variableName="Main_beta_X_i[n]"/>
+<refvariable id="59" variableName="Main_E_Kp_i[n]"/>
+<refvariable id="58" variableName="Main_beta_K1_i[n]"/>
+<refvariable id="57" variableName="Main_alpha_K1_i[n]"/>
+<refvariable id="56" variableName="Main_K1_infinity_i[n]"/>
+<refvariable id="63" variableName="Main_i_b_i[n]"/>
+<refvariable id="62" variableName="Main_g_Kp_z"/>
+<refvariable id="61" variableName="Main_i_Kp_i[n]"/>
+<refvariable id="60" variableName="Main_Kp_i[n]"/>
+<refvariable id="68" variableName="Main_km_k[n]"/>
+<refvariable id="69" variableName="Main_kh_k[n]"/>
+<refvariable id="70" variableName="Main_kj_k[n]"/>
+<refvariable id="71" variableName="Main_kd_k[n]"/>
+<refvariable id="64" variableName="Main_g_b_z"/>
+<refvariable id="65" variableName="Main_E_b_z"/>
+<refvariable id="66" variableName="Main_kV_k[n]"/>
+<refvariable id="67" variableName="Main_C_z"/>
+<refvariable id="76" variableName="d"/>
+<refvariable id="77" variableName="Main_m_x[ ( n + 1 ) ]"/>
+<refvariable id="78" variableName="Main_h_x[ ( n + 1 ) ]"/>
+<refvariable id="79" variableName="Main_j_x[ ( n + 1 ) ]"/>
+<refvariable id="72" variableName="Main_kf_k[n]"/>
+<refvariable id="73" variableName="Main_kX_k[n]"/>
+<refvariable id="74" variableName="Main_kCai_k[n]"/>
+<refvariable id="75" variableName="Main_V_x[ ( n + 1 ) ]"/>
+<refvariable id="85" variableName="Vend"/>
+<refvariable id="84" variableName="Main_time_t[ ( n + 1 ) ]"/>
+<refvariable id="87" variableName="hend"/>
+<refvariable id="86" variableName="mend"/>
+<refvariable id="81" variableName="Main_f_x[ ( n + 1 ) ]"/>
+<refvariable id="80" variableName="Main_d_x[ ( n + 1 ) ]"/>
+<refvariable id="83" variableName="Main_Cai_x[ ( n + 1 ) ]"/>
+<refvariable id="82" variableName="Main_X_x[ ( n + 1 ) ]"/>
+<refvariable id="93" variableName="t"/>
+<refvariable id="92" variableName="Caiend"/>
+<refvariable id="89" variableName="dend"/>
+<refvariable id="88" variableName="jend"/>
+<refvariable id="91" variableName="Xend"/>
+<refvariable id="90" variableName="fend"/>
+
+
+<math>
+<apply  num = "40" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<apply >
+	<divide/>
+	<apply >
+		<times/>
+<ci> Main_R_z </ci>
+	<ci> Main_T_z </ci>
+</apply>
+	<ci> Main_F_z </ci>
+
+</apply>
+	<apply >
+	<ln/>
+	<apply >
+	<divide/>
+	<ci> Main_Ko_z </ci>
+	<ci> Main_Ki_z </ci>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "45" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_E_Kp_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+<apply  num = "39" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_g_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<cn> 0.6047 </cn>
+	<apply >
+	<root/>
+	 <apply >
+	<divide/>
+	<ci> Main_Ko_z </ci>
+	<cn> 5.4 </cn>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "34" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_E_K_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<apply >
+	<divide/>
+	<apply >
+		<times/>
+<ci> Main_R_z </ci>
+	<ci> Main_T_z </ci>
+</apply>
+	<ci> Main_F_z </ci>
+
+</apply>
+	<apply >
+	<ln/>
+	<apply >
+	<divide/>
+	<apply >
+	<plus/>
+	<ci> Main_Ko_z </ci>
+	<apply >
+		<times/>
+<ci> Main_PR_NaK_z </ci>
+	<ci> Main_Nao_z </ci>
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<ci> Main_Ki_z </ci>
+	<apply >
+		<times/>
+<ci> Main_PR_NaK_z </ci>
+	<ci> Main_Nai_z </ci>
+</apply>
+</apply>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "33" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_g_K_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<cn> 0.282 </cn>
+	<apply >
+	<root/>
+	 <apply >
+	<divide/>
+	<ci> Main_Ko_z </ci>
+	<cn> 5.4 </cn>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "19" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_E_Na_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<apply >
+	<divide/>
+	<apply >
+		<times/>
+<ci> Main_R_z </ci>
+	<ci> Main_T_z </ci>
+</apply>
+	<ci> Main_F_z </ci>
+
+</apply>
+	<apply >
+	<ln/>
+	<apply >
+	<divide/>
+	<ci> Main_Nao_z </ci>
+	<ci> Main_Nai_z </ci>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "16" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.0 </cn>
+</apply>
+<apply  loopnum = "0" num = "17" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "65" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "75" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> t </ci>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "18" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_I_stim_i </ci>
+	<ci> n </ci>
+	</apply>
+	<piecewise>
+   <piece>
+	<ci> Main_stim_amplitude_z </ci>
+	<apply >
+	<and/>
+	   <apply >
+	<geq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> Main_stim_start_z </ci>
+
+</apply>
+   <apply >
+	<leq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> Main_stim_end_z </ci>
+
+</apply>
+   <apply >
+	<leq/>
+	<apply >
+	<minus/>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> Main_stim_start_z </ci>
+
+</apply>
+	<apply >
+		<times/>
+<apply >
+	<floor/>
+	<apply >
+	<divide/>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> Main_stim_start_z </ci>
+
+</apply>
+	<ci> Main_stim_period_z </ci>
+
+</apply>
+
+</apply>
+	<ci> Main_stim_period_z </ci>
+</apply>
+
+</apply>
+	<ci> Main_stim_duration_z </ci>
+
+</apply>
+
+</apply>
+</piece><otherwise>
+	<cn> 0 </cn>
+</otherwise>
+</piecewise>
+</apply>
+<apply  num = "14" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 2.0E-4 </cn>
+</apply>
+<apply  loopnum = "0" num = "15" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "27" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_E_si_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 7.7 </cn>
+	<apply >
+		<times/>
+<cn> 13.0287 </cn>
+	<apply >
+	<ln/>
+	<apply >
+	<divide/>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 1 </cn>
+
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "12" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.16647703 </cn>
+</apply>
+<apply  loopnum = "0" num = "13" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "10" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.99427859 </cn>
+</apply>
+<apply  loopnum = "0" num = "11" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "8" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.00316354 </cn>
+</apply>
+<apply  loopnum = "0" num = "9" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "6" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.98767124 </cn>
+</apply>
+<apply  loopnum = "0" num = "7" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "4" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.9804713 </cn>
+</apply>
+<apply  loopnum = "0" num = "5" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "2" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.00187018 </cn>
+</apply>
+<apply  loopnum = "0" num = "3" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "0" loop1 = "init">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> -83.853 </cn>
+</apply>
+<apply  loopnum = "0" num = "1" type = "initend" loop1 = "initend">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+<apply  num = "30" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_d_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.07 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.017 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 44 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.05 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 44 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "31" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_f_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.012 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.008 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 28 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.15 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 28 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "28" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_i_si_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<cn> 0.09 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_si_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "56" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kCai_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<plus/>
+	<apply >
+		<times/>
+<apply >
+	<divide/>
+	<apply >
+	<minus/>
+   <cn> 0.0001 </cn>
+
+</apply>
+	<cn> 1 </cn>
+
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_si_i </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+	<apply >
+		<times/>
+<cn> 0.07 </cn>
+	<apply >
+	<minus/>
+	<cn> 0.0001 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+</apply>
+</apply>
+<apply  num = "64" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kCai_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "74" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> Caiend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_Cai_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "29" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_d_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.095 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.01 </cn>
+
+</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 5 </cn>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.072 </cn>
+
+</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 5 </cn>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "53" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kd_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_alpha_d_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_beta_d_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "61" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kd_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "71" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> dend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_d_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "26" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_j_i </ci>
+	<ci> n </ci>
+	</apply>
+	<piecewise>
+   <piece>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.1212 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.01052 </cn>
+
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.1378 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 40.14 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+	<apply >
+	<lt/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+   <cn> 40 </cn>
+
+</apply>
+
+</apply>
+</piece><otherwise>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.3 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.0000002535 </cn>
+
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.1 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 32 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</otherwise>
+</piecewise>
+</apply>
+<apply  num = "24" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_h_i </ci>
+	<ci> n </ci>
+	</apply>
+	<piecewise>
+   <piece>
+	<apply >
+	<plus/>
+	<apply >
+		<times/>
+<cn> 3.56 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.079 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+<cn> 310000 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.35 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+</apply>
+	<apply >
+	<lt/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+   <cn> 40 </cn>
+
+</apply>
+
+</apply>
+</piece><otherwise>
+	<apply >
+	<divide/>
+	<cn> 1 </cn>
+	<apply >
+		<times/>
+<cn> 0.13 </cn>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+	<divide/>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 10.66 </cn>
+</apply>
+	<apply >
+	<minus/>
+   <cn> 11.1 </cn>
+
+</apply>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+
+</apply>
+</otherwise>
+</piecewise>
+</apply>
+<apply  num = "25" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_j_i </ci>
+	<ci> n </ci>
+	</apply>
+	<piecewise>
+   <piece>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 127140 </cn>
+
+</apply>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.2444 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+<cn> 0.00003474 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.04391 </cn>
+
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 37.78 </cn>
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.311 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 79.23 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+	<apply >
+	<lt/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+   <cn> 40 </cn>
+
+</apply>
+
+</apply>
+</piece><otherwise>
+	<cn> 0 </cn>
+</otherwise>
+</piecewise>
+</apply>
+<apply  num = "52" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kj_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_alpha_j_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_beta_j_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "60" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kj_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "70" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> jend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "22" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_m_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<cn> 0.08 </cn>
+	<apply >
+	<exp/>
+	<apply >
+	<divide/>
+	<apply >
+	<minus/>
+   	<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+	<cn> 11 </cn>
+
+</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "23" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_h_i </ci>
+	<ci> n </ci>
+	</apply>
+	<piecewise>
+   <piece>
+	<apply >
+		<times/>
+<cn> 0.135 </cn>
+	<apply >
+	<exp/>
+	<apply >
+	<divide/>
+	<apply >
+	<plus/>
+	<cn> 80 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+	<apply >
+	<minus/>
+   <cn> 6.8 </cn>
+
+</apply>
+
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<lt/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+   <cn> 40 </cn>
+
+</apply>
+
+</apply>
+</piece><otherwise>
+	<cn> 0 </cn>
+</otherwise>
+</piecewise>
+</apply>
+<apply  num = "51" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kh_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_alpha_h_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_beta_h_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "59" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kh_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "69" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> hend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "20" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_i_Na_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<ci> Main_g_Na_z </ci>
+	<apply >
+	<power/>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 3 </cn>
+
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_h_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_j_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_Na_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "21" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_m_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.32 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 47.13 </cn>
+</apply>
+</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.1 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 47.13 </cn>
+</apply>
+</apply>
+
+</apply>
+
+</apply>
+
+</apply>
+</apply>
+<apply  num = "50" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_km_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_alpha_m_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_beta_m_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "58" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_km_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "68" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> mend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_m_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "48" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_i_b_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<ci> Main_g_b_z </ci>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> Main_E_b_z </ci>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "46" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_Kp_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<cn> 1 </cn>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+	<divide/>
+	<apply >
+	<minus/>
+	<cn> 7.488 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+	<cn> 5.98 </cn>
+
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "47" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_i_Kp_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<ci> Main_g_Kp_z </ci>
+		<apply>
+	<selector/>
+	<ci> Main_Kp_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_Kp_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "43" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+	<plus/>
+	<apply >
+		<times/>
+<cn> 0.49124 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.08032 </cn>
+	<apply >
+	<minus/>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 5.476 </cn>
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.06175 </cn>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 594.31 </cn>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.5143 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+	<cn> 4.753 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "42" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<cn> 1.02 </cn>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.2385 </cn>
+	<apply >
+	<minus/>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+	<cn> 59.215 </cn>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "44" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_K1_infinity_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_beta_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "41" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_i_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_g_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_K1_infinity_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "37" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_X_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.0013 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.06 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 20 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.04 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 20 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "36" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_alpha_X_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.0005 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.083 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 50 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.057 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 50 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "55" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kX_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_alpha_X_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_beta_X_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "63" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kX_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "73" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> Xend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "38" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_Xi_i </ci>
+	<ci> n </ci>
+	</apply>
+	<piecewise>
+   <piece>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 2.837 </cn>
+	<apply >
+	<minus/>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.04 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 77 </cn>
+</apply>
+</apply>
+
+</apply>
+	<cn> 1 </cn>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 77 </cn>
+</apply>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<cn> 0.04 </cn>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 35 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+	<apply >
+	<gt/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+   <cn> 100 </cn>
+
+</apply>
+
+</apply>
+</piece><otherwise>
+	<cn> 1 </cn>
+</otherwise>
+</piecewise>
+</apply>
+<apply  num = "32" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_beta_f_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<divide/>
+	<apply >
+		<times/>
+<cn> 0.0065 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.02 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 30 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+	<apply >
+	<plus/>
+	<cn> 1 </cn>
+	<apply >
+	<exp/>
+	<apply >
+		<times/>
+<apply >
+	<minus/>
+   <cn> 0.2 </cn>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 30 </cn>
+</apply>
+</apply>
+
+</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "54" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kf_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_alpha_f_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+	<cn> 1 </cn>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_beta_f_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+
+</apply>
+</apply>
+<apply  num = "62" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kf_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "72" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> fend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_f_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "35" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_i_K_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_g_K_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_X_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_Xi_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_E_K_i </ci>
+	<ci> n </ci>
+	</apply>
+
+</apply>
+</apply>
+</apply>
+<apply  num = "49" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kV_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<apply >
+	<divide/>
+	<apply >
+	<minus/>
+   <cn> 1 </cn>
+
+</apply>
+	<ci> Main_C_z </ci>
+
+</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_I_stim_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_Na_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_si_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_K_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_K1_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_Kp_i </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_i_b_i </ci>
+	<ci> n </ci>
+	</apply>
+</apply>
+</apply>
+</apply>
+<apply  num = "57" loop1 = "inner">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kV_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+<apply  loopnum = "0" num = "67" type = "final" condref = "66" loop1 = "final">
+	<eq/>
+	<ci> Vend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_V_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+<apply  num = "66" loop1 = "loopcond">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 400 </cn>
+</apply>
+</math>
+</recml>

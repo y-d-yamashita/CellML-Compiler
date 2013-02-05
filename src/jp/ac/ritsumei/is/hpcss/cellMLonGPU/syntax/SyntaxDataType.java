@@ -33,6 +33,7 @@ public class SyntaxDataType {
 		DT_DOUBLE	("double"),
 		DT_DIM3		("dim3"),
 		DT_PUB		("public static void"),
+		DT_PUBDouble("public static double"),
 		DT_STRING	("String"),
 		DT_BIGDECIMAL	("BigDecimal"),
 			;

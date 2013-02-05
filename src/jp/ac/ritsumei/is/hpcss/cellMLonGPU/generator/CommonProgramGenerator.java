@@ -28,6 +28,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.SimultaneousNewtonSolver;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl.eControlKind;
@@ -1193,5 +1194,5 @@ public class CommonProgramGenerator extends ProgramGenerator {
 
 		return pSyntaxExp;
 	}
-
+	
 }

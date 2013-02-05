@@ -20,7 +20,17 @@ public class SyntaxCallFunction extends SyntaxStatement {
 
 	/**キャスト型*/
 	protected SyntaxDataType m_pCastDataType;
-
+	
+	/**ベクタサイズ*/
+	protected int size;
+	
+	public void setSize(int n){
+		this.size=n;
+	}
+	public int getSize(){
+		return this.size;
+	}
+	
 	/**
 	 * 関数呼び出し構文インスタンスを作成する.
 	 * @param strFuncName 関数名
@@ -31,6 +41,7 @@ public class SyntaxCallFunction extends SyntaxStatement {
 		m_pCastDataType = null;
 		m_vecArgFactor = new Vector<MathFactor>();
 		m_vecKernelParam = new Vector<MathFactor>();
+		size=0;
 	}
 
 	/**
@@ -143,22 +154,52 @@ public class SyntaxCallFunction extends SyntaxStatement {
 
 		/*カーネル関数名追加*/
 		strPresentText.append(m_strFuncName);
+		
+		for(int i=0;i<this.size;i++){
+		
+			if(i==0){
+				/*キャスト型が指定されていればキャスト構文追加*/
+				if (m_pCastDataType != null) {
+					strPresentText.append(" " + m_pCastDataType.toLegalString() + "[");
+				}
+			}else{
+				strPresentText.append("[");
+			}
+			
+			//------------------------------------------
+			//カーネルパラメータ追加
+			//------------------------------------------
+			if (m_vecKernelParam.size() > 0) {
+				/*開始括弧追加*/
+				strPresentText.append(" <<< ");
 
-		/*キャスト型が指定されていればキャスト構文追加*/
-		if (m_pCastDataType != null) {
-			strPresentText.append(" " + m_pCastDataType.toLegalString() + "[");
-		}
+				/*順次パラメータを追加*/
+				boolean first = true;
+				for (MathFactor it1: m_vecKernelParam) {
 
-		//------------------------------------------
-		//カーネルパラメータ追加
-		//------------------------------------------
-		if (m_vecKernelParam.size() > 0) {
+					/*コンマ追加*/
+					if (first) {
+						first = false;
+					} else {
+						strPresentText.append(" , ");
+					}
+
+					/*パラメータ追加*/
+					strPresentText.append(it1.toLegalString());
+				}
+
+				/*終了括弧追加*/
+				strPresentText.append(" >>> ");
+			}
+			
+			//------------------------------------------
+			//関数引数追加
+			//------------------------------------------
 			/*開始括弧追加*/
-			strPresentText.append(" <<< ");
 
-			/*順次パラメータを追加*/
+			/*順次引数を追加*/
 			boolean first = true;
-			for (MathFactor it1: m_vecKernelParam) {
+			for (MathFactor it2: m_vecArgFactor) {
 
 				/*コンマ追加*/
 				if (first) {
@@ -167,34 +208,12 @@ public class SyntaxCallFunction extends SyntaxStatement {
 					strPresentText.append(" , ");
 				}
 
-				/*パラメータ追加*/
-				strPresentText.append(it1.toLegalString());
+				/*引数追加*/
+				strPresentText.append(it2.toLegalString());
 			}
-
-			/*終了括弧追加*/
-			strPresentText.append(" >>> ");
+			strPresentText.append("]");
 		}
-
-		//------------------------------------------
-		//関数引数追加
-		//------------------------------------------
-		/*開始括弧追加*/
-
-		/*順次引数を追加*/
-		boolean first = true;
-		for (MathFactor it2: m_vecArgFactor) {
-
-			/*コンマ追加*/
-			if (first) {
-				first = false;
-			} else {
-				strPresentText.append(" , ");
-			}
-
-			/*引数追加*/
-			strPresentText.append(it2.toLegalString());
-		}
-		strPresentText.append("]");
+		
 
 		/*文字列を返す*/
 		return strPresentText.toString();

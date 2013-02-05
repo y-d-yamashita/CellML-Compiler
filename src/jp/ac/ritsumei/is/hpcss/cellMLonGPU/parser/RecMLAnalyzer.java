@@ -336,11 +336,20 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 					/*変数名とタイプ取得*/
 					String strName = pXMLAttr.getValue("name");
 					String strType = pXMLAttr.getValue("type");
+					String initial_value = pXMLAttr.getValue("initial_value");
 					eRecMLVarType varType = RecMLDefinition.getRecMLVarType(strType);
 	
 					/*変数名から変数インスタンス生成*/
 					Math_ci pVariable =
 						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName);
+					
+					//初期値を格納
+					if(initial_value!=null){
+						pVariable.setValue(Double.parseDouble(initial_value));
+					}else{
+						pVariable.setValue(0.0);
+					}
+					
 					
 					String[] LoopComponent = new String[5];
 					LoopComponent[0] = pXMLAttr.getValue("loopcomponent1");

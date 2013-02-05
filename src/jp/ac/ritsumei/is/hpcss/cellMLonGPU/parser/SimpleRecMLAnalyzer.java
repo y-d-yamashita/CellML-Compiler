@@ -500,50 +500,20 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 					/*変数名とタイプ取得*/
 					String strName = pXMLAttr.getValue("name");
 					String strType = pXMLAttr.getValue("type");
+					String initial_value = pXMLAttr.getValue("initial_value");
 					eRecMLVarType varType = SimpleRecMLDefinition.getRecMLVarType(strType);
 	
 					/*変数名から変数インスタンス生成*/
 					Math_ci pVariable =
 						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName);
-	
-//					/*input変数の登録*/
-//					if (tagId == eTecMLTag.TTAG_INPUTVAR) {
-//						m_pInputVar = pVariable;
-//					}
-//					/*output変数の登録*/
-//					else if (tagId == eTecMLTag.TTAG_OUTPUTVAR) {
-//						m_pOutputVar = pVariable;
-//					}
-	
-//					/*タイプごとに変数追加*/
-//					switch (varType) {
-//	
-//						//----------------------------------RECURVAR変数型
-//					case CVAR_TYPE_RECURVAR:
-//						m_vecRecurVar.add(pVariable);
-//						break;
-//	
-//						//----------------------------------ARITHVAR変数型
-//					case CVAR_TYPE_ARITHVAR:
-//						m_vecArithVar.add(pVariable);
-//						break;
-//	
-//						//----------------------------------CONSTVAR変数型
-//					case CVAR_TYPE_CONSTVAR:
-//						m_vecConstVar.add(pVariable);
-//						break;
-//	
-//						//----------------------------------CONDITION変数型
-//					case CVAR_TYPE_STR_CONDITION:
-//						m_vecCondition.add(pVariable);
-//						break;
-//	
-//						//----------------------------------OUTPUT変数型
-//					case CVAR_TYPE_OUTPUT:
-//						m_vecOutput.add(pVariable);
-//						break;
-//
-//					}
+					
+					
+					//初期値を格納
+					if(initial_value!=null){
+						pVariable.setValue(Double.parseDouble(initial_value));
+					}else{
+						pVariable.setValue(0.0);
+					}
 					
 					String[] LoopComponent = new String[5];
 					LoopComponent[0] = pXMLAttr.getValue("loopcomponent1");
@@ -923,7 +893,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		
 	}
 
-	public void analysisForOutPutStrRec(SimpleRecMLAnalyzer sa) throws MathException{
+	public void analysisForOutPutStrRec(SimpleRecMLAnalyzer sa) throws MathException, GraphException{
 		/*selector内cnのInteger*/
 		sa.changeAllSelectorInteger();
 		
@@ -956,7 +926,9 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		SimpleRecMLEquationAndVariableContainer container2 = 
 				new SimpleRecMLEquationAndVariableContainer(sa,sa.getRecMLVariableTable());
 		
-		
+		if(container2.equationIdList.size()!=container2.variableIdList.size()){
+			throw new GraphException();
+		}
 		/* Create a bipartite graph */
 		try {		
 //			resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);

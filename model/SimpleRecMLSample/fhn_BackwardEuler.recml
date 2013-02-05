@@ -1,0 +1,378 @@
+<recml>
+
+
+<loopindex num="0" name="n" />
+
+
+
+<variable name="Main_x_x" type="recurvar" initial_value="0.0" />
+<variable name="Main_y_x" type="recurvar" initial_value="0.0" />
+<variable name="Main_time_t" type="recurvar" initial_value="0.0" />
+<variable name="Main_r_i" type="arithvar" initial_value="0.0" />
+<variable name="tend" type="arithvar" initial_value="0.0" />
+<variable name="yend" type="arithvar" initial_value="0.0" />
+<variable name="xend" type="arithvar" initial_value="0.0" />
+<variable name="Main_ky_k" type="arithvar" initial_value="0.0" />
+<variable name="Main_kx_k" type="arithvar" initial_value="0.0" />
+<variable name="Main_zz_z" type="constvar" initial_value="0.0" />
+<variable name="Main_gamma_z" type="constvar" initial_value="0.3" />
+<variable name="Main_beta_z" type="constvar" initial_value="1.2" />
+<variable name="d" type="constvar" initial_value="0.01" />
+<variable name="Main_epsilon_z" type="constvar" initial_value="0.03" />
+<variable name="n" type="stepvar" />
+
+
+<math >
+<!--    equation    -->
+<apply  num = "0" type = "init" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.0 </cn>
+</apply>
+
+
+<apply  num = "1" type = "initend" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+
+
+<apply  num = "2" type = "init" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.0 </cn>
+</apply>
+
+
+<apply  num = "3" type = "initend" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+
+
+<apply  num = "4" type = "init" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<cn> 0 </cn>
+	</apply>
+	<cn> 0.0 </cn>
+</apply>
+
+
+<apply  num = "5" type = "initend" loopnum = "0">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<cn> 0 </cn>
+	</apply>
+</apply>
+
+
+<apply  num = "6">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_r_i </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+</apply>
+
+
+<apply  num = "7">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_kx_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+	<plus/>
+	<apply >
+	<minus/>
+	<apply >
+	<minus/>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<divide/>
+		<apply>
+	<selector/>
+	<ci> Main_r_i </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 3 </cn>
+
+</apply>
+</apply>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+	<ci> Main_zz_z </ci>
+</apply>
+</apply>
+
+
+<apply  num = "8">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_ky_k </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+<ci> Main_epsilon_z </ci>
+	<apply >
+	<minus/>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<ci> Main_beta_z </ci>
+</apply>
+	<apply >
+		<times/>
+<ci> Main_gamma_z </ci>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+</apply>
+</apply>
+</apply>
+
+
+<apply  num = "9">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_kx_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+
+
+<apply  num = "10">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<ci> n </ci>
+	</apply>
+	<apply >
+		<times/>
+	<apply>
+	<selector/>
+	<ci> Main_ky_k </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+</apply>
+
+
+<apply  num = "11">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+	<apply >
+	<plus/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<ci> d </ci>
+</apply>
+</apply>
+
+
+<apply  num = "12" type = "condition">
+	<eq/>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<ci> n </ci>
+	</apply>
+	<cn> 400 </cn>
+</apply>
+
+
+<apply  num = "13" type = "final" condref = "12" loopnum = "0">
+	<eq/>
+	<ci> xend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_x_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+
+
+<apply  num = "14" type = "final" condref = "12" loopnum = "0">
+	<eq/>
+	<ci> yend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_y_x </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+
+
+<apply  num = "15" type = "final" condref = "12" loopnum = "0">
+	<eq/>
+	<ci> tend </ci>
+		<apply>
+	<selector/>
+	<ci> Main_time_t </ci>
+	<apply >
+	<plus/>
+	<ci> n </ci>
+	<cn> 1 </cn>
+</apply>
+	</apply>
+</apply>
+
+
+</math>
+</recml>

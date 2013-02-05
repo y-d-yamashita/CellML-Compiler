@@ -69,6 +69,10 @@ public class SyntaxPreprocessor extends Syntax {
 			/*define*/
 		case PP_DEFINE:
 			return "#define " + m_strContent;
+			
+			/*import*/
+		case JAVA_IMPORT:
+			return "import " + m_strContent;
 
 			/*予期しない種類*/
 		default:

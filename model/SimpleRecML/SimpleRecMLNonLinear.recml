@@ -191,7 +191,7 @@
 
 		<!-- loop1 loopcond -->
 		<apply num = "9">
-			<eq/>
+			<lt/>
 			<ci>n1</ci>
 			<cn>100</cn>
 		</apply>

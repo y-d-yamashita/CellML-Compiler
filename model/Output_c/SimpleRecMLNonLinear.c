@@ -48,7 +48,7 @@ int main ( int argc , char** argv ) {
 		
 		n1 =  ( n1 + 1 ) ;
 
-	}while(!(n1 == 100));
+	}while( (n1 < 100) );
 
 	X1end = X1[ ( n1 + 1 ) ];
 	

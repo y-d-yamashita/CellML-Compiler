@@ -54,6 +54,23 @@ public class Math_log extends MathOperator {
 		return "(log(" + m_vecFactor.get(1).toLegalString() + " )" +"/" + "log( " + m_vecFactor.get(0).toLegalString() + " ) )";
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_LOG) {
+			throw new MathException("Math_log","toLegalJavaString","lack of operand");
+		}
+		/*デフォルトの底に設定*/
+		if(m_vecFactor.size()==1){
+			m_vecFactor.add(1, m_vecFactor.get(0));
+			m_vecFactor.add(0, (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,"10"));
+		}
+		/*Math.logは自然対数を底とするものなので変換して利用*/
+		return "(Math.log(" + m_vecFactor.get(1).toLegalJavaString() + " )" +"/" + 
+									"Math.log( " + m_vecFactor.get(0).toLegalJavaString() + " ) )";
+	}
+	
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

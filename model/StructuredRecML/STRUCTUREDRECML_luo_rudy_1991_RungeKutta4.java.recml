@@ -8,226 +8,226 @@
 <loopstruct num= "0"/>
 
 
-<variable name="Main_h_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_V_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_time_t1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_f_x4" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_Cai_x1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_X_x3" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_time_t2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_j_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_V_x1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_Cai_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_m_x3" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_h_x1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_V_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_X_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_h_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_j_x3" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_time_t3" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_m_x1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_f_x1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_X_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_f_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_Cai_x2" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_V_x2" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_f_x2" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_h_x3" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_time_t4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_h_x2" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_X_x3" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_X_x1" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_X_x4" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_d_x3" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_j_x3" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_d_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_f_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_V_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_f_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_f_x1" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_m_x4" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_d_x4" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_Cai_x3" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_j_x1" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_d_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_d_x2" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_time_t1" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_m_x2" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_h_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_Cai_x1" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_d_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_m_x1" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_V_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_time_t2" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_Cai_x4" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_j_x2" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_h_x1" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_V_x1" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_f_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_V_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_X_x2" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_d_x1" type="recurvar" loopcomponent1 = "1" />
 <variable name="Main_j_x4" type="recurvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_d_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_K1_infinity_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Na_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K1_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kh_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K1_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kf_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_X_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_si_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_j_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="hend" type="arithvar" />
-<variable name="Main_beta_f_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_K1_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_j_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_I_stim_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_b_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K1_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Kp_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kh_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kh_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Na_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_m_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Xi_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kd_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K1_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kd_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_km_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kX_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_h_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_m_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_K_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="mend" type="arithvar" />
-<variable name="Main_beta_j_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Na_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_K1_infinity_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_K1_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_f_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_m_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kCai_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_X_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Kp_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_d_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Kp_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_j_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_si_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_km_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kV_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Kp_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Na_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_d_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_X_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_b_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_X_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Xend" type="arithvar" />
-<variable name="Main_i_si_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_I_stim_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K1_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_b_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_K_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_m_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_Cai_x3" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_j_x1" type="recurvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_K1_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="fend" type="arithvar" />
 <variable name="Main_kd_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_K1_i3" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_i_si_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_h_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_m_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kX_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_K1_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Kp_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_f_i2" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_E_K1_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_m_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Xi_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Na_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_si_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Kp_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_d_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_h_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_K1_infinity_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Xend" type="arithvar" />
+<variable name="Main_beta_f_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_b_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="hend" type="arithvar" />
+<variable name="Main_Kp_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Kp_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kh_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_K1_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K1_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_d_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_f_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kj_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kf_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_f_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_m_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kf_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_h_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_K1_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_j_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Kp_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Na_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_si_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kh_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_j_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kX_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_X_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_km_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_j_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Na_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_d_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_b_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_m_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kV_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_si_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_si_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="dend" type="arithvar" />
+<variable name="Main_beta_d_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_j_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Na_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_m_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_si_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kCai_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kh_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_X_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kV_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Kp_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_km_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kh_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_f_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Xi_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kd_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Vend" type="arithvar" />
+<variable name="Main_km_k2" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_beta_h_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kV_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_K1_infinity_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_X_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_j_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kj_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_K1_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_m_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_I_stim_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_X_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K1_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Na_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Kp_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_si_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_h_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_d_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kX_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_I_stim_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_K1_i3" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_beta_m_i2" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_kCai_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Na_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Kp_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_K1_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_K1_infinity_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Na_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kCai_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_si_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_d_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kf_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_d_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="dend" type="arithvar" />
-<variable name="Main_K1_infinity_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_K1_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_X_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kCai_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_si_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_j_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kV_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_X_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K1_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kf_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kh_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="jend" type="arithvar" />
-<variable name="Main_E_si_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Kp_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_j_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_K_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Kp_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kX_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_K1_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Kp_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_m_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_b_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_I_stim_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kd_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kX_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_K_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_f_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_h_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kj_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_f_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_f_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_X_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Vend" type="arithvar" />
-<variable name="Main_beta_m_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_I_stim_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_Kp_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_h_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kj_k4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Kp_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K1_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_h_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_j_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_Na_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_i_K_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kj_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Xi_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_f_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_K1_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kj_k1" type="arithvar" loopcomponent1 = "1" />
-<variable name="t" type="arithvar" />
-<variable name="Main_E_K1_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_f_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="fend" type="arithvar" />
-<variable name="Main_beta_d_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_E_K1_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_Xi_i3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_kV_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_X_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_km_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_h_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_f_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_h_i2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_K1_i4" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_km_k2" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_j_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_alpha_K1_i4" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_kf_k3" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_beta_d_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_f_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kV_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K1_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Na_i4" type="arithvar" loopcomponent1 = "1" />
 <variable name="Caiend" type="arithvar" />
+<variable name="Main_I_stim_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K1_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_K1_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kd_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_I_stim_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_X_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_Kp_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="mend" type="arithvar" />
+<variable name="Main_i_Kp_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_j_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_h_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_f_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Kp_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_X_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Kp_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_si_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_K1_infinity_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kCai_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K1_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="jend" type="arithvar" />
+<variable name="Main_kd_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_f_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_X_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_h_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K1_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_si_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K1_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_h_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="t" type="arithvar" />
+<variable name="Main_beta_j_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kj_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K1_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_m_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Kp_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K1_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_b_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_K1_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kj_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_X_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_m_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_K1_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kX_k3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_h_i3" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_alpha_d_i1" type="arithvar" loopcomponent1 = "1" />
-<variable name="Main_g_b_z" type="constvar" initial_value="0.03921" />
-<variable name="Main_stim_amplitude_z" type="constvar" initial_value="-25.5" />
-<variable name="Main_stim_period_z" type="constvar" initial_value="1000.0" />
-<variable name="Main_g_Kp_z" type="constvar" initial_value="0.0183" />
-<variable name="Main_T_z" type="constvar" initial_value="310.0" />
-<variable name="Main_Nai_z" type="constvar" initial_value="18.0" />
-<variable name="Main_C_z" type="constvar" initial_value="1.0" />
-<variable name="d" type="constvar" initial_value="0.01" />
-<variable name="Main_Nao_z" type="constvar" initial_value="140.0" />
-<variable name="Main_g_Na_z" type="constvar" initial_value="23.0" />
+<variable name="Main_i_b_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kV_k1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_d_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_d_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K1_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_K1_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Xi_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_beta_j_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kX_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Na_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Kp_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_K1_infinity_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kCai_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Xi_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_kf_k2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Na_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_km_k4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_E_Na_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_alpha_m_i2" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_g_K_i3" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_i_K_i1" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Kp_i4" type="arithvar" loopcomponent1 = "1" />
+<variable name="Main_Xi_i2" type="arithvar" loopcomponent1 = "1" />
 <variable name="Main_E_b_z" type="constvar" initial_value="-59.87" />
-<variable name="Main_F_z" type="constvar" initial_value="96484.6" />
-<variable name="Main_PR_NaK_z" type="constvar" initial_value="0.01833" />
+<variable name="Main_T_z" type="constvar" initial_value="310.0" />
+<variable name="Main_stim_amplitude_z" type="constvar" initial_value="-25.5" />
+<variable name="Main_stim_start_z" type="constvar" initial_value="100.0" />
+<variable name="Main_g_Na_z" type="constvar" initial_value="23.0" />
 <variable name="Main_Ki_z" type="constvar" initial_value="145.0" />
-<variable name="Main_R_z" type="constvar" initial_value="8314.0" />
 <variable name="Main_Ko_z" type="constvar" initial_value="5.4" />
 <variable name="Main_stim_duration_z" type="constvar" initial_value="2.0" />
+<variable name="Main_Nai_z" type="constvar" initial_value="18.0" />
+<variable name="Main_R_z" type="constvar" initial_value="8314.0" />
+<variable name="Main_PR_NaK_z" type="constvar" initial_value="0.01833" />
+<variable name="Main_g_Kp_z" type="constvar" initial_value="0.0183" />
+<variable name="d" type="constvar" initial_value="0.01" />
+<variable name="Main_C_z" type="constvar" initial_value="1.0" />
+<variable name="Main_Nao_z" type="constvar" initial_value="140.0" />
+<variable name="Main_g_b_z" type="constvar" initial_value="0.03921" />
+<variable name="Main_stim_period_z" type="constvar" initial_value="1000.0" />
+<variable name="Main_F_z" type="constvar" initial_value="96484.6" />
 <variable name="Main_stim_end_z" type="constvar" initial_value="1.0E11" />
-<variable name="Main_stim_start_z" type="constvar" initial_value="100.0" />
 <variable name="n" type="stepvar" />
 
 
@@ -10589,13 +10589,14 @@
 	</apply>
 </apply>
 <apply  num = "210" loop1 = "loopcond">
-	<eq/>
+	<lt/>
 		<apply>
 	<selector/>
 	<ci> Main_time_t1 </ci>
 	<ci> n </ci>
 	</apply>
 	<cn> 400 </cn>
+
 </apply>
 </math>
 </recml>

@@ -7,7 +7,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
@@ -45,13 +44,13 @@ public class SimultaneousNewtonSolverJava {
 			for(int j=0;j<vList.size();j++){
 				boolean flag = false;
 				for(int k=0;k<v2List.size();k++){
-					if(vList.get(j).toLegalString().equals(v2List.get(k).toLegalString())) flag = true;
+					if(vList.get(j).toLegalJavaString().equals(v2List.get(k).toLegalJavaString())) flag = true;
 				}
 				if(!flag){
 					boolean d_flag=false;
 					//導出変数かどうか判定
 					for(int d=0;d<varList.size();d++){
-						if(varList.get(d).toLegalString().equals(vList.get(j).toLegalString())){
+						if(varList.get(d).toLegalJavaString().equals(vList.get(j).toLegalJavaString())){
 							d_flag=true;
 						}
 					}
@@ -255,7 +254,7 @@ public class SimultaneousNewtonSolverJava {
 		outputStr=outputStr.concat("\n");
 		for(int i=0;i<n;i++){
 			for(int j=0;j<n;j++){
-				outputStr=outputStr.concat("\tif(i=="+i+" && j=="+j+") return "+JacobianRoot.get(i).get(j).toLegalString()+";\n");
+				outputStr=outputStr.concat("\tif(i=="+i+" && j=="+j+") return "+JacobianRoot.get(i).get(j).toLegalJavaString()+";\n");
 			}
 		}
 		outputStr=outputStr.concat("\n");
@@ -303,7 +302,7 @@ public class SimultaneousNewtonSolverJava {
 
 		outputStr=outputStr.concat("\n");
 		for(int i=0;i<n;i++){
-			outputStr=outputStr.concat("\tif(i=="+i+") return "+expressionList.get(i).getLeftExpression().toLegalString()+";\n");
+			outputStr=outputStr.concat("\tif(i=="+i+") return "+expressionList.get(i).getLeftExpression().toLegalJavaString()+";\n");
 		}
 		outputStr=outputStr.concat("\n");
 		outputStr=outputStr.concat("\telse return 0.0;\n");
@@ -331,7 +330,7 @@ public class SimultaneousNewtonSolverJava {
 		Math_cn num1 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
 		Math_cn num2 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
 		Math_cn num3 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "3");
-		Math_cn num4 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "4");
+		//Math_cn num4 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "4");
 		
 		
 		MathExpression pNewExpression = new MathExpression();

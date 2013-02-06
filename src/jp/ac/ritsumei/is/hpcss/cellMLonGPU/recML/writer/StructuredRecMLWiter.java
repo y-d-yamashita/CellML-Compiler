@@ -2,81 +2,23 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.writer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
-
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.Exception;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.RelationPattern;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_assign;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_eq;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_fn;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_lt;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_plus;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_times;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl.eControlKind;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType.eDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxFunction;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxPreprocessor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxPreprocessor.ePreprocessorKind;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition.eTecMLVarType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.StringUtil;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.CommonProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.CudaProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.SimpleProgramGenerator;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLVariableAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLHandler;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * 逐次プログラム構文生成クラス
@@ -531,11 +473,7 @@ public class StructuredRecMLWiter{
 		
 		return out;
 	}
-	
-	private String outPutMathML() throws MathException {
-		pSimpleRecMLAnalyzer.printMathml();
-		return null;
-	}
+
 	private ArrayList<String> getMathML() throws MathException {
 		return pSimpleRecMLAnalyzer.getMathml();
 	}

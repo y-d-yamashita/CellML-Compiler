@@ -54,12 +54,41 @@ public class Math_plus extends MathOperator {
 
 			for(int i=0; i < m_vecFactor.size(); i++) {
 
-			//TODO: BUG NOTED: this line does not allow multiplication of same variable	/* +演算子を追加  */
-//				if(it != m_vecFactor.firstElement()){
-//					strExpression += " + ";
-//				}
-
 				strExpression += (m_vecFactor.get(i)).toLegalString();
+				
+				if(i < ( m_vecFactor.size() - 1)){
+					strExpression += " + ";
+				}
+				
+			}
+
+			/*閉じ括弧を追加*/
+			strExpression += " ) ";
+
+			return strExpression;
+		}
+	}
+	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*非演算子がない場合は例外*/
+		if (m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_PLUS) {
+			throw new MathException("Math_plus","toLegalJavaString","lack of operand");
+		}
+		/*単項演算子*/
+		else if (m_vecFactor.size() == 1) {
+			return " ( + " + m_vecFactor.get(0).toLegalJavaString() + " ) ";
+		}
+		/*多項演算子*/
+		else{
+
+			/*文字列を追加していく*/
+			String strExpression = " ( ";
+
+			for(int i=0; i < m_vecFactor.size(); i++) {
+
+				strExpression += (m_vecFactor.get(i)).toLegalJavaString();
 				
 				if(i < ( m_vecFactor.size() - 1)){
 					strExpression += " + ";

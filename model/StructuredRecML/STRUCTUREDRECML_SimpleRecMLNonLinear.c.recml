@@ -210,7 +210,7 @@
 	</apply>
 </apply>
 <apply  num = "9" loop1 = "loopcond">
-	<eq/>
+	<lt/>
 	<ci> n1 </ci>
 	<cn> 100 </cn>
 </apply>

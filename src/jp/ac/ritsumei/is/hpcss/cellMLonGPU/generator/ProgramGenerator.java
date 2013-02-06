@@ -1,7 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator;
 
 import java.io.PrintWriter;
-import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
@@ -27,14 +26,12 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.NewtonSolver;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.SimultaneousNewtonSolver;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxProgram;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCallFunction;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl.eControlKind;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType.eDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxExpression;
@@ -269,6 +266,14 @@ public abstract class ProgramGenerator {
 	 */
 	public SyntaxProgram createNewProgram() {
 		return new SyntaxProgram();
+	}
+	
+	/**
+	 * 新規プログラム構文インスタンスを生成する.
+	 * @return プログラム構文インスタンス
+	 */
+	public JavaSyntaxProgram createNewJavaProgram() {
+		return new JavaSyntaxProgram();
 	}
 
 	/**
@@ -555,7 +560,7 @@ public abstract class ProgramGenerator {
 		pSynMallocCall.addArgFactor(pMathTimes1);
 
 		/*戻り値をキャスト*/
-		SyntaxDataType pSynPDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,1);
+		//SyntaxDataType pSynPDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,1);
 //		pSynMallocCall.addCastDataType(pSynPDoubleType); //remove casting for declaration of multidimensional arrays
 
 		/*代入式を生成*/

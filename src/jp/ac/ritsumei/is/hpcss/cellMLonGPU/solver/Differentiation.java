@@ -2,7 +2,6 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver;
 
 
 import java.util.HashMap;
-import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
@@ -1644,14 +1643,8 @@ public static void main(String[] args) throws MathException {
 		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "X");
 		val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "2"));
 		
-		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "A");
-		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
-		Math_ci val6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
-		Math_ci val7=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
-		
 		
 		Math_cn zero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
-		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "5");
 		MathExpression pNewExpression = new MathExpression();
 		pNewExpression.addOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));

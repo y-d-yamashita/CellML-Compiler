@@ -10,14 +10,14 @@ int main ( int argc , char** argv ) {
 
 	double** Main_a_xr;
 	double* Main_d_x;
-	double xend;
-	double* Main_a;
-	double** Main_ka_kr;
 	double* Main_kd_k;
 	double* Main_e_i;
-	double Main_c_zr;
+	double* Main_a;
+	double xend;
+	double** Main_ka_kr;
 	double Main_b_zr;
 	double d;
+	double Main_c_zr;
 	int m;
 	int n;
 	int i0;
@@ -25,10 +25,10 @@ int main ( int argc , char** argv ) {
 
 	Main_a_xr = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
 	Main_d_x = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
-	Main_a = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
-	Main_ka_kr = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
 	Main_kd_k = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
 	Main_e_i = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	Main_a = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
+	Main_ka_kr = (double**)malloc (  ( sizeof(double *) * __MAX_ARRAY_NUM )  ) ; ;
 	for(i0 = 0; ( i0 < __MAX_ARRAY_NUM ) ;i0++){
 
 		Main_a_xr[i0] = (double*)malloc (  ( sizeof(double ) * __MAX_ARRAY_NUM )  ) ; ;
@@ -36,9 +36,9 @@ int main ( int argc , char** argv ) {
 
 	}
 
-	Main_c_zr = (double)0.0;
 	Main_b_zr = (double)0.0;
 	d = (double)0.01;
+	Main_c_zr = (double)0.0;
 	
 	
 	Main_d_x[0] = (double)0.0;
@@ -61,7 +61,7 @@ int main ( int argc , char** argv ) {
 			
 			n =  ( n + 1 ) ;
 
-		}while(!( ( n > 100 ) ));
+		}while( ( n < 100 ) );
 
 		Main_a[m] = Main_a_xr[m][ ( n + 1 ) ];
 		
@@ -75,7 +75,7 @@ int main ( int argc , char** argv ) {
 		
 		m =  ( m + 1 ) ;
 
-	}while(!( ( m > 300 ) ));
+	}while( ( m < 300 ) );
 
 	xend = Main_d_x[ ( m + 1 ) ];
 	
@@ -86,9 +86,9 @@ int main ( int argc , char** argv ) {
 	{
 
 		free ( Main_d_x ) ; 
-		free ( Main_a ) ; 
 		free ( Main_kd_k ) ; 
 		free ( Main_e_i ) ; 
+		free ( Main_a ) ; 
 
 	}
 

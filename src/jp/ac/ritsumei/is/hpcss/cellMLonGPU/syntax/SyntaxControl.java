@@ -141,7 +141,7 @@ public class SyntaxControl extends SyntaxStatement {
 			strPresentText += StringUtil.lineSep + getIndentString() + "}" ;
 			
 			/*終了条件の追加*/
-			strPresentText += "while(!(" + m_pSynCondition.toLegalString() + "));"+ StringUtil.lineSep;
+			strPresentText += "while(" + m_pSynCondition.toLegalString() + ");"+ StringUtil.lineSep;
 		}
 		return strPresentText;
 	}

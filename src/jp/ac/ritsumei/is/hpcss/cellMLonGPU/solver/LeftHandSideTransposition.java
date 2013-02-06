@@ -1219,12 +1219,9 @@ public class LeftHandSideTransposition {
 		val2.addArrayIndexToFront(0);
 		Math_ci val3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
 		val3.addArrayIndexToFront(1);
-		Math_ci val4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
-		Math_ci val5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
-		Math_ci val6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
+
 		Math_ci val7=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "F");
-		Math_cn num = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "5");
-		
+
 		MathExpression pNewExpression = new MathExpression();
 		pNewExpression.addOperator(
 				MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));

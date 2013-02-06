@@ -225,7 +225,7 @@ int main ( int argc , char** argv ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t[n] == 400));
+	}while( (Main_time_t[n] < 400) );
 
 	t = Main_time_t[ ( n + 1 ) ];
 	Caiend = Main_Cai_x[ ( n + 1 ) ];

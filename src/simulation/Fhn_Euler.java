@@ -1,9 +1,11 @@
-import java.lang.Math
+package simulation;
+
+public class Fhn_Euler{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
+	int __DATA_NUM = 100000;
 	double Main_x_x[];
 	double Main_time_t[];
 	double Main_y_x[];
@@ -19,6 +21,11 @@ public static void main ( String args[] ) {
 	double d;
 	double Main_zz_z;
 	int n;
+	
+	/***** variables for stimulation *****/
+	double stim_start = 50;
+	double stim_interval= 200;
+	double stim_dur = 1;	
 
 	Main_x_x = new double[__DATA_NUM];
 	Main_time_t = new double[__DATA_NUM];
@@ -34,13 +41,22 @@ public static void main ( String args[] ) {
 	
 	
 	Main_time_t[0] = (double)0.0;
-	Main_y_x[0] = (double)0.0;
-	Main_x_x[0] = (double)0.0;
+	
+	/***** initial values *****/
+	Main_x_x[0] = (double)-1.501250563778375;
+	Main_y_x[0] = (double)-0.37621367749846896;
 	
 	
 	n = 0;
 	do{
-
+		
+		/***** Stimulation part *****/
+		if ( ( ( Main_time_t[n] >= stim_start )  &&  ( (Main_time_t[n] - stim_start) <= stim_dur ) ) || ( ( Main_time_t[n] >= stim_interval ) &&  ( (Main_time_t[n] - stim_interval) <= stim_dur ) ) ) { 
+			Main_zz_z = 1.0;
+		} else{
+			Main_zz_z = 0.0;
+		}
+		
 		Main_time_t[ ( n + 1 ) ] =  ( Main_time_t[n] + d ) ;
 		Main_ky_k[n] =  ( Main_epsilon_z *  (  ( Main_x_x[n] + Main_beta_z )  -  ( Main_gamma_z * Main_y_x[n] )  )  ) ;
 		Main_y_x[ ( n + 1 ) ] =  ( Main_y_x[n] +  ( Main_ky_k[n] * d )  ) ;
@@ -48,10 +64,15 @@ public static void main ( String args[] ) {
 		Main_kx_k[n] =  (  (  ( Main_x_x[n] -  ( Main_r_i[n] / (double)3 )  )  - Main_y_x[n] )  + Main_zz_z ) ;
 		Main_x_x[ ( n + 1 ) ] =  ( Main_x_x[n] +  ( Main_kx_k[n] * d )  ) ;
 		
+		/***** Output part *****/
+		System.out.print(Main_time_t[n+1]+",");
+		System.out.print(Main_x_x[n+1]+",");
+		System.out.print(Main_y_x[n+1]);
+		System.out.println();
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t[n] == 400));
+	}while( ( Main_time_t[n] < 400 ) );
 
 	t = Main_time_t[ ( n + 1 ) ];
 	y = Main_y_x[ ( n + 1 ) ];
@@ -64,4 +85,4 @@ public static void main ( String args[] ) {
 }
 
 
-
+}

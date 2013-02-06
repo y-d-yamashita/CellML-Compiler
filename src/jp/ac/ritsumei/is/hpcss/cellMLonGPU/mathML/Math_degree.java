@@ -34,6 +34,20 @@ public class Math_degree extends MathOperator {
 			throw new MathException("Math_degree","toLegalString","lack of operand");
 		}
 	}
+	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*単項演算子*/
+		if(m_vecFactor.size() == 1){
+			return "^" + m_vecFactor.get(0).toLegalJavaString();
+		}
+		/*例外*/
+		else{
+			throw new MathException("Math_degree","toLegalJavaString","lack of operand");
+		}
+	}
+	
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

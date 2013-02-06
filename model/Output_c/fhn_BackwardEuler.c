@@ -68,7 +68,7 @@ int main ( int argc , char** argv ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t[n] == 400));
+	}while( (Main_time_t[n] < 400) );
 
 	tend = Main_time_t[ ( n + 1 ) ];
 	xend = Main_x_x[ ( n + 1 ) ];

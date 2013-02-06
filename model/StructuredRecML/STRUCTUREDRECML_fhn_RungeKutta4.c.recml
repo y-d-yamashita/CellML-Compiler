@@ -1057,7 +1057,7 @@
 	</apply>
 </apply>
 <apply  num = "30" loop1 = "loopcond">
-	<eq/>
+	<lt/>
 		<apply>
 	<selector/>
 	<ci> Main_time_t1 </ci>

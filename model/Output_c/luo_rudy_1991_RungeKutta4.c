@@ -655,7 +655,7 @@ int main ( int argc , char** argv ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t1[n] == 400));
+	}while( (Main_time_t1[n] < 400) );
 
 	t = Main_time_t1[ ( n + 1 ) ];
 	Xend = Main_X_x1[ ( n + 1 ) ];

@@ -1,19 +1,14 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser;
 
-//import static org.junit.Assert.assertNotNull;
-
-import java.beans.Expression;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.EqnDepTree.EqnDepTree;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
@@ -25,24 +20,17 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.XMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.DirectedGraph;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.manipulator.GraphManipulator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.RelationPattern;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CreateSimpleRecMLVariableTableVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.ReplacePartOfVariableNameVisitor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.SetLeftSideRightSideVariableVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.SimpleRecML_SetLeftSideRightSideVariableVisitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLDefinition.eRecMLTag;
@@ -929,6 +917,8 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		if(container2.equationIdList.size()!=container2.variableIdList.size()){
 			throw new GraphException();
 		}
+		
+		
 		/* Create a bipartite graph */
 		try {		
 //			resultTestCreateBipartiteGraph = graphManipulator.createBipartiteGraph(container);

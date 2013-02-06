@@ -17,14 +17,14 @@
 
 <variable name="Main_a_xr" type="recurvar" loopcomponent1 = "1" loopcomponent2 = "1" />
 <variable name="Main_d_x" type="recurvar" loopcomponent2 = "1" />
-<variable name="xend" type="arithvar" />
-<variable name="Main_a" type="arithvar" loopcomponent2 = "1" />
-<variable name="Main_ka_kr" type="arithvar" loopcomponent1 = "1" loopcomponent2 = "1" />
 <variable name="Main_kd_k" type="arithvar" loopcomponent2 = "1" />
 <variable name="Main_e_i" type="arithvar" loopcomponent2 = "1" />
-<variable name="Main_c_zr" type="constvar" initial_value="0.0" />
+<variable name="Main_a" type="arithvar" loopcomponent2 = "1" />
+<variable name="xend" type="arithvar" />
+<variable name="Main_ka_kr" type="arithvar" loopcomponent1 = "1" loopcomponent2 = "1" />
 <variable name="Main_b_zr" type="constvar" initial_value="0.0" />
 <variable name="d" type="constvar" initial_value="0.01" />
+<variable name="Main_c_zr" type="constvar" initial_value="0.0" />
 <variable name="m" type="stepvar" />
 <variable name="n" type="stepvar" />
 
@@ -252,13 +252,13 @@
 	</apply>
 </apply>
 <apply  num = "6" loop1 = "loopcond" loop2 = "inner">
-	<gt/>
+	<lt/>
 	<ci> n </ci>
 	<cn> 100 </cn>
 
 </apply>
 <apply  num = "11" loop2 = "loopcond">
-	<gt/>
+	<lt/>
 	<ci> m </ci>
 	<cn> 300 </cn>
 

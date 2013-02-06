@@ -4,14 +4,10 @@ import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
@@ -146,9 +142,9 @@ public class NewtonSolver {
 		//val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 		Math_ci var3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
 		//val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
-		Math_ci var4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
+		//Math_ci var4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
 		Math_ci var5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
-		Math_ci var6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
+		//Math_ci var6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
 		
 		
 		

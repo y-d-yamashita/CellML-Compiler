@@ -11,6 +11,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.GlobalLogger;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
 
+
 /**
  * Graph algorithm class for maximum matching
  * @author y-yamashita
@@ -32,6 +33,7 @@ public class MaximumMatching {
 	 */
 	public PairList<RecMLVertex,RecMLVertex> maximumMatching(BipartiteGraph<RecMLVertex,RecMLEdge> graph) 
 			throws GraphException{
+		
 		
 		PairList<RecMLVertex,RecMLVertex> resultPairList = new PairList<RecMLVertex,RecMLVertex>();
 		Stack<RecMLVertex> pathStack = new Stack<RecMLVertex>();

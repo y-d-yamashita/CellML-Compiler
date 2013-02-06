@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ODECProgramGenerator;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.CommonProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
@@ -19,7 +19,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.*;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
@@ -31,7 +30,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.LeftHandSideTransposition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.writer.StructuredRecMLWiter;
 
 
@@ -43,13 +41,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * ODE Common Program Generator main class 
  * 
- * Transposition of Derived variable
- * Newton-Solver for Non-linear equation
- * Simultaneous Newton-Solver for Simultaneous equation and Non-linear Simultaneous equation
- * 
- * 
  * input file:  
- * 	SimpleRecML, StructuredRecML
+ * 	SimpleRecML or StructuredRecML
 
  * output file:
  *  C program code
@@ -64,16 +57,11 @@ public class CommonProgramGeneratorMain {
 	//========================================================
 	//DEFINE
 	//========================================================
-	private static final String MAIN_VAR_RELATION_FILENAME = "relation.txt";
-	private static final String MAIN_VAR_INITIALIZE_FILENAME = "initialize.txt";
-
 	/** Default parser name. */
 	protected static final String DEFAULT_PARSER_NAME =
 		"org.apache.xerces.parsers.SAXParser";
 
 	private static final String GENERATOR_CUDA = "cuda";
-	private static final String GENERATOR_COMMON = "common";
-	private static final String GENERATOR_SIMPLE = "simple";
 	private static final String DEFALUT_GENERATOR = GENERATOR_CUDA;
 
 	protected static final String GENERATOR_RUSTY = "-R";
@@ -360,7 +348,7 @@ public class CommonProgramGeneratorMain {
 				
 				try {
 					pProgramGenerator =
-					new ODECProgramGenerator(recMLAnalyzer);
+					new CommonProgramGenerator(recMLAnalyzer);
 				} catch (MathException e1) {
 					// TODO 自動生成された catch ブロック
 					e1.printStackTrace();
@@ -430,7 +418,6 @@ public class CommonProgramGeneratorMain {
 				LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
 				
 				pRecMLAnalyzer.createVariableTable();
-				RecMLVariableTable vartable2 = pRecMLAnalyzer.getRecMLVariableTable();
 				ArrayList<Vector<Integer>> pairList2 = pRecMLAnalyzer.resultMaximumMatching;
 				
 				for(int i=0;i<pairList2.size();i++){
@@ -510,7 +497,7 @@ public class CommonProgramGeneratorMain {
 				
 				try {
 					pProgramGenerator =
-					new ODECProgramGenerator(pRecMLAnalyzer);
+					new CommonProgramGenerator(pRecMLAnalyzer);
 					} catch (MathException e1) {
 					// TODO 自動生成された catch ブロック
 					e1.printStackTrace();

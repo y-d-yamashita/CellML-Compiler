@@ -1,31 +1,32 @@
-import java.lang.Math
+import java.lang.Math;
+public class thesisdoubleloop{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
+	int __DATA_NUM = 100000;
 	double Main_a_xr[][];
 	double Main_d_x[];
+	double xend;
+	double Main_a[];
+	double Main_ka_kr[][];
 	double Main_kd_k[];
 	double Main_e_i[];
-	double Main_a[];
-	double xend;
-	double Main_ka_kr[][];
+	double Main_c_zr;
 	double Main_b_zr;
 	double d;
-	double Main_c_zr;
 	int m;
 	int n;
 
 	Main_a_xr = new double[__DATA_NUM][__DATA_NUM];
 	Main_d_x = new double[__DATA_NUM];
-	Main_kd_k = new double[__DATA_NUM];
-	Main_e_i = new double[__DATA_NUM];
 	Main_a = new double[__DATA_NUM];
 	Main_ka_kr = new double[__DATA_NUM][__DATA_NUM];
+	Main_kd_k = new double[__DATA_NUM];
+	Main_e_i = new double[__DATA_NUM];
+	Main_c_zr = (double)0.0;
 	Main_b_zr = (double)0.0;
 	d = (double)0.01;
-	Main_c_zr = (double)0.0;
 	
 	
 	Main_d_x[0] = (double)0.0;
@@ -48,7 +49,7 @@ public static void main ( String args[] ) {
 			
 			n =  ( n + 1 ) ;
 
-		}while(!( ( n > 100 ) ));
+		}while( ( n < 100 ) );
 
 		Main_a[m] = Main_a_xr[m][ ( n + 1 ) ];
 		
@@ -62,7 +63,7 @@ public static void main ( String args[] ) {
 		
 		m =  ( m + 1 ) ;
 
-	}while(!( ( m > 300 ) ));
+	}while( ( m < 300 ) );
 
 	xend = Main_d_x[ ( m + 1 ) ];
 	
@@ -73,4 +74,4 @@ public static void main ( String args[] ) {
 }
 
 
-
+}

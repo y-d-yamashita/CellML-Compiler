@@ -44,6 +44,18 @@ public class Math_lt extends MathOperator {
 			+ " < " + m_vecFactor.get(1).toLegalString() + " ) ";
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_LT) {
+			throw new MathException("Math_lt","toLegalJavaString","lack of operand");
+		}
+
+		return " ( " + m_vecFactor.get(0).toLegalJavaString()
+			+ " < " + m_vecFactor.get(1).toLegalJavaString() + " ) ";
+	}
+	
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

@@ -39,6 +39,18 @@ public class Math_condition extends MathOperator {
 		
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if (m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_CONDITION){
+			throw new MathException("Math_condition","toLegalJavaString","lack of operand");
+		}
+		/* Works the same as apply */
+		return m_vecFactor.get(0).toLegalJavaString();
+		
+	}
+	
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

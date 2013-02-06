@@ -1,7 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;

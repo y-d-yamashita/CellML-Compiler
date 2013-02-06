@@ -111,6 +111,37 @@ public class Math_fn extends MathOperator {
 
 		return strExpression;
 	}
+	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*例外処理*/
+		if(m_pFuncOperand == null){
+			throw new MathException("Math_fn","toLegalJavaString","have no function operand");
+		}
+
+		/*関数名を文字列に追加*/
+		String strExpression = m_pFuncOperand.toLegalJavaString();
+
+		/*引数を追加していく*/
+		strExpression += " ( ";
+
+		for (MathFactor it: m_vecFactor) {
+
+			/*コンマを追加*/
+			if (it != m_vecFactor.firstElement()) {
+				strExpression += " , ";
+			}
+
+			/*項を追加*/
+			strExpression += it.toLegalJavaString();
+		}
+
+		/*閉じ括弧を追加*/
+		strExpression += " ) ";
+
+		return strExpression;
+	}
 
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {

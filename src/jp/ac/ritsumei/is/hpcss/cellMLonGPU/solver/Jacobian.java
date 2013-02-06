@@ -330,8 +330,6 @@ public static void main(String[] args) throws MathException {
 		Math_cn num1 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "1");
 		Math_cn num2 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "2");
 		Math_cn num3 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "3");
-		Math_cn num4 = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "4");
-		
 		
 		MathExpression pNewExpression = new MathExpression();
 		pNewExpression.addOperator(

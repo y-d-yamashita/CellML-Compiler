@@ -59,45 +59,45 @@
 <node id="23" equation="24" variable="28" />
 <node id="22" equation="23" variable="27" />
 
-<edge dest="18" source="16" />
-<edge dest="6" source="16" />
-<edge dest="12" source="16" />
-<edge dest="19" source="17" />
-<edge dest="7" source="17" />
-<edge dest="13" source="17" />
-<edge dest="5" source="4" />
+<edge dest="22" source="19" />
+<edge dest="19" source="3" />
+<edge dest="7" source="3" />
+<edge dest="13" source="3" />
+<edge dest="3" source="2" />
+<edge dest="10" source="7" />
+<edge dest="11" source="7" />
+<edge dest="19" source="11" />
+<edge dest="7" source="11" />
+<edge dest="13" source="11" />
+<edge dest="23" source="20" />
+<edge dest="1" source="0" />
 <edge dest="18" source="1" />
 <edge dest="6" source="1" />
 <edge dest="12" source="1" />
-<edge dest="16" source="15" />
-<edge dest="10" source="7" />
-<edge dest="11" source="7" />
-<edge dest="20" source="5" />
-<edge dest="8" source="5" />
-<edge dest="14" source="5" />
+<edge dest="18" source="16" />
+<edge dest="12" source="16" />
+<edge dest="6" source="16" />
+<edge dest="16" source="13" />
+<edge dest="17" source="13" />
 <edge dest="6" source="10" />
 <edge dest="18" source="10" />
-<edge dest="19" source="11" />
-<edge dest="12" source="10" />
-<edge dest="13" source="11" />
-<edge dest="7" source="11" />
-<edge dest="16" source="12" />
-<edge dest="17" source="12" />
-<edge dest="17" source="13" />
-<edge dest="15" source="12" />
-<edge dest="1" source="0" />
-<edge dest="16" source="13" />
-<edge dest="10" source="6" />
-<edge dest="9" source="6" />
-<edge dest="23" source="20" />
-<edge dest="11" source="6" />
-<edge dest="19" source="3" />
-<edge dest="7" source="3" />
-<edge dest="22" source="19" />
-<edge dest="3" source="2" />
-<edge dest="10" source="9" />
-<edge dest="13" source="3" />
 <edge dest="21" source="18" />
+<edge dest="12" source="10" />
+<edge dest="8" source="5" />
+<edge dest="20" source="5" />
+<edge dest="9" source="6" />
+<edge dest="14" source="5" />
+<edge dest="11" source="6" />
+<edge dest="10" source="6" />
+<edge dest="17" source="12" />
+<edge dest="16" source="15" />
+<edge dest="5" source="4" />
+<edge dest="19" source="17" />
+<edge dest="16" source="12" />
+<edge dest="15" source="12" />
+<edge dest="10" source="9" />
+<edge dest="7" source="17" />
+<edge dest="13" source="17" />
 
 
 
@@ -882,13 +882,14 @@
 	</apply>
 </apply>
 <apply  num = "21" loop1 = "loopcond">
-	<eq/>
+	<lt/>
 		<apply>
 	<selector/>
 	<ci> Main_time_t </ci>
 	<ci> n </ci>
 	</apply>
 	<cn> 400 </cn>
+
 </apply>
 </math>
 </recml>

@@ -161,6 +161,40 @@ public class Math_ci extends MathOperand {
 		return strVariable;
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*ポインタ演算子の追加*/
+		String strVariable = "";
+
+		if(m_nPointerNum<0){
+			strVariable += "&";
+		}
+		else if(m_nPointerNum>0){
+			for(int i=0;i<m_nPointerNum;i++){
+				strVariable += "*";
+			}
+		}
+
+		/*変数名を追加*/
+		strVariable += m_strPresentText;
+
+		/*配列インデックスの追加*/
+		for (MathFactor it: m_vecArrayIndexFactor) {
+			/*項を追加*/
+			strVariable += "[" + it.toLegalJavaString() + "]";
+		}
+
+		/*Selector要素*/
+		/*配列インデックスの追加*/
+		for (MathFactor it: m_vecIndexListFactor) {
+			/*項を追加*/
+			strVariable += "[" + it.toLegalJavaString() + "]";
+		}
+		
+		return strVariable;
+	}
+	
 	/*-----数式複製メソッド-----*/
 	public MathFactor createCopy() throws MathException {
 		MathOperand newOperand =  MathFactory.createOperand(m_operandKind,m_strPresentText);

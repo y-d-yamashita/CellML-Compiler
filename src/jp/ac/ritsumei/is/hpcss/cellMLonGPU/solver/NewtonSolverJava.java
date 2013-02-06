@@ -4,14 +4,10 @@ import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 
 /**
@@ -43,7 +39,7 @@ public class NewtonSolverJava {
 		exp.replaceCodeVariable();
 		
 		String outputStr = "";
-		outputStr=outputStr.concat("\treturn "+exp.getLeftExpression().toLegalString()+";\n");
+		outputStr=outputStr.concat("\treturn "+exp.getLeftExpression().toLegalJavaString()+";\n");
 		outputStr=outputStr.concat("\n");
 		return outputStr;
 		
@@ -77,7 +73,7 @@ public class NewtonSolverJava {
 		
 		String outputStr = "";
 
-		outputStr=outputStr.concat("\treturn "+pDiffExpression.getLeftExpression().toLegalString()+";\n");
+		outputStr=outputStr.concat("\treturn "+pDiffExpression.getLeftExpression().toLegalJavaString()+";\n");
 		outputStr=outputStr.concat("\n");
 		return outputStr;
 		
@@ -146,9 +142,9 @@ public class NewtonSolverJava {
 		//val2.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "0"));
 		Math_ci var3=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "B");
 		//val3.addIndexList((MathFactor)MathFactory.createOperand(eMathOperand.MOPD_CN, "1"));
-		Math_ci var4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
+		//Math_ci var4=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "C");
 		Math_ci var5=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "D");
-		Math_ci var6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
+		//Math_ci var6=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "E");
 		
 		
 		
@@ -192,7 +188,15 @@ public class NewtonSolverJava {
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
 				pNewExpression.addOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("times"), strAttr));
+				
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply"), strAttr));
+				pNewExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("cos"), strAttr));
 				pNewExpression.addOperand(var3);
+				pNewExpression.breakOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
+				
 				pNewExpression.addOperand(var5);
 				pNewExpression.breakOperator(
 						MathFactory.createOperator(MathMLDefinition.getMathOperatorId("apply")));
@@ -210,19 +214,19 @@ public class NewtonSolverJava {
 
 		
 		
-//		System.out.println("Input Function : ");
-//		System.out.println(pNewExpression.getLeftExpression().toLegalString());
-//		System.out.println("");
+		System.out.println("Input Function : ");
+		System.out.println(pNewExpression.getLeftExpression().toLegalJavaString());
+		System.out.println("");
 
 		//導出変数を設定
-		Math_ci derivedVar = var1;
+		//Math_ci derivedVar = var1;
 		
-		double e = 1.0e-50;
-		int max = 1000;
-		NewtonSolverJava ns = new NewtonSolverJava();
-		ns.makeNewtonSolver(pNewExpression, derivedVar, e, max);
-		ns.makeLeftFunc(pNewExpression, derivedVar);
-		ns.makeDiffFunc(pNewExpression, derivedVar);
+		//double e = 1.0e-50;
+		//int max = 1000;
+		//NewtonSolverJava ns = new NewtonSolverJava();
+		//ns.makeNewtonSolver(pNewExpression, derivedVar, e, max);
+		//ns.makeLeftFunc(pNewExpression, derivedVar);
+		//ns.makeDiffFunc(pNewExpression, derivedVar);
 		
 		
 	}

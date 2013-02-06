@@ -41,22 +41,22 @@
 <node id="13" equation="14" variable="18" />
 <node id="14" equation="15" variable="19" />
 
-<edge dest="7" source="3" />
-<edge dest="8" source="3" />
-<edge dest="10" source="3" />
-<edge dest="13" source="10" />
-<edge dest="9" source="7" />
-<edge dest="14" source="11" />
-<edge dest="11" source="5" />
-<edge dest="1" source="0" />
 <edge dest="3" source="2" />
+<edge dest="10" source="8" />
+<edge dest="9" source="7" />
+<edge dest="5" source="4" />
+<edge dest="11" source="5" />
+<edge dest="7" source="6" />
+<edge dest="13" source="10" />
+<edge dest="14" source="11" />
 <edge dest="6" source="1" />
 <edge dest="7" source="1" />
 <edge dest="8" source="1" />
 <edge dest="9" source="1" />
-<edge dest="5" source="4" />
-<edge dest="7" source="6" />
-<edge dest="10" source="8" />
+<edge dest="1" source="0" />
+<edge dest="7" source="3" />
+<edge dest="8" source="3" />
+<edge dest="10" source="3" />
 <edge dest="12" source="9" />
 
 
@@ -371,13 +371,14 @@
 	</apply>
 </apply>
 <apply  num = "12" loop1 = "loopcond">
-	<eq/>
+	<lt/>
 		<apply>
 	<selector/>
 	<ci> Main_time_t </ci>
 	<ci> n </ci>
 	</apply>
 	<cn> 400 </cn>
+
 </apply>
 </math>
 </recml>

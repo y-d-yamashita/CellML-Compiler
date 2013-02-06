@@ -204,5 +204,13 @@ public abstract class MathFactor {
 	public void replaceStrPresentExt(String regex,String replacement){
 		m_strPresentText=m_strPresentText.replaceAll(regex, replacement);
 	}
+
+
+	/**
+	 * Java文字列に変換する.
+	 * @return 変換した文字列
+	 * @throws MathException
+	 */
+	public abstract String toLegalJavaString() throws MathException;
 	
 }

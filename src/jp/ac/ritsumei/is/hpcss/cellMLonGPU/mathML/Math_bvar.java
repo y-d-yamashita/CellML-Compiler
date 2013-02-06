@@ -32,6 +32,17 @@ public class Math_bvar extends MathOperator {
 
 		return "( d" + m_vecFactor.get(0).toLegalString() + " )";
 	}
+	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_BVAR){
+			throw new MathException("Math_bvar","toLegalJavaString","lack of operand");
+		}
+
+		return "( d" + m_vecFactor.get(0).toLegalJavaString() + " )";
+	}
 
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {

@@ -1,9 +1,10 @@
-import java.lang.Math
+import java.lang.Math;
+public class luo_rudy_1991_Euler{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
+	int __DATA_NUM = 100000;
 	double Main_j_x[];
 	double Main_h_x[];
 	double Main_X_x[];
@@ -165,49 +166,49 @@ public static void main ( String args[] ) {
 	n = 0;
 	do{
 
-		Main_E_K1_i[n] =  (  (  ( Main_R_z * Main_T_z )  / Main_F_z )  * log(  ( Main_Ko_z / Main_Ki_z )  ) ) ;
+		Main_E_K1_i[n] =  (  (  ( Main_R_z * Main_T_z )  / Main_F_z )  * Math.log(  ( Main_Ko_z / Main_Ki_z )  ) ) ;
 		Main_E_Kp_i[n] = Main_E_K1_i[n];
-		Main_g_K1_i[n] =  ( (double)0.6047 * sqrt(  ( Main_Ko_z / (double)5.4 )  ) ) ;
-		Main_E_K_i[n] =  (  (  ( Main_R_z * Main_T_z )  / Main_F_z )  * log(  (  ( Main_Ko_z +  ( Main_PR_NaK_z * Main_Nao_z )  )  /  ( Main_Ki_z +  ( Main_PR_NaK_z * Main_Nai_z )  )  )  ) ) ;
-		Main_g_K_i[n] =  ( (double)0.282 * sqrt(  ( Main_Ko_z / (double)5.4 )  ) ) ;
-		Main_E_Na_i[n] =  (  (  ( Main_R_z * Main_T_z )  / Main_F_z )  * log(  ( Main_Nao_z / Main_Nai_z )  ) ) ;
+		Main_g_K1_i[n] =  ( (double)0.6047 * Math.sqrt(  ( Main_Ko_z / (double)5.4 )  ) ) ;
+		Main_E_K_i[n] =  (  (  ( Main_R_z * Main_T_z )  / Main_F_z )  * Math.log(  (  ( Main_Ko_z +  ( Main_PR_NaK_z * Main_Nao_z )  )  /  ( Main_Ki_z +  ( Main_PR_NaK_z * Main_Nai_z )  )  )  ) ) ;
+		Main_g_K_i[n] =  ( (double)0.282 * Math.sqrt(  ( Main_Ko_z / (double)5.4 )  ) ) ;
+		Main_E_Na_i[n] =  (  (  ( Main_R_z * Main_T_z )  / Main_F_z )  * Math.log(  ( Main_Nao_z / Main_Nai_z )  ) ) ;
 		Main_time_t[ ( n + 1 ) ] =  ( Main_time_t[n] + d ) ;
-		Main_I_stim_i[n] =  (  (  ( Main_time_t[n] >= Main_stim_start_z )  &&  ( Main_time_t[n] <= Main_stim_end_z )  &&  (  (  ( Main_time_t[n] - Main_stim_start_z )  -  ( floor(  (  ( Main_time_t[n] - Main_stim_start_z )  / Main_stim_period_z )  ) * Main_stim_period_z )  )  <= Main_stim_duration_z )  )  ? Main_stim_amplitude_z : (double)0 ) ;
-		Main_E_si_i[n] =  ( (double)7.7 -  ( (double)13.0287 * log(  ( Main_Cai_x[n] / (double)1 )  ) )  ) ;
-		Main_beta_d_i[n] =  (  ( (double)0.07 * exp(  (  ( - (double)0.017 )  *  ( Main_V_x[n] + (double)44 )  )  ) )  /  ( (double)1 + exp(  ( (double)0.05 *  ( Main_V_x[n] + (double)44 )  )  ) )  ) ;
-		Main_alpha_f_i[n] =  (  ( (double)0.012 * exp(  (  ( - (double)0.008 )  *  ( Main_V_x[n] + (double)28 )  )  ) )  /  ( (double)1 + exp(  ( (double)0.15 *  ( Main_V_x[n] + (double)28 )  )  ) )  ) ;
+		Main_I_stim_i[n] =  (  (  ( Main_time_t[n] >= Main_stim_start_z )  &&  ( Main_time_t[n] <= Main_stim_end_z )  &&  (  (  ( Main_time_t[n] - Main_stim_start_z )  -  ( Math.floor(  (  ( Main_time_t[n] - Main_stim_start_z )  / Main_stim_period_z )  ) * Main_stim_period_z )  )  <= Main_stim_duration_z )  )  ? Main_stim_amplitude_z : (double)0 ) ;
+		Main_E_si_i[n] =  ( (double)7.7 -  ( (double)13.0287 * Math.log(  ( Main_Cai_x[n] / (double)1 )  ) )  ) ;
+		Main_beta_d_i[n] =  (  ( (double)0.07 * Math.exp(  (  ( - (double)0.017 )  *  ( Main_V_x[n] + (double)44 )  )  ) )  /  ( (double)1 + Math.exp(  ( (double)0.05 *  ( Main_V_x[n] + (double)44 )  )  ) )  ) ;
+		Main_alpha_f_i[n] =  (  ( (double)0.012 * Math.exp(  (  ( - (double)0.008 )  *  ( Main_V_x[n] + (double)28 )  )  ) )  /  ( (double)1 + Math.exp(  ( (double)0.15 *  ( Main_V_x[n] + (double)28 )  )  ) )  ) ;
 		Main_i_si_i[n] =  ( (double)0.09 * Main_d_x[n] * Main_f_x[n] *  ( Main_V_x[n] - Main_E_si_i[n] )  ) ;
 		Main_kCai_k[n] =  (  (  (  ( - (double)0.0001 )  / (double)1 )  * Main_i_si_i[n] )  +  ( (double)0.07 *  ( (double)0.0001 - Main_Cai_x[n] )  )  ) ;
 		Main_Cai_x[ ( n + 1 ) ] =  ( Main_Cai_x[n] +  ( Main_kCai_k[n] * d )  ) ;
-		Main_alpha_d_i[n] =  (  ( (double)0.095 * exp(  (  ( - (double)0.01 )  *  ( Main_V_x[n] - (double)5 )  )  ) )  /  ( (double)1 + exp(  (  ( - (double)0.072 )  *  ( Main_V_x[n] - (double)5 )  )  ) )  ) ;
+		Main_alpha_d_i[n] =  (  ( (double)0.095 * Math.exp(  (  ( - (double)0.01 )  *  ( Main_V_x[n] - (double)5 )  )  ) )  /  ( (double)1 + Math.exp(  (  ( - (double)0.072 )  *  ( Main_V_x[n] - (double)5 )  )  ) )  ) ;
 		Main_kd_k[n] =  (  ( Main_alpha_d_i[n] *  ( (double)1 - Main_d_x[n] )  )  -  ( Main_beta_d_i[n] * Main_d_x[n] )  ) ;
 		Main_d_x[ ( n + 1 ) ] =  ( Main_d_x[n] +  ( Main_kd_k[n] * d )  ) ;
-		Main_beta_j_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  (  ( (double)0.1212 * exp(  (  ( - (double)0.01052 )  * Main_V_x[n] )  ) )  /  ( (double)1 + exp(  (  ( - (double)0.1378 )  *  ( Main_V_x[n] + (double)40.14 )  )  ) )  )  :  (  ( (double)0.3 * exp(  (  ( - (double)0.0000002535 )  * Main_V_x[n] )  ) )  /  ( (double)1 + exp(  (  ( - (double)0.1 )  *  ( Main_V_x[n] + (double)32 )  )  ) )  )  ) ;
-		Main_beta_h_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  (  ( (double)3.56 * exp(  ( (double)0.079 * Main_V_x[n] )  ) )  +  ( (double)310000 * exp(  ( (double)0.35 * Main_V_x[n] )  ) )  )  :  ( (double)1 /  ( (double)0.13 *  ( (double)1 + exp(  (  ( Main_V_x[n] + (double)10.66 )  /  ( - (double)11.1 )  )  ) )  )  )  ) ;
-		Main_alpha_j_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  (  (  (  (  ( - (double)127140 )  * exp(  ( (double)0.2444 * Main_V_x[n] )  ) )  -  ( (double)0.00003474 * exp(  (  ( - (double)0.04391 )  * Main_V_x[n] )  ) )  )  *  ( Main_V_x[n] + (double)37.78 )  )  /  ( (double)1 + exp(  ( (double)0.311 *  ( Main_V_x[n] + (double)79.23 )  )  ) )  )  : (double)0 ) ;
+		Main_beta_j_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  (  ( (double)0.1212 * Math.exp(  (  ( - (double)0.01052 )  * Main_V_x[n] )  ) )  /  ( (double)1 + Math.exp(  (  ( - (double)0.1378 )  *  ( Main_V_x[n] + (double)40.14 )  )  ) )  )  :  (  ( (double)0.3 * Math.exp(  (  ( - (double)0.0000002535 )  * Main_V_x[n] )  ) )  /  ( (double)1 + Math.exp(  (  ( - (double)0.1 )  *  ( Main_V_x[n] + (double)32 )  )  ) )  )  ) ;
+		Main_beta_h_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  (  ( (double)3.56 * Math.exp(  ( (double)0.079 * Main_V_x[n] )  ) )  +  ( (double)310000 * Math.exp(  ( (double)0.35 * Main_V_x[n] )  ) )  )  :  ( (double)1 /  ( (double)0.13 *  ( (double)1 + Math.exp(  (  ( Main_V_x[n] + (double)10.66 )  /  ( - (double)11.1 )  )  ) )  )  )  ) ;
+		Main_alpha_j_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  (  (  (  (  ( - (double)127140 )  * Math.exp(  ( (double)0.2444 * Main_V_x[n] )  ) )  -  ( (double)0.00003474 * Math.exp(  (  ( - (double)0.04391 )  * Main_V_x[n] )  ) )  )  *  ( Main_V_x[n] + (double)37.78 )  )  /  ( (double)1 + Math.exp(  ( (double)0.311 *  ( Main_V_x[n] + (double)79.23 )  )  ) )  )  : (double)0 ) ;
 		Main_kj_k[n] =  (  ( Main_alpha_j_i[n] *  ( (double)1 - Main_j_x[n] )  )  -  ( Main_beta_j_i[n] * Main_j_x[n] )  ) ;
 		Main_j_x[ ( n + 1 ) ] =  ( Main_j_x[n] +  ( Main_kj_k[n] * d )  ) ;
-		Main_beta_m_i[n] =  ( (double)0.08 * exp(  (  ( - Main_V_x[n] )  / (double)11 )  ) ) ;
-		Main_alpha_h_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  ( (double)0.135 * exp(  (  ( (double)80 + Main_V_x[n] )  /  ( - (double)6.8 )  )  ) )  : (double)0 ) ;
+		Main_beta_m_i[n] =  ( (double)0.08 * Math.exp(  (  ( - Main_V_x[n] )  / (double)11 )  ) ) ;
+		Main_alpha_h_i[n] =  (  ( Main_V_x[n] <  ( - (double)40 )  )  ?  ( (double)0.135 * Math.exp(  (  ( (double)80 + Main_V_x[n] )  /  ( - (double)6.8 )  )  ) )  : (double)0 ) ;
 		Main_kh_k[n] =  (  ( Main_alpha_h_i[n] *  ( (double)1 - Main_h_x[n] )  )  -  ( Main_beta_h_i[n] * Main_h_x[n] )  ) ;
 		Main_h_x[ ( n + 1 ) ] =  ( Main_h_x[n] +  ( Main_kh_k[n] * d )  ) ;
-		Main_i_Na_i[n] =  ( Main_g_Na_z * pow( Main_m_x[n] , (double)3 ) * Main_h_x[n] * Main_j_x[n] *  ( Main_V_x[n] - Main_E_Na_i[n] )  ) ;
-		Main_alpha_m_i[n] =  (  ( (double)0.32 *  ( Main_V_x[n] + (double)47.13 )  )  /  ( (double)1 - exp(  (  ( - (double)0.1 )  *  ( Main_V_x[n] + (double)47.13 )  )  ) )  ) ;
+		Main_i_Na_i[n] =  ( Main_g_Na_z * Math.pow( Main_m_x[n] , (double)3 ) * Main_h_x[n] * Main_j_x[n] *  ( Main_V_x[n] - Main_E_Na_i[n] )  ) ;
+		Main_alpha_m_i[n] =  (  ( (double)0.32 *  ( Main_V_x[n] + (double)47.13 )  )  /  ( (double)1 - Math.exp(  (  ( - (double)0.1 )  *  ( Main_V_x[n] + (double)47.13 )  )  ) )  ) ;
 		Main_km_k[n] =  (  ( Main_alpha_m_i[n] *  ( (double)1 - Main_m_x[n] )  )  -  ( Main_beta_m_i[n] * Main_m_x[n] )  ) ;
 		Main_m_x[ ( n + 1 ) ] =  ( Main_m_x[n] +  ( Main_km_k[n] * d )  ) ;
 		Main_i_b_i[n] =  ( Main_g_b_z *  ( Main_V_x[n] - Main_E_b_z )  ) ;
-		Main_Kp_i[n] =  ( (double)1 /  ( (double)1 + exp(  (  ( (double)7.488 - Main_V_x[n] )  / (double)5.98 )  ) )  ) ;
+		Main_Kp_i[n] =  ( (double)1 /  ( (double)1 + Math.exp(  (  ( (double)7.488 - Main_V_x[n] )  / (double)5.98 )  ) )  ) ;
 		Main_i_Kp_i[n] =  ( Main_g_Kp_z * Main_Kp_i[n] *  ( Main_V_x[n] - Main_E_Kp_i[n] )  ) ;
-		Main_beta_K1_i[n] =  (  (  ( (double)0.49124 * exp(  ( (double)0.08032 *  (  ( Main_V_x[n] + (double)5.476 )  - Main_E_K1_i[n] )  )  ) )  +  ( (double)1 * exp(  ( (double)0.06175 *  ( Main_V_x[n] -  ( Main_E_K1_i[n] + (double)594.31 )  )  )  ) )  )  /  ( (double)1 + exp(  (  ( - (double)0.5143 )  *  (  ( Main_V_x[n] - Main_E_K1_i[n] )  + (double)4.753 )  )  ) )  ) ;
-		Main_alpha_K1_i[n] =  ( (double)1.02 /  ( (double)1 + exp(  ( (double)0.2385 *  (  ( Main_V_x[n] - Main_E_K1_i[n] )  - (double)59.215 )  )  ) )  ) ;
+		Main_beta_K1_i[n] =  (  (  ( (double)0.49124 * Math.exp(  ( (double)0.08032 *  (  ( Main_V_x[n] + (double)5.476 )  - Main_E_K1_i[n] )  )  ) )  +  ( (double)1 * Math.exp(  ( (double)0.06175 *  ( Main_V_x[n] -  ( Main_E_K1_i[n] + (double)594.31 )  )  )  ) )  )  /  ( (double)1 + Math.exp(  (  ( - (double)0.5143 )  *  (  ( Main_V_x[n] - Main_E_K1_i[n] )  + (double)4.753 )  )  ) )  ) ;
+		Main_alpha_K1_i[n] =  ( (double)1.02 /  ( (double)1 + Math.exp(  ( (double)0.2385 *  (  ( Main_V_x[n] - Main_E_K1_i[n] )  - (double)59.215 )  )  ) )  ) ;
 		Main_K1_infinity_i[n] =  ( Main_alpha_K1_i[n] /  ( Main_alpha_K1_i[n] + Main_beta_K1_i[n] )  ) ;
 		Main_i_K1_i[n] =  ( Main_g_K1_i[n] * Main_K1_infinity_i[n] *  ( Main_V_x[n] - Main_E_K1_i[n] )  ) ;
-		Main_beta_X_i[n] =  (  ( (double)0.0013 * exp(  (  ( - (double)0.06 )  *  ( Main_V_x[n] + (double)20 )  )  ) )  /  ( (double)1 + exp(  (  ( - (double)0.04 )  *  ( Main_V_x[n] + (double)20 )  )  ) )  ) ;
-		Main_alpha_X_i[n] =  (  ( (double)0.0005 * exp(  ( (double)0.083 *  ( Main_V_x[n] + (double)50 )  )  ) )  /  ( (double)1 + exp(  ( (double)0.057 *  ( Main_V_x[n] + (double)50 )  )  ) )  ) ;
+		Main_beta_X_i[n] =  (  ( (double)0.0013 * Math.exp(  (  ( - (double)0.06 )  *  ( Main_V_x[n] + (double)20 )  )  ) )  /  ( (double)1 + Math.exp(  (  ( - (double)0.04 )  *  ( Main_V_x[n] + (double)20 )  )  ) )  ) ;
+		Main_alpha_X_i[n] =  (  ( (double)0.0005 * Math.exp(  ( (double)0.083 *  ( Main_V_x[n] + (double)50 )  )  ) )  /  ( (double)1 + Math.exp(  ( (double)0.057 *  ( Main_V_x[n] + (double)50 )  )  ) )  ) ;
 		Main_kX_k[n] =  (  ( Main_alpha_X_i[n] *  ( (double)1 - Main_X_x[n] )  )  -  ( Main_beta_X_i[n] * Main_X_x[n] )  ) ;
 		Main_X_x[ ( n + 1 ) ] =  ( Main_X_x[n] +  ( Main_kX_k[n] * d )  ) ;
-		Main_Xi_i[n] =  (  ( Main_V_x[n] >  ( - (double)100 )  )  ?  (  ( (double)2.837 *  ( exp(  ( (double)0.04 *  ( Main_V_x[n] + (double)77 )  )  ) - (double)1 )  )  /  (  ( Main_V_x[n] + (double)77 )  * exp(  ( (double)0.04 *  ( Main_V_x[n] + (double)35 )  )  ) )  )  : (double)1 ) ;
-		Main_beta_f_i[n] =  (  ( (double)0.0065 * exp(  (  ( - (double)0.02 )  *  ( Main_V_x[n] + (double)30 )  )  ) )  /  ( (double)1 + exp(  (  ( - (double)0.2 )  *  ( Main_V_x[n] + (double)30 )  )  ) )  ) ;
+		Main_Xi_i[n] =  (  ( Main_V_x[n] >  ( - (double)100 )  )  ?  (  ( (double)2.837 *  ( Math.exp(  ( (double)0.04 *  ( Main_V_x[n] + (double)77 )  )  ) - (double)1 )  )  /  (  ( Main_V_x[n] + (double)77 )  * Math.exp(  ( (double)0.04 *  ( Main_V_x[n] + (double)35 )  )  ) )  )  : (double)1 ) ;
+		Main_beta_f_i[n] =  (  ( (double)0.0065 * Math.exp(  (  ( - (double)0.02 )  *  ( Main_V_x[n] + (double)30 )  )  ) )  /  ( (double)1 + Math.exp(  (  ( - (double)0.2 )  *  ( Main_V_x[n] + (double)30 )  )  ) )  ) ;
 		Main_kf_k[n] =  (  ( Main_alpha_f_i[n] *  ( (double)1 - Main_f_x[n] )  )  -  ( Main_beta_f_i[n] * Main_f_x[n] )  ) ;
 		Main_f_x[ ( n + 1 ) ] =  ( Main_f_x[n] +  ( Main_kf_k[n] * d )  ) ;
 		Main_i_K_i[n] =  ( Main_g_K_i[n] * Main_X_x[n] * Main_Xi_i[n] *  ( Main_V_x[n] - Main_E_K_i[n] )  ) ;
@@ -217,7 +218,7 @@ public static void main ( String args[] ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t[n] == 400));
+	}while( ( Main_time_t[n] < 400 ) );
 
 	t = Main_time_t[ ( n + 1 ) ];
 	Caiend = Main_Cai_x[ ( n + 1 ) ];
@@ -236,4 +237,4 @@ public static void main ( String args[] ) {
 }
 
 
-
+}

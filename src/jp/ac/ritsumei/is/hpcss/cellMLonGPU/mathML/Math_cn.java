@@ -102,6 +102,36 @@ public class Math_cn extends MathOperand {
 		}
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*sepが利用される場合*/
+		if(m_strSepValue != null && m_strSepValue.length()!=0){
+
+			/*sepタイプに応じた文字列化*/
+			switch(m_sepType){
+
+				//------------------------指数表記
+				case MSEP_E_NOTATION:
+					return m_strPresentText + "E" + m_strSepValue;
+
+				//------------------------定義されないタイプ
+				default:
+					throw new MathException("Math_cn","toLegalJavaString",
+							"can't set value on constant number");
+			}
+		}
+
+		/*sepのない場合*/
+		else{
+			if(m_Type == "double"){
+				return "(double)" + m_strPresentText;
+			}else{
+				return m_strPresentText;
+			}
+		}
+	}
+	
 	/*-----文字列変換メソッド-----*/
 	public String toSelectorLegalString() throws MathException {
 		return m_strPresentText.substring(8);

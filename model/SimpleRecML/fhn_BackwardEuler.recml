@@ -319,7 +319,7 @@
 
 
 <apply  num = "12" type = "condition">
-	<eq/>
+	<lt/>
 		<apply>
 	<selector/>
 	<ci> Main_time_t </ci>

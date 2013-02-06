@@ -5,11 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -34,8 +30,6 @@ public class CellMLcompilerGUI  extends JFrame {
 	private static final String STATUS_LABEL_RUN = "Start";
 	private static final String STATUS_LABEL_END = "Finish";
 	private static final String STATUS_LABEL_FAIL = "failure";
-	private static final String DEFAULT_INITIALIZE_FILE = "initialize.txt";
-	private static final String DEFAULT_RELATION_FILE = "relation.txt";
 	private static final int dialogWidth = 650;
 	private static final int dialogHeight = 550;
 	private static final int labelWidth = 130;
@@ -63,10 +57,6 @@ public class CellMLcompilerGUI  extends JFrame {
 	
 	private JLabel programLabel;
 	private JTextField programTextField;
-	private JLabel initializeLabel;
-	private JTextField initializeTextField;
-	private JLabel relationLabel;
-	private JTextField relationTextField;
 	private JTextArea execLogTextArea;
 	private JButton execButton;
 	private JButton endButton;
@@ -425,37 +415,6 @@ public class CellMLcompilerGUI  extends JFrame {
     	}
 	}
     
-	/**
-	 * 変数関係ファイルパスを取得する.
-	 * @return 変数関係ファイルパス
-	 */
-	private String getRelationFile() {
-		return relationTextField.getText();
-    }
-
-	/**
-	 * 変数関係ファイルパスを設定する.
-	 * @param path 変数関係ファイルパス
-	 */
-	private void setRelationFile(String path) {
-		relationTextField.setText(path);
-    }
-
-	/**
-	 * 初期化式ファイルパスを取得する.
-	 * @return 初期化式ファイルパス
-	 */
-	private String getInitializeFile() {
-		return initializeTextField.getText();
-    }
-
-	/**
-	 * 初期化式ファイルパスを設定する.
-	 * @param path 初期化式ファイルパス
-	 */
-	private void setInitializeFile(String path) {
-		initializeTextField.setText(path);
-    }
 
 	
 	/**

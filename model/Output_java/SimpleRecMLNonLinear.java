@@ -1,9 +1,10 @@
-import java.lang.Math
+import java.lang.Math;
+public class SimpleRecMLNonLinear{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
+	int __DATA_NUM = 100000;
 	double X1[];
 	double t1[];
 	double X1end;
@@ -39,7 +40,7 @@ public static void main ( String args[] ) {
 		
 		n1 =  ( n1 + 1 ) ;
 
-	}while(!(n1 == 100));
+	}while( ( n1 < 100 ) );
 
 	X1end = X1[ ( n1 + 1 ) ];
 	
@@ -89,4 +90,4 @@ public static double dfunc5 ( double var0 , double var1 ) {
 }
 
 
-
+}

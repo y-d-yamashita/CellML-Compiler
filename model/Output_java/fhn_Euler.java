@@ -1,9 +1,10 @@
-import java.lang.Math
+import java.lang.Math;
+public class fhn_Euler{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
+	int __DATA_NUM = 100000;
 	double Main_x_x[];
 	double Main_time_t[];
 	double Main_y_x[];
@@ -51,7 +52,7 @@ public static void main ( String args[] ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t[n] == 400));
+	}while( ( Main_time_t[n] < 400 ) );
 
 	t = Main_time_t[ ( n + 1 ) ];
 	y = Main_y_x[ ( n + 1 ) ];
@@ -64,4 +65,4 @@ public static void main ( String args[] ) {
 }
 
 
-
+}

@@ -677,6 +677,15 @@ public class MathExpression {
 	}
 	
 	/**
+	 * Java文字列に変換する.
+	 * @return 計算式文字列
+	 * @throws MathException
+	 */
+	public String toLegalJavaString() throws MathException {
+		return m_pRootFactor.toLegalJavaString();
+	}
+	
+	/**
 	 * Convert the MathExpression to MathML string.
 	 * @return String MathML
 	 * @throws MathException

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ODECProgramGenerator;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.JavaProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
@@ -19,7 +19,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.*;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
@@ -30,8 +29,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLHandler;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.LeftHandSideTransposition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxProgram;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.writer.StructuredRecMLWiter;
 
 
@@ -43,13 +41,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * Java Program Generator main class 
  * 
- * Transposition of Derived variable
- * Newton-Solver for Non-linear equation
- * Simultaneous Newton-Solver for Simultaneous equation and Non-linear Simultaneous equation
- * 
- * 
  * input file:  
- * 	SimpleRecML, StructuredRecML
+ * 	SimpleRecML or StructuredRecML
 
  * output file:
  *  Java program code
@@ -64,16 +57,13 @@ public class JavaProgramGeneratorMain {
 	//========================================================
 	//DEFINE
 	//========================================================
-	private static final String MAIN_VAR_RELATION_FILENAME = "relation.txt";
-	private static final String MAIN_VAR_INITIALIZE_FILENAME = "initialize.txt";
+
 
 	/** Default parser name. */
 	protected static final String DEFAULT_PARSER_NAME =
 		"org.apache.xerces.parsers.SAXParser";
 
 	private static final String GENERATOR_CUDA = "cuda";
-	private static final String GENERATOR_COMMON = "common";
-	private static final String GENERATOR_SIMPLE = "simple";
 	private static final String DEFALUT_GENERATOR = GENERATOR_CUDA;
 
 	protected static final String GENERATOR_RUSTY = "-R";
@@ -355,12 +345,12 @@ public class JavaProgramGeneratorMain {
 				//---------------------------------------------------
 				/*プログラム生成器インスタンス生成*/
 				ProgramGenerator pProgramGenerator = null;
-				SyntaxProgram pSynProgram = null;
+				JavaSyntaxProgram pSynProgram = null;
 				
 				
 				try {
 					pProgramGenerator =
-					new ODEJavaProgramGenerator(recMLAnalyzer);
+					new JavaProgramGenerator(recMLAnalyzer,args[4]);
 				} catch (MathException e1) {
 					// TODO 自動生成された catch ブロック
 					e1.printStackTrace();
@@ -370,7 +360,7 @@ public class JavaProgramGeneratorMain {
 				pProgramGenerator.setElementNum(1);
 				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
 				
-				pSynProgram = pProgramGenerator.getSyntaxProgram();
+				pSynProgram = ((JavaProgramGenerator) pProgramGenerator).getJavaSyntaxProgram();
 				
 				/*プログラム構文出力*/
 				try {
@@ -386,7 +376,7 @@ public class JavaProgramGeneratorMain {
 						
 						
 						
-						outKST1.println(pSynProgram.toLegalString());
+						outKST1.println(pSynProgram.toLegalJavaString());
 						
 						if (programFilename != null) {
 							outKST1.close();
@@ -430,7 +420,7 @@ public class JavaProgramGeneratorMain {
 				LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
 				
 				pRecMLAnalyzer.createVariableTable();
-				RecMLVariableTable vartable2 = pRecMLAnalyzer.getRecMLVariableTable();
+				
 				ArrayList<Vector<Integer>> pairList2 = pRecMLAnalyzer.resultMaximumMatching;
 				
 				for(int i=0;i<pairList2.size();i++){
@@ -505,12 +495,12 @@ public class JavaProgramGeneratorMain {
 				//---------------------------------------------------
 				/*プログラム生成器インスタンス生成*/
 				ProgramGenerator pProgramGenerator = null;
-				SyntaxProgram pSynProgram = null;
+				JavaSyntaxProgram pSynProgram = null;
 				
 				
 				try {
 					pProgramGenerator =
-					new ODEJavaProgramGenerator(pRecMLAnalyzer);
+					new JavaProgramGenerator(pRecMLAnalyzer,args[4]);
 					} catch (MathException e1) {
 					// TODO 自動生成された catch ブロック
 					e1.printStackTrace();
@@ -520,7 +510,7 @@ public class JavaProgramGeneratorMain {
 				pProgramGenerator.setElementNum(1);
 				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
 				
-				pSynProgram = pProgramGenerator.getSyntaxProgram();
+				pSynProgram = ((JavaProgramGenerator) pProgramGenerator).getJavaSyntaxProgram();
 				/*プログラム構文出力*/
 				try {
 					/*目的プログラム出力*/
@@ -531,7 +521,7 @@ public class JavaProgramGeneratorMain {
 							outKST1 = new PrintWriter(System.out);
 						}
 						/*プログラム出力*/
-						outKST1.println(pSynProgram.toLegalString());
+						outKST1.println(pSynProgram.toLegalJavaString());
 						
 						if (programFilename != null) {
 							outKST1.close();

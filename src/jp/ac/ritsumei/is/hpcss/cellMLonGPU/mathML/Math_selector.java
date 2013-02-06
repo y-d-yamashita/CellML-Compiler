@@ -69,6 +69,52 @@ public class Math_selector extends MathOperator {
 		
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if (m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_SELECTOR){
+			throw new MathException("Math_selector","toLegalJavaString","lack of operand");
+		}
+		/* if there is only one index */
+		if (m_vecFactor.size() == 2){
+			return m_vecFactor.get(0).toLegalJavaString()
+			+ "[ " + m_vecFactor.get(1).toLegalJavaString() + " ]";
+		}
+		/* if there are two indices */
+		else if (m_vecFactor.size() == 3){
+			return m_vecFactor.get(0).toLegalJavaString()
+			+ "[ " + m_vecFactor.get(1).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(2).toLegalJavaString() + " ]";
+		}
+		else if (m_vecFactor.size() == 4){
+			return m_vecFactor.get(0).toLegalJavaString()
+			+ "[ " + m_vecFactor.get(1).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(2).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(3).toLegalJavaString() + " ]";
+		}
+		else if (m_vecFactor.size() == 5){
+			return m_vecFactor.get(0).toLegalJavaString()
+			+ "[ " + m_vecFactor.get(1).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(2).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(3).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(4).toLegalJavaString() + " ]";
+		}
+		else if (m_vecFactor.size() == 6){
+			return m_vecFactor.get(0).toLegalJavaString()
+			+ "[ " + m_vecFactor.get(1).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(2).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(3).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(4).toLegalJavaString() + " ]"
+			+ "[ " + m_vecFactor.get(5).toLegalJavaString() + " ]";
+		}
+		/* if there are more than two indices (can add more indices but now, limit is 2) */
+		else {
+			throw new MathException("Math_selector","toLegalJavaString","too many operands");
+		}
+		
+		
+	}
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

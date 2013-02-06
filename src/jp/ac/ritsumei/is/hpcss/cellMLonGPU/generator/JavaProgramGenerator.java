@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -13,900 +14,1376 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_assign;
+
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_apply;
+
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_fn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_plus;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_times;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCallFunction;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxFunction;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxPreprocessor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.NewtonSolverJava;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.SimultaneousNewtonSolverJava;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxControl.eControlKind;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxDataType.eDataType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxPreprocessor.ePreprocessorKind;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxProgram;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
+
+
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.*;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType.eDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition.eTecMLVarType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.StringUtil;
+
 
 /**
- * 逐次プログラム構文生成クラス.
+ * Java Program Generator for ODE class 
+
+ * @author n-washio
+ * 
  */
+
 public class JavaProgramGenerator extends ProgramGenerator {
 
 	//========================================================
 	//DEFINE
 	//========================================================
-	private static final String JAVAPROG_LOOP_INDEX_NAME1 = "__i";
-	private static final String JAVAPROG_DEFINE_DATANUM_NAME = "__DATA_NUM";
-
+	private static final String COMPROG_DEFINE_DATANUM_NAME = "__DATA_NUM";
+	private static final String COMPROG_DEFINE_MAXARRAYNUM_NAME = "__MAX_ARRAY_NUM";
+	private String FILE_NAME = null;
 	/*共通変数*/
 	protected Math_ci m_pDefinedDataSizeVar;		//データ数として#defineされる定数
-
-	/**
-	 * 逐次プログラム構文生成インスタンスを作成する.
-	 * @param pCellMLAnalyzer CellML解析器
-	 * @param pRelMLAnalyzer RelML解析器
-	 * @param pTecMLAnalyzer TecML解析器
-	 * @throws MathException
-	 */
-	public JavaProgramGenerator(CellMLAnalyzer pCellMLAnalyzer,
-			RelMLAnalyzer pRelMLAnalyzer, TecMLAnalyzer pTecMLAnalyzer)
+	
+	public Vector<Math_ci> m_vecMaxArraySizeName;
+	public Vector<Math_ci> getMaxArraySizeName() {
+		return m_vecMaxArraySizeName;
+	}
+	public void setMaxArraySizeName(int maxLoopIndexNum) 
 	throws MathException {
-		super(pCellMLAnalyzer, pRelMLAnalyzer, pTecMLAnalyzer);
+		for (int i=0; i<maxLoopIndexNum; i++) {
+			m_vecMaxArraySizeName.add( (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, COMPROG_DEFINE_MAXARRAYNUM_NAME ));
+		}
+	}
+	
+	/*-----コンストラクタ-----*/
+	public JavaProgramGenerator(RecMLAnalyzer pRecMLAnalyzer)
+	throws MathException 	{
+		super(pRecMLAnalyzer);
 		m_pDefinedDataSizeVar = null;
+		m_vecMaxArraySizeName = new Vector<Math_ci>();
+		initialize();
+	}
+	
+	/*-----コンストラクタ-----*/
+	public JavaProgramGenerator(RecMLAnalyzer pRecMLAnalyzer, String name)
+	throws MathException 	{
+		super(pRecMLAnalyzer);
+		m_pDefinedDataSizeVar = null;
+		m_vecMaxArraySizeName = new Vector<Math_ci>();
+		
+		//拡張子の削除
+		String str1 = "";
+		String str2 = ".java";
+		String fileName = name.replaceAll(str2, str1);
+ 		FILE_NAME = fileName;
+		
 		initialize();
 	}
 
+	//========================================================
+	//getJavaSyntaxProgram
+	// プログラム構文を生成し，返す
+	//
+	//@return
+	// プログラム構文インスタンス	: JavaSyntaxProgram*
+	//
+	//@throws
+	// TranslateException
+	//
+	//========================================================
 	/*-----プログラム構文取得メソッド-----*/
-	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator#getSyntaxProgram()
-	 */
-	public SyntaxProgram getSyntaxProgram()
-	throws MathException, CellMLException, RelMLException,
-		TranslateException, SyntaxException {
-
-		//----------------------------------------------
-		//プログラム生成のための前処理
-		//----------------------------------------------
-		/*CellMLにRelMLを適用*/
-		m_pCellMLAnalyzer.applyRelML(m_pRelMLAnalyzer);
+	public JavaSyntaxProgram getJavaSyntaxProgram()
+	throws MathException, CellMLException, RelMLException, TranslateException, SyntaxException {
 
 		//----------------------------------------------
 		//プログラム構文の生成
 		//----------------------------------------------
+		
 		/*プログラム構文生成*/
-		SyntaxProgram pSynProgram = this.createNewProgram();
+		JavaSyntaxProgram pSynProgram = this.createNewJavaProgram();
 
 		/*プリプロセッサ構文生成・追加*/
-//		SyntaxPreprocessor pSynInclude1 =
-//			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "stdio.h");
-//		SyntaxPreprocessor pSynInclude2 =
-//			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "stdlib.h");
-//		SyntaxPreprocessor pSynInclude3 =
-//			new SyntaxPreprocessor(ePreprocessorKind.PP_INCLUDE_ABS, "math.h");
-//		pSynProgram.addPreprocessor(pSynInclude1);
-//		pSynProgram.addPreprocessor(pSynInclude2);
-//		pSynProgram.addPreprocessor(pSynInclude3);
+		JavaSyntaxPreprocessor pSynInclude1 = new JavaSyntaxPreprocessor(ePreprocessorKind.JAVA_IMPORT, "java.lang.Math;");
+		JavaSyntaxPreprocessor pSynInclude2 = new JavaSyntaxPreprocessor(ePreprocessorKind.JAVA_CLASS, FILE_NAME);
 
-		SyntaxPreprocessor pSynDefine1 =
-			new SyntaxPreprocessor("java.lang.Math");
-		pSynProgram.addPreprocessor(pSynDefine1);
 
-		/*データ数定義defineの追加*/
-//		String strElementNum = String.valueOf(m_unElementNum);
-//		SyntaxPreprocessor pSynDefine1 =
-//			new SyntaxPreprocessor(ePreprocessorKind.PP_DEFINE,
-//					       m_pDefinedDataSizeVar.toLegalString() + " "
-//					       + strElementNum);
-//		pSynProgram.addPreprocessor(pSynDefine1);
+		pSynProgram.addPreprocessor(pSynInclude1);
+		pSynProgram.addPreprocessor(pSynInclude2);
+		
+		ArrayList<JavaSyntaxFunction> pSynSolverFuncList = new ArrayList<JavaSyntaxFunction>();
+		
+		ArrayList<Long> simulIDList = new ArrayList<Long>();
+		
+		//非線形数式に対してソルバー関数を作成
+		for(int i=0;i<m_pRecMLAnalyzer.getExpressionCount();i++){
+			if(m_pRecMLAnalyzer.getExpression(i).getNonlinearFlag() && m_pRecMLAnalyzer.getExpression(i).getSimulID()==-1){
 
-		//----------------------------------------------
-		//メイン関数生成
-		//----------------------------------------------
-		/*メイン関数生成・追加*/
-		SyntaxFunction pSynMainFunc = this.createMainFunction();
+				MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
+				
+				//ニュートン法計算関数
+				JavaSyntaxFunction pSynNewtonSolverFunc = this.createSolverFunction(exp);
+				
+				//左辺関数
+				JavaSyntaxFunction pSynNewtonSolverFunc2 = this.createLeftFunction(exp);
+				//左辺微分関数
+				JavaSyntaxFunction pSynNewtonSolverFunc3 = this.createDiffFunction(exp);
+				
+				//テンプレート処理するため内部宣言は不要
+				pSynSolverFuncList.add(pSynNewtonSolverFunc);
+				
+				pSynSolverFuncList.add(pSynNewtonSolverFunc2);
+				pSynSolverFuncList.add(pSynNewtonSolverFunc3);
+				
+			}else if(m_pRecMLAnalyzer.getExpression(i).getSimulID()!=-1){
+				
+				//連立方程式処理
+				//ここで重複処理をする.(idにつき3つ生成)
+				boolean flag=false;
+				for(int j=0;j<simulIDList.size();j++){
+					if(m_pRecMLAnalyzer.getExpression(i).getSimulID()==simulIDList.get(j)){
+						flag=true;
+					}
+				}
+				if(!flag){
+					MathExpression exp = m_pRecMLAnalyzer.getExpression(i);
+					
+					//ニュートン法計算関数
+					JavaSyntaxFunction pSynSimulNewtonSolverFunc = this.createSimulNewtonFunction(exp);
+					
+					//左辺関数
+					JavaSyntaxFunction pSynSimulNewtonSolverFunc2 = this.createSimulFunction(exp);
+					//左辺微分関数
+					JavaSyntaxFunction pSynSimulNewtonSolverFunc3 = this.createJacobiFunction(exp);
+					
+					//テンプレート処理するため内部宣言は不要
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc);
+					
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc2);
+					pSynSolverFuncList.add(pSynSimulNewtonSolverFunc3);
+					
+				}
+				
+				simulIDList.add(m_pRecMLAnalyzer.getExpression(i).getSimulID());
+				
+			}
+			
+		}
+		JavaSyntaxFunction pSynMainFunc = this.createJavaMainFunction();
+		
 		pSynProgram.addFunction(pSynMainFunc);
-
+		
+		
+		
+		
 		//----------------------------------------------
-		//宣言の追加
+		//配列最大長を宣言
 		//----------------------------------------------
-		/*ループ変数インスタンス生成*/
-		Math_ci pLoopIndexVar =
-			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,JAVAPROG_LOOP_INDEX_NAME1);
+		
+		/*int型構文生成*/
+		JavaSyntaxDataType pSynTypeInt = new JavaSyntaxDataType(eDataType.DT_INT,0);
 
-		/*ループ条件に使用した変数を関数に宣言追加*/
-		{
-			SyntaxDataType pSynTypeInt = new SyntaxDataType(eDataType.DT_INT, 0);
-			SyntaxDeclaration pDecVar = new SyntaxDeclaration(pSynTypeInt, pLoopIndexVar);
-			pSynMainFunc.addDeclaration(pDecVar);
+		/*宣言用変数の生成*/
+		Math_ci pDataNumVar =
+			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,"__DATA_NUM");
+
+		/*初期化式の生成*/
+		Math_cn pConstDataNum =
+			(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,"100000");
+		pConstDataNum.changeType();
+		MathExpression pInitExpression = new MathExpression(pConstDataNum);
+
+		/*宣言の生成*/
+		JavaSyntaxDeclaration pSynDataNum = new JavaSyntaxDeclaration(pSynTypeInt,pDataNumVar);
+
+		/*初期化式の追加*/
+		pSynDataNum.addInitExpression(pInitExpression);
+
+		/*宣言の追加*/
+		pSynMainFunc.addDeclaration(pSynDataNum);
+		
+		
+		
+		
+		//ソルバー関数を追加
+		for(int i=0;i<pSynSolverFuncList.size();i++){
+			pSynProgram.addFunction(pSynSolverFuncList.get(i));
 		}
+		
 
-		/*微分変数の宣言*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDiffVar().size(); i++) {
+		
+		//連立式セットの配列を宣言に追加
+		/*Declare a blank loop for allocating one-dimensional arrays*/
+		if(m_pRecMLAnalyzer.simulEquationList.size()!=0){
+			
+			for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.size();i++){
+				/*double型ポインタ配列構文生成*/
+				JavaSyntaxDataType pSynTypePDoubleArray = new JavaSyntaxDataType(eDataType.DT_DOUBLE, 0);
+				
+				
+				
+				/*宣言用変数の生成*/
+				Math_ci pDecVar1 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+i+"[]");
+				/*宣言用変数の生成*/
+				Math_ci pDecVar2 = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+i);
+				
+				/*宣言の生成*/
+				JavaSyntaxDeclaration pSynVarDec =
+					new JavaSyntaxDeclaration(pSynTypePDoubleArray, pDecVar1);
 
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
+				/*宣言の追加*/
+				pSynMainFunc.addDeclaration(pSynVarDec);
+				
+				/*データ数を表す数式を生成*/
+				Math_apply pMathApply =
+					(Math_apply)MathFactory.createOperator(eMathOperator.MOP_APPLY);
+				
+				pMathApply.addFactor(m_pDefinedDataSizeVar);
+		
+				/*宣言の追加*/
+				pSynMainFunc.addStatement(createNew(pDecVar2, pMathApply,1));	
+			}
 
-			/*宣言用変数の生成*/
-			Math_ci pDecVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecDiffVar().get(i).toLegalString() + "[]");
-
-			/*宣言の生成*/
-			SyntaxDeclaration pSynTimeVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynTimeVarDec);
 		}
+		
+		/*RecurVar変数の宣言*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
 
-		/*微係数変数の宣言*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDerivativeVar().size(); i++) {
-
+			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
+			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapRecurVar();
+			int parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
+			
 			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
-			/*宣言用変数の生成*/
-			Math_ci pDecVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecDerivativeVar().get(i).toLegalString() + "[]");
-
-			/*宣言の生成*/
-			SyntaxDeclaration pSynDiffVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynDiffVarDec);
-		}
-
-		/*通常変数の宣言*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecArithVar().size(); i++) {
-
-			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
+			JavaSyntaxDataType pSynTypePDoubleArray = new JavaSyntaxDataType(eDataType.DT_DOUBLE, 0);
+			
+			String declaration = "";
+			String indexString="[]";
+			for(int j=0;j<parenthesisnum;j++){
+				declaration=declaration+indexString;
+			}
+			
 			/*宣言用変数の生成*/
 			Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-					m_pTecMLAnalyzer.getM_vecArithVar().get(i).toLegalString() + "[]");
+					m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i).toLegalJavaString()+declaration);
 
 			/*宣言の生成*/
-			SyntaxDeclaration pSynVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
+			JavaSyntaxDeclaration pSynVarDec =
+				new JavaSyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
 			/*宣言の追加*/
 			pSynMainFunc.addDeclaration(pSynVarDec);
 		}
-
-		/*定数の宣言*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecConstVar().size(); i++) {
-
+		
+		/*ArithVar変数の宣言*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
+			
+			HashMap<Math_ci, Integer> ArithVarHM_G = new HashMap<Math_ci, Integer>();
+			ArithVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
+			int parenthesisnum = ArithVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
+			
 			/*double型ポインタ配列構文生成*/
-			SyntaxDataType pSynTypePDoubleArray = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
+			JavaSyntaxDataType pSynTypePDoubleArray = new JavaSyntaxDataType(eDataType.DT_DOUBLE, 0);
+			
+			String declaration = "";
+			String indexString="[]";
+			for(int j=0;j<parenthesisnum;j++){
+				declaration=declaration+indexString;
+			}
+			
+			/*宣言用変数の生成*/
+			Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+					m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i).toLegalJavaString()+declaration);
+			
+			/*宣言の生成*/
+			JavaSyntaxDeclaration pSynVarDec =
+				new JavaSyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
+			/*宣言の追加*/
+			pSynMainFunc.addDeclaration(pSynVarDec);
+		}
+		
+		/*Constの宣言*/
+		for (int i = 0; i <m_pRecMLAnalyzer.getM_ArrayListConstVar().size(); i++) {
+
+			HashMap<Math_ci, Integer> ConstVarHM_G = new HashMap<Math_ci, Integer>();
+			ConstVarHM_G = m_pRecMLAnalyzer.getM_HashMapConstVar();
+			int parenthesisnum = ConstVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i));
+			
+			/*double型ポインタ配列構文生成*/
+			JavaSyntaxDataType pSynTypePDoubleArray = new JavaSyntaxDataType(eDataType.DT_DOUBLE, 0);
+			
+			String declaration = "";
+			String indexString="[]";
+			for(int j=0;j<parenthesisnum;j++){
+				declaration=declaration+indexString;
+			}
 			/*宣言用変数の生成*/
 			Math_ci pDecVar =
 				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecConstVar().get(i).toLegalString() + "[]");
+						m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i).toLegalJavaString()+declaration);
 
 			/*宣言の生成*/
-			SyntaxDeclaration pSynConstVarDec =
-				new SyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
+			JavaSyntaxDeclaration pSynConstVarDec =
+				new JavaSyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
 			/*宣言の追加*/
 			pSynMainFunc.addDeclaration(pSynConstVarDec);
 		}
+		
+		/*OutputVar変数の宣言*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
+			
+			HashMap<Math_ci, Integer> OutputVarHM_G = new HashMap<Math_ci, Integer>();
+			OutputVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
+			int parenthesisnum = OutputVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
 
-		/*時間変数の宣言*/
-		{
-
-			/*double型構文生成*/
-			SyntaxDataType pSynTypeDouble = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
+			/*double型ポインタ配列構文生成*/
+			JavaSyntaxDataType pSynTypePDoubleArray = new JavaSyntaxDataType(eDataType.DT_DOUBLE, 0);
+			
+			String declaration = "";
+			String indexString="[]";
+			for(int j=0;j<parenthesisnum;j++){
+				declaration=declaration+indexString;
+			}
+			
 			/*宣言用変数の生成*/
 			Math_ci pDecVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_pTimeVar().toLegalString());
-
+					(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+							m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalJavaString()+declaration);
+			
 			/*宣言の生成*/
-			SyntaxDeclaration pSynTimeDec = new SyntaxDeclaration(pSynTypeDouble, pDecVar);
+			JavaSyntaxDeclaration pSynConstVarDec =
+				new JavaSyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
 			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynTimeDec);
+			pSynMainFunc.addDeclaration(pSynConstVarDec);
 		}
+		
+		/*StepVar変数の宣言*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListStepVar().size(); i++) {
+			
+			HashMap<Math_ci, Integer> StepVarHM_G = new HashMap<Math_ci, Integer>();
+			StepVarHM_G = m_pRecMLAnalyzer.getM_HashMapStepVar();
+			int parenthesisnum = StepVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListStepVar().get(i));
 
-		/*デルタ変数の宣言*/
-		{
-			/*double型構文生成*/
-			SyntaxDataType pSynTypeDouble = new SyntaxDataType(eDataType.DT_DOUBLE, 0);
-
+			/*double型ポインタ配列構文生成*/
+			JavaSyntaxDataType pSynTypePDoubleArray = new JavaSyntaxDataType(eDataType.DT_INT, 0);
+			
+			String declaration = "";
+			String indexString="[]";
+			for(int j=0;j<parenthesisnum;j++){
+				declaration=declaration+indexString;
+			}
+			
 			/*宣言用変数の生成*/
 			Math_ci pDecVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_pDeltaVar().toLegalString());
-
-			/*初期化式の生成*/
-			Math_cn pConstDeltaVal =
-				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,
-						StringUtil.doubleToString(m_dDeltaTime));
-			pConstDeltaVal.changeType();
-			MathExpression pInitExpression = new MathExpression(pConstDeltaVal);
-
+					(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+							m_pRecMLAnalyzer.getM_ArrayListStepVar().get(i).toLegalJavaString()+declaration);
+			
 			/*宣言の生成*/
-			SyntaxDeclaration pSynDeltaDec = new SyntaxDeclaration(pSynTypeDouble, pDecVar);
-
-			/*初期化式の追加*/
-			pSynDeltaDec.addInitExpression(pInitExpression);
+			JavaSyntaxDeclaration pSynConstVarDec =
+				new JavaSyntaxDeclaration(pSynTypePDoubleArray, pDecVar);
 
 			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynDeltaDec);
+			pSynMainFunc.addDeclaration(pSynConstVarDec);
 		}
+		
 
-		//要素数(__DATA_NUM)の変数追加
-		{
-			/*double型構文生成*/
-			SyntaxDataType pSynTypeInt = new SyntaxDataType(eDataType.DT_INT,0);
-
-			/*宣言用変数の生成*/
-			Math_ci pDataNumVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,"__DATA_NUM");
-
-			/*初期化式の生成*/
-			String strElementNum = String.valueOf(m_unElementNum);
-			Math_cn pConstDataNum =
-				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,strElementNum);
-			pConstDataNum.changeType();
-			MathExpression pInitExpression = new MathExpression(pConstDataNum);
-
-			/*宣言の生成*/
-			SyntaxDeclaration pSynDataNum = new SyntaxDeclaration(pSynTypeInt,pDataNumVar);
-
-			/*初期化式の追加*/
-			pSynDataNum.addInitExpression(pInitExpression);
-
-			/*宣言の追加*/
-			pSynMainFunc.addDeclaration(pSynDataNum);
-		}
-
+		
 		//----------------------------------------------
-		//malloc関数呼び出しの追加
+		//配列のインスタンスを行う構文の追加
 		//----------------------------------------------
-		/*微分変数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDiffVar().size(); i++) {
 
-			/*データ数を表す数式を生成*/
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_cn pMathVarCount =
-				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,
-						String.valueOf(m_pCellMLAnalyzer.getM_vecDiffVar().size()));
-			pMathVarCount.changeType();
-			pMathTimes.addFactor(pMathVarCount);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
+		/*RecurVar変数のインスタンス生成*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListRecurVar().size(); i++) {
 
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createNew(m_pTecMLAnalyzer.getM_vecDiffVar().get(i),
-					pMathTimes));
+			HashMap<Math_ci, Integer> RecurVarHM_G = new HashMap<Math_ci, Integer>();
+			RecurVarHM_G = m_pRecMLAnalyzer.getM_HashMapRecurVar();
+			int parenthesisnum = RecurVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i));
+			
+			if(parenthesisnum!=0){
+				/*データ数を表す数式を生成*/
+				Math_apply pMathApply =
+					(Math_apply)MathFactory.createOperator(eMathOperator.MOP_APPLY);
+				
+				pMathApply.addFactor(m_pDefinedDataSizeVar);
+				
+				
+				Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+						m_pRecMLAnalyzer.getM_ArrayListRecurVar().get(i).toLegalJavaString());
+				
+				/*宣言の追加*/
+				pSynMainFunc.addStatement(createNew(pDecVar, pMathApply,parenthesisnum));	
+			}
+			
 		}
-		/*一時変数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecArithVar().size(); i++) {
+		
+		/*ArithVar変数のインスタンス生成*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListArithVar().size(); i++) {
 
-			/*データ数を表す数式を生成*/
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_cn pMathVarCount =
-				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,
-						String.valueOf(m_pCellMLAnalyzer.getM_vecArithVar().size()));
-			pMathVarCount.changeType();
-			pMathTimes.addFactor(pMathVarCount);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createNew(m_pTecMLAnalyzer.getM_vecArithVar().get(i),
-					pMathTimes));
+			HashMap<Math_ci, Integer> ArithVarHM_G = new HashMap<Math_ci, Integer>();
+			ArithVarHM_G = m_pRecMLAnalyzer.getM_HashMapArithVar();
+			int parenthesisnum = ArithVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i));
+			
+			if(parenthesisnum!=0){
+				/*データ数を表す数式を生成*/
+				Math_apply pMathApply =
+					(Math_apply)MathFactory.createOperator(eMathOperator.MOP_APPLY);
+				
+				pMathApply.addFactor(m_pDefinedDataSizeVar);
+				
+				
+				Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+						m_pRecMLAnalyzer.getM_ArrayListArithVar().get(i).toLegalJavaString());
+				
+				/*宣言の追加*/
+				pSynMainFunc.addStatement(createNew(pDecVar, pMathApply,parenthesisnum));	
+			}
+			
 		}
-		/*微係数変数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDerivativeVar().size(); i++) {
+		
+		/*OutputVar変数のインスタンス生成*/
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListOutputVar().size(); i++) {
 
-			/*データ数を表す数式を生成*/
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_cn pMathVarCount =
-				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,
-						String.valueOf(m_pCellMLAnalyzer.getM_vecDiffVar().size()));
-			pMathVarCount.changeType();
-			pMathTimes.addFactor(pMathVarCount);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createNew(m_pTecMLAnalyzer.
-					getM_vecDerivativeVar().get(i),
-					pMathTimes));
+			HashMap<Math_ci, Integer> OutputVarHM_G = new HashMap<Math_ci, Integer>();
+			OutputVarHM_G = m_pRecMLAnalyzer.getM_HashMapOutputVar();
+			int parenthesisnum = OutputVarHM_G.get(m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i));
+			
+			if(parenthesisnum!=0){
+				/*データ数を表す数式を生成*/
+				Math_apply pMathApply =
+					(Math_apply)MathFactory.createOperator(eMathOperator.MOP_APPLY);
+				
+				pMathApply.addFactor(m_pDefinedDataSizeVar);
+				
+				
+				Math_ci pDecVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
+						m_pRecMLAnalyzer.getM_ArrayListOutputVar().get(i).toLegalJavaString());
+				
+				/*宣言の追加*/
+				pSynMainFunc.addStatement(createNew(pDecVar, pMathApply,parenthesisnum));	
+			}
+			
 		}
-		/*定数へのmallocによるメモリ割り当て*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecConstVar().size(); i++) {
-
-			/*データ数を表す変数を生成*/
-			Math_cn pMathVarCount =
-				(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,
-						String.valueOf(m_pCellMLAnalyzer.getM_vecConstVar().size()));
-			pMathVarCount.changeType();
-
-			/*宣言の追加*/
-			pSynMainFunc.addStatement(createNew(m_pTecMLAnalyzer.getM_vecConstVar().get(i),
-					pMathVarCount));
-		}
-
+		
+		
 		//----------------------------------------------
-		//数式部分の追加
+		//変数の初期化を行う構文の追加
 		//----------------------------------------------
-		/*外側ループ構文生成・追加*/
-		Math_ci pTimeVariale = (Math_ci)(m_pTecMLAnalyzer.getM_pTimeVar().createCopy());
-		Math_ci pDeltaVariale = (Math_ci)(m_pTecMLAnalyzer.getM_pDeltaVar().createCopy());
-
-		SyntaxControl pSynFor1 = createSyntaxTimeLoop(m_dStartTime,
-				m_dEndTime, pTimeVariale, pDeltaVariale);
-		pSynMainFunc.addStatement(pSynFor1);
-
-		/*内側ループ構文生成・追加*/
-		SyntaxControl pSynFor2 = createSyntaxDataNumLoop(m_pDefinedDataSizeVar, pLoopIndexVar);
-		pSynFor1.addStatement(pSynFor2);
-
-		//----------------------------------------------
-		//数式の生成と追加
-		//----------------------------------------------
-		/*数式を生成し，取得*/
-		Vector<SyntaxExpression> vecExpressions = this.createExpressions();
-
-		/*ループ中に数式を追加*/
-		int nExpressionNum = vecExpressions.size();
-
-		for (int i = 0; i < nExpressionNum;i++) {
-
-			/*数式の追加*/
-			pSynFor2.addStatement(vecExpressions.get(i));
+		
+		//ConstVarの初期化
+		for (int i = 0; i < m_pRecMLAnalyzer.getM_ArrayListConstVar().size(); i++) {
+			
+			Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i).toLegalJavaString());
+			String initial_valueString = String.valueOf(m_pRecMLAnalyzer.getM_ArrayListConstVar().get(i).getValue());
+			Math_cn initial_value = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, initial_valueString);
+			
+			Math_assign pMathAssign = (Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+			Math_cn pZero = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, "0");
+			pZero.changeType();
+			pMathAssign.addFactor(pVariable);
+			pMathAssign.addFactor(initial_value);
+			
+			MathExpression pMathApExpression = new MathExpression(pMathAssign);
+			JavaSyntaxExpression pSyntaxExp = new JavaSyntaxExpression(pMathApExpression);
+			
+			//構文追加
+			pSynMainFunc.addStatement(pSyntaxExp);
 		}
-
-//		//----------------------------------------------
-//		//free関数呼び出しの追加
-//		//----------------------------------------------
-//		/*微分変数のfree*/
-//		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDiffVar().size(); i++) {
-//
-//			/*宣言の追加*/
-//			pSynMainFunc.addStatement(createFree(m_pTecMLAnalyzer.getM_vecDiffVar().get(i)));
-//		}
-//		/*一時変数のfree*/
-//		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecArithVar().size(); i++) {
-//
-//			/*宣言の追加*/
-//			pSynMainFunc.addStatement(createFree(m_pTecMLAnalyzer.getM_vecArithVar().get(i)));
-//		}
-//		/*微係数変数のfree*/
-//		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDerivativeVar().size(); i++) {
-//
-//			/*宣言の追加*/
-//			pSynMainFunc.addStatement(createFree(m_pTecMLAnalyzer.
-//					getM_vecDerivativeVar().get(i)));
-//		}
-//		/*定数のfree*/
-//		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecConstVar().size(); i++) {
-//
-//			/*宣言の追加*/
-//			pSynMainFunc.addStatement(createFree(m_pTecMLAnalyzer.getM_vecConstVar().get(i)));
-//		}
-
+		
+		
+		//----------------------------------------------
+		//計算を行う構文の追加
+		//----------------------------------------------
+		
+		//rootとなるループ番号を取得
+		int rootNum = m_pRecMLAnalyzer.getRoot().loopNumber;
+		pSynMainFunc.addStatement(this.MainFuncSyntaxStatementList(rootNum));
+		
 		/*プログラム構文を返す*/
 		return pSynProgram;
 	}
+	
+	protected JavaSyntaxStatementList MainFuncSyntaxStatementList(int root) throws SyntaxException {
+		JavaSyntaxStatementList aStatementList = null;
 
-	/**
-	 * 初期化する.
-	 * @throws MathException
-	 */
+		// add declaration for main function
+
+		// add first do-while loop structure
+		// for debug
+		//String[] strAttr_Now = new String[] {"pre", null, null};
+		String[] strAttr_Now = new String[] {null, null, null, null, null};
+		try {
+
+			//取得したルート要素のループ番号から生成
+			aStatementList = MakeDowhileLoop(root, strAttr_Now);
+		} catch (TranslateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MathException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return aStatementList;
+	}
+	
+	protected JavaSyntaxStatementList MakeDowhileLoop(int LoopNumber, String[] strAttr_Now) throws TranslateException, MathException, SyntaxException {
+		JavaSyntaxStatementList aStatementList = new JavaSyntaxStatementList();
+		
+		/*----- process "pre" -----*/
+		String[] strAttr_pre = strAttr_Now.clone();
+		strAttr_pre[LoopNumber] = "pre";
+		
+		JavaSyntaxStatementList aStatementList_pre = new JavaSyntaxStatementList();
+		if (m_pRecMLAnalyzer.hasChild(strAttr_pre)) {
+			// strAttr[LoopNumber] = "pre" has inner loopStructure
+			aStatementList_pre.addStatement(MakeDowhileLoop(m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_pre), strAttr_pre));
+		}
+		else {
+			// strAttr[LoopNumber] = "pre" has no inner loop
+			aStatementList_pre.addStatement(createStatementList(strAttr_pre));
+		}
+		aStatementList.addStatement(aStatementList_pre);
+
+		
+		/*----- process init -----*/
+		String[] strAttr_init = strAttr_Now.clone();
+		JavaSyntaxStatementList aStatementList_init = new JavaSyntaxStatementList();
+		strAttr_init[LoopNumber] = "init";
+		if (m_pRecMLAnalyzer.hasChild(strAttr_init)) {
+			// strAttr[LoopNumber] = "init" has inner loopStructure
+			aStatementList_init.addStatement(MakeDowhileLoop(m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_init), strAttr_init));
+		} else {
+			// strAttr[LoopNumber] = "init" has no inner loop
+			aStatementList_init.addStatement(createStatementList(strAttr_init));
+		}
+		aStatementList.addStatement(aStatementList_init);
+
+
+		/*----- process loop structure -----*/
+		// strAttr[LoopNumber] has 
+		if( m_pRecMLAnalyzer.hasInner(LoopNumber) ){
+			/* create loop structure */
+			/*----- create "tn" = 0 (loop index string = RecMLAnalyzer.getIndexString(LoopNumber)) -----*/
+			aStatementList.addStatement(createInitEqu(LoopNumber));
+
+
+			/*----- create loop condition -----*/
+			JavaSyntaxControl pSynDowhile = createSyntaxDowhile(LoopNumber, strAttr_Now);
+			aStatementList.addStatement(pSynDowhile);
+
+			/*----- create inner Statements and add to Do While loop -----*/
+			String[] strAttr_inner = strAttr_Now.clone();
+			strAttr_inner[LoopNumber] = "inner";
+			JavaSyntaxStatementList aStatementList_inner = new JavaSyntaxStatementList();
+			if (m_pRecMLAnalyzer.hasChild(strAttr_inner)) {
+				//strAttr[LoopNumber] = "inner" has inner loop structure
+				aStatementList_inner.addStatement(
+						MakeDowhileLoop(m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_inner), strAttr_inner));
+			} else {
+				//strAttr[LoopNumber] = "inner" has no inner loop
+				aStatementList_inner.addStatement(createStatementList(strAttr_inner));
+			}
+			pSynDowhile.addStatement(aStatementList_inner);
+			
+			/*----- insert loop counter increment -----*/
+			pSynDowhile.addStatement(createIndexIncrementEqu(LoopNumber));
+
+		}
+		
+		/*----- process final -----*/
+		String[] strAttr_final = strAttr_Now.clone();
+		strAttr_final[LoopNumber] = "final";
+		JavaSyntaxStatementList aStatementList_final = new JavaSyntaxStatementList();
+		if (m_pRecMLAnalyzer.hasChild(strAttr_final)) {
+			// strAttr[LoopNumber] = "final" has inner loopStructure
+			aStatementList_final.addStatement(
+					MakeDowhileLoop(m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_final), strAttr_final));
+		} else {
+			// strAttr[LoopNumber] = "final" has no inner loop
+			aStatementList_final.addStatement(createStatementList(strAttr_final));
+		}
+		aStatementList.addStatement(aStatementList_final);
+		
+		/*----- process post -----*/
+		String[] strAttr_post = strAttr_Now.clone();
+		strAttr_post[LoopNumber] = "post";
+		JavaSyntaxStatementList aStatementList_post = new JavaSyntaxStatementList();
+		if (m_pRecMLAnalyzer.hasChild(strAttr_post)) {
+			// strAttr[LoopNumber] = "post" has inner loopStructure
+			aStatementList_post.addStatement(
+					MakeDowhileLoop(m_pRecMLAnalyzer.nextChildLoopNumber(strAttr_post), strAttr_post));
+		} else {
+			// strAttr[LoopNumber] = "post" has no inner loop
+			aStatementList_post.addStatement(createStatementList(strAttr_post));
+		}
+		aStatementList.addStatement(aStatementList_post);
+		
+		return aStatementList;
+	}
+			
+	//========================================================
+	//initialize
+	// 初期化メソッド
+	//
+	//========================================================
+	/*-----初期化・終了処理メソッド-----*/
 	protected void initialize() throws MathException {
 		m_pDefinedDataSizeVar =
 			(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-							   JAVAPROG_DEFINE_DATANUM_NAME);
+							   COMPROG_DEFINE_DATANUM_NAME);
 	}
 
-	/**
-	 * 計算式部を生成し，ベクタを返す.
-	 * @return 計算式ベクタ
-	 * @throws TranslateException
-	 * @throws MathException
-	 */
-	protected Vector<SyntaxExpression> createExpressions()
+
+			
+			
+	protected JavaSyntaxStatementList createStatementList(String[] strAttrCE) throws TranslateException, MathException {
+		JavaSyntaxStatementList aStatementList = new JavaSyntaxStatementList();
+		Vector<JavaSyntaxExpression> vecExpression = this.createExpressions(strAttrCE);
+		for (int i = 0; i < vecExpression.size(); i++) {
+			aStatementList.addStatement(vecExpression.get(i));
+		}
+		return aStatementList;
+	}
+			
+			
+	protected Vector<JavaSyntaxExpression> createExpressions(String[] strAttrCE)
 	throws TranslateException, MathException {
+		
 		//---------------------------------------------
 		//式生成のための前処理
 		//---------------------------------------------
 		/*ベクタを初期化*/
-		Vector<SyntaxExpression> vecExpressions = new Vector<SyntaxExpression>();
+		Vector<JavaSyntaxExpression> vecExpressions = new Vector<JavaSyntaxExpression>();
 
 		//---------------------------------------------
 		//式の追加
 		//---------------------------------------------
 		/*数式数を取得*/
-		int nExpressionNum = m_pTecMLAnalyzer.getExpressionCount();
+//				System.out.println("loop1 = " + strAttr2[0] + "\n");
+		ArrayList<Integer> expIndex2 = new ArrayList<Integer>();
+		expIndex2 = m_pRecMLAnalyzer.getExpressionWithAttr(strAttrCE);
+			
+			for (int j=0; j < expIndex2.size(); j++){
+				int index = Integer.parseInt(expIndex2.get(j).toString());
 
-		for (int i = 0; i < nExpressionNum; i++) {
+				
+				/*数式の複製を取得*/
+				MathExpression pMathExp = m_pRecMLAnalyzer.getExpression(index);
+			
+				
+				if(pMathExp.getNonlinearFlag() && pMathExp.getSimulID()==-1){
+					
+					
+					//含まれる変数リストを作成
+					Vector<Math_ci> varList= new Vector<Math_ci>();
+					pMathExp.getAllVariablesWithSelector(varList);
+					
+					//非線形式である場合,ソルバー関数を呼び出す代入文を作成.
 
-			/*数式の複製を取得*/
-			MathExpression pMathExp = m_pTecMLAnalyzer.getExpression(i);
+					
+					/*代入文の形成*/
+					Math_assign pMathAssign =
+						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+					
+					pMathAssign.addFactor(pMathExp.getDerivedVariable());
+					
+					String[] strAttr = new String[] {null, null, null, null, null};
+					Math_fn func = (Math_fn) MathFactory.createOperator(MathMLDefinition.getMathOperatorId("fn"), strAttr);
+					Math_ci funcOperand = (Math_ci) MathFactory.createOperand( eMathOperand.MOPD_CI, "newton"+pMathExp.getExID());
+					
+					func.setFuncOperand((MathOperand)funcOperand);
+					
+					for(int i=0;i<varList.size();i++){
+						func.addFactor(varList.get(i));
+						
+					}
+					pMathAssign.addFactor(func);
+					
+					MathExpression pNewExp = new MathExpression(pMathAssign);
+					
+					/*数式ベクタに追加*/
+					JavaSyntaxExpression pSyntaxExp = new JavaSyntaxExpression(pNewExp);
+					vecExpressions.add(pSyntaxExp);
+						
+				} 
+				else if(pMathExp.getSimulID()!=-1){
+					
+					//連立方程式処理
+					
+					int SimulEquNum = -1;
+					for(int k=0;k<m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();k++){
+						if(m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(k).getExID()==pMathExp.getExID()){
+							SimulEquNum=k;
+						}
+					}
+					
+					if(SimulEquNum==0){
+						
+						
+						//連立成分の最初の式であれば,ソルバーをコールする構文を付加
+						
+						
+						//simulSetへ導出変数の初期値を代入
+						//simulSetをソルバーへ渡す
+						//simulSetの値を導出変数へ代入
+						
+						
+						Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+						for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();i++){
+							derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(i).getDerivedVariable());
+						}
+						
+						for(int i=0;i<derivedVarList.size();i++){
+							
+							Math_assign pMathInitAssign =
+									(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+							
+							
+							pMathInitAssign.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+pMathExp.getSimulID()+"["+i+"]"));
+				
+							pMathInitAssign.addFactor(derivedVarList.get(i));
+							/*新たな計算式を生成*/
+							MathExpression pNewExp = new MathExpression(pMathInitAssign);
+				
+							/*数式ベクタに追加*/
+							JavaSyntaxExpression pSyntaxExp = new JavaSyntaxExpression(pNewExp);
+							vecExpressions.add(pSyntaxExp);
+							
+						}
+						
+						String[] strAttr = new String[] {null, null, null, null, null};
+						Math_fn func = (Math_fn) MathFactory.createOperator(MathMLDefinition.getMathOperatorId("fn"), strAttr);
+						Math_ci funcOperand = (Math_ci) MathFactory.createOperand( eMathOperand.MOPD_CI, "simulNewton"+pMathExp.getSimulID());
+						
+						func.setFuncOperand((MathOperand)funcOperand);
+						
+						func.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+pMathExp.getSimulID()));
+						
+						
+						//含まれる変数リストを作成
+						Vector<Math_ci> varList;
+						Vector<Math_ci> varList_all = new Vector<Math_ci>();
+						
+						
+						//連立成分の数式全ての変数を格納する.
+						for(int k=0;k<m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).size();k++){
+							
+							varList = new Vector<Math_ci>();
+							//各数式の変数リストを取得
+							m_pRecMLAnalyzer.simulEquationList.get((int) pMathExp.getSimulID()).get(k).getAllVariablesWithSelector(varList);
+							
+							for(int i=0;i<varList.size();i++){
+		
+								//導出変数でなく重複しない場合,引数リストに追加 
+								boolean overlap=false;
+								for(int j1=0;j1<derivedVarList.size();j1++){
+									if(varList.get(i).toLegalJavaString().equals(derivedVarList.get(j1).toLegalJavaString())){
+										overlap=true;
+									}
+								}
+								for(int j1=0;j1<varList_all.size();j1++){
+									if(varList.get(i).toLegalJavaString().equals(varList_all.get(j1).toLegalJavaString())){
+										overlap=true;
+									}
+								}
+								if(!overlap){
+									varList_all.add(varList.get(i));
+								}
+							}
+						}
+						for(int k=0;k<varList_all.size();k++){
+							func.addFactor(varList_all.get(k));
+						}
+						
+						
+						/*新たな計算式を生成*/
+						MathExpression pNewExp = new MathExpression(func);
+						/*数式ベクタに追加*/
+						JavaSyntaxExpression pSyntaxExp = new JavaSyntaxExpression(pNewExp);
+						vecExpressions.add(pSyntaxExp);
+						
+						/*代入文の形成*/
+						for(int i=0;i<derivedVarList.size();i++){
+							
+							Math_assign pMathInitAssign =
+									(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
+							
+							
+							pMathInitAssign.addFactor(derivedVarList.get(i));
+							pMathInitAssign.addFactor((Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "simulSet"+pMathExp.getSimulID()+"["+i+"]"));
+				
+							
+							/*新たな計算式を生成*/
+							MathExpression pNewExp2 = new MathExpression(pMathInitAssign);
+				
+							/*数式ベクタに追加*/
+							JavaSyntaxExpression pSyntaxExp2 = new JavaSyntaxExpression(pNewExp2);
+							vecExpressions.add(pSyntaxExp2);
+							
+						}
+						
+					}
+					
+					
 
-			/*左辺式・右辺式取得*/
-			MathExpression pLeftExp = pMathExp.getLeftExpression();
-			MathExpression pRightExp = pMathExp.getRightExpression();
-
-			if (pLeftExp == null || pRightExp == null) {
-				throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-							     "failed to parse expression");
-			}
-
-			/*左辺変数取得*/
-			MathOperand pLeftVar = (MathOperand)pLeftExp.getFirstVariable();
-
-			//-------------------------------------------
-			//左辺式ごとに数式の追加
-			//-------------------------------------------
-			/*微係数変数*/
-			if (m_pTecMLAnalyzer.isDerivativeVar(pLeftVar)) {
-
-				/*微分式の数を取得*/
-				int nDiffExpNum = m_pCellMLAnalyzer.getM_vecDiffExpression().size();
-
-				/*数式の出力*/
-				for (int j = 0; j < nDiffExpNum; j++) {
-
+					
+				}else{
+					
+					/*左辺式・右辺式取得*/
+					MathExpression pLeftExp = pMathExp.getLeftExpression();
+					MathExpression pRightExp = pMathExp.getRightExpression();
+		
+					if (pLeftExp == null || pRightExp == null) {
+						throw new TranslateException("JavaSyntaxProgram","CommonProgramGenerator",
+									     "failed to parse expression");
+					}
+		
 					/*代入文の形成*/
 					Math_assign pMathAssign =
 						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
 					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
 					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-
+		
 					/*新たな計算式を生成*/
 					MathExpression pNewExp = new MathExpression(pMathAssign);
-
-					/*TecML変数に添え字を付加*/
-					this.addIndexToTecMLVariables(pNewExp, j);
-
-					/*微分式インスタンスのコピー取得*/
-					MathExpression pDiffExpression =
-						m_pCellMLAnalyzer.getM_vecDiffExpression().get(j).createCopy();
-
-					/*微分関数の展開*/
-					this.expandDiffFunction(pNewExp, pDiffExpression);
-
+		
 					/*数式ベクタに追加*/
-					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
+					JavaSyntaxExpression pSyntaxExp = new JavaSyntaxExpression(pNewExp);
 					vecExpressions.add(pSyntaxExp);
+					
+					
 				}
+				
 
 			}
-
-			/*微分変数*/
-			else if (m_pTecMLAnalyzer.isDiffVar(pLeftVar)) {
-
-				/*微分式の数を取得*/
-				int nDiffVarNum = m_pCellMLAnalyzer.getM_vecDiffVar().size();
-
-				/*数式の出力*/
-				for (int j = 0; j < nDiffVarNum; j++) {
-
-					/*代入文の形成*/
-					Math_assign pMathAssign =
-						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-
-					/*新たな計算式を生成*/
-					MathExpression pNewExp = new MathExpression(pMathAssign);
-
-					/*添え字の付加*/
-					this.addIndexToTecMLVariables(pNewExp, j);
-
-					/*数式ベクタに追加*/
-					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-					vecExpressions.add(pSyntaxExp);
-				}
-			}
-
-			/*通常変数*/
-			else if (m_pTecMLAnalyzer.isArithVar(pLeftVar)) {
-				/*微分式の数を取得*/
-				int nNonDiffExpNum = m_pCellMLAnalyzer.getM_vecNonDiffExpression().size();
-
-				/*数式の出力*/
-				for (int j = 0; j < nNonDiffExpNum; j++) {
-
-					/*代入文の形成*/
-					Math_assign pMathAssign =
-						(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-					pMathAssign.addFactor(pLeftExp.createCopy().getRootFactor());
-					pMathAssign.addFactor(pRightExp.createCopy().getRootFactor());
-
-					/*新たな計算式を生成*/
-					MathExpression pNewExp = new MathExpression(pMathAssign);
-
-					/*TecML変数に添え字を付加*/
-					this.addIndexToTecMLVariables(pNewExp, j);
-
-					/*微分式インスタンスのコピー取得*/
-					MathExpression pNonDiffExpression =
-						m_pCellMLAnalyzer.getM_vecNonDiffExpression().get(j).createCopy();
-
-					/*微分関数の展開*/
-					this.expandNonDiffFunction(pNewExp, pNonDiffExpression);
-
-					/*数式ベクタに追加*/
-					SyntaxExpression pSyntaxExp = new SyntaxExpression(pNewExp);
-					vecExpressions.add(pSyntaxExp);
-				}
-			}
-
-			/*定数変数*/
-			else if (m_pTecMLAnalyzer.isConstVar(pLeftVar)) {
-			}
-
-		}
-
-		//---------------------------------------------
-		//出力変数から入力変数への代入式の追加
-		// (TecMLには記述されていない式を追加する)
-		//---------------------------------------------
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-			/*代入式の構成*/
-			Math_assign pMathAssign =
-				(Math_assign)MathFactory.createOperator(eMathOperator.MOP_ASSIGN);
-			pMathAssign.addFactor(m_pTecMLAnalyzer.getM_pInputVar().createCopy());
-			pMathAssign.addFactor(m_pTecMLAnalyzer.getM_pOutputVar().createCopy());
-			MathExpression pMathExp = new MathExpression(pMathAssign);
-
-			/*添え字の追加*/
-			this.addIndexToTecMLVariables(pMathExp, i);
-
-			/*数式ベクタに追加*/
-			SyntaxExpression pSyntaxExp = new SyntaxExpression(pMathExp);
-			vecExpressions.add(pSyntaxExp);
-		}
 
 		return vecExpressions;
 	}
-
-	/*-----関数展開・変数置換メソッド-----*/
-
-	/**
-	 * 微分関数を展開する.
-	 * @param pExpression 数式インスタンス
-	 * @param pDiffExpression 微分式インスタンス
-	 * @throws MathException
-	 * @throws TranslateException
-	 */
-	protected void expandDiffFunction(MathExpression pExpression,
-			MathExpression pDiffExpression)
-	throws MathException, TranslateException {
-		/*展開関数の検索*/
-		Vector<Math_fn> vecFunctions = new Vector<Math_fn>();
-
-		pExpression.searchFunction(m_pTecMLAnalyzer.getM_pDiffFuncVar(), vecFunctions);
-
-		/*検索結果のすべての関数を展開*/
-		int nFunctionNum = vecFunctions.size();
-
-		for (int i = 0; i < nFunctionNum; i++) {
-
-			/*置換対象の関数*/
-			Math_fn pFunction = (Math_fn)vecFunctions.get(i).createCopy();
-
-			/*関数の置換*/
-			pExpression.replace(pFunction,
-					pDiffExpression.getRightExpression().getRootFactor());
-
-			/*関数引数型ごとのidを取得*/
-			HashMap<eTecMLVarType, Integer> ati = m_pTecMLAnalyzer.getDiffFuncArgTypeIdx();
-
-			if (ati.size() == 0) {
-				throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-			     "failed to get arguments index of differential function ");
+	
+	protected boolean hasInner(int LoopNumber, String[] strAttr) {
+		String[] strAttr_inner = strAttr.clone();
+		strAttr_inner[LoopNumber] = "inner";
+		try {
+			Vector<JavaSyntaxExpression> vecExpressions = createExpressions(strAttr_inner);
+			if (vecExpressions.size() > 0) {
+				return true;
+			} else {
+				return false;
 			}
-
-			/*変数の置換*/
-			this.replaceFunctionVariables(pExpression, pFunction, ati);
+		} catch (TranslateException e) {
+			e.printStackTrace();
+		} catch (MathException e) {
+			e.printStackTrace();
 		}
+		return false;
 	}
+	
+	// create "tn = 0"
+	protected JavaSyntaxStatement createInitEqu(int LoopNumber) {
+		MathExpression tnINIT = new MathExpression();
+		Math_apply tnINITApply = new Math_apply();
+		tnINIT.addOperator(tnINITApply);
+		Math_assign tnINITAssign = new Math_assign();
+		tnINITApply.addFactor(tnINITAssign);
+//		Math_ci tnINITTn = new Math_ci("tn");
+//		Math_ci tnINITTn = new Math_ci(m_pRecMLAnalyzer.getIndexString(LoopNumber));
+		Math_ci tnINITTn = new Math_ci(m_pRecMLAnalyzer.getIndexHashMap(LoopNumber));
+		tnINITAssign.addFactor(tnINITTn);
+		Math_cn tnINIT0 = new Math_cn("0");
+		/*double消す*/
+		tnINIT0.changeType();
+		tnINITAssign.addFactor(tnINIT0);
+		JavaSyntaxStatement aStatement = new JavaSyntaxExpression(tnINIT);
+		return aStatement;
+	}
+	
+	// create "tn = tn + 1"
+	protected JavaSyntaxExpression createIndexIncrementEqu(int LoopNumber) {
+		MathExpression tnpINNER = new MathExpression();
+		Math_apply tnpINNERApply = new Math_apply();
+		tnpINNER.addOperator(tnpINNERApply);
+		Math_assign tnpINNERAssign = new Math_assign();
+		tnpINNERApply.addFactor(tnpINNERAssign);
+		//Math_ci tnpINNERTnL = new Math_ci("tn");
+//		Math_ci tnpINNERTnL = new Math_ci(m_pRecMLAnalyzer.getIndexString(LoopNumber));
+		Math_ci tnpINNERTnL = new Math_ci(m_pRecMLAnalyzer.getIndexHashMap(LoopNumber));
+		tnpINNERAssign.addFactor(tnpINNERTnL);
+		Math_apply tnpINNERApplyR = new Math_apply();
+		tnpINNERAssign.addFactor(tnpINNERApplyR);
+		Math_plus tnpINNERPlusR = new Math_plus();
+		tnpINNERApplyR.addFactor(tnpINNERPlusR);
+		//Math_ci tnpINNERTnR = new Math_ci("tn");
+//		Math_ci tnpINNERTnR = new Math_ci(m_pRecMLAnalyzer.getIndexString(LoopNumber));
+		Math_ci tnpINNERTnR = new Math_ci(m_pRecMLAnalyzer.getIndexHashMap(LoopNumber));
+		tnpINNERPlusR.addFactor(tnpINNERTnR);
+		Math_cn tnpINNER1R = new Math_cn("1");
+		tnpINNER1R.changeType();
+		tnpINNERPlusR.addFactor(tnpINNER1R);
+		JavaSyntaxExpression pSyntaxExpINNER = new JavaSyntaxExpression(tnpINNER);
+		return pSyntaxExpINNER;
+	}
+	
+	protected JavaSyntaxControl createSyntaxDowhile(int LoopNumber, String[] strAttr) {
+		String[] strAttr_loopcond = strAttr.clone();
+		strAttr_loopcond[LoopNumber] = "loopcond";
+		ArrayList<Integer> expIndex = new ArrayList<Integer>();
+		expIndex = m_pRecMLAnalyzer.getExpressionWithAttr(strAttr_loopcond);
 
+		//Math_lt pMathLt = (Math_lt)MathFactory.createOperator(eMathOperator.MOP_LT);
+		//pMathLt.addFactor(null);
+		//pMathLt.addFactor(null);
+		//MathExpression pConditionExp = new MathExpression(pMathLt);
+		MathExpression pConditionExp = m_pRecMLAnalyzer.getExpression((Integer)expIndex.get(0));
+		/*double消す*/
+		((MathOperator)(pConditionExp.getRootFactor())).changeIndexInteger();
+		JavaSyntaxCondition pSynLoopCond = new JavaSyntaxCondition(pConditionExp);
+		JavaSyntaxControl pSynDowhile = new JavaSyntaxControl(eControlKind.CTRL_DOWHILE,pSynLoopCond);
+		return pSynDowhile;
+	}
+	
+	public JavaSyntaxFunction createJavaMainFunction()
+	throws MathException {
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynIntType = new JavaSyntaxDataType(eDataType.DT_PUB,0);
+		JavaSyntaxFunction pSynMainFunc = new JavaSyntaxFunction("main",pSynIntType);
+
+		/*引数宣言の生成*/
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_STRING,0);
+		Math_ci pArgvVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,"args[]");
+		JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,pArgvVar);
+
+		/*引数宣言の追加*/
+		pSynMainFunc.addParam(pSynArgvDec);
+
+		return pSynMainFunc;
+	}
+	
+	//非線形方程式用ソルバー生成@n-washio
 	/**
-	 * 非微分関数を展開する.
-	 * @param pExpression 数式インスタンス
-	 * @param pNonDiffExpression 非微分式インスタンス
+	 * ソルバー関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
 	 * @throws MathException
-	 * @throws TranslateException
 	 */
-	protected void expandNonDiffFunction(MathExpression pExpression,
-			MathExpression pNonDiffExpression)
-	throws MathException, TranslateException {
-		/*展開関数の検索*/
-		Vector<Math_fn> vecFunctions = new Vector<Math_fn>();
+	public JavaSyntaxFunction createSolverFunction(MathExpression exp)
+	throws MathException {
+		
+		MathExpression expression = new MathExpression();
+		expression = exp.clone();
+		expression.setExID(exp.getExID());
+		expression.setDerivedVariable(exp.getDerivedVariable());
+		
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynDoubleType = new JavaSyntaxDataType(eDataType.DT_PUB,0);
+		JavaSyntaxFunction pSynSolverFunc = new JavaSyntaxFunction("newton"+exp.getExID(),pSynDoubleType);
 
-		pExpression.searchFunction(m_pTecMLAnalyzer.getM_pNonDiffFuncVar(), vecFunctions);
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		Vector<Math_ci> varList= new Vector<Math_ci>();
+		exp.getAllVariablesWithSelector(varList);
+		
+		
+		//CodeNameを登録.
+		for(int i=0;i<varList.size();i++){
+			varList.get(i).setCodeName("var"+i);
+		}
+		exp.setCodeVariable(varList);
+		exp.setDerivedVariableCodeName();
+		
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		
+		for(int i=0;i<varList.size();i++){
+			/*引数宣言の追加*/
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList.get(i).codeName);
+			JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,var);
+			pSynSolverFunc.addParam(pSynArgvDec);
+		}
+		NewtonSolverJava ns = new NewtonSolverJava();
+		//デフォルトで設定.手入力も検討.
+		
+		double e = 1.0e-5;//収束判定値
+		int max = 1000;//最大反復数
+		
+		//DerivedVariableがセレクターを含む場合,変数名だけを扱うようにする.
+		//同変数名で競合する可能性(x[n],x[n+1]等)は存在しないものとする.
+		String str="";
+		str = ns.makeNewtonSolver(exp, exp.getDerivedVariable(),e,max);
+		pSynSolverFunc.addString(str);
 
-		/*検索結果のすべての関数を展開*/
-		int nFunctionNum = vecFunctions.size();
+		return pSynSolverFunc;
+	}
+	/**
+	 * 左辺関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public JavaSyntaxFunction createLeftFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynDoubleType = new JavaSyntaxDataType(eDataType.DT_PUBDouble,0);
+		JavaSyntaxFunction pSynLeftFunc = new JavaSyntaxFunction("func"+exp.getExID(),pSynDoubleType);
 
-		for (int i = 0; i < nFunctionNum; i++) {
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		Vector<Math_ci> varList= new Vector<Math_ci>();
+		exp.getAllVariablesWithSelector(varList);
+		
+		//CodeNameを登録.
+		for(int i=0;i<varList.size();i++){
+			varList.get(i).setCodeName("var"+i);
+		}
+		exp.setCodeVariable(varList);
+		exp.setDerivedVariableCodeName();
+		
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		
+		for(int i=0;i<varList.size();i++){
+			/*引数宣言の追加*/
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList.get(i).codeName);
+			JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,var);
+			pSynLeftFunc.addParam(pSynArgvDec);
+		}
+		NewtonSolverJava ns = new NewtonSolverJava();
+		String str = ns.makeLeftFunc(exp, exp.getDerivedVariable());
+		
+		pSynLeftFunc.addString(str);
+		return pSynLeftFunc;
+	}
+	/**
+	 * 左辺微分関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public JavaSyntaxFunction createDiffFunction(MathExpression exp)
+	throws MathException {
+		
+		
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynDoubleType = new JavaSyntaxDataType(eDataType.DT_PUBDouble,0);
+		JavaSyntaxFunction pSynDiffrFunc = new JavaSyntaxFunction("dfunc"+exp.getExID(),pSynDoubleType);
 
-			/*置換対象の関数*/
-			Math_fn pFunction = (Math_fn)vecFunctions.get(i).createCopy();
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		Vector<Math_ci> varList= new Vector<Math_ci>();
+		exp.getAllVariablesWithSelector(varList);
+		
+		//CodeNameを登録
+		for(int i=0;i<varList.size();i++){
+			varList.get(i).setCodeName("var"+i);
+		}
+		
+		exp.setCodeVariable(varList);
+		exp.setDerivedVariableCodeName();
+		
+		
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		
+		for(int i=0;i<varList.size();i++){
+			/*引数宣言の追加*/
+			Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList.get(i).codeName);
+			JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,var);
+			pSynDiffrFunc.addParam(pSynArgvDec);
+		}
+		NewtonSolverJava ns = new NewtonSolverJava();
+		String str = ns.makeDiffFunc(exp, exp.getDerivedVariable());
+		
+		
+		
+		pSynDiffrFunc.addString(str);
 
-			/*関数の置換*/
-			pExpression.replace(pFunction,
-					pNonDiffExpression.getRightExpression().getRootFactor());
-
-			/*関数引数型ごとのidを取得*/
-			HashMap<eTecMLVarType, Integer> ati = m_pTecMLAnalyzer.getDiffFuncArgTypeIdx();
-
-			if (ati.size() == 0) {
-				throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-			     "failed to get arguments index of differential function ");
+		return pSynDiffrFunc;
+	}
+	
+	/**
+	 * ヤコビ行列関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
+	 * @throws MathException
+	 */
+	public JavaSyntaxFunction createJacobiFunction(MathExpression exp)
+	throws MathException {
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynDoubleType = new JavaSyntaxDataType(eDataType.DT_PUBDouble,0);
+		JavaSyntaxFunction pSynDiffrFunc = new JavaSyntaxFunction("jacobi"+exp.getSimulID(),pSynDoubleType);
+		
+		Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getDerivedVariable());
+		}
+		
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		//連立成分の数式全てを取得
+		Vector<Math_ci> varList;
+		Vector<Math_ci> varList_new = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			varList= new Vector<Math_ci>();
+			this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getAllVariablesWithSelector(varList);
+			
+			for(int j=0;j<varList.size();j++){
+				boolean flag=false;
+				for(int k=0;k<varList_new.size();k++){
+					if(varList_new.get(k).toLegalJavaString().equals(varList.get(j).toLegalJavaString())){
+						flag=true;
+					}
+				}
+				if(!flag) varList_new.add(varList.get(j));
 			}
-
-			/*変数の置換*/
-			this.replaceFunctionVariables(pExpression, pFunction, ati);
 		}
-	}
+		
+		//CodeNameを登録
+		for(int i=0;i<varList_new.size();i++){
+			varList_new.get(i).setCodeName("var"+i);
+		}
 
+
+		
+		//連立成分の数式全てにCodeNameを共有
+		for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+		
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setCodeVariable(varList_new);
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setDerivedVariableCodeName();
+			
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setAllVariableCodeName();
+		}
+		
+
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		JavaSyntaxDataType pSynPPCharType2 = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		JavaSyntaxDataType pSynPPIntType = new JavaSyntaxDataType(eDataType.DT_INT,0);
+		
+		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "[] simulSet");
+		
+		
+		/*引数宣言の追加*/
+		JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,set);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		for(int i=0;i<varList_new.size();i++){
+
+			//導出変数でない場合,引数リストに追加 idによるソートが必要　保留
+			boolean overlap=false;
+			for(int j=0;j<derivedVarList.size();j++){
+				if(varList_new.get(i).toLegalJavaString().equals(derivedVarList.get(j).toLegalJavaString())){
+					overlap=true;
+				}
+			}
+			if(!overlap){
+				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
+				pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType2,var);
+				pSynDiffrFunc.addParam(pSynArgvDec);
+			}
+		}
+		
+		//int i, j 追加
+		Math_ci i=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "i");
+		Math_ci j=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "j");
+		pSynArgvDec = new JavaSyntaxDeclaration(pSynPPIntType,i);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		pSynArgvDec = new JavaSyntaxDeclaration(pSynPPIntType,j);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		
+		
+		SimultaneousNewtonSolverJava sns = new SimultaneousNewtonSolverJava();
+		String str = sns.makeJacobiFunc(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList);
+		
+		pSynDiffrFunc.addString(str);
+
+		return pSynDiffrFunc;
+	}
 	/**
-	 * 関数中変数の置換をする.
-	 * @param pExpression 数式インスタンス
-	 * @param pFunction 置換関数
-	 * @param ati 関数引数型ごとのidとインデックス
+	 * 連立関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
 	 * @throws MathException
 	 */
-	private void replaceFunctionVariables(MathExpression pExpression, Math_fn pFunction,
-		      HashMap<eTecMLVarType, Integer> ati)
+	public JavaSyntaxFunction createSimulFunction(MathExpression exp)
 	throws MathException {
-		/*関数引数型ごとのidを取得*/
-		int nTimeArgIdx = 0;
-		int nTimeVarArgIdx = 0;
-		int nVarArgIdx = 0;
-		int nConstVarArgIdx = 0;
-
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_TIMEVAR)) {
-			nTimeArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_TIMEVAR);
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynDoubleType = new JavaSyntaxDataType(eDataType.DT_PUBDouble,0);
+		JavaSyntaxFunction pSynDiffrFunc = new JavaSyntaxFunction("simulFunc"+exp.getSimulID(),pSynDoubleType);
+		
+		
+		Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getDerivedVariable());
 		}
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_DIFFVAR)) {
-			nTimeVarArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_DIFFVAR);
+		
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		//連立成分の数式全てを取得
+		Vector<Math_ci> varList;
+		Vector<Math_ci> varList_new = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			varList= new Vector<Math_ci>();
+			this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getAllVariablesWithSelector(varList);
+			
+			for(int j=0;j<varList.size();j++){
+				boolean flag=false;
+				for(int k=0;k<varList_new.size();k++){
+					if(varList_new.get(k).toLegalJavaString().equals(varList.get(j).toLegalJavaString())){
+						flag=true;
+					}
+				}
+				if(!flag) varList_new.add(varList.get(j));
+			}
 		}
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_ARITHVAR)) {
-			nVarArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_ARITHVAR);
+		//CodeNameを登録
+		for(int i=0;i<varList_new.size();i++){
+			varList_new.get(i).setCodeName("var"+i);
 		}
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_CONSTVAR)) {
-			nConstVarArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_CONSTVAR);
+				
+		//連立成分の数式全てにCodeNameを共有
+		for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+		
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setCodeVariable(varList_new);
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setDerivedVariableCodeName();
+			
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setAllVariableCodeName();
 		}
+		
 
-		/*時間変数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecTimeVar().size(); i++) {
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		JavaSyntaxDataType pSynPPCharType2 = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		JavaSyntaxDataType pSynPPIntType = new JavaSyntaxDataType(eDataType.DT_INT,0);
+		
+		
+		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "[] simulSet");
+		
+		
+		/*引数宣言の追加*/
+		JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,set);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		for(int i=0;i<varList_new.size();i++){
 
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nTimeArgIdx).toLegalString());
-
-			/*配列インデックスを追加*/
-			//pArgVar->addArrayIndexToBack(i);
-			//時間にインデックスを付けず，共通の変数として扱う
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecTimeVar().get(i), pArgVar);
+			//導出変数でない場合,引数リストに追加  idによるソートが必要　保留
+			boolean overlap=false;
+			for(int j=0;j<derivedVarList.size();j++){
+				if(varList_new.get(i).toLegalJavaString().equals(derivedVarList.get(j).toLegalJavaString())){
+					overlap=true;
+				}
+			}
+			if(!overlap){
+				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
+				pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType2,var);
+				pSynDiffrFunc.addParam(pSynArgvDec);
+			}
 		}
+		
+		//int i 追加
+		Math_ci i=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "i");
+		pSynArgvDec = new JavaSyntaxDeclaration(pSynPPIntType,i);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		
+		SimultaneousNewtonSolverJava sns = new SimultaneousNewtonSolverJava();
+		String str = sns.makeFunc(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList);
+		
+		pSynDiffrFunc.addString(str);
 
-		/*微分変数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nTimeVarArgIdx).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(i));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						JAVAPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecDiffVar().get(i),pArgVar);
-		}
-
-		/*通常変数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecArithVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nVarArgIdx).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(i));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,JAVAPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecArithVar().get(i),pArgVar);
-		}
-
-		/*定数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecConstVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nConstVarArgIdx).toLegalString());
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(i);
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecConstVar().get(i),pArgVar);
-		}
+		return pSynDiffrFunc;
 	}
-
+	
 	/**
-	 * TecML変数へのインデックスを追加する.
-	 * @param pExpression 数式インスタンス
-	 * @param nIndex 付加するインデックス
+	 * 連立方程式ニュートン法計算関数構文インスタンスを生成する.
+	 * @return 関数構文インスタンス
 	 * @throws MathException
 	 */
-	protected void addIndexToTecMLVariables(MathExpression pExpression, int nIndex)
+	public JavaSyntaxFunction createSimulNewtonFunction(MathExpression exp)
 	throws MathException {
-		/*微分変数の置換*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDiffVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-				   m_pTecMLAnalyzer.getM_vecDiffVar().get(i).toLegalString());
-
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(nIndex));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						JAVAPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pTecMLAnalyzer.getM_vecDiffVar().get(i),pArgVar);
+		/*関数本体の生成*/
+		JavaSyntaxDataType pSynDoubleType = new JavaSyntaxDataType(eDataType.DT_PUB,0);
+		JavaSyntaxFunction pSynDiffrFunc = new JavaSyntaxFunction("simulNewton"+exp.getSimulID(),pSynDoubleType);
+	
+		
+		Vector<Math_ci> derivedVarList = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			derivedVarList.add(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getDerivedVariable());
 		}
+		
+		/*引数宣言の生成*/
+		//含まれる変数リストを作成
+		//連立成分の数式全てを取得
+		Vector<Math_ci> varList;
+		Vector<Math_ci> varList_new = new Vector<Math_ci>();
+		for(int i=0;i<this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+			varList= new Vector<Math_ci>();
+			this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).getAllVariablesWithSelector(varList);
+			
+			for(int j=0;j<varList.size();j++){
+				boolean flag=false;
+				for(int k=0;k<varList_new.size();k++){
+					if(varList_new.get(k).toLegalJavaString().equals(varList.get(j).toLegalJavaString())){
+						flag=true;
+					}
+				}
 
-		/*微係数変数の置換*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDerivativeVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecDerivativeVar().get(i).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(nIndex));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						JAVAPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pTecMLAnalyzer.getM_vecDerivativeVar().get(i),pArgVar);
+				if(!flag) varList_new.add(varList.get(j));
+			}
 		}
-
-		/*通常変数の置換*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecArithVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecArithVar().get(i).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(nIndex));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						JAVAPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pTecMLAnalyzer.getM_vecArithVar().get(i),pArgVar);
+		//CodeNameを登録
+		for(int i=0;i<varList_new.size();i++){
+			varList_new.get(i).setCodeName("var"+i);
 		}
+				
+		//連立成分の数式全てにCodeNameを共有
+		for(int i=0;i<m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).size();i++){
+		
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setCodeVariable(varList_new);
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setDerivedVariableCodeName();
+			
+			m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()).get(i).setAllVariableCodeName();
+		}
+		
+
+		JavaSyntaxDataType pSynPPCharType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		JavaSyntaxDataType pSynPPCharType2 = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
+		
+		Math_ci set=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, "[] simulSet");
+		
+		
+		
+		/*引数宣言の追加*/
+		JavaSyntaxDeclaration pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType,set);
+		pSynDiffrFunc.addParam(pSynArgvDec);
+		for(int i=0;i<varList_new.size();i++){
+
+			boolean overlap=false;
+			for(int j=0;j<derivedVarList.size();j++){
+				if(varList_new.get(i).toLegalJavaString().equals(derivedVarList.get(j).toLegalJavaString())){
+					overlap=true;
+				}
+			}
+			
+			if(!overlap){
+				Math_ci var=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, varList_new.get(i).codeName);
+				pSynArgvDec = new JavaSyntaxDeclaration(pSynPPCharType2,var);
+				pSynDiffrFunc.addParam(pSynArgvDec);
+			}
+		}
+		
+		double e = 1.0e-5;//収束判定値
+		int max = 1000;//最大反復数
+	
+	
+		SimultaneousNewtonSolverJava sns = new SimultaneousNewtonSolverJava();
+		String str = sns.makeSimultaneousNewtonSolver(this.m_pRecMLAnalyzer.simulEquationList.get((int) exp.getSimulID()), derivedVarList,e,max,(int) exp.getSimulID());
+		
+		pSynDiffrFunc.addString(str);
+
+		return pSynDiffrFunc;
 	}
-
+	
 	/**
 	 * new関数呼び出し生成メソッド
 	 * @param pDstVar メモリ確保先変数インスタンス
@@ -915,23 +1392,20 @@ public class JavaProgramGenerator extends ProgramGenerator {
 	 * @throws MathException
 	 * @throws SyntaxException
 	 */
-	protected SyntaxExpression createNew(Math_ci pDstVar,MathFactor pDataNumFactor)
+	protected JavaSyntaxExpression createNew(Math_ci pDstVar,MathFactor pDataNumFactor,int size)
 	throws MathException, SyntaxException {
 		/*関数呼び出しインスタンス生成*/
-		SyntaxCallFunction pSynMallocCall = new SyntaxCallFunction("new");
-
-		/*引数の構築*/
-//		Math_ci* pSizeofVar = (Math_ci*)MathFactory::createOperand(MOPD_CI,"");
-//		//Syntax構文群が完成するまでの暫定処置
-//		Math_ci* pMathTimes1 = (Math_ci*)MathFactory::createOperator(MOP_T);
-//		pMathTimes1->addFactor(pSizeofVar);
-//		pMathTimes1->addFactor(pDataNumFactor);
-
+		JavaSyntaxCallFunction pSynMallocCall = new JavaSyntaxCallFunction("new");
+		
+		
 		/*引数の追加*/
 		pSynMallocCall.addArgFactor(pDataNumFactor);
-
+		
+		/*サイズの追加*/
+		pSynMallocCall.setSize(size);
+		
 		/*戻り値をキャスト*/
-		SyntaxDataType pSynPDoubleType = new SyntaxDataType(eDataType.DT_DOUBLE,0);
+		JavaSyntaxDataType pSynPDoubleType = new JavaSyntaxDataType(eDataType.DT_DOUBLE,0);
 		pSynMallocCall.addCastDataType(pSynPDoubleType);
 
 		/*代入式を生成*/
@@ -943,30 +1417,16 @@ public class JavaProgramGenerator extends ProgramGenerator {
 		pMathAssign.addFactor(pDstVar);
 		pMathAssign.addFactor(pMathTmpVar);
 		MathExpression pNewExpression = new MathExpression(pMathAssign);
-		SyntaxExpression pNewSynExpression = new SyntaxExpression(pNewExpression);
+		JavaSyntaxExpression pNewSynExpression = new JavaSyntaxExpression(pNewExpression);
 
 		/*関数呼び出しインスタンスを戻す*/
 		return pNewSynExpression;
 	}
-
-	/* (非 Javadoc)
-	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator#createMainFunction()
-	 */
-	public SyntaxFunction createMainFunction()
-	throws MathException {
-		/*関数本体の生成*/
-		SyntaxDataType pSynIntType = new SyntaxDataType(eDataType.DT_PUB,0);
-		SyntaxFunction pSynMainFunc = new SyntaxFunction("main",pSynIntType);
-
-		/*引数宣言の生成*/
-		SyntaxDataType pSynPPCharType = new SyntaxDataType(eDataType.DT_STRING,0);
-		Math_ci pArgvVar = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,"args[]");
-		SyntaxDeclaration pSynArgvDec = new SyntaxDeclaration(pSynPPCharType,pArgvVar);
-
-		/*引数宣言の追加*/
-		pSynMainFunc.addParam(pSynArgvDec);
-
-		return pSynMainFunc;
+	@Override
+	public SyntaxProgram getSyntaxProgram() throws MathException,
+			CellMLException, RelMLException, TranslateException,
+			SyntaxException {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
 }

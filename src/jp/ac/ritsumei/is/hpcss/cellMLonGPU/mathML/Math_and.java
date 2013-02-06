@@ -59,6 +59,35 @@ public class Math_and extends MathOperator {
 
 		return strExpression;
 	}
+	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*被演算子の個数チェック*/
+		if(m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_AND){
+			throw new MathException("Math_and","toLegalJavaString","lack of operand");
+		}
+
+		/*文字列を追加していく*/
+		String strExpression = " ( ";
+
+		for(MathFactor it: m_vecFactor) {
+
+			/* &&演算子を追加 */
+			if(it != m_vecFactor.firstElement()){
+				strExpression += " && ";
+			}
+
+			/*項を追加*/
+			strExpression += it.toLegalJavaString();
+		}
+
+		/*閉じ括弧を追加*/
+		strExpression += " ) ";
+
+		return strExpression;
+	}
+	
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

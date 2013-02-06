@@ -541,8 +541,8 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 	//
 	//========================================================
 	// 
-	public ArrayList getExpressionWithAttr(String[] strAttr) {
-		ArrayList indexList = new ArrayList();
+	public ArrayList<Integer> getExpressionWithAttr(String[] strAttr) {
+		ArrayList<Integer> indexList = new ArrayList<Integer>();
 		for (int i=0; i<m_vecAttrList.size(); i++){
 			if(Arrays.equals(strAttr, m_vecAttrList.get(i))){
 				indexList.add(i);
@@ -607,7 +607,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 		
 		String[] strAttr = new String[] {"init", null, null};
 		System.out.println("loop1 = " + strAttr[0] + "\n");
-		ArrayList expIndex = new ArrayList();
+		ArrayList<Integer> expIndex = new ArrayList<Integer>();
 		expIndex = recMLAnalyzer.getExpressionWithAttr(strAttr);
 		
 		for (int i=0; i < expIndex.size(); i++){

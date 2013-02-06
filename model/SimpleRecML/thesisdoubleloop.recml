@@ -123,7 +123,7 @@
 
 
 <apply  num = "6" type = "condition">
-	<gt/>
+	<lt/>
 	<ci> n </ci>
 	<cn> 100 </cn>
 
@@ -216,7 +216,7 @@
 
 
 <apply  num = "11" type = "condition">
-	<gt/>
+	<lt/>
 	<ci> m </ci>
 	<cn> 300 </cn>
 

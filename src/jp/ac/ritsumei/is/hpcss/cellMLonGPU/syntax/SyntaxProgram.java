@@ -27,13 +27,6 @@ public class SyntaxProgram extends Syntax {
 		m_vecSynDeclaration = new Vector<SyntaxDeclaration>();
 		m_vecSynFunction = new Vector<SyntaxFunction>();
 	}
-	
-	/**java構文(プロトタイプ宣言不要)*/
-	protected boolean javaFlag = false;
-	
-	public void setJavaFlag(){
-		javaFlag=true;
-	}
 
 	/* (非 Javadoc)
 	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.Syntax#toLegalString()
@@ -70,20 +63,18 @@ public class SyntaxProgram extends Syntax {
 		/*改行*/
 		strPresentText.append(StringUtil.lineSep);
 		
-		if(!this.javaFlag){
-			//------------------------------------------
-			//関数プロトタイプ構文追加
-			//------------------------------------------
-			{
-				/*順次追加*/
-				for (SyntaxFunction it: m_vecSynFunction) {
-					strPresentText.append(it.toStringPrototype() + ";" + StringUtil.lineSep);
-				}
+		//------------------------------------------
+		//関数プロトタイプ構文追加
+		//------------------------------------------
+		{
+			/*順次追加*/
+			for (SyntaxFunction it: m_vecSynFunction) {
+				strPresentText.append(it.toStringPrototype() + ";" + StringUtil.lineSep);
 			}
-
-			/*改行*/
-			strPresentText.append(StringUtil.lineSep);
 		}
+
+		/*改行*/
+		strPresentText.append(StringUtil.lineSep);
 		
 
 		//------------------------------------------

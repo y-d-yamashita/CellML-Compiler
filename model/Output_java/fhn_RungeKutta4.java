@@ -1,72 +1,73 @@
-import java.lang.Math
+import java.lang.Math;
+public class fhn_RungeKutta4{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
-	double Main_y_x2[];
-	double Main_time_t4[];
-	double Main_y_x1[];
-	double Main_y_x3[];
-	double Main_time_t3[];
-	double Main_x_x1[];
-	double Main_y_x4[];
-	double Main_x_x3[];
+	int __DATA_NUM = 100000;
+	double Main_time_t1[];
 	double Main_x_x2[];
 	double Main_x_x4[];
+	double Main_y_x4[];
+	double Main_x_x3[];
+	double Main_y_x1[];
+	double Main_time_t3[];
+	double Main_x_x1[];
+	double Main_y_x2[];
 	double Main_time_t2[];
-	double Main_time_t1[];
-	double Main_r_i4[];
-	double Main_kx_k3[];
-	double Main_ky_k2[];
-	double x;
-	double Main_kx_k2[];
-	double Main_kx_k4[];
-	double y;
-	double Main_r_i1[];
-	double Main_ky_k4[];
-	double Main_r_i3[];
+	double Main_y_x3[];
+	double Main_time_t4[];
 	double Main_ky_k3[];
+	double Main_kx_k3[];
+	double Main_kx_k2[];
+	double Main_r_i1[];
 	double t;
+	double Main_r_i4[];
+	double Main_r_i3[];
+	double Main_ky_k2[];
+	double Main_ky_k4[];
 	double Main_ky_k1[];
 	double Main_kx_k1[];
+	double y;
+	double Main_kx_k4[];
+	double x;
 	double Main_r_i2[];
-	double Main_zz_z;
 	double Main_epsilon_z;
-	double d;
-	double Main_gamma_z;
 	double Main_beta_z;
+	double Main_gamma_z;
+	double d;
+	double Main_zz_z;
 	int n;
 
-	Main_y_x2 = new double[__DATA_NUM];
-	Main_time_t4 = new double[__DATA_NUM];
-	Main_y_x1 = new double[__DATA_NUM];
-	Main_y_x3 = new double[__DATA_NUM];
-	Main_time_t3 = new double[__DATA_NUM];
-	Main_x_x1 = new double[__DATA_NUM];
-	Main_y_x4 = new double[__DATA_NUM];
-	Main_x_x3 = new double[__DATA_NUM];
+	Main_time_t1 = new double[__DATA_NUM];
 	Main_x_x2 = new double[__DATA_NUM];
 	Main_x_x4 = new double[__DATA_NUM];
+	Main_y_x4 = new double[__DATA_NUM];
+	Main_x_x3 = new double[__DATA_NUM];
+	Main_y_x1 = new double[__DATA_NUM];
+	Main_time_t3 = new double[__DATA_NUM];
+	Main_x_x1 = new double[__DATA_NUM];
+	Main_y_x2 = new double[__DATA_NUM];
 	Main_time_t2 = new double[__DATA_NUM];
-	Main_time_t1 = new double[__DATA_NUM];
-	Main_r_i4 = new double[__DATA_NUM];
-	Main_kx_k3 = new double[__DATA_NUM];
-	Main_ky_k2 = new double[__DATA_NUM];
-	Main_kx_k2 = new double[__DATA_NUM];
-	Main_kx_k4 = new double[__DATA_NUM];
-	Main_r_i1 = new double[__DATA_NUM];
-	Main_ky_k4 = new double[__DATA_NUM];
-	Main_r_i3 = new double[__DATA_NUM];
+	Main_y_x3 = new double[__DATA_NUM];
+	Main_time_t4 = new double[__DATA_NUM];
 	Main_ky_k3 = new double[__DATA_NUM];
+	Main_kx_k3 = new double[__DATA_NUM];
+	Main_kx_k2 = new double[__DATA_NUM];
+	Main_r_i1 = new double[__DATA_NUM];
+	Main_r_i4 = new double[__DATA_NUM];
+	Main_r_i3 = new double[__DATA_NUM];
+	Main_ky_k2 = new double[__DATA_NUM];
+	Main_ky_k4 = new double[__DATA_NUM];
 	Main_ky_k1 = new double[__DATA_NUM];
 	Main_kx_k1 = new double[__DATA_NUM];
+	Main_kx_k4 = new double[__DATA_NUM];
 	Main_r_i2 = new double[__DATA_NUM];
-	Main_zz_z = (double)0.0;
 	Main_epsilon_z = (double)0.03;
-	d = (double)0.01;
-	Main_gamma_z = (double)0.3;
 	Main_beta_z = (double)1.2;
+	Main_gamma_z = (double)0.3;
+	d = (double)0.01;
+	Main_zz_z = (double)0.0;
 	
 	
 	Main_time_t1[0] = (double)0.0;
@@ -105,7 +106,7 @@ public static void main ( String args[] ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t1[n] == 400));
+	}while( ( Main_time_t1[n] < 400 ) );
 
 	t = Main_time_t1[ ( n + 1 ) ];
 	y = Main_y_x1[ ( n + 1 ) ];
@@ -118,4 +119,4 @@ public static void main ( String args[] ) {
 }
 
 
-
+}

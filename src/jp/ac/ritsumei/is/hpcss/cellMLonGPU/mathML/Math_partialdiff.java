@@ -41,6 +41,25 @@ public class Math_partialdiff extends MathOperator {
 		}
 	}
 	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*単項演算子*/
+		if(m_vecFactor.size() == 2){
+			return " ( d" + m_vecFactor.get(1).toLegalJavaString() + " / " +
+			m_vecFactor.get(0).toLegalJavaString() + " ) ";
+		}
+		/*2項演算子*/
+		else if(m_vecFactor.size() == 3){
+			return " d" + m_vecFactor.get(1).toLegalJavaString() + " " + m_vecFactor.get(2).toLegalJavaString() +  
+				" / " + m_vecFactor.get(0).toLegalJavaString() + m_vecFactor.get(1).toLegalJavaString() + " ";
+		}
+		/*例外*/
+		else{
+			throw new MathException("Math_partialdiff","toLegalJavaString","lack of operand");
+		}
+	}
+	
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 

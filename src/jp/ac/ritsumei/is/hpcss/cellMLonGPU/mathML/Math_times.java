@@ -47,13 +47,37 @@ public class Math_times extends MathOperator {
 		String strExpression = " ( ";
 		
 		for (int i=0; i < m_vecFactor.size(); i++) {
-
-			/* *演算子を追加 */
-//			if(it != m_vecFactor.firstElement()){
-//				strExpression += " * ";
-//			}
 			
 			strExpression += (m_vecFactor.get(i)).toLegalString();
+			
+			if(i < ( m_vecFactor.size() - 1)){
+				strExpression += " * ";
+			}
+
+			/*項を追加*/
+			
+		}
+
+		/*閉じ括弧を追加*/
+		strExpression += " ) ";
+
+		return strExpression;
+	}
+	
+	/*-----Java文字列変換メソッド-----*/
+	public String toLegalJavaString() throws MathException {
+
+		/*非演算子がない場合は例外*/
+		if (m_vecFactor.size() < MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_TIMES) {
+			throw new MathException("Math_times","toLegalJavaString","lack of operand");
+		}
+
+		/*文字列を追加していく*/
+		String strExpression = " ( ";
+		
+		for (int i=0; i < m_vecFactor.size(); i++) {
+			
+			strExpression += (m_vecFactor.get(i)).toLegalJavaString();
 			
 			if(i < ( m_vecFactor.size() - 1)){
 				strExpression += " * ";

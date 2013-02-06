@@ -1,38 +1,39 @@
-import java.lang.Math
+import java.lang.Math;
+public class fhn_BackwardEuler{
 
 
 public static void main ( String args[] ) {
 
-	int __DATA_NUM = 1;
+	int __DATA_NUM = 100000;
 	double simulSet0[];
+	double Main_y_x[];
 	double Main_x_x[];
 	double Main_time_t[];
-	double Main_y_x[];
-	double Main_ky_k[];
+	double Main_kx_k[];
+	double yend;
+	double Main_r_i[];
 	double xend;
 	double tend;
-	double yend;
-	double Main_kx_k[];
-	double Main_r_i[];
+	double Main_ky_k[];
+	double Main_zz_z;
 	double Main_epsilon_z;
+	double d;
 	double Main_beta_z;
 	double Main_gamma_z;
-	double d;
-	double Main_zz_z;
 	int n;
 
 	simulSet0 = new double[__DATA_NUM];
+	Main_y_x = new double[__DATA_NUM];
 	Main_x_x = new double[__DATA_NUM];
 	Main_time_t = new double[__DATA_NUM];
-	Main_y_x = new double[__DATA_NUM];
-	Main_ky_k = new double[__DATA_NUM];
 	Main_kx_k = new double[__DATA_NUM];
 	Main_r_i = new double[__DATA_NUM];
+	Main_ky_k = new double[__DATA_NUM];
+	Main_zz_z = (double)0.0;
 	Main_epsilon_z = (double)0.03;
+	d = (double)0.01;
 	Main_beta_z = (double)1.2;
 	Main_gamma_z = (double)0.3;
-	d = (double)0.01;
-	Main_zz_z = (double)0.0;
 	
 	
 	Main_time_t[0] = (double)0.0;
@@ -59,7 +60,7 @@ public static void main ( String args[] ) {
 		
 		n =  ( n + 1 ) ;
 
-	}while(!(Main_time_t[n] == 400));
+	}while( ( Main_time_t[n] < 400 ) );
 
 	tend = Main_time_t[ ( n + 1 ) ];
 	xend = Main_x_x[ ( n + 1 ) ];
@@ -221,4 +222,4 @@ public static double jacobi0 ( double [] simulSet , double var4 , double var6 , 
 }
 
 
-
+}

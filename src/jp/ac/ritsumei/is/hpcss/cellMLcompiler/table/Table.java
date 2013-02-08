@@ -10,10 +10,10 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 public class Table<T> {
 
 	/**テーブル名*/
-	private String m_strName;
+	protected String m_strName;
 
 	/**テーブル要素*/
-	private HashMap<String,T> m_mapElements;
+	protected HashMap<String,T> m_mapElements;
 
 	/*親へのポインタ*/
 	// 使用していないので削除
@@ -67,6 +67,15 @@ public class Table<T> {
 		return v;
 	}
 
+	public boolean isContain(String strTableName){
+		/*名前から検索する*/
+		/*見つからなかった場合*/
+		if (m_mapElements.get(strTableName) == null) 
+			return false;
+		/*見つかった要素を返す*/
+		else return true;
+	}
+	
 	/**
 	 * 値を置換する.
 	 * @param strTableName 検索する名前
@@ -76,5 +85,15 @@ public class Table<T> {
 		/*以前の値の削除と新たな値の挿入*/
 		m_mapElements.put(strTableName,repElement);
 	}
-
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("<<"+this.m_strName+">>-----------------------\n");
+		for(T t:m_mapElements.values()){
+			sb.append(t.toString());
+			sb.append(", ");
+		}
+		sb.setLength(sb.length()-2);
+		return sb.toString();
+	}
 }

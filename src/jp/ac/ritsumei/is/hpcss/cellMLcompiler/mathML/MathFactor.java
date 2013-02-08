@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML;
 
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 
@@ -187,6 +188,21 @@ public abstract class MathFactor {
 			return false;
 		return true;
 	}
+	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public abstract void traverse(Visitor v);
 
+	public String getM_strPresentText() {
+		return m_strPresentText;
+	}
+
+	public void setM_strPresentText(String m_strPresentText) {
+		this.m_strPresentText = m_strPresentText;
+	}
+	public void replaceStrPresentExt(String regex,String replacement){
+		m_strPresentText=m_strPresentText.replaceAll(regex, replacement);
+	}
 	
 }

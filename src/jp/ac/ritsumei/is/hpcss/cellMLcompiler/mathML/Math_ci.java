@@ -5,6 +5,7 @@ import java.util.Vector;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.variableMesh.MeshCoordinates;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 
 /**
  * MathML変数被演算子ciクラス
@@ -19,6 +20,10 @@ public class Math_ci extends MathOperand {
 	public void addIndexList(MathFactor pFactor){
 		/*オペランドをベクタに追加*/
 		m_vecIndexListFactor.add(pFactor);
+	}
+	public Vector<MathFactor> getIndexList(){
+		/*オペランドをベクタに追加*/
+		return m_vecIndexListFactor;
 	}
 
 	/*ポインタ演算子数(マイナスの場合は&演算子)*/
@@ -77,6 +82,7 @@ public class Math_ci extends MathOperand {
 
 		/*整数より定数オペランドインスタンスを生成*/
 		Math_cn pConst = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, strIndex);
+		pConst.changeType();
 
 		/*オーバーロードメソッドに投げる*/
 		this.addArrayIndexToBack(pConst);
@@ -115,8 +121,6 @@ public class Math_ci extends MathOperand {
 		/*配列インデックスの追加*/
 		for (MathFactor it: m_vecIndexListFactor) {
 			/*項を追加*/
-//			strVariable += "[" + it.toSelectorLegalString() + "]";
-			/*項を追加*/
 			strVariable += "[" + it.toLegalString() + "]";
 		}
 		
@@ -134,12 +138,12 @@ public class Math_ci extends MathOperand {
 		
 		return newOperand;
 	}
-	
+
 	/*-----Method for converting Expression to MathML-----*/
 	public String toMathMLString() throws MathException {
 		return 	"<ci> " + m_strPresentText + " </ci>";
 	}
-	
+
 	/* override hashcode and equals of Math_ci to make objects work as hash map keys */
 	@Override
 	public int hashCode() {
@@ -177,5 +181,19 @@ public class Math_ci extends MathOperand {
 		return true;
 	}
 	
+	public Vector<MathFactor> getM_vecIndexListFactor() {
+		return m_vecIndexListFactor;
+	}
 	
+	public void setM_vecIndexListFactor(Vector<MathFactor> m_vecIndexListFactor) {
+		this.m_vecIndexListFactor = m_vecIndexListFactor;
+	}
+	
+	/**
+	 * Vsitorパターンでのtraverse
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+//		m_pRootFactor.traverse(v);
+	}
 }

@@ -18,31 +18,31 @@
 	<variable name="deltax1" type="deltavar" order="2"/>
 	<variable name="deltax2" type="deltavar" order="3"/>
 
-	<variable name="Main.x" type="diffvar" />
-	<variable name="Main.y" type="diffvar" />
+	<variable name="Main.v" type="diffvar" />
+	<variable name="Main.w" type="diffvar" />
 	<variable name="Main.r" type="arithvar" />
-	<variable name="Main.zz" type="arithvar" />
+	<variable name="Main.zz" type="constvar" />
 	<variable name="Main.epsilon" type="constvar" />
 	<variable name="Main.beta" type="constvar" />
 	<variable name="Main.gamma" type="constvar" />
 	
 	<variable name="Main.D" type="constvar" />
 	
-	<morphology name="2D LV wall model" filename="csv/morphology_RMesh_50x50.csv" >
+	<morphology name="2D LV wall model" filename="csv/morphology_RMesh_4x4.csv" >
 		<geometry geometry-id="1" type="solid" dimension="2">
-			<mesh type="RECTILINEAR_GRID" dimensions="50 50 1" spacing="1 1 1" />
+			<mesh type="RECTILINEAR_GRID" sizex="4" sizey="4" sizez="1" spacingx="1" spacingy="1" spacingz="1"/>
 		</geometry>
 	</morphology>
 	
-	<boundary-cond variablename="Main.x" filename="csv/boundary_RMesh_50x50.csv" />
-	<parameter-cond variablename="Main.epsilon" filename="csv/epsilonDP_RMesh_4x4.csv" />
-	<parameter-cond variablename="Main.zz" />
+	<boundary-cond variablename="Main.x" filename="csv/boundary_RMesh_4x4.csv" />
+	<parameter-cond variablename="Main.epsilon" filename="csv/DP_epsilon_4x4.csv" />
+	<parameter-cond variablename="Main.zz" parameter-id="1"/>
 	
 	<math>
 		<apply boundary-id="1" location="left"><eq/>
 			<apply><partialdiff/>
 				<bvar><ci> Main.x1 </ci></bvar>
-				<ci> Main.x </ci>
+				<ci> Main.v </ci>
 			</apply>
 			<cn> 0 </cn>
 		</apply>
@@ -50,7 +50,7 @@
 		<apply boundary-id="2" location="right"><eq/>
 			<apply><partialdiff/>
 				<bvar><ci> Main.x1 </ci></bvar>
-				<ci> Main.x </ci>
+				<ci> Main.v </ci>
 			</apply>
 			<cn> 0 </cn>
 		</apply>
@@ -58,7 +58,7 @@
 		<apply boundary-id="3" location="bottom"><eq/>
 			<apply><partialdiff/>
 				<bvar><ci> Main.x2 </ci></bvar>
-				<ci> Main.x </ci>
+				<ci> Main.v </ci>
 			</apply>
 			<cn> 0 </cn>
 		</apply>
@@ -66,33 +66,33 @@
 		<apply boundary-id="4" location="top"><eq/>
 			<apply><partialdiff/>
 				<bvar><ci> Main.x2 </ci></bvar>
-				<ci> Main.x </ci>
+				<ci> Main.v </ci>
 			</apply>
 			<cn> 0 </cn>
 		</apply>
 
 		<apply boundary-id="5" location="corner"><eq/>
-			<ci> Main.x </ci>
+			<ci> Main.v </ci>
 			<apply><minus/>
 				<cn> 1.501250563778375 </cn>
 			</apply>
 		</apply>
 		
 		<apply boundary-id="6" location="corner"><eq/>
-			<ci> Main.x </ci>
+			<ci> Main.v </ci>
 			<apply><minus/>
 				<cn> 1.501250563778375 </cn>
 			</apply>
 		</apply>
 		
 		<apply boundary-id="7" location="corner"><eq/>
-			<ci> Main.x </ci>
+			<ci> Main.v </ci>
 			<apply><minus/>
 				<cn> 1.501250563778375 </cn>
 			</apply>
 		</apply>
 		<apply boundary-id="8" location="corner"><eq/>
-			<ci> Main.x </ci>
+			<ci> Main.v </ci>
 			<apply><minus/>
 				<cn> 1.501250563778375 </cn>
 			</apply>

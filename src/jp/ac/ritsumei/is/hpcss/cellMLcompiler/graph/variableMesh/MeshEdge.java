@@ -5,14 +5,14 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.graph.Edge;
 public class MeshEdge extends Edge {
 
 	/* initial vertex or node */
-	private MeshNode tail;
-	public MeshNode getEdgeTail() {
+	private MeshCoordinates tail;
+	public MeshCoordinates getEdgeTail() {
 		return tail;
 	}
 	
 	/* terminal vertex or node */
-	private MeshNode head;
-	public MeshNode getEdgeHead() {
+	private MeshCoordinates head;
+	public MeshCoordinates getEdgeHead() {
 		return head;
 	}
 	
@@ -23,7 +23,7 @@ public class MeshEdge extends Edge {
 	}
 	
 	/* Constructor */
-	public MeshEdge(MeshNode nTail, MeshNode nHead) {
+	public MeshEdge(MeshCoordinates nTail, MeshCoordinates nHead) {
 		tail = nTail;
 		head = nHead;
 	}

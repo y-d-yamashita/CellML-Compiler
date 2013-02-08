@@ -16,11 +16,12 @@ public class MeshNode extends Vertex {
 	
 	public int numInEdges; 	//Number of incoming mesh edges
 	public int numOutEdges; //Number of outgoing mesh edges
-	public ArrayList<MeshEdge> inEdge; //Array of incoming mesh edges
-	public ArrayList<MeshEdge> outEdge; //Array of outgoing mesh edges
+	public ArrayList<MeshEdge> inEdgeList; //Array of incoming mesh edges
+	public ArrayList<MeshEdge> outEdgeList; //Array of outgoing mesh edges
 	
 	public MeshNode(){
 		nodeLocation = new MeshCoordinates();
+		inEdgeList = new ArrayList<MeshEdge>();
 	}
 	
 	public MeshNode(int numCoordinates){
@@ -41,6 +42,10 @@ public class MeshNode extends Vertex {
 	/* Get the value of the node coordinates*/
 	public MeshCoordinates getCoordinates() {
 		return nodeLocation;
+	}
+	
+	public void addIncomingEdge(MeshEdge newInEdge) {
+		inEdgeList.add(newInEdge);
 	}
 	
 	@Override

@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperand;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.IndexReplacingVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.MathFactorStackingVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
@@ -28,7 +35,12 @@ public class MathExpression {
 
 	/**変数リスト保持ベクタ*/
 	Vector<MathOperand> m_vecVariables;
-
+	
+	/**数式ID*/
+	long exID = -1;
+	/**conditionのreference*/
+	int condref = -1;
+	
 	
 	/**
 	 * MathML数式インスタンスを作成する.
@@ -216,11 +228,41 @@ public class MathExpression {
 	}
 	
 	/**
+	 * 構造情報をapplyへ割り当てる
+	 */
+	public void assignStruAttrToApply(HashMap<Integer, String> attrList){
+		((MathOperator) m_pRootFactor).assignStruAttrToApply(m_pRootFactor, attrList);
+	}
+	
+	/**
 	 * Selector内cnをIntegerに変更
 	 */
 	public void changeSelectorInteger(){
 		((MathOperator) m_pRootFactor).changeSelectorInteger(m_pRootFactor);
 	}
+	
+	/**
+	 *  conditionがあるかどうか検索
+	 */
+	public MathExpression searchCondition(){
+		MathExpression condExp = ((MathOperator) m_pRootFactor).searchCondition(m_pRootFactor);
+		return condExp;
+	}
+	
+	/**
+	 * conditionのreference番号を登録する
+	 */
+	public void setCondref(int num){
+		this.condref = num;
+	}
+	
+	/**
+	 * 数式IDを登録する
+	 */
+	public void setExID(int num){
+		this.exID = num;
+	}
+	
 	/**
 	 *数式内の全てのvariableを取得する (selector考慮)
 	 * @throws MathException 
@@ -250,7 +292,7 @@ public class MathExpression {
 	public MathOperand getVariable(int dVariableId) {
 		return m_vecVariables.get(dVariableId);
 	}
-
+	
 	/**
 	 * 変数を取得する.
 	 * @param dVariableId 変数id
@@ -260,7 +302,6 @@ public class MathExpression {
 	public Vector<MathOperand> getVariables() {
 		return m_vecVariables;
 	}
-
 	
 	/**
 	 * 数式中の変数の数を取得する.
@@ -316,6 +357,7 @@ public class MathExpression {
 	throws MathException {
 		/*ルートが演算子の場合*/
 		if (m_pRootFactor.matches(eMathMLClassification.MML_OPERATOR)) {
+
 			/*関数の場合*/
 			if (((MathOperator)m_pRootFactor).matches(eMathOperator.MOP_FN)) {
 
@@ -518,7 +560,22 @@ public class MathExpression {
 
 		return null;
 	}
-
+	
+	/**
+	 *数式IDを取得する
+	 * @return 数式ID
+	 */
+	public long getExID(){
+		return this.exID;
+	}
+	
+	/**
+	 * conditionのReference番号を返す
+	 * @return conditionのReference番号
+	 */
+	public int getCondRef(){
+		return this.condref;
+	}
 	/**
 	 * 数式を比較する.
 	 * @param pExpression 比較対象の式
@@ -561,7 +618,7 @@ public class MathExpression {
 	public String toMathMLString() throws MathException {
 		return m_pRootFactor.toMathMLString();
 	}
-
+	
 	/**
 	 * 数式を展開する(Expand expression)
 	 * ex. a(x+y) -> ax + ay
@@ -628,7 +685,102 @@ public class MathExpression {
 						"first factor should be Math_apply of Math_Eq");
 		}
 	}
+	
+	/**
+	 * Vsitorパターンでのtraverse
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+		m_pRootFactor.traverse(v);
+	}
+
+	public Integer compareFocusOnVariableIndex(MathExpression that,int indexPos) throws MathException{
+		//indexPos 0:time, 1:x, 2:y, 3:z
+
+		MathFactorStackingVisitor expr1_StackVisitor = new MathFactorStackingVisitor();
+		MathFactorStackingVisitor expr2_StackVisitor = new MathFactorStackingVisitor();
+		
+		this.traverse(expr1_StackVisitor);
+		that.traverse(expr2_StackVisitor);
+		
+		
+			
+		return compareMathFactorStack(expr1_StackVisitor.getStack(),expr2_StackVisitor.getStack(),indexPos);
+		
+	}
+	/**
+	 * 
+	 * @param stack1
+	 * @param stack2
+	 * @param varName
+	 * @param indexPos
+	 * @return 同じ式ならばindexPosのIndexの差を返す，異なればnull
+	 * @throws MathException 
+	 */
+	private Integer compareMathFactorStack(Stack<MathFactor> stack1,
+			Stack<MathFactor> stack2, int indexPos) throws MathException {
+		Integer indexDiff=null;
+		
+		//stackサイズがことなれば違う式の形
+		if(stack1.size()!=stack2.size()){
+			return null;
+		}
+		
+		for(MathFactor factor1:stack1){
+			MathFactor factor2=stack2.get(stack1.indexOf(factor1));
+			
+			if(factor1.getClass()!=factor2.getClass()){
+				return null;
+			}
+			if((factor1 instanceof Math_ci )&&(factor2 instanceof Math_ci)){
+				Math_ci ci1 = (Math_ci) factor1;
+				Math_ci ci2 = (Math_ci) factor2;
+				if(!ci1.getM_strPresentText().equals(ci2.getM_strPresentText())){
+					return null;
+				}else{ //変数名が同じ
+					//Indexを持っているなら(定数は持っていない場合もある)
+					if((ci1.getM_vecIndexListFactor().size()>indexPos) &&
+							(ci2.getM_vecIndexListFactor().size()>indexPos)){
+					
+					//	System.out.println(this.getClass()+":"+ci1.getM_vecIndexListFactor().get(indexPos).toLegalString()+" "+ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
+						
+					Integer index1 = decode(ci1.getM_vecIndexListFactor().get(indexPos).toLegalString());
+					Integer index2 = decode(ci2.getM_vecIndexListFactor().get(indexPos).toLegalString());
+					if(indexDiff==null){	//一回目のMath_ci
+						indexDiff= index2-index1;
+					}else{					//二回目以降
+						if(!indexDiff.equals(index2-index1)){//indexの差分が１回目と異なるなら別の式の形
+							return null;
+						}
+					}
+					}
+				}
+			}
+			
+		}
+		return indexDiff;
+	}
+	
+	/**
+	 * Translate String to Integer  
+	 * @param str
+	 * @return Translated Integer
+	 */
+	private Integer decode(String str){
+		return Integer.decode(str.replace(" ","").replace("(","").replace(")", ""));
+	}
+	
+	
+	public void replaceIndex(MathFactor replaceIndexFactor, int baseIndex,
+			int indexPosition) {
+		IndexReplacingVisitor indexReplaceVsitor = new IndexReplacingVisitor(replaceIndexFactor,baseIndex,indexPosition);
+		this.traverse(indexReplaceVsitor);
+	}
+	
+	public boolean serchIndexVaruable(String index, Math_ci mci) throws MathException {
+		boolean flag = false;
+		
+		flag = ((MathOperator) m_pRootFactor).K_checkIndexVariable(index,mci);
+		return flag;
+	}
 }
-
-
-

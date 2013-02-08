@@ -38,7 +38,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 
 	/**数式解析中判定*/
 	private boolean m_bMathParsing;
-	private int m_intGeometryDimension;
 
 	/*種類ごとの対応変数名*/
 	Vector<Math_ci> m_vecTimeVar;
@@ -54,14 +53,9 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	/*微分方程式の左辺式記述の解析用変数*/
 	boolean m_bDiffEquListParsing;
 	String m_strCurComponent;
-	String m_strMeshType;   	// mesh type (currently regular rectilinear grid only)
+	String m_strMeshType;   		// mesh type (currently regular rectilinear grid only)
 	String m_strMorphologyName; 	// name for morphology grid
 
-	/* return the number of spatial dimensions */
-	public int getM_intGeometryDimension() {
-		return m_intGeometryDimension;
-	}
-	
 	/* return differential variables vector */
 	public Vector<Math_ci> getM_vecDiffVar() {
 		return m_vecDiffVar;
@@ -112,7 +106,11 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	public Vector<MathExpression> getM_vecExpression() {
 		return m_vecExpression;
 	}
-	
+	/* return the initial value of the relml variables */
+	private HashMap<Math_ci, String> m_HashMapInitialValues;
+	public HashMap<Math_ci, String> getM_HashMapInitialValues() {
+		return m_HashMapInitialValues;
+	}	
 	/* return bounded variables map with filename */
 	private HashMap<Math_ci, String> m_HashMapBoundedVar;
 	public HashMap<Math_ci, String> getM_HashMapBoundedVar() {
@@ -121,7 +119,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	
 	/* return distributed parameters map with filename */
 	private HashMap<Math_ci, String> m_HashMapDistributedParam;
-	public HashMap<Math_ci, String> getM_HHashMapDistributedParam() {
+	public HashMap<Math_ci, String> getM_HashMapDistributedParam() {
 		return m_HashMapDistributedParam;
 	}	
 	
@@ -146,6 +144,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		m_vecArithVar = new Vector<Math_ci>();
 		m_vecConstVar = new Vector<Math_ci>();
 		m_vecExpression = new Vector<MathExpression>();
+		m_HashMapInitialValues = new HashMap<Math_ci, String>();
 		m_HashMapBoundedVar = new HashMap<Math_ci, String>();
 		m_HashMapDistributedParam = new HashMap<Math_ci, String>();
 	}
@@ -191,7 +190,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 				/* Get the attributes values for geometry tags*/
 				String m_strGeometryID = pXMLAttr.getValue("geometry-id");
 				String m_strType = pXMLAttr.getValue("type");
-				m_intGeometryDimension = Integer.parseInt(pXMLAttr.getValue("dimension"));
+				int m_intGeometryDimension = Integer.parseInt(pXMLAttr.getValue("dimension"));
 				Math_cn pGeometryID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strGeometryID);
 				
 				break;
@@ -202,12 +201,17 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			{
 				/* Get the attributes values for mesh tag*/
 				m_strMeshType = pXMLAttr.getValue("type");
-				String m_strDimensions = pXMLAttr.getValue("dimensions");
-				String m_strSpacing = pXMLAttr.getValue("spacing");
+				
+				String[] arrDimensions = new String[3];
+				arrDimensions[0] = pXMLAttr.getValue("sizex");
+				arrDimensions[1] = pXMLAttr.getValue("sizey");
+				arrDimensions[2] = pXMLAttr.getValue("sizez");
+				
+				String[] arrSpacing = new String[3];
+				arrSpacing[0] = pXMLAttr.getValue("spacingx");
+				arrSpacing[1] = pXMLAttr.getValue("spacingy");
+				arrSpacing[2] = pXMLAttr.getValue("spacingz");
 
-				/* remove white spaces in the dimensions and spacing string and store as Math_cn vectors */ 
-				String[] arrDimensions = m_strDimensions.split("\\s");
-				String[] arrSpacing = m_strSpacing.split("\\s");
 				for (int i=0; i<arrDimensions.length; i++){
 					Math_cn pDimension = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrDimensions[i]);
 					pDimension.changeType();
@@ -239,8 +243,15 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 				/* Get the attributes values for boundary condition tag*/
 				String strName = pXMLAttr.getValue("variablename");
 				String strFileName = pXMLAttr.getValue("filename");
+				String strParameterID = pXMLAttr.getValue("parameter-id");
 				Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
-				m_HashMapDistributedParam.put(pVariable, strFileName);
+				/* if filename exists, store filename, if not store the parameter-id */
+				if (strFileName != null) {
+					m_HashMapDistributedParam.put(pVariable, strFileName);
+				} else {
+					m_HashMapDistributedParam.put(pVariable, strParameterID);
+				}
+				
 				
 				break;
 			}
@@ -276,6 +287,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 					String strName = pXMLAttr.getValue("name");
 					String strComponent = pXMLAttr.getValue("component");
 					String strType = pXMLAttr.getValue("type");
+					String strInit = pXMLAttr.getValue("init");
 					eRelMLVarType varType;
 
 					try{
@@ -293,7 +305,10 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 					/*変数名から変数インスタンス生成*/
 					Math_ci pVariable =
 						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
-
+					
+					/* add the initial value of the variable to hashmap */
+					m_HashMapInitialValues.put(pVariable, strInit);
+					
 					/*タイプごとにベクタに追加*/
 					switch(varType){
 
@@ -729,7 +744,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		return intDimensions;
 	}
 
-	
 	//========================================================
 	//	getSpacing (only for rectilinear grid)
 	// 		get the spacings for each dimension of the rectilinear grid

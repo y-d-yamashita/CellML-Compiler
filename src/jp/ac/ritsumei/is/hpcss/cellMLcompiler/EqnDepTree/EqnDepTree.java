@@ -51,6 +51,33 @@ public class EqnDepTree {
 		}
 	}
 	
+	public void printString(String indent) {
+		System.out.println(indent+"Loop["+this.loopNumber + "]<pre>");
+		if (this.n_pre != null) {
+			this.n_pre.printString(indent+indent);
+		}
+		System.out.println(indent+"Loop["+this.loopNumber + "]<init>");
+		if (this.n_init != null) {
+			this.n_init.printString(indent+indent);
+		}
+		System.out.println(indent+"Loop["+this.loopNumber + "]<inner>");
+		if (this.n_inner != null) {
+			this.n_inner.printString(indent+indent);
+		}
+		System.out.println(indent+"Loop["+this.loopNumber + "]<loopcond>");
+		if (this.n_loopcond != null) {
+			this.n_loopcond.printString(indent+indent);
+		}
+		System.out.println(indent+"Loop["+this.loopNumber + "]<final>");
+		if (this.n_final != null) {
+			this.n_final.printString(indent+indent);
+		}
+		System.out.println(indent+"Loop["+this.loopNumber + "]<post>");
+		if (this.n_post != null) {
+			this.n_post.printString(indent+indent);
+		}
+	}
+	
 	public void start() {
 		EqnDepTree root = new EqnDepTree(0);
 		EqnDepTree now = root;

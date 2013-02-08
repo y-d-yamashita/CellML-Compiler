@@ -16,6 +16,10 @@ public class PerformanceMonitor {
 	    for (int i = 0; i <= 100000; i++) {
 	      list.add(new Person("Jim", "Knopf"));
 	    }
+	    
+	    // check max available heap space
+	    System.out.println("Max available heap space : " + bytesToMegabytes(java.lang.Runtime.getRuntime().maxMemory()) + "mb"); 
+	    
 	    // Get the Java runtime
 	    Runtime runtime = Runtime.getRuntime();
 	    // Run the garbage collector

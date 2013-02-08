@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.visitor.Visitor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
@@ -49,7 +51,7 @@ public abstract class MathOperator extends MathFactor {
 			int unMinFactorNum) {
 		this(strPresentText, operatorKind, unMinFactorNum, null);
 	}
-	
+
 	/* (非 Javadoc)
 	 * @see jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor#getValue()
 	 */
@@ -140,7 +142,7 @@ public abstract class MathOperator extends MathFactor {
 
 			/*オペランドの場合*/
 			if (it.matches(eMathMLClassification.MML_OPERAND)) {
-				
+
 				/*オペランドの置換*/
 				if (((MathOperand)it).matches(pOldOperand)) {
 					m_vecFactor.set(i, pNewFactor);
@@ -281,13 +283,14 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
-
+	
 	/**
 	 *selector時apply削除用
 	 */
 	public void replace(int i, MathFactor pNewFactor) {
 			m_vecFactor.set(i, pNewFactor);
 	}
+	
 	/**
 	 * Selector内探索
 	 */
@@ -304,6 +307,7 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+	
 	/**
 	 * Index要素のcnをIntegerに変える
 	 * */
@@ -320,6 +324,38 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+	
+	/**
+	 * condition部分を抜き取る
+	 */
+	public MathExpression searchCondition(MathFactor rootFactor){
+		MathExpression condExp = null;
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				/*conditionなら*/
+				if(((MathOperator)it).matches(eMathOperator.MOP_CONDITION)){
+					/*conditionの子要素（抜き取る数式）を取り出しておく*/
+					condExp = new MathExpression();
+					/*conditionタグ以下のapplyから新しい数式とする*/
+					condExp.addOperator((MathOperator)((MathOperator)it).m_vecFactor.elementAt(0));
+					
+					/*conditionの親要素検索*/
+					MathOperator parent = findParentOperator((MathOperator)rootFactor, it);
+					int setNum = parent.findObj((MathOperator)it);
+					/*conditionを削除*/
+					try {
+						parent.removeFactor(setNum);
+					} catch (MathException e) {
+						// TODO 自動生成された catch ブロック
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return condExp;
+	}
+	
 	/**
 	 * Selectorを削除する
 	 */
@@ -351,6 +387,20 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+
+	/**
+	 * 構造情報をapplyへ割り当てる
+	 */
+	public void assignStruAttrToApply(MathFactor rootFactor, HashMap<Integer, String> attrList){
+		MathFactor it = rootFactor;
+		/*applyなら*/
+		if(it.matches(eMathMLClassification.MML_OPERATOR)){
+			if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+				((Math_apply)it).setAttrList(attrList);
+			}
+		}
+	}
+	
 	/**
 	 * 親Operatorを探す
 	 */
@@ -557,7 +607,7 @@ public abstract class MathOperator extends MathFactor {
 	public boolean matches(MathOperator pOperator) {
 		return m_operatorKind == pOperator.m_operatorKind;
 	}
-	
+
 	/**
 	 * オブジェクトを比較する.
 	 * @param operatorKind 演算子種類
@@ -700,11 +750,79 @@ public abstract class MathOperator extends MathFactor {
 	}
 
 	/**
+	 * 配列変数内にある変数が存在するか判断
+	 * @param t_mci 対象となる変数
+	 * @param mci 探索する配列変数文字列
+	 * @return 存在の有無
+	 */
+	public boolean K_checkIndexVariable(String index, Math_ci mci) throws MathException{
+		boolean flag = false;
+		for (int i = 0; i < m_vecFactor.size(); i++) {
+			MathFactor it = m_vecFactor.get(i);
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				flag = ((MathOperator)it).K_checkIndexVariable(index,mci);
+				if(flag){
+					return flag;
+				}
+			}else if(it.matches(eMathMLClassification.MML_OPERAND)){
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					String str_it = ((Math_ci)it).getM_strPresentText();
+					String str_mci = mci.getM_strPresentText();
+					if(str_it.equals(str_mci)){						
+						flag = checkIndexVariable2(((Math_ci)it),index);
+						if(flag){
+							return flag;
+						}
+					}
+				}
+			}
+		}
+		return flag;
+	}
+		
+	public boolean checkIndexVariable2(Math_ci t_mci, String index) throws MathException{
+		boolean flag = false;
+		Vector<MathFactor> vec_mf = t_mci.getIndexList();
+		for(MathFactor mf:vec_mf){
+			/*配列変数内に配列変数として宣言されている変数が
+			 * 存在するかを確かめる必要がある
+			 * ただし単に探索するだけではな、末端子要素を調べる必要がある*/
+			if(mf.matches(eMathMLClassification.MML_OPERATOR)){
+				for(MathFactor n_mf:((MathOperator)mf).m_vecFactor){
+					flag = checkIndexVariable(n_mf,index);
+				}
+			}else if(mf.matches(eMathMLClassification.MML_OPERAND)){
+				String index_ci = ((MathOperand)mf).toLegalString();
+				if(index_ci.equals(index)){
+					return true;
+				}
+			}
+		}
+		return flag;
+	}
+
+	public boolean checkIndexVariable(MathFactor mf, String index) throws MathException{
+		if(mf.matches(eMathMLClassification.MML_OPERATOR)){
+			for(MathFactor n_mf:((MathOperator)mf).m_vecFactor){
+				checkIndexVariable(n_mf,index);
+			}
+		}else if(mf.matches(eMathMLClassification.MML_OPERAND)){
+			String index_ci = ((MathOperand)mf).toLegalString();
+			if(index_ci.equals(index)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
+	/**
 	 * 演算する.
 	 * @return 演算結果値
 	 * @throws MathException
 	 */
 	public abstract double calculate() throws MathException;
+	
 	/**
 	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
 	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
@@ -851,10 +969,22 @@ public abstract class MathOperator extends MathFactor {
 	}
 	
 	/**
+	 * ツリーの横断
+	 * @param v
+	 */
+	public void traverse(Visitor v){
+		v.visit(this);
+		for(MathFactor f:m_vecFactor)
+			f.traverse(v);
+	}
+	
+	/**
 	 * m_vecFactor繧貞叙蠕励☆繧�
 	 * @return 髱樊ｼ皮ｮ励�繧ｯ繧ｿ
 	 */
-	public Vector<MathFactor> getFactorVector(){ return m_vecFactor;}
+	public Vector<MathFactor> getFactorVector(){ 
+		return this.m_vecFactor;
+	}
 	
 	public MathFactor toBinOperation() throws MathException{
 		if(this.m_vecFactor.size()>2){
@@ -931,8 +1061,6 @@ public abstract class MathOperator extends MathFactor {
 				((Math_eq)it).setExpInfo(HMapApplyAttr);
 			}
 		}
-
-
 	}
 
 }

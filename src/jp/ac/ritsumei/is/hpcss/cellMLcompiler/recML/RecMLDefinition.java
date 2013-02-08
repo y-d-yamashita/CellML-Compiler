@@ -18,13 +18,19 @@ public class RecMLDefinition {
 	public static final String RECML_TAG_STR_POSITION = "position";
 	
 	public static final String RECML_TAG_STR_VARIABLE = "variable";
+	public static final String RECML_TAG_STR_GRAPH=RecMLGraphDefinition.RECML_TAG_STR_GRAPH;
+	
+	public static final String RECML_TAG_STR_NODE = "node";
+	public static final String RECML_TAG_STR_EDGE = "edge";
+	public static final String RECML_TAG_STR_REFVARIABLE = "refvariable";
 	
 	/*RecML変数型文字列定義*/
 	public static final String RECML_VARTYPE_STR_RECURVAR = "recurvar";
 	public static final String RECML_VARTYPE_STR_ARITHVAR = "arithvar";
 	public static final String RECML_VARTYPE_STR_CONSTVAR = "constvar";
 	public static final String RECML_VARTYPE_STR_OUTPUT = "output";
-
+	public static final String RECML_VARTYPE_STR_DOUBLE = "double";
+	public static final String RECML_VARTYPE_STR_STEPVAR = "stepvar";
 
 	/* RecML attribute names */
 	public static final String RECML_ATTR_LOOP1 = "loop1";
@@ -40,10 +46,11 @@ public class RecMLDefinition {
 	public static final String RECML_ATTR_FINAL = "final";
 	public static final String RECML_ATTR_POST = "post";
 	
-	/* RecML attribute names for boundary and distributed parameters */
-	public static final String RECML_ATTR_BOUNDARYID = "boundary-id";
-	public static final String RECML_ATTR_BOUNDARYLOC = "location";
-	public static final String RECML_ATTR_PARAMETERID = "parameter-id";
+	public static final String RECML_ATTR_EQUATION = "equation";
+	public static final String RECML_ATTR_VARIABLE = "variable";
+	public static final String RECML_ATTR_DEST = "dest";
+	public static final String RECML_ATTR_SOURCE = "source";
+	public static final String RECML_ATTR_VARIABLENAME = "variableName";
 	
 	public enum eRecMLTag {
 		CTAG_RECML		(RECML_TAG_STR_RECML),
@@ -51,7 +58,11 @@ public class RecMLDefinition {
 		CTAG_LOOPINDEX		(RECML_TAG_STR_LOOPINDEX),
 		CTAG_LOOPSTRUCT		(RECML_TAG_STR_LOOPSTRUCT),
 		CTAG_POSITION	(RECML_TAG_STR_POSITION),
-		CTAG_VARIABLE	(RECML_TAG_STR_VARIABLE)
+		CTAG_VARIABLE	(RECML_TAG_STR_VARIABLE),
+		CTAG_GRAPH	(RECML_TAG_STR_GRAPH),
+		CTAG_NODE	(RECML_TAG_STR_NODE),
+		CTAG_EDGE	(RECML_TAG_STR_EDGE),
+		CTAG_REFVARIABLE	(RECML_TAG_STR_REFVARIABLE),
 			;
 		private final String operatorStr;
 		private eRecMLTag(String operatorstr) {
@@ -67,6 +78,8 @@ public class RecMLDefinition {
 		CVAR_TYPE_ARITHVAR	(RECML_VARTYPE_STR_ARITHVAR),
 		CVAR_TYPE_CONSTVAR	(RECML_VARTYPE_STR_CONSTVAR),
 		CVAR_TYPE_OUTPUT	(RECML_VARTYPE_STR_OUTPUT),
+		CVAR_TYPE_STEPVAR	(RECML_VARTYPE_STR_STEPVAR),
+		CVAR_TYPE_DOUBLE	(RECML_VARTYPE_STR_DOUBLE),
 			;
 		private final String operatorStr;
 		private eRecMLVarType(String operatorstr) {

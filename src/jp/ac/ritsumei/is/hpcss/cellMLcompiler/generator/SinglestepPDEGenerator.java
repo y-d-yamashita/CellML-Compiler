@@ -1,10 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.generator;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.HashSet;
 import java.util.Vector;
 import java.util.List;
 
@@ -85,6 +82,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 	public HashMap<MeshCoordinates, String> getM_strMorphologyHMap() {
 		return MorphologyHMap;
 	}
+	
 	HashMap<String, MathExpression> BoundaryExpHMap;
 	/* return boundary condition expressions */
 	public HashMap<String, MathExpression> getM_vecBoundaryExpHMap() {
@@ -786,13 +784,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		/* create the SimpleRecML file and insert variable declarations */
 		pSimpleRecMLWriter.createSimpleRecMLFile(strRecMLFileName);
 		pSimpleRecMLWriter.appendSimpleRecMLDeclarations(strRecMLFileName, m_pRelMLAnalyzer);
-		
-		/* insert the initial value conditions of diffvars and consts */
-//		System.out.println("\n --------------------------- Initial values:");
-//		HashMap<Math_ci, String> m_HMapInitValues= new HashMap<Math_ci, String>(); 		
-//		m_HMapInitValues = m_pRelMLAnalyzer.getM_HashMapInitialValues();
-//		this.insertInitDeclarations(strRecMLFileName, m_HMapInitValues);
-		
+
 		/* generate the equation instances and append to simple recml file (check the type of expansion*/
 		nExpansionType = nExpandOption;
 		if (nExpansionType == 0) { // no expansion
@@ -806,42 +798,6 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		/* change the variable names in the equations to remove the dot (from component name) */
 		pSimpleRecMLWriter.changeRecMLVarNames(strRecMLFileName);
 		pSimpleRecMLWriter.closeSimpleRecMLFile(strRecMLFileName);
-	}
-	
-	/*****
-	 * Insert the initial value declarations
-	 * @return: mathml text of differential variables and constants and their respective initial value.
-	 * *****/
-	public void insertInitDeclarations(String strFileName, HashMap<Math_ci, String> HashMapInitValueList) 
-	throws IOException, MathException {
-		FileWriter fw = new FileWriter(strFileName, true);
-		PrintWriter pw = new PrintWriter(fw);
-		
-		for (Math_ci varName: HashMapInitValueList.keySet()) {
-			if (HashMapInitValueList.get(varName) != null) {  
-				Math_cn pInitValue = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, HashMapInitValueList.get(varName));
-				Math_eq pMathEq = (Math_eq)MathFactory.createOperator(eMathOperator.MOP_EQ);
-				pMathEq.addFactor(varName);
-				pMathEq.addFactor(pInitValue);
-				
-				MathExpression pNewInitExp = new MathExpression(pMathEq);
-				
-				/* insert equation number attribute in equation */
-				HashMap<String, String> HMapEquNum = new HashMap<String, String>();
-				HMapEquNum.put(strNumAttr, Integer.toString(nEquNumber));
-				pNewInitExp.addAttribute(HMapEquNum);
-				this.incrementEquNum();
-				
-				pw.print(pNewInitExp.toMathMLString() + "\n");
-				System.out.println(pNewInitExp.toLegalString());
-			}
-		}
-		
-		pw.flush();
-		//Close the Print Writer
-		pw.close();
-		//Close the File Writer
-		fw.close();   
 	}
 	
 	/**
@@ -1007,7 +963,7 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 			
 			System.out.println("[output]------------------------------------");
 			/* print the model, boundary and distributed parameter equations */
-//			pSingleStepGenerator.printContents();
+			pSingleStepGenerator.printContents();
 				
 		} catch (MathException e1) {
 			e1.printStackTrace();
@@ -1020,19 +976,19 @@ public class SinglestepPDEGenerator extends ProgramGenerator {
 		} 
 		
 		
-		try {
-			/* TODO: Generate the SimpleRecML file */
-//			pSingleStepGenerator.generateAllInstanceEquations(strRecMLFileName);
-			pSingleStepGenerator.writeToSimpleRecMLFile(strRecMLFileName, 2);
-		
-			
-		} catch (MathException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (TranslateException e1) {
-			e1.printStackTrace();
-		}
+//		try {
+//			/* TODO: Generate the SimpleRecML file */
+////			pSingleStepGenerator.generateAllInstanceEquations(strRecMLFileName);
+//			pSingleStepGenerator.writeToSimpleRecMLFile(strRecMLFileName, 2);
+//		
+//			
+//		} catch (MathException e1) {
+//			e1.printStackTrace();
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		} catch (TranslateException e1) {
+//			e1.printStackTrace();
+//		}
 		
 		
 	}

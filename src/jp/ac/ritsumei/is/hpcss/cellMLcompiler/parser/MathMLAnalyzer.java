@@ -1,5 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLcompiler.parser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.CellMLException;
@@ -10,13 +12,19 @@ import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.exception.XMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathOperator;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_apply;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.mathML.MathMLDefinition.eMathSepType;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.relML.RelMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.RecMLDefinition;
+import jp.ac.ritsumei.is.hpcss.cellMLcompiler.recML.SimpleRecMLDefinition;
 
 /**
  * MathML解析クラス.
@@ -109,14 +117,14 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 			String strAttrLoop5 =
 				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_LOOP5);
 			String[] strAttr = new String[] {strAttrLoop1, strAttrLoop2, strAttrLoop3, strAttrLoop4, strAttrLoop5};
-			
+	
 			/* get operator attribute for boundary condition and distributed parameters */
 			String strAttrBoundaryID = 
-				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_BOUNDARYID);
+				pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_BOUNDARYID);
 			String strAttrBoundaryLoc = 
-					pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_BOUNDARYLOC);
+					pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_BOUNDARYLOC);
 			String strAttrParameterID = 
-					pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_PARAMETERID);
+					pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_PARAMETERID);
 			
 			/* put new boundary/parameter attribute to attribute list */
 			String[] strParamAttr = null;
@@ -132,17 +140,70 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 				strAttr = strParamAttr;
 			}
 			
+			/*SimpleRecML*/	
+			/*属性情報リストを取得*/	
+			HashMap<String, String> SimpleRecAttrList = new HashMap<String, String>();	
+			String strAttrNum;	
+			String strAttrType = "";	
+			String strAttrCondref = "";	
+			int intAttrLoopnum;	
+			strAttrNum =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_NUM);	
+			strAttrType =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE);	
+			String strLoopnum =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM);	
+			strAttrCondref =	
+			pXMLAttr.getValue(SimpleRecMLDefinition.SIMPLERECML_ATTR_CONDREF);	
+
+			
 			/*新しい計算式*/
 			if(m_pCurMathExpression==null || !m_pCurMathExpression.isConstructing()){
 				this.addNewExpression();
 				
 				/* store the MathExpression attribute values */
 				addNewAttribute(strAttr);
+				/*SimpleRecML*/	
+				/*属性情報リストを取得*/	
+					HashMap<String, String> hm = new HashMap<String, String>();
+					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_NUM, strAttrNum);
+				int intAttrNum;	
+				int intAttrCondref;	
+				if("final".equals(strAttrType)){	
+					intAttrNum = Integer.parseInt(strAttrNum);	
+					intAttrLoopnum = Integer.parseInt(strLoopnum);	
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "final");
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
+				}	
+				if("initend".equals(strAttrType)){	
+					intAttrNum = Integer.parseInt(strAttrNum);	
+					intAttrLoopnum = Integer.parseInt(strLoopnum);	
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "initend");
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
+				}	
+				if(strAttrCondref!=null){	
+					intAttrNum = Integer.parseInt(strAttrNum);	
+					intAttrCondref = Integer.parseInt(strAttrCondref);	
+						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_CONDREF, strAttrCondref);
+				}
 				
+				
+				m_pCurMathExpression.addOperator(
+						MathFactory.createOperator(MathMLDefinition.getMathOperatorId(strTag), strAttr));
+				
+				MathFactor it = m_pCurMathExpression.getRootFactor();
+				if(it.matches(eMathMLClassification.MML_OPERATOR)){
+					if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+						((Math_apply)it).setExpInfo(hm);
+					}
+				}
+				
+				break;
 			}
 
 			m_pCurMathExpression.addOperator(
 					MathFactory.createOperator(MathMLDefinition.getMathOperatorId(strTag), strAttr));
+			
 			break;
 
 			//-----------------------------------被演算子の解析
@@ -296,11 +357,78 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	}
 	
 	/**
+	 * 構造情報をapplyへ割り当てる
+	 */
+	public void assignStruAttrToApply(HashMap<Integer, HashMap<Integer, String>> AttrLists){
+		for (int i=0;i<m_vecMathExpression.size();i++) {
+			
+			MathFactor it = m_vecMathExpression.get(i).getRootFactor();
+			if(it.matches(eMathMLClassification.MML_OPERATOR)){
+				if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+					
+					int num = ((Math_apply)it).getExpNum();
+					if(AttrLists.containsKey(num)){
+						HashMap<Integer, String> attrlist = new HashMap<Integer, String>();
+						attrlist = (HashMap<Integer, String>) AttrLists.get(num).clone();
+						m_vecMathExpression.get(i).assignStruAttrToApply(attrlist);
+					}
+
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 *  condition部分を抜き取り、別数式として保存
+	 */
+	public void pickUpConditions(){
+		int count = 0; /*数式番号*/
+		int condcount = 0; /*condition番号*/
+		MathExpression[] condExp = new MathExpression[10];
+		for (MathExpression it: m_vecMathExpression) {
+			/*condition検索*/
+			condExp[condcount] = it.searchCondition();
+			if(condExp[condcount] !=null){
+//				/*test*/
+//				try {
+//					System.out.println("exp["+count+"]: " + condExp[condcount].toLegalString() + " Ref:" +count);
+//				} catch (MathException e) {
+//					// TODO 自動生成された catch ブロック
+//					e.printStackTrace();
+//				}
+				/*conditionReference登録*/
+				condExp[condcount].setCondref(count);
+				condcount++;
+			}
+			/*数式番号登録*/
+			it.setExID(count);
+			count++;
+		}
+		for (MathExpression it: condExp){
+			if(it != null){
+				m_vecMathExpression.add(it);
+			}
+		}
+		
+	}
+	
+	/**
 	 * Selector内のcnをintegerにする
 	 * */
 	public void changeAllSelectorInteger(){
 		for(MathExpression it : m_vecMathExpression){
 			it.changeSelectorInteger();
+		}
+	}
+	
+	/**
+	 * 数式内のvariableを取得する(selectorも考慮する)
+	 * @throws MathException 
+	 */
+	public void getAllVariable(Vector<Math_ci> pVec) throws MathException{
+		for(MathExpression it: m_vecMathExpression){
+			it.getAllVariables(pVec);
 		}
 	}
 	
@@ -348,6 +476,32 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		}
 	}
 
+	/**
+	 * 数式をmathml出力する.
+	 * @throws MathException
+	 */
+	public void printMathmlExpressions() throws MathException {
+		/*すべての数式を出力*/
+		for (MathExpression it: m_vecMathExpression) {
+			/*数式標準出力*/
+			System.out.println(it.toMathMLString());
+			System.out.println();
+		}
+	}
+	
+	/**
+	 * 数式をmathmlを取得する.
+	 * @return 
+	 * @throws MathException
+	 */
+	public ArrayList<String> getMathmlExpressions() throws MathException {
+		ArrayList<String> al = new ArrayList<String>();
+		/*すべての数式を出力*/
+		for (MathExpression it: m_vecMathExpression) {
+			al.add(it.toMathMLString());
+		}
+		return al;
+	}
 	//========================================================
 	// addNewAttribute
 	//  set the values of the MathOperator attributes with vector index
@@ -366,5 +520,37 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	//========================================================
 	public String[] getAttribute(int mathExpIndex) {
 		return m_vecAttrList.get(mathExpIndex);
+	}
+	//========================================================
+	// getAttribute
+	//  get the values of the MathOperator attributes from the attribute list
+	//
+	// return
+	//	Vector<String[]> strAttributes
+	//========================================================
+	public Vector<String[]> getAttribute() {
+		return m_vecAttrList;
+	}
+
+
+	public int getExpressionNumfromApply(int index) {
+		int num = ((Math_apply)m_vecMathExpression.get(index).getRootFactor()).getExpNum();
+		return num;
+	}
+
+	public HashMap<Integer,Integer> serchIndexVaruable(HashMap<Integer, String> indexHashMapList, Math_ci mci) throws MathException {
+		HashMap<Integer,Integer> hm = new HashMap<Integer,Integer>();
+		for(Integer index:indexHashMapList.keySet()){
+			boolean flag = false;
+			hm.put(index, 0);
+			for (int i=0;i<m_vecMathExpression.size();i++){
+				flag = m_vecMathExpression.get(i).serchIndexVaruable(indexHashMapList.get(index),mci);
+				if(flag){
+					hm.put(index, 1);
+					break;
+				}
+			}
+		}
+		return hm;
 	}
 }

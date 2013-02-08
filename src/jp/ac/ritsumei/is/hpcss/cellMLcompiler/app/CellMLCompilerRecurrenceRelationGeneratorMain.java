@@ -37,6 +37,8 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 	private static final String MAIN_VAR_RELATION_FILENAME = "relation.txt";
 	private static final String MAIN_VAR_INITIALIZE_FILENAME = "initialize.txt";
 
+	protected static String programFilename = "./out_common_gen/singlestep/fsk2008_ftcs_2D.cpp"; //"fhn_euler_unisys2.cpp";
+	
 	/** Default parser name. */
 	protected static final String DEFAULT_PARSER_NAME =
 		"org.apache.xerces.parsers.SAXParser";
@@ -64,7 +66,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 		RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
 		
 		String xml = "";
-		xml = "./model/recml/RecMLSample/LR1_FTCS_2D_struct_v2.recml";
+		xml = "./model/recml/RecMLSample/FSK2008_FTCS_struct_Spatial1x1.recml";
 
 		//---------------------------------------------------
 		//XMLパーサ初期化
@@ -203,7 +205,7 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 			System.out.println("[output]------------------------------------");
 
 			/*プログラム出力*/
-			System.out.println(pSynProgram.toLegalString());
+//			System.out.println(pSynProgram.toLegalString());
 		} catch (MathException e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
@@ -249,6 +251,49 @@ public class CellMLCompilerRecurrenceRelationGeneratorMain {
 			System.exit(1);
 		}
 
+		try {
+			/*RelML内容出力*/
+//			pRelMLAnalyzer.printContents();
+
+			/*CellML内容出力*/
+//			pCellMLAnalyzer.printContents();
+
+			/*TecML内容出力*/
+//			pTecMLAnalyzer.printContents();
+
+			/*目的プログラム出力*/
+			if (pSynProgram != null) {
+				PrintWriter out = null;
+				if (programFilename == null) {
+					out = new PrintWriter(System.out);
+				} else {
+					out = new PrintWriter(
+							new BufferedWriter(new FileWriter(programFilename)));
+				}
+
+				/*出力開始線*/
+				//out.println("[output]------------------------------------");
+
+				/*プログラム出力*/
+				if (pProgramGenerator instanceof RecurrenceRelationGeneratorStatementList) {
+					out.println(pSynProgram.toJavaString());
+				} else {
+					out.println(pSynProgram.toLegalString());
+				}
+				
+				if (programFilename != null) {
+					out.close();
+				} else {
+					out.flush();
+				}
+			}
+//			System.exit(1);		// *ML内容出力確認時に有効にする
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace(System.err);
+			System.exit(1);
+		}
+		
 //		try {
 //			PrintWriter out = null;
 //			/*変数関係の出力*/

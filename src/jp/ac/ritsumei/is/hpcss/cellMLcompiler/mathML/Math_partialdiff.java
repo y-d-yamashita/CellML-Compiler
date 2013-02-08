@@ -10,7 +10,7 @@ public class Math_partialdiff extends MathOperator {
 
 	/*-----コンストラクタ-----*/
 	public Math_partialdiff(String[] strAttr) {
-		super("diff", eMathOperator.MOP_DIFF, MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_DIFF, strAttr);
+		super("partialdiff", eMathOperator.MOP_PARTIALDIFF, MathMLDefinition.MATH_OPERATOR_MIN_FACTOR_PARTIALDIFF, strAttr);
 	}
 	
 	public Math_partialdiff() {

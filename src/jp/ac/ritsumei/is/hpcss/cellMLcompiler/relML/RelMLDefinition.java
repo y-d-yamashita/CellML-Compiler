@@ -50,6 +50,10 @@ public class RelMLDefinition {
 	/**RelML variable for delta time and delta space */
 	public static final String RELML_VARTYPE_STR_DELTAVAR = "deltavar";
 
+	/* RelML attribute names for boundary and distributed parameters */
+	public static final String RELML_ATTR_BOUNDARYID = "boundary-id";
+	public static final String RELML_ATTR_BOUNDARYLOC = "location";
+	public static final String RELML_ATTR_PARAMETERID = "parameter-id";
 
 	//========================================================
 	//ENUM

@@ -1,7 +1,7 @@
 <tecml>
-	<!-- 	FTCS_2D version 1    	 		-->
+	<!-- 	FTCS_2D version 2    	 		-->
 	<!--	Single-step Replacement Scheme 	-->
-	<!--	Last edit:   20120913   		-->
+	<!--	Last edit:   20121030   		-->
 	<variable name="v" type="diffvar"/>
 	<variable name="y" type="arithvar"/>
 	<variable name="z" type="constvar"/>
@@ -41,6 +41,15 @@
 			</apply>
 		</apply>
 		
+		<apply distributed-param="1"><eq/>
+			<ci> z </ci>
+			<apply><selector/>
+				<ci> z </ci>
+				<ci> j </ci>
+				<ci> l </ci>
+			</apply>
+		</apply>
+		
 		<apply location="left"><eq/>
 			<apply><partialdiff/>
 				<bvar><ci> x1 </ci></bvar>
@@ -73,13 +82,13 @@
 				<apply><selector/>
 					<ci> v </ci>
 					<ci> n </ci>
-					<cn> 50 </cn>
+					<cn> 4 </cn>
 					<ci> l </ci>
 				</apply>
 				<apply><selector/>
 					<ci> v </ci>
 					<ci> n </ci>
-					<cn> 49 </cn>
+					<cn> 3 </cn>
 					<ci> l </ci>
 				</apply>
 			</apply>
@@ -118,13 +127,13 @@
 					<ci> v </ci>
 					<ci> n </ci>
 					<ci> j </ci>
-					<cn> 50 </cn>
+					<cn> 4 </cn>
 				</apply>
 				<apply><selector/>
 					<ci> v </ci>
 					<ci> n </ci>
 					<ci> j </ci>
-					<cn> 49 </cn>
+					<cn> 3 </cn>
 				</apply>
 			</apply>
 		</apply>

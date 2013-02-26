@@ -1,0 +1,58 @@
+<relml>
+	<tecml filename="model/TecML2.0/BackwardEuler.tecml"/>
+	<cellml name="cellml0" filename="model/CellML/fhn.cellml"/>
+ 
+ 	<tecmlvariable name="x">
+ 		<correspondcellml file="cellml0" component="Main" name="x"/>
+ 		<correspondcellml file="cellml0" component="Main" name="y"/>
+	</tecmlvariable>
+	<tecmlvariable name="t">
+		<correspondcellml file="cellml0" component="Main" name="time" />
+	</tecmlvariable>
+	<tecmlvariable name="i">
+		<correspondcellml file="cellml0" component="Main" name="r" />
+	</tecmlvariable>
+	<tecmlvariable name="k">
+		<correspondcellml file="cellml0" component="Main" name="kx" />
+		<correspondcellml file="cellml0" component="Main" name="ky" />
+	</tecmlvariable>
+	<tecmlvariable name="xinit">
+		<correspondrelml value="-1.501250563778375" />
+		<correspondrelml value="-0.37621367749846896" />
+	</tecmlvariable>
+	<tecmlvariable name="tinit">
+		<correspondrelml value="0.0" />
+	</tecmlvariable>
+	<tecmlvariable name="z">
+		<correspondcellml file="cellml0" component="Main" name="zz" />
+		<correspondcellml file="cellml0" component="Main" name="beta" />
+		<correspondcellml file="cellml0" component="Main" name="gamma" />
+		<correspondcellml file="cellml0" component="Main" name="epsilon" />
+	</tecmlvariable>
+	<tecmlvariable name="d">
+		<correspondrelml name="d" value="0.01"/>
+	</tecmlvariable>
+	<tecmlvariable name="xend">
+		<correspondrelml name="xend"/>
+		<correspondrelml name="yend"/>
+	</tecmlvariable>
+	<tecmlvariable name="tend">
+		<correspondrelml name="tend"/>
+	</tecmlvariable>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		
+	    <apply condname="cond" loopindex="n">
+	        <eq/>
+	        <apply>
+		        <selector/>    
+	        	<ci>Main_time_t</ci>
+	        	<ci>n</ci>
+	        </apply>
+	        <cn>400</cn>
+	    </apply>
+			
+	
+	</math>
+	
+</relml>

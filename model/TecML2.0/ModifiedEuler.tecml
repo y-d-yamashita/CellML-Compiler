@@ -1,0 +1,344 @@
+<tecml>
+	<!-- ModifiedEuler tecml2.0 version.1  	-->
+	<!--	Last edit:   20121004  			-->
+	<!--	Author:     m-ara				-->
+
+	<variable name="x1" type="recurvar" />
+	<variable name="x2" type="recurvar" />
+	<variable name="t1" type="recurvar" />
+	<variable name="t2" type="recurvar" />
+
+	<variable name="i1" type="arithvar" />
+	<variable name="i2" type="arithvar" />
+	<variable name="k1" type="arithvar" />
+	<variable name="k2" type="arithvar" />
+
+	<variable name="x1init" type="constvar" />
+	<variable name="t1init" type="constvar" />
+	<variable name="z" type="constvar" />
+	<variable name="d" type="constvar" />
+	
+	<variable name="cond" type="condition" />
+
+	<variable name="x1end" type="arithvar" />
+	<variable name="t1end" type="arithvar" />
+
+	<function name="g1" />
+	
+	<function name="g2" />
+
+	<function name="f1" />
+	
+	<function name="f2" />
+	
+	<variable name="n" type="stepvar" />
+
+
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		<apply type="init" loopindex="n">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>x1</ci>
+				<apply>
+					<eq/>
+					<ci>n</ci>
+					<cn>0</cn>
+				</apply>
+			</apply>
+			<ci>x1init</ci>
+		</apply>
+
+		<apply type="init" loopindex="n">
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<apply>
+					<eq/>
+					<ci>n</ci>
+					<cn>0</cn>
+				</apply>
+			</apply>
+			<ci>t1init</ci>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>i1</ci>
+				<ci>n</ci>
+			</apply>
+			<apply>
+				<fn>
+					<ci>g1</ci>
+				</fn>
+				<apply>
+					<selector/>
+					<ci>x1</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>t1</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>i1</ci>
+					<ci>n</ci>
+				</apply>
+				<ci>z</ci>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>k1</ci>
+				<ci>n</ci>
+			</apply>
+			<apply>
+				<fn>
+					<ci>f1</ci>
+				</fn>
+				<apply>
+					<selector/>
+					<ci>x1</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>t1</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>i1</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>k1</ci>
+					<ci>n</ci>
+				</apply>
+				<ci>z</ci>
+			</apply>
+		</apply>
+		
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>x2</ci>
+				<ci>n</ci>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>x1</ci>
+					<cn>n</cn>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<selector/>
+						<ci>k1</ci>
+						<ci>n</ci>
+					</apply>
+					<ci>d</ci>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>t2</ci>
+				<ci>n</ci>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>t1</ci>
+					<ci>n</ci>
+				</apply>
+				<ci>d</ci>
+			</apply>
+		</apply>
+		
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>i2</ci>
+				<ci>n</ci>
+			</apply>
+			<apply>
+				<fn>
+					<ci>g2</ci>
+				</fn>
+				<apply>
+					<selector/>
+					<ci>x2</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>t2</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>i2</ci>
+					<ci>n</ci>
+				</apply>
+				<ci>z</ci>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>k2</ci>
+				<ci>n</ci>
+			</apply>
+			<apply>
+				<fn>
+					<ci>f2</ci>
+				</fn>
+				<apply>
+					<selector/>
+					<ci>x2</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>t2</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>i2</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<selector/>
+					<ci>k2</ci>
+					<ci>n</ci>
+				</apply>
+				<ci>z</ci>
+			</apply>
+		</apply>
+		
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>x1</ci>
+				<apply>
+					<plus/>
+					<ci>n</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>x1</ci>
+					<ci>n</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<divide/>
+						<ci>d</ci>
+						<cn>2</cn>
+					</apply>
+					<apply>
+						<plus/>
+						<apply>
+							<selector/>
+							<ci>k1</ci>
+							<ci>n</ci>
+						</apply>
+						<apply>
+							<selector/>
+							<ci>k2</ci>
+							<ci>n</ci>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply>
+			<eq/>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<apply>
+					<plus/>
+					<ci>n</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+			<apply>
+				<plus/>
+				<apply>
+					<selector/>
+					<ci>t1</ci>
+					<ci>n</ci>
+				</apply>
+				<ci>d</ci>
+			</apply>
+		</apply>
+		
+		<apply type="final" loopindex="n">
+			<condition>
+				<apply>
+					<ci>cond</ci>
+				</apply>
+			</condition>	
+			<eq/>
+			<ci>x1end</ci>
+			<apply>
+				<selector/>
+				<ci>x1</ci>
+				<apply>
+					<plus/>
+					<ci>n</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+
+		<apply type="final" loopindex="n">
+			<condition>
+				<apply>
+					<ci>cond</ci>
+				</apply>
+			</condition>	
+			<eq/>
+			<ci>t1end</ci>
+			<apply>
+				<selector/>
+				<ci>t1</ci>
+				<apply>
+					<plus/>
+					<ci>n</ci>
+					<cn>1</cn>
+				</apply>
+			</apply>
+		</apply>
+		
+	</math>
+
+</tecml>

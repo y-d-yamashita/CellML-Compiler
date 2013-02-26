@@ -13,33 +13,20 @@ import javax.swing.JTextArea;
  */
 public class ExecSubProcess {
 
-	private File relml;
-	private String genCode;
+	private File recml;
+
+	private String genCode0;
+	private String genCode1;
 	private String outputDir;
 	private String programFilename;
-	private String relationFilename;
-	private String initializeFilename;
 	private JTextArea log;
 
-	/**
-	 * サブプロセスで数式展開を実行するためのインスタンスを作成する.
-	 * @param relml RelMLファイル
-	 * @param genCode 生成器
-	 * @param outputDir 出力フォルダ
-	 * @param programFilename プログラムファイル
-	 * @param relationFilename 変数関係ファイル
-	 * @param initializeFilename 初期化式ファイル
-	 * @param log ログ出力先
-	 */
-	public ExecSubProcess(File relml, String genCode, String outputDir,
-			String programFilename, String relationFilename, String initializeFilename,
-			JTextArea log) {
-		this.relml = relml;
-		this.genCode = genCode;
+	public ExecSubProcess(File xml, String str0, String str1, String outputDir, String programFilename, JTextArea log) {
+		this.recml = xml;
+		this.genCode0 = str0;
+		this.genCode1 = str1;
 		this.outputDir = outputDir;
 		this.programFilename = programFilename;
-		this.relationFilename = relationFilename;
-		this.initializeFilename = initializeFilename;
 		this.log = log;
 	}
 
@@ -51,8 +38,7 @@ public class ExecSubProcess {
 		// 実行開始
 		ArrayList<String> commandList = createCommandList();
 		return startProcess(commandList);
-	}
-
+	} 
    /**
 	 * 数式展開の実行用コマンドリストを作成する.
 	 * @return コマンドリスト
@@ -64,15 +50,13 @@ public class ExecSubProcess {
 		commandList.add("cmd.exe");
 		commandList.add("/C");
 		commandList.add("parser.bat");
-		commandList.add("-g");
-		commandList.add(genCode);
-		commandList.add(relml.getPath());
-		if (outputDir.length() > 0) {
-			commandList.add(outputDir);
-			if (relationFilename.length() > 0) {
-				commandList.add(relationFilename);
-				if (initializeFilename.length() > 0) {
-					commandList.add(initializeFilename);
+		if (genCode0.length() > 0) {
+			commandList.add(genCode0);
+			if (genCode1.length() > 0) {
+				commandList.add(genCode1);
+				commandList.add(recml.getPath());
+				if (outputDir.length() > 0) {
+					commandList.add(outputDir);
 					if (programFilename.length() > 0) {
 						commandList.add(programFilename);
 					}
@@ -83,10 +67,9 @@ public class ExecSubProcess {
 		return commandList;
 	}
 
+
 	/**
-	 * プロセスを実行する.
-	 * 修了するまで待つ.
-	 * @param commandList コマンドリスト
+	 * @param commandList
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
@@ -100,8 +83,6 @@ public class ExecSubProcess {
     			new InputStreamReader(p.getInputStream()));
     	String line;
     	while ((line=r.readLine()) != null) {
-    		// 入力しないとプロセスがブロックされる
-//    		System.out.println(line);
     		log.append(line + "\n");
     	}
     	int ret = p.waitFor();

@@ -40,6 +40,7 @@ public class Pair<FIRST, SECOND> {
 	/**
 	 * equals method
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object obj){
 		if(obj == null){return false;}
 		if(obj instanceof Pair){

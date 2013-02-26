@@ -2,7 +2,7 @@ package simulation;
 
 public class Fhn_Euler{
 
-
+@SuppressWarnings("unused")
 public static void main ( String args[] ) {
 
 	int __DATA_NUM = 100000;

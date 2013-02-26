@@ -28,6 +28,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.NewtonSolverJava;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.SimultaneousNewtonSolverJava;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxProgram;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxControl.eControlKind;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxDataType.eDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxPreprocessor.ePreprocessorKind;
@@ -37,7 +38,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.*;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
 
 
 /**

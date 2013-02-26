@@ -10,7 +10,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition.eRecMLVarType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.GlobalLogger;
 
 /**
  * 変数テーブルクラス.
@@ -141,6 +140,7 @@ public class RecMLVariableTable extends Table<RecMLVariableReference> {
 	 * @return 初期値
 	 * @throws TableException
 	 */
+	@SuppressWarnings("unused")
 	public String getInitValue(String strName)
 	throws TableException {
 		/*変数参照の取得*/

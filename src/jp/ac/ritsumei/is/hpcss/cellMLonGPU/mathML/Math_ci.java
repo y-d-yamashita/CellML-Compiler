@@ -6,6 +6,7 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.Visitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.relML.RelMLDefinition.eRelMLTag;
 
 /**
  * MathML変数被演算子ciクラス
@@ -25,26 +26,55 @@ public class Math_ci extends MathOperand {
 		/*オペランドをベクタに追加*/
 		m_vecIndexListFactor.add(pFactor);
 	}
+	public void addIndexList(Vector<MathFactor> pIndexList){
+		this.m_vecIndexListFactor.addAll(pIndexList);
+	}
 	public Vector<MathFactor> getIndexList(){
 		/*オペランドをベクタに追加*/
 		return m_vecIndexListFactor;
 	}
+	public void clearIndexList(){
+		m_vecIndexListFactor.clear();
+	}
+
 
 	/*ポインタ演算子数(マイナスの場合は&演算子)*/
 	int m_nPointerNum;
 
+
+	/*cellmlfile名*/
+	String m_CellMLFileName = null;
+	public void setCellMLFileName(String filename){
+		m_CellMLFileName = filename;
+	}
+	public String getCellMLFileName(){
+		return m_CellMLFileName;
+	}
+
+	/*CellML対応もしくはRelML対応*/
+	//SimpleExpansion用 @m-ara
+	protected eRelMLTag m_CorrespondTag;
+	public eRelMLTag getCorrespondTag(){
+		return m_CorrespondTag;
+	}
+	public void setCorrespondTag(eRelMLTag pTag){
+		m_CorrespondTag = pTag;
+	}
+	
 	/*-----コンストラクタ-----*/
 	public Math_ci(String strVariableName,double dValue) {
 		super(strVariableName, dValue, eMathOperand.MOPD_CI);
 		m_vecArrayIndexFactor = new Vector<MathFactor>();
 		m_vecIndexListFactor = new Vector<MathFactor>();
 		m_nPointerNum = 0;
+		m_CorrespondTag = null;
 	}
 	public Math_ci(String strVariableName) {
 		super(strVariableName, eMathOperand.MOPD_CI);
 		m_vecArrayIndexFactor = new Vector<MathFactor>();
 		m_vecIndexListFactor = new Vector<MathFactor>();
 		m_nPointerNum = 0;
+		m_CorrespondTag = null;
 	}
 
 	/*-----値設定メソッド-----*/
@@ -285,5 +315,13 @@ public class Math_ci extends MathOperand {
 	public void traverse(Visitor v){
 //		m_pRootFactor.traverse(v);
 		v.visit(this);
+	}
+	/**
+	 * 初期化済か判定
+	 * @return boolean
+	 * @author m-ara
+	 */
+	public boolean isInitialized(){
+		return m_bInitFlag;
 	}
 }

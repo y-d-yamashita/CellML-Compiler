@@ -1,6 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
@@ -15,7 +16,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition.eTecMLFuncType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition.eTecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition.eTecMLVarType;
 
@@ -27,89 +27,21 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	/**数式解析中判定*/
 	private boolean m_bMathParsing;
 
-	/**式中の入力変数*/
-	Math_ci m_pInputVar;
+	/**式中のrecur変数*/
+	Vector<Math_ci> m_vecRecurVar;
 	/**
-	 * 式中の入力変数を取得する.
-	 * @return 式中の入力変数
+	 * 式中のrecur変数を取得する.
+	 * @return 式中のrecur変数
 	 */
-	public Math_ci getM_pInputVar() {
-		return m_pInputVar;
+	public Vector<Math_ci> getM_vecRecurVar() {
+		return m_vecRecurVar;
 	}
 
-	/**式中の出力変数*/
-	Math_ci m_pOutputVar;
-	/**
-	 * 式中の出力変数を取得する.
-	 * @return 式中の出力変数
-	 */
-	public Math_ci getM_pOutputVar() {
-		return m_pOutputVar;
-	}
-
-	/**式中のdelta変数*/
-	Math_ci m_pDeltaVar;
-	/**
-	 * 式中のdelta変数を取得する.
-	 * @return 式中のdelta変数
-	 */
-	public Math_ci getM_pDeltaVar() {
-		return m_pDeltaVar;
-	}
-
-	/**式中の時間変数*/
-	Math_ci m_pTimeVar;
-	/**
-	 * 式中の時間変数を取得する.
-	 * @return 式中の時間変数
-	 */
-	public Math_ci getM_pTimeVar() {
-		return m_pTimeVar;
-	}
-	
-	/**Return the dimension variables involve in the discretization*/
-	Vector<Math_ci> m_vecDimensionVar;
-	public Vector<Math_ci> getM_vecDimensionVar() {
-		return m_vecDimensionVar;
-	}
-	
-	/**Return the delta variables in the discretization*/
-	Vector<Math_ci> m_vecDeltaVar;
-	public Vector<Math_ci> getM_vecDeltaVar() {
-		return m_vecDeltaVar;
-	}
-
-	/**Return the indices involve in the discretization*/
-	Vector<Math_ci> m_vecIndexVar;
-	public Vector<Math_ci> getM_vecIndexVar() {
-		return m_vecIndexVar;
-	}
-
-	/**式中の微係数変数*/
-	Vector<Math_ci> m_vecDerivativeVar;
-	/**
-	 * 式中の微係数変数を取得する.
-	 * @return 式中の微係数変数
-	 */
-	public Vector<Math_ci> getM_vecDerivativeVar() {
-		return m_vecDerivativeVar;
-	}
-
-	/**式中の微分変数*/
-	Vector<Math_ci> m_vecDiffVar;
-	/**
-	 * 式中の微分変数を取得する.
-	 * @return 式中の微分変数
-	 */
-	public Vector<Math_ci> getM_vecDiffVar() {
-		return m_vecDiffVar;
-	}
-
-	/**式中の通常変数*/
+	/**式中の中間変数*/
 	Vector<Math_ci> m_vecArithVar;
 	/**
-	 * 式中の通常変数を取得する.
-	 * @return 式中の通常変数
+	 * 式中の中間変数を取得する.
+	 * @return 式中の中間変数
 	 */
 	public Vector<Math_ci> getM_vecArithVar() {
 		return m_vecArithVar;
@@ -124,57 +56,58 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	public Vector<Math_ci> getM_vecConstVar() {
 		return m_vecConstVar;
 	}
-
-	/**微分方程式関数変数*/
-	Math_ci m_pDiffFuncVar;
+	
+	/**式中のcondition*/
+	Vector<Math_ci> m_vecCondition;
 	/**
-	 * 微分方程式関数変数を取得する.
-	 * @return 微分方程式関数変数
+	 * 式中のconditionを取得する.
+	 * @return 式中のcondition
 	 */
-	public Math_ci getM_pDiffFuncVar() {
-		return m_pDiffFuncVar;
+	public Vector<Math_ci> getM_vecCondition() {
+		return m_vecCondition;
 	}
-
-	/**非微分方程式関数変数*/
-	Math_ci m_pNonDiffFuncVar;
+	
+	/**式中の出力変数*/
+	Vector<Math_ci> m_vecOutputVar;
 	/**
-	 * 非微分方程式関数変数を取得する.
-	 * @return 非微分方程式関数変数
+	 * 式中の出力変数を取得する.
+	 * @return 式中の出力変数
 	 */
-	public Math_ci getM_pNonDiffFuncVar() {
-		return m_pNonDiffFuncVar;
+	public Vector<Math_ci> getM_vecOutputVar() {
+		return m_vecOutputVar;
 	}
-
-	/**関数プロトタイプ引数ベクタ*/
-	Vector<eTecMLVarType> m_vecDiffFuncArgType;
-	Vector<eTecMLVarType> m_vecNonDiffFuncArgType;
-
+	
+	/**式中のステップ変数*/
+	Vector<Math_ci> m_vecStepVar;
+	/**
+	 * 式中のステップ変数を取得する.
+	 * @return 式中のステップ変数
+	 */
+	public Vector<Math_ci> getM_vecStepVar() {
+		return m_vecStepVar;
+	}
+	
 	/**関数定義解析中判定*/
 	boolean m_bFunctionAnalyzing;
-	eTecMLFuncType m_AnalyzingFuncType;
+	Math_ci m_AnalyzingFuncVariable;
 
+	/**次元対応HashMap*/
+	HashMap<Math_ci, Math_ci> m_mapDimensionalDependency;
+	
 	/**
 	 * TecML解析インスタンスを作成する.
 	 */
 	public TecMLAnalyzer() {
 		m_bMathParsing = false;
-		m_pInputVar = null;
-		m_pOutputVar = null;
-		m_pDeltaVar = null;
-		m_pTimeVar = null;
-		m_pDiffFuncVar = null;
-		m_pNonDiffFuncVar = null;
 		m_bFunctionAnalyzing = false;
+		m_mapDimensionalDependency = new HashMap<Math_ci, Math_ci>();
 
-		m_vecDimensionVar = new Vector<Math_ci>();
-		m_vecDeltaVar = new Vector<Math_ci>();
-		m_vecIndexVar = new Vector<Math_ci>();
-		m_vecDerivativeVar = new Vector<Math_ci>();
-		m_vecDiffVar = new Vector<Math_ci>();
+		m_vecRecurVar = new Vector<Math_ci>();
 		m_vecArithVar = new Vector<Math_ci>();
 		m_vecConstVar = new Vector<Math_ci>();
-		m_vecDiffFuncArgType = new Vector<eTecMLVarType>();
-		m_vecNonDiffFuncArgType = new Vector<eTecMLVarType>();
+		m_vecCondition = new Vector<Math_ci>();
+		m_vecOutputVar = new Vector<Math_ci>();
+		m_vecStepVar = new Vector<Math_ci>();
 	}
 
 	/*========================================================
@@ -193,6 +126,16 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 		/*数式の解析*/
 		if (m_bMathParsing) {
 			super.findTagStart(strTag,pXMLAttr);
+			/*数式Type取得*/
+			String strType = pXMLAttr.getValue("type");
+			if(strType != null){
+				HashMap<String, String> pHashMap = new HashMap<String, String>();
+				pHashMap.put("type", strType);
+				//loopindex取得
+				String strLoopindex = pXMLAttr.getValue("loopindex");
+				pHashMap.put("loopindex", strLoopindex);
+				m_pCurMathExpression.assignExpInfoToApply(pHashMap);
+			}
 		}
 
 		/*TecML解析*/
@@ -203,12 +146,6 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 
 			/*タグ種別ごとの処理*/
 			switch (tagId) {
-
-				//--------------------------------------入力変数宣言
-			case TTAG_INPUTVAR:
-
-				//--------------------------------------出力変数宣言
-			case TTAG_OUTPUTVAR:
 
 				//--------------------------------------変数宣言
 			case TTAG_VARIABLE:
@@ -222,54 +159,15 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 					Math_ci pVariable =
 						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName);
 
-					/*input変数の登録*/
-					if (tagId == eTecMLTag.TTAG_INPUTVAR) {
-						m_pInputVar = pVariable;
-					}
-					/*output変数の登録*/
-					else if (tagId == eTecMLTag.TTAG_OUTPUTVAR) {
-						m_pOutputVar = pVariable;
-					}
-
 					/*タイプごとに変数追加*/
 					switch (varType) {
 
-						//----------------------------------delta変数型
-					case TVAR_TYPE_DELTATIMEVAR:
-						m_pDeltaVar = pVariable;
+						//----------------------------------Recur型
+					case TVAR_TYPE_RECURVAR:
+						m_vecRecurVar.add(pVariable);
 						break;
 
-						//----------------------------------時間変数型
-					case TVAR_TYPE_TIMEVAR:
-						m_pTimeVar = pVariable;
-						break;
-						
-						//----------------------------------dimension variables (TODO: should include timevar)
-					case TVAR_TYPE_DIMENSIONVAR:
-						m_vecDimensionVar.add(pVariable);
-						break;
-						
-						//----------------------------------delta variables (for delta_x and delta_t)
-					case TVAR_TYPE_DELTAVAR:
-						m_vecDeltaVar.add(pVariable);
-						break;
-						
-						//----------------------------------indices variables for discretization
-					case TVAR_TYPE_INDEXVAR:
-						m_vecIndexVar.add(pVariable);
-						break;
-
-						//----------------------------------微分変数型
-					case TVAR_TYPE_DIFFVAR:
-						m_vecDiffVar.add(pVariable);
-						break;
-
-						//----------------------------------微係数変数型
-					case TVAR_TYPE_DERIVATIVEVAR:
-						m_vecDerivativeVar.add(pVariable);
-						break;
-
-						//----------------------------------通常変数型
+						//----------------------------------中間変数型
 					case TVAR_TYPE_ARITHVAR:
 						m_vecArithVar.add(pVariable);
 						break;
@@ -278,6 +176,17 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 					case TVAR_TYPE_CONSTVAR:
 						m_vecConstVar.add(pVariable);
 						break;
+					
+						//----------------------------------condition
+					case TVAR_TYPE_CONDITION:
+						m_vecCondition.add(pVariable);
+						break;
+						
+						//----------------------------------ステップを表す変数型
+					case TVAR_TYPE_STEPVAR:
+						m_vecStepVar.add(pVariable);
+						break;
+
 					}
 
 					break;
@@ -286,55 +195,34 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 				//--------------------------------------関数プロトタイプ宣言
 			case TTAG_FUNCTION:
 				{
-					m_bFunctionAnalyzing = true;
-
-					/*変数名とタイプ取得*/
-					String strName = pXMLAttr.getValue("name");
-					String strType = pXMLAttr.getValue("type");
-					eTecMLFuncType varType = TecMLDefinition.getTecMLFuncType(strType);
-
-					/*変数名から変数インスタンス生成*/
-					Math_ci pVariable =
-						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName);
-
-					/*関数変数の追加*/
-					switch (varType) {
-
-						//---------------------------------非微分方程式関数
-					case TFUNC_TYPE_NONDIFF:
-						m_pNonDiffFuncVar = pVariable;
-						m_AnalyzingFuncType = eTecMLFuncType.TFUNC_TYPE_NONDIFF;
-						break;
-
-						//---------------------------------微分方程式関数
-					case TFUNC_TYPE_DIFF:
-						m_pDiffFuncVar = pVariable;
-						m_AnalyzingFuncType = eTecMLFuncType.TFUNC_TYPE_DIFF;
-						break;
-					}
-
+//					m_bFunctionAnalyzing = true;
+//					
+//					/*変数名取得*/
+//					String strName = pXMLAttr.getValue("name");
+//					
+//					/*変数名から変数インスタンス生成*/
+//					m_AnalyzingFuncVariable =
+//						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName);
+					
 					break;
 				}
 
-				//--------------------------------------プロトタイプ引数宣言
-			case TTAG_ARGUMENT:
+				//---------------------------------------数式記述による次元の制約
+			case TTAG_DIMENSION:
 				{
-					/*引数タイプ取得*/
-					String strType = pXMLAttr.getValue("type");
-					eTecMLVarType varType = TecMLDefinition.getTecMLVarType(strType);
-
-					switch (m_AnalyzingFuncType) {
-
-						//---------------------------------非微分方程式関数
-					case TFUNC_TYPE_NONDIFF:
-						m_vecNonDiffFuncArgType.add(varType);
-						break;
-
-						//---------------------------------微分方程式関数
-					case TFUNC_TYPE_DIFF:
-						m_vecDiffFuncArgType.add(varType);
-						break;
-					}
+					/*左辺変数取得*/
+					String strLeft = pXMLAttr.getValue("left");
+					/*変数名から変数インスタンス生成*/
+					Math_ci pLVariable =
+						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strLeft);
+					/*右辺変数取得*/
+					String strRight = pXMLAttr.getValue("right");
+					/*変数名から変数インスタンス生成*/
+					Math_ci pRVariable =
+						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strRight);
+					
+					m_mapDimensionalDependency.put(pLVariable, pRVariable);
+					
 					break;
 				}
 
@@ -363,14 +251,18 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 			}
 
 			super.findTagEnd(strTag);
+			
+			
+			
 		}
-		else if (m_bFunctionAnalyzing) {
-
-			/*関数解析終了*/
-			if (strTag == TecMLDefinition.TECML_TAG_STR_FUNCTION) {
-				m_bFunctionAnalyzing = false;
-			}
-		}
+//		else if (m_bFunctionAnalyzing) {
+//
+//			/*関数解析終了*/
+//			if (strTag == TecMLDefinition.TECML_TAG_STR_FUNCTION) {
+//				m_bFunctionAnalyzing = false;
+//			}
+//			
+//		}
 
 		/*TecML解析*/
 		else {
@@ -403,16 +295,22 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 		/*開始線出力*/
 		System.out.println("[TecML]------------------------------------");
 
-		printContents("diffvar", m_vecDiffVar);
+		printContents("recurvar", m_vecRecurVar);
 		printContents("arithvar", m_vecArithVar);
 		printContents("constvar", m_vecConstVar);
-		printContents("dimensionvar", m_vecDimensionVar);
-		printContents("deltavar", m_vecDeltaVar);
-		printContents("indexvar", m_vecIndexVar);
+		printContents("stepvar", m_vecStepVar);
 
-		/*print the math expressions*/
+		/*数式出力*/
 		super.printExpressions();
+		
+		//キーを取得する
+        Set<Math_ci> keys = m_mapDimensionalDependency.keySet();
 
+        // mapの中身をすべて表示する
+        for(Math_ci key : keys) {
+                System.out.println(key + 
+                          " : " + m_mapDimensionalDependency.get(key).toLegalString());
+        }
 		/*改行*/
 		System.out.println();
 	}
@@ -426,7 +324,7 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	private void printContents(String strTag, Vector<Math_ci> vecM)
 	throws MathException {
 		/*変数リスト出力*/
-		System.out.print(strTag + "\t= {");
+		System.out.print(strTag + "\t= { ");
 
 		boolean first = true;
 		for (Math_ci it: vecM) {
@@ -442,31 +340,13 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	}
 
 	/**
-	 * Check if the variable involves a differential operator on a diffvar 
-	 * @param pVariable, String "diff" (e.g. diffv/difft
-	 * @return 一致判定
-	 */
-	public boolean isDiffOperator(MathOperand pVariable) 
-	throws MathException {
-		//TODO: remove MathException
-		/*すべての要素を比較*/
-		
-		String strOperandVar = pVariable.toLegalString();
-		if (strOperandVar.contains("diff")){
-			return true;
-		}
-		/*不一致*/
-		return false;
-	}
-	
-	/**
-	 * 微係数変数か判定する.
+	 * recur変数か判定する.
 	 * @param pVariable 判定する数式
 	 * @return 一致判定
 	 */
-	public boolean isDerivativeVar(MathOperand pVariable) {
+	public boolean isRecurVar(MathOperand pVariable) {
 		/*すべての要素を比較*/
-		for (Math_ci it: m_vecDerivativeVar) {
+		for (Math_ci it: m_vecRecurVar) {
 
 			/*一致判定*/
 			if (it.matches(pVariable)) {
@@ -479,26 +359,7 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	}
 
 	/**
-	 * 微分変数か判定する.
-	 * @param pVariable 判定する数式
-	 * @return 一致判定
-	 */
-	public boolean isDiffVar(MathOperand pVariable) {
-		/*すべての要素を比較*/
-		for (Math_ci it: m_vecDiffVar) {
-
-			/*一致判定*/
-			if (it.matches(pVariable)) {
-				return true;
-			}
-		}
-
-		/*不一致*/
-		return false;
-	}
-
-	/**
-	 * 通常変数か判定する.
+	 * 中間変数か判定する.
 	 * @param pVariable 判定する数式
 	 * @return 一致判定
 	 */
@@ -536,80 +397,20 @@ public class TecMLAnalyzer extends MathMLAnalyzer {
 	}
 	
 	/**
-	 * Check if the variable is a dimension variable (t, x, etc).
-	 * @param pVariable 判定する数式
-	 * @return 一致判定
+	 * ステップ変数か判定する
 	 */
-	public boolean isDimensionVar(MathOperand pVariable) {
-		/*すべての要素を比較*/
-		for (Math_ci it: m_vecDimensionVar) {
-
+	public boolean isStepVar(MathOperand pVariable){
+		/*全ての要素を比較*/
+		for( Math_ci it: m_vecStepVar){
+			
 			/*一致判定*/
-			if (it.matches(pVariable)) {
+			if(it.matches(pVariable)){
 				return true;
 			}
 		}
-
+		
 		/*不一致*/
 		return false;
-	}
-
-	/**
-	 * 関数引数タイプインデックスを取得する.
-	 * 各タイプの引数がプロトタイプ宣言で何番目に宣言されているかを調べる
-	 * @return 関数引数型ごとのidとインデックス
-	 */
-	public HashMap<eTecMLVarType, Integer> getDiffFuncArgTypeIdx() {
-		HashMap<eTecMLVarType, Integer> ati = new HashMap<eTecMLVarType, Integer>();
-		for (int id = 0; id < m_vecDiffFuncArgType.size(); id++) {
-			switch (m_vecDiffFuncArgType.get(id)) {
-				//----------------------------------時間変数型
-			case TVAR_TYPE_TIMEVAR:
-
-				//----------------------------------微分変化変数型
-			case TVAR_TYPE_DIFFVAR:
-
-				//----------------------------------通常変数型
-			case TVAR_TYPE_ARITHVAR:
-
-				//----------------------------------定数型
-			case TVAR_TYPE_CONSTVAR:
-
-				ati.put(m_vecDiffFuncArgType.get(id), id);
-				break;
-			}
-		}
-		return ati;
-	}
-
-	/**
-	 * 関数引数タイプインデックスを取得する.
-	 * 各タイプの引数がプロトタイプ宣言で何番目に宣言されているかを調べる
-	 * @return 関数引数型ごとのidとインデックス
-	 */
-	public HashMap<eTecMLVarType, Integer> getNonDiffFuncArgTypeIdx() {
-		HashMap<eTecMLVarType, Integer> ati = new HashMap<eTecMLVarType, Integer>();
-		for (int id = 0; id < m_vecNonDiffFuncArgType.size(); id++) {
-			switch (m_vecNonDiffFuncArgType.get(id)) {
-//			switch (m_vecDiffFuncArgType.get(id)) {
-
-				//----------------------------------delta変数型
-			case TVAR_TYPE_TIMEVAR:
-
-				//----------------------------------微分変数型
-			case TVAR_TYPE_DIFFVAR:
-
-				//----------------------------------通常変数型
-			case TVAR_TYPE_ARITHVAR:
-
-				//----------------------------------定数型
-			case TVAR_TYPE_CONSTVAR:
-
-				ati.put(m_vecNonDiffFuncArgType.get(id), id);
-				break;
-			}
-		}
-		return ati;
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration.eDeclarationSpecifier;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxDeclaration.eDeclarationSpecifier;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.StringUtil;
 
 /**

@@ -2,9 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;

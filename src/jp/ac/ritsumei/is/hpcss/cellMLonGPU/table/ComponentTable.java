@@ -1,5 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.table;
 
+import java.util.HashMap;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 
 /**
@@ -54,6 +56,13 @@ public class ComponentTable extends Table<VariableTable> {
 	 */
 	public VariableTable searchTable(String strTableName) throws TableException {
 		return find(strTableName);
+	}
+	
+	/**
+	 * map要素を取得
+	 */
+	public HashMap<String, VariableTable> getMapElements(){
+		return m_mapElements;
 	}
 
 }

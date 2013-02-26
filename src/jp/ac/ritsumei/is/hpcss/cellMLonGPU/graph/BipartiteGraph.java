@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 
 
 /**

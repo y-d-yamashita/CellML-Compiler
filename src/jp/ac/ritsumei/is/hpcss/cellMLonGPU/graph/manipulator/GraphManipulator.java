@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.BipartiteGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.FieldGraph;
@@ -23,10 +22,9 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.manipulator.algorithm.MaximumMa
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.manipulator.algorithm.Tarjan;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.cellML.CellMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLEquationAndVariableContainer;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.Pair;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.List2D;
@@ -79,21 +77,6 @@ public class GraphManipulator {
 			return graphCreator.cretateDependencyGraph(pairList, graph);
 	}
 	
-	/**
-	 * Crate dependency graph
-	 * @param dependency graph of variables and equations
-	 * @return Field Dependency graph
-	 * @throws GraphException
-	 * @throws MathException 
-	 * @throws TableException 
-	 */
-//	public FieldGraph cretateFieldDependencyGraph(
-//			DirectedGraph<RecMLVertex, RecMLEdge> graph,
-//			RecMLAnalyzer recmlAnalyzer
-//			) throws GraphException, TableException, MathException{
-//			return graphCreator.cretateFieldDependencyGraph(graph,recmlAnalyzer.getRecMLVariableTable(),recmlAnalyzer);
-//	}
-	
 	
 	/**
 	 * Create bipartite graph
@@ -110,6 +93,11 @@ public class GraphManipulator {
 	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph_Simple(
 			SimpleRecMLEquationAndVariableContainer contener) throws GraphException{
 		return graphCreator.createBipartiteGraph_Simple(contener);
+	}
+	
+	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph_Cell(
+			CellMLEquationAndVariableContainer contener) throws GraphException{
+		return graphCreator.createBipartiteGraph_Cell(contener);
 	}
 	
 	/**

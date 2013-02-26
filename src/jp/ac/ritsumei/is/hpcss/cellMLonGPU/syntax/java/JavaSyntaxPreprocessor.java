@@ -17,9 +17,9 @@ public class JavaSyntaxPreprocessor extends JavaSyntax {
 	 * プリプロセッサ分類列挙
 	 */
 	public enum ePreprocessorKind {
-		/**include<> 絶対パスで探すほう*/
+		/**include<> 絶対パス*/
 		PP_INCLUDE_ABS,
-		/**include"" 相対パスで探すほう*/
+		/**include"" 相対パス*/
 		PP_INCLUDE_REL,
 		PP_DEFINE,
 		JAVA_IMPORT,

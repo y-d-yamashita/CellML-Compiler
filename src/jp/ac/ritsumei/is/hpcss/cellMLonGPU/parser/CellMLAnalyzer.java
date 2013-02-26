@@ -1,5 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.cellML.CellMLDefinition;
@@ -13,8 +14,9 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.XMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CellML_SetLeftSideRightSideVariableVisitor;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.cellML.CellMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.ComponentTable;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.VariableTable;
 
@@ -29,31 +31,21 @@ public class CellMLAnalyzer extends MathMLAnalyzer {
 	/**数式解析中判定*/
 	private boolean m_bMathParsing;
 
-	/**分類後時間変数ベクタ*/
-	Vector<Math_ci> m_vecTimeVar;
+	/**分類後Recur変数ベクタ*/
+	Vector<Math_ci> m_vecRecurVar;
 	/**
-	 * 分類後時間変数ベクタを取得する.
-	 * @return 分類後時間変数ベクタ
+	 * 分類後Recur変数ベクタを取得する.
+	 * @return 分類後Recur変数ベクタ
 	 */
-	public Vector<Math_ci> getM_vecTimeVar() {
-		return m_vecTimeVar;
+	public Vector<Math_ci> getM_vecRecurVar() {
+		return m_vecRecurVar;
 	}
 
-	/**分類後微分変化変数ベクタ*/
-	Vector<Math_ci> m_vecDiffVar;
-	/**
-	 * 分類後微分変化変数ベクタを取得する.
-	 * @return 分類後微分変化変数ベクタ
-	 */
-	public Vector<Math_ci> getM_vecDiffVar() {
-		return m_vecDiffVar;
-	}
-
-	/**分類後通常変数ベクタ*/
+	/**分類後中間変数ベクタ*/
 	Vector<Math_ci> m_vecArithVar;
 	/**
-	 * 分類後通常変数ベクタを取得する.
-	 * @return 分類後通常変数ベクタ
+	 * 分類後中間変数ベクタを取得する.
+	 * @return 分類後中間変数ベクタ
 	 */
 	public Vector<Math_ci> getM_vecArithVar() {
 		return m_vecArithVar;
@@ -102,8 +94,7 @@ public class CellMLAnalyzer extends MathMLAnalyzer {
 		m_pComponentTable = null;
 		m_pCurVariableTable = null;
 
-		m_vecTimeVar = new Vector<Math_ci>();
-		m_vecDiffVar = new Vector<Math_ci>();
+		m_vecRecurVar = new Vector<Math_ci>();
 		m_vecArithVar = new Vector<Math_ci>();
 		m_vecConstVar = new Vector<Math_ci>();
 		m_vecDiffExpression = new Vector<MathExpression>();
@@ -293,77 +284,6 @@ public class CellMLAnalyzer extends MathMLAnalyzer {
 	}
 
 	/**
-	 * 変数テーブルをRelMLに適用する.
-	 * @param pRelMLAnalyzer RelML解析器インスタンス
-	 * @throws CellMLException
-	 * @throws RelMLException
-	 * @throws MathException
-	 */
-	public void applyRelML(RelMLAnalyzer pRelMLAnalyzer)
-	throws CellMLException, RelMLException, MathException {
-		/*変数テーブルをRelMLに適用*/
-		pRelMLAnalyzer.applyComponentTable(m_pComponentTable);
-
-		/*変数ベクタをコピー*/
-		m_vecTimeVar = pRelMLAnalyzer.m_vecTimeVar;
-		m_vecConstVar = pRelMLAnalyzer.m_vecConstVar;
-
-		//-------------------------------------------------
-		//数式の解析
-		//-------------------------------------------------
-		/*数式数を取得*/
-		int nExpressionNum = getExpressionCount();
-
-		for (int i = 0; i < nExpressionNum; i++) {
-			/*数式取得*/
-			MathExpression pMathExp = getExpression(i);
-
-			/*左辺式取得*/
-			MathExpression pLeftExp = pMathExp.getLeftExpression();
-
-			if (pLeftExp == null) {
-				throw new CellMLException("CellMLAnalyzer","applyRelML",
-							  "failed to parse expression");
-			}
-
-			/*左辺変数取得*/
-			Math_ci pLeftVar = (Math_ci)pLeftExp.getFirstVariable();
-
-			/*左辺変数の型より式が微分式かを判別する*/
-			if (pRelMLAnalyzer.isDiffVar(pLeftVar)) {
-
-				/*微分変数ベクタに追加*/
-				m_vecDiffVar.add(pLeftVar);
-
-				/*微分式として登録*/
-				m_vecDiffExpression.add(pMathExp);
-			}
-			else{
-
-				/*通常変数ベクタに追加*/
-				m_vecArithVar.add(pLeftVar);
-
-				/*非微分式として登録*/
-				m_vecNonDiffExpression.add(pMathExp);
-			}
-		}
-
-		/*式の並べ替えを行う*/
-		this.sortExpressions();
-//		System.out.println("sort m_vecNonDiffExpression");
-//		for (int i = 0; i < m_vecNonDiffExpression.size(); i++) {
-//			MathExpression it = m_vecNonDiffExpression.get(i);
-//			System.out.println(i + "\t" + it.toLegalString());
-//		}
-//		System.out.println("sort m_vecArithVar");
-//		for (int i = 0; i < m_vecArithVar.size(); i++) {
-//			Math_ci it = m_vecArithVar.get(i);
-//			System.out.println(i + "\t" + it.toLegalString());
-//		}
-//		printContents();	// debug
-	}
-
-	/**
 	 * 解析内容を標準出力する.
 	 * @throws MathException
 	 */
@@ -373,117 +293,113 @@ public class CellMLAnalyzer extends MathMLAnalyzer {
 
 		/*数式出力*/
 		super.printExpressions();
+		HashMap<String, VariableTable> m_mapComponent = m_pComponentTable.getMapElements();
+		for(String key : m_mapComponent.keySet()){
+			if(key.equals("Main")){
+				m_pCurVariableTable = m_mapComponent.get(key);
+			}
+		}
+		System.out.println(m_pCurVariableTable.toString());
+		System.out.println(new CellMLEquationAndVariableContainer(this).toString());
 
 		/*改行*/
 		System.out.println();
 	}
 
-
 	/**
-	 * 計算式を並べ替える.
-	 * 次の計算式を並び替える
-	 * m_vecNonDiffExpression 並び替える数式ベクタ
-	 * m_vecArithVar 未初期化変数リスト
-	 * @throws MathException
+	 * 変数が数式のどの位置にあるか調べる
+	 * @author m-ara
 	 */
-	private void sortExpressions() throws MathException {
-		Vector<MathExpression> pvecExpressions = m_vecNonDiffExpression;
-		/*並び替え後のベクタ*/
-		Vector<MathExpression> vecReorderedExpression = new Vector<MathExpression>();
-		Vector<Math_ci> vecReorderedVariables = new Vector<Math_ci>();
-
-		/*未初期化変数ベクタ*/
-		Vector<Math_ci> vecUnInitializedVar = m_vecArithVar;
-
-		/*式を順番に調べていく*/
-		/*新しいベクタにすべての式が入るまで繰り返し*/
-		while (pvecExpressions.size() > 0) {
-//			System.out.println("pvecExpressions->size(): " + pvecExpressions.size());
-
-			Vector<MathExpression> newPvecExpressions = new Vector<MathExpression>();
-			/**
-			 * VC++版と同じ並び順の出力を生成するためのフラグ.
-			 * このフラグが行う処理はなくてもいい.
-			 */
-			boolean removeFlagForSameAction_CPlusPlusVersion = false;
-			for (MathExpression it: pvecExpressions) {
-				if (removeFlagForSameAction_CPlusPlusVersion) {
-					removeFlagForSameAction_CPlusPlusVersion = false;
-					newPvecExpressions.add(it);
-					continue;
-				}
-
-				/*式の取得*/
-				MathExpression pExp = it;
-				MathExpression pLeftExp = pExp.getLeftExpression();
-				Math_ci pLeftVar = pLeftExp.getFirstVariable();
-
-				/*未初期化変数のチェック*/
-				boolean bUnInitialized = false;
-				int nVariableNum = pExp.getVariableCount();
-//				System.out.println(nVariableNum + "\t" + it.toLegalString());
-
-				for (int i = 0; i < nVariableNum; i++) {
-
-					/*変数取得*/
-					MathOperand pVariable = pExp.getVariable(i);
-
-					/*左辺値と同じものは初期化済み扱い*/
-					if (pVariable.toLegalString().equals(pLeftVar.toLegalString())) {
-						continue;
-					}
-
-					/*未初期化変数ベクタとの比較*/
-					for (Math_ci it2: vecUnInitializedVar) {
-
-						/*変数名が一致すれば未初期化*/
-						if (it2.toLegalString().equals(pVariable.toLegalString())) {
-							bUnInitialized = true;
-							break;
-						}
-					}
-
-					if (bUnInitialized) {
-						break;
-					}
-				}
-
-				/*未初期化の式は後回しにする*/
-				if (bUnInitialized) {
-					newPvecExpressions.add(it);
-//					System.out.println("UnInitialized");
-					continue;
-				}
-				/*初期化済みの右辺式を持つ式*/
-				else {
-					/*式を新しいベクタに加える*/
-					vecReorderedExpression.add(pExp);
-					vecReorderedVariables.add(pLeftVar);
-//					System.out.println("Initialized");
-					removeFlagForSameAction_CPlusPlusVersion = true;
-
-					/*未初期化変数リストから左辺変数を削除*/
-					for (Math_ci it2: vecUnInitializedVar) {
-
-						/*一致する変数を削除*/
-						if (it2.toLegalString().equals(pLeftVar.toLegalString())) {
-							vecUnInitializedVar.remove(it2);
-//							System.out.println("removed " + it2.toLegalString());
-							break;
-						}
-					}
-
-					/*元の式をベクタから削除*/
-					//pvecExpressions.remove(it);
-
-				}
-			}
-			pvecExpressions = newPvecExpressions;
+	public void setLeftsideRightsideVariable(){
+		HashMap<String, VariableTable> m_mapComponent = m_pComponentTable.getMapElements();
+		for(String key : m_mapComponent.keySet()){
+			m_pCurVariableTable = m_mapComponent.get(key);
+			CellML_SetLeftSideRightSideVariableVisitor visitor = new CellML_SetLeftSideRightSideVariableVisitor(m_pCurVariableTable);
+			 for(MathExpression expr :m_vecMathExpression){
+				 visitor.reset((int)expr.getExID());
+				 expr.getRootFactor().traverse(visitor);
+				 //visitor.reset();
+			 }
 		}
-
-		/*新しいベクタを適用する*/
-		m_vecNonDiffExpression = vecReorderedExpression;
-		m_vecArithVar = vecReorderedVariables;
+	}
+	
+	/**
+	 *変数Typeを取得する
+	 * @param pTecMLAnalyzer
+	 * @param pRelMLAnalyzer
+	 * @throws MathException
+	 * @throws TableException
+	 * @throws RelMLException
+	 * @author m-ara
+	 */
+	public void setRefVariableType(TecMLAnalyzer pTecMLAnalyzer, RelMLAnalyzer pRelMLAnalyzer) throws MathException, TableException, RelMLException{
+		HashMap<String, VariableTable> m_mapComponent = m_pComponentTable.getMapElements();
+		for(String key : m_mapComponent.keySet()){
+			m_pCurVariableTable = m_mapComponent.get(key);
+			m_pCurVariableTable.setRefVariableType(pTecMLAnalyzer, pRelMLAnalyzer);
+		}
 	}
 
+	//CellMLEquationAndVariableContainer用にVariableTableを渡す
+	//今は１コンポーネントしか対応していないので、mainのVariableTableを返す
+	//@author m-ara
+	public VariableTable getVariableTable() throws TableException{
+		m_pCurVariableTable = null;
+		HashMap<String, VariableTable> m_mapComponent = m_pComponentTable.getMapElements();
+		for(String key : m_mapComponent.keySet()){
+			if(key.equals("Main")){
+				m_pCurVariableTable = m_mapComponent.get(key);
+			}
+		}
+		return m_pCurVariableTable;
+	}
+	
+	/**
+	 * 指定された変数の初期値を取得する
+	 * @throws MathException 
+	 * @throws TableException 
+	 * @author m-ara
+	 */
+	public String getInitialValue(Math_ci pVariable) throws MathException, TableException{
+		m_pCurVariableTable = null;
+		
+		/*名前の取得と分解*/
+		String strVarName = pVariable.toLegalString();
+		String strComponentName = null;
+		
+		//コンポーネント名切り分け
+		int nIndexPos = strVarName.indexOf(".");
+		if(nIndexPos > 0){
+			strComponentName = strVarName.substring(0, nIndexPos);
+			strVarName = strVarName.substring(nIndexPos+1);
+		}
+		
+		HashMap<String, VariableTable> m_mapComponent = m_pComponentTable.getMapElements();
+		for(String key : m_mapComponent.keySet()){
+			if(key.equals(strComponentName)){
+				m_pCurVariableTable = m_mapComponent.get(key);
+			}
+		}
+		
+		//error handling
+		if(m_pCurVariableTable == null){
+			throw new MathException("CellMLAnalyzer", "getInitialValue",
+					"can't find VariableTable name \"" + strComponentName + "\"");
+		}
+		
+		String initialValue =m_pCurVariableTable.getInitValue(strVarName);
+		
+		return initialValue;
+	}
+	
+//	/**
+//	 * dx/dt等の構造をひとつの変数に変える
+//	 * @author m-ara
+//	 */
+//	public void changeDifferentialParameterToOneVariable(){
+//		for(MathExpression pExp : m_vecMathExpression){
+//			MathOperator pRootFactor = (MathOperator) pExp.getRootFactor();
+//			pRootFactor.changeDifferentialParameterToOneVariable(pRootFactor);
+//		}
+//	}
 }

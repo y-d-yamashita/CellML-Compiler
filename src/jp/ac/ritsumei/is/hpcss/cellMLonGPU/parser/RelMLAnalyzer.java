@@ -1,9 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
@@ -14,16 +13,15 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.XMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.relML.RelMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.relML.RelMLDefinition.eRelMLTag;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.relML.RelMLDefinition.eRelMLVarType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.ComponentTable;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.VariableTable;
+
 
 /**
  * RelML解析クラス.
@@ -33,114 +31,40 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	/**数式解析中判定*/
 	private boolean m_bMathParsing;
 
-	/*種類ごとの対応変数名*/
-	Vector<Math_ci> m_vecTimeVar;
-	Vector<Math_ci> m_vecDiffVar;
-	Vector<Math_ci> m_vecArithVar;
-	Vector<Math_ci> m_vecConstVar;
+	/*変数名*/
+	Vector<Math_ci> m_vecRelMLVariable;
 
 	/**読み込みファイル名*/
 	String m_strFileNameCellML;
+	/*簡易名*/
+	String m_strSimpleNameCellML;
+	
 	/**読み込みファイル名*/
 	String m_strFileNameTecML;
 
-	/*微分方程式の左辺式記述の解析用変数*/
-	boolean m_bDiffEquListParsing;
 	String m_strCurComponent;
-	String m_strMeshType;   		// mesh type (currently regular rectilinear grid only)
-	String m_strMorphologyName; 	// name for morphology grid
+	
+	/**tecml変数対応リスト*/
+	HashMap<Math_ci, Vector<MathOperand>> m_mapTecMLVariableTransformation;
+	/**現在tecml変数ベクター*/
+	Vector<MathOperand> m_veccurTecMLVariable;
+	
+	/**condition数式情報*/
+	Vector<String[]> m_vecConditionInformation;
 
-	/* return differential variables vector */
-	public Vector<Math_ci> getM_vecDiffVar() {
-		return m_vecDiffVar;
-	}
-	
-	/* return arithmetic variables vector */
-	public Vector<Math_ci> getM_vecArithVar() {
-		return m_vecArithVar;
-	}
-	
-	/* return constants vector */
-	public Vector<Math_ci> getM_vecConstVar() {
-		return m_vecConstVar;
-	}
-	
-	/* return variable dimension vector */
-	private Vector<Math_ci> m_vecDimensionVar;
-	public Vector<Math_ci> getM_vecDimensionVar() {
-		return m_vecDimensionVar;
-	}
-	
-	/* return index names vector */
-	private Vector<Math_ci> m_vecIndexVar;
-	public Vector<Math_ci> getM_vecIndexVar() {
-		return m_vecIndexVar;
-	}
-	
-	/* return delta time and space vector */
-	private Vector<Math_ci> m_vecDeltaVar;
-	public Vector<Math_ci> getM_vecDeltaVar() {
-		return m_vecDeltaVar;
-	}
-	
-	/* return mesh dimensions vector */
-	private Vector<Math_cn> m_vecDimensions;
-	public Vector<Math_cn> getM_vecDimensions() {
-		return m_vecDimensions;
-	}
-	
-	/* mesh grid spacing (for regular grids) vector */
-	private Vector<Math_cn> m_vecSpacing;
-	public Vector<Math_cn> getM_vecSpacing() {
-		return m_vecSpacing;
-	}
-	
-	/* boundary condition equation vector */
-	Vector<MathExpression> m_vecExpression;
-	public Vector<MathExpression> getM_vecExpression() {
-		return m_vecExpression;
-	}
-	/* return the initial value of the relml variables */
-	private HashMap<Math_ci, String> m_HashMapInitialValues;
-	public HashMap<Math_ci, String> getM_HashMapInitialValues() {
-		return m_HashMapInitialValues;
-	}	
-	/* return bounded variables map with filename */
-	private HashMap<Math_ci, String> m_HashMapBoundedVar;
-	public HashMap<Math_ci, String> getM_HashMapBoundedVar() {
-		return m_HashMapBoundedVar;
-	}
-	
-	/* return distributed parameters map with filename */
-	private HashMap<Math_ci, String> m_HashMapDistributedParam;
-	public HashMap<Math_ci, String> getM_HashMapDistributedParam() {
-		return m_HashMapDistributedParam;
-	}	
-	
-	/* return the file name of the morphology file*/
-	public String getMorphologyFileName() {
-		return m_strMorphologyName;
-	}
+	//applyCellMLVariableType
+	Vector<Math_ci> m_vecRecurVar;
+	Vector<Math_ci> m_vecArithVar;
+	Vector<Math_ci> m_vecConstVar;
 	
 	/**
 	 * RelML解析インスタンスを作成する.
 	 */
 	public RelMLAnalyzer() {
 		m_bMathParsing = false;
-		m_bDiffEquListParsing = false;
-		m_vecTimeVar = new Vector<Math_ci>();
-		m_vecDimensionVar = new Vector<Math_ci>();
-		m_vecIndexVar = new Vector<Math_ci>();
-		m_vecDeltaVar = new Vector<Math_ci>();
-		m_vecDimensions = new Vector<Math_cn>();
-		m_vecSpacing = new Vector<Math_cn>();
-		m_vecDiffVar = new Vector<Math_ci>();
-		m_vecArithVar = new Vector<Math_ci>();
-		m_vecConstVar = new Vector<Math_ci>();
-		m_vecExpression = new Vector<MathExpression>();
-		m_HashMapInitialValues = new HashMap<Math_ci, String>();
-		m_HashMapBoundedVar = new HashMap<Math_ci, String>();
-		m_HashMapDistributedParam = new HashMap<Math_ci, String>();
+		m_vecRelMLVariable = new Vector<Math_ci>();
+		m_mapTecMLVariableTransformation = new HashMap<Math_ci, Vector<MathOperand>>();
+		m_vecConditionInformation = new Vector<String[]>();
 	}
 
 	/* (非 Javadoc)
@@ -155,6 +79,15 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 
 			/*MathML解析器に投げる*/
 			super.findTagStart(strTag,pXMLAttr);
+			
+			/*get RelML condition information*/
+			String strCondName = pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_CONDNAME);
+			String strLoopIndex = pXMLAttr.getValue(RelMLDefinition.RELML_ATTR_LOOPINDEX);
+			if(strCondName != null && strLoopIndex != null){
+				int pExID = (int)super.m_pCurMathExpression.getExID();
+				String[] pCondInfo = {strCondName, strLoopIndex, String.valueOf(pExID)};
+				m_vecConditionInformation.add(pCondInfo);
+			}
 		}
 
 		//-----------------------------------------------------
@@ -168,88 +101,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			/*タグ種別ごとの処理*/
 			switch(tagId){
 
-				//--------------------------------------Morphology information from RelML
-			case RTAG_MORPHOLOGY:
-			{
-				/* Get the attributes values for morphology tag*/
-				String strName = pXMLAttr.getValue("name");
-				m_strMorphologyName = pXMLAttr.getValue("filename");
-				
-				break;
-			}
-			
-				//--------------------------------------Morphology information from RelML
-			case RTAG_GEOMETRY:
-			{
-				/* Get the attributes values for geometry tags*/
-				String m_strGeometryID = pXMLAttr.getValue("geometry-id");
-				String m_strType = pXMLAttr.getValue("type");
-				int m_intGeometryDimension = Integer.parseInt(pXMLAttr.getValue("dimension"));
-				Math_cn pGeometryID = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, m_strGeometryID);
-				
-				break;
-			}
-				
-				//--------------------------------------Mesh information from RelML
-			case RTAG_MESH:
-			{
-				/* Get the attributes values for mesh tag*/
-				m_strMeshType = pXMLAttr.getValue("type");
-				
-				String[] arrDimensions = new String[3];
-				arrDimensions[0] = pXMLAttr.getValue("sizex");
-				arrDimensions[1] = pXMLAttr.getValue("sizey");
-				arrDimensions[2] = pXMLAttr.getValue("sizez");
-				
-				String[] arrSpacing = new String[3];
-				arrSpacing[0] = pXMLAttr.getValue("spacingx");
-				arrSpacing[1] = pXMLAttr.getValue("spacingy");
-				arrSpacing[2] = pXMLAttr.getValue("spacingz");
-
-				for (int i=0; i<arrDimensions.length; i++){
-					Math_cn pDimension = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrDimensions[i]);
-					pDimension.changeType();
-					m_vecDimensions.add(pDimension);
-					
-					Math_cn pSpacing = (Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN, arrSpacing[i]);
-					pSpacing.changeType();
-					m_vecSpacing.add(pSpacing);
-				}
-				
-				break;
-			}
-			
-				//--------------------------------------Boundary condition information from RelML
-			case RTAG_BOUNDARY:
-			{
-				/* Get the attributes values for boundary condition tag*/
-				String strName = pXMLAttr.getValue("variablename");
-				String strFileName = pXMLAttr.getValue("filename");
-				Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
-				m_HashMapBoundedVar.put(pVariable, strFileName);
-				
-				break;
-			}
-			
-			//--------------------------------------Distributed parameters information from RelML
-			case RTAG_PARAMETER:
-			{
-				/* Get the attributes values for boundary condition tag*/
-				String strName = pXMLAttr.getValue("variablename");
-				String strFileName = pXMLAttr.getValue("filename");
-				String strParameterID = pXMLAttr.getValue("parameter-id");
-				Math_ci pVariable = (Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
-				/* if filename exists, store filename, if not store the parameter-id */
-				if (strFileName != null) {
-					m_HashMapDistributedParam.put(pVariable, strFileName);
-				} else {
-					m_HashMapDistributedParam.put(pVariable, strParameterID);
-				}
-				
-				
-				break;
-			}
-			
 				//-----------------------------------TecMLファイルの指定
 			case RTAG_TECML:
 				{
@@ -265,6 +116,11 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 				//-----------------------------------RelMLファイルの指定
 			case RTAG_CELLML:
 				{
+					
+					/*簡易名取得*/
+					String strName = pXMLAttr.getValue("name");
+					m_strSimpleNameCellML = strName;
+					
 					/*ファイル名取得*/
 					String strFileName = pXMLAttr.getValue("filename");
 
@@ -279,99 +135,106 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 				{
 					/*変数名とタイプ取得*/
 					String strName = pXMLAttr.getValue("name");
-					String strComponent = pXMLAttr.getValue("component");
-					String strType = pXMLAttr.getValue("type");
-					String strInit = pXMLAttr.getValue("init");
-					eRelMLVarType varType;
 
-					try{
-						varType = RelMLDefinition.getRelMLVarType(strType);
-					}
-					catch(RelMLException e){
-						System.err.println(e.getMessage());
-						throw new RelMLException("RelMLAnalyzer","findTagStart",
-								"Unknown type used in variable daclaration");
+					/*変数名から変数インスタンス生成*/
+					//nullの場合Math_ciを作らずにnullとして登録
+					Math_ci pVariable;
+					if(strName.endsWith("null")){
+						pVariable = null;						
+					}else{
+						pVariable =
+								(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
 					}
 
-					/*コンポーネント名をつなげる*/
-					//strName = strComponent + "." + strName;
-
+					/*ベクタに追加*/
+					m_vecRelMLVariable.add(pVariable);
+					
+					break;
+				}
+				
+				//----------------------------------tecml変数対応記述におけるtecml変数
+			case RTAG_TVAR:
+				{
+					/*変数名取得*/
+					String strName = pXMLAttr.getValue("name");
+					
 					/*変数名から変数インスタンス生成*/
 					Math_ci pVariable =
 						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
 					
-					/* add the initial value of the variable to hashmap */
-					m_HashMapInitialValues.put(pVariable, strInit);
+					/*TecML変数対応リスト作成*/
+					m_veccurTecMLVariable = new Vector<MathOperand>();
+					m_mapTecMLVariableTransformation.put(pVariable, m_veccurTecMLVariable);
+						
+					break;
 					
-					/*タイプごとにベクタに追加*/
-					switch(varType){
-
-						//-------------------------------時間変数型
-					case RVAR_TYPE_TIMEVAR:
-						m_vecTimeVar.add(pVariable);
-						break;
-						
-						//----------------------------------space and time variable name
-					case RVAR_TYPE_DIMENSIONVAR:
-						m_vecDimensionVar.add(pVariable);
-						break;
-						
-						//----------------------------------matrix/vector index 変数型
-					case RVAR_TYPE_INDEXVAR:
-						m_vecIndexVar.add(pVariable);
-						break;
-						
-						//----------------------------------delta valriable name 変数型
-					case RVAR_TYPE_DELTAVAR:
-						m_vecDeltaVar.add(pVariable);
-						break;
-
-						//-------------------------------微分変数型
-					case RVAR_TYPE_DIFFVAR:
-						m_vecDiffVar.add(pVariable);
-						break;
-
-						//-------------------------------通常変数型
-					case RVAR_TYPE_ARITHVAR:
-						m_vecArithVar.add(pVariable);
-						break;
-
-						//-------------------------------定数型
-					case RVAR_TYPE_CONSTVAR:
-						m_vecConstVar.add(pVariable);
-						break;
-
-						//---------------------------------その他の型
-					default:
-						throw new RelMLException("RelMLAnalyzer","findTagStart",
-								"Unknown type used in variable daclaration");
-					}
-
-					break;
 				}
-
-				//-----------------------------------微分方程式左辺式記述の解析開始
-			case RTAG_DIFFEQU:
+				
+				//-----------------------------------tecml変数対応記述におけるcellml変数
+			case RTAG_CORRCELLML:
 				{
-					/*解析開始フラグON*/
-					m_bDiffEquListParsing = true;
-					break;
-				}
-
-				//-----------------------------------コンポーネントの解析開始
-			case RTAG_COMPONENT:
-				{
-					/*diffequの中でない場合は例外*/
-					if(!m_bDiffEquListParsing){
-						throw new RelMLException("RelMLAnalyzer","findTagStart",
-								"component found without diffequ tag");
+					/*ファイル名、コンポーネント名、変数名取得*/
+					String strFileName = pXMLAttr.getValue("file");
+					String strComponent = pXMLAttr.getValue("component");
+					String strName = pXMLAttr.getValue("name");
+					
+					/*ファイル名、コンポーネント名をつなげる*/
+					strName =  strComponent + "." + strName;
+					
+					/*変数名から変数インスタンス生成*/
+					Math_ci pVariable =
+						(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
+					
+					//CellMLファイル名登録
+					if(m_strSimpleNameCellML.contentEquals(strFileName)){
+						pVariable.setCellMLFileName(m_strFileNameCellML);
 					}
-
-					/*コンポーネント名取得*/
-					m_strCurComponent = pXMLAttr.getValue("name");
+					
+					//CellML変数であることを登録
+					pVariable.setCorrespondTag(eRelMLTag.RTAG_CORRCELLML);
+					
+					
+					/*TecML変数対応リストに登録*/
+					m_veccurTecMLVariable.add(pVariable);
+					
 					break;
 				}
-
+				
+				//-----------------------------------tecml変数対応記述におけるcellml変数
+			case RTAG_CORRRELML:
+				{
+					/*変数名または値を取得*/
+					String strName = pXMLAttr.getValue("name");
+					String strValue = pXMLAttr.getValue("value");
+					
+					MathOperand pVariable = null;
+					
+					/*TecML変数対応リストに登録*/
+					if(strName != null){
+						/*変数名から変数インスタンス生成*/
+						if(strValue != null){
+							pVariable =
+									(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, strName, Double.valueOf(strValue));
+						}else{
+							pVariable =
+									(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,strName);
+						}
+						//CellML変数であることを登録
+						((Math_ci)pVariable).setCorrespondTag(eRelMLTag.RTAG_CORRRELML);
+					}else if(strValue != null ){
+						/*値から定数インスタンス生成*/
+						pVariable =
+							(Math_cn)MathFactory.createOperand(eMathOperand.MOPD_CN,strValue);
+						
+					}
+					
+					/*TecML変数対応リストに登録*/
+					m_veccurTecMLVariable.add(pVariable);
+					
+					break;
+				}
+				
+				
 				//-----------------------------------数式部分の解析開始
 			case RTAG_MATH:
 				{
@@ -415,19 +278,19 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			/*タグ種別ごとの処理*/
 			switch (tagId) {
 
-				//-----------------------------------微分方程式左辺式記述の解析開始
-			case RTAG_DIFFEQU:
-				{
-					/*解析フラグoff*/
-					m_bDiffEquListParsing = false;
-					break;
-				}
-
 				//-----------------------------------コンポーネントの解析終了
 			case RTAG_COMPONENT:
 				{
 					/*コンポーネント名初期化*/
 					m_strCurComponent = "";
+					break;
+				}
+				
+				//-----------------------------------tecml変数対応記述内でtecml変数部分が終了
+			case RTAG_TVAR:
+				{
+					/*現在tecml変数をクリア*/
+					m_veccurTecMLVariable = null;
 					break;
 				}
 			}
@@ -443,9 +306,11 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		//数式部の解析
 		//-----------------------------------------------------
 		if (m_bMathParsing && m_NextOperandKind != null) {
-			/*コンポーネント名をつなげる TODO: component name was removed for variables and equations*/
-			if(m_NextOperandKind==eMathOperand.MOPD_CI){
-//				strText = m_strCurComponent + "." + strText;
+			/*コンポーネント名をつなげる*/
+			if(m_strCurComponent != null){
+				if(m_NextOperandKind==eMathOperand.MOPD_CI){
+					strText = m_strCurComponent + "." + strText;
+				}
 			}
 
 			/*MathML解析器に投げる*/
@@ -457,60 +322,6 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		//-----------------------------------------------------
 		else {
 		}
-	}
-
-	/**
-	 * 微分変数か判定する.
-	 * @param pVariable 判定する数式
-	 * @return 一致判定
-	 */
-	public boolean isDiffVar(MathOperand pVariable) {
-		/*すべての要素を比較*/
-		for (Math_ci it: m_vecDiffVar) {
-			/*一致判定*/
-			if (it.matches(pVariable)) {
-				return true;
-			}
-		}
-
-		/*不一致*/
-		return false;
-	}
-
-	/**
-	 * 通常変数か判定する.
-	 * @param pVariable 判定する数式
-	 * @return 一致判定
-	 */
-	public boolean isArithVar(MathOperand pVariable) {
-		/*すべての要素を比較*/
-		for (Math_ci it: m_vecArithVar) {
-			/*一致判定*/
-			if (it.matches(pVariable)) {
-				return true;
-			}
-		}
-
-		/*不一致*/
-		return false;
-	}
-
-	/**
-	 * 定数変数か判定する.
-	 * @param pVariable 判定する数式
-	 * @return 一致判定
-	 */
-	public boolean isConstVar(MathOperand pVariable) {
-		/*すべての要素を比較*/
-		for (Math_ci it: m_vecConstVar) {
-			/*一致判定*/
-			if (it.matches(pVariable)) {
-				return true;
-			}
-		}
-
-		/*不一致*/
-		return false;
 	}
 
 	/**
@@ -536,6 +347,15 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	}
 
 	/**
+	 * Condition情報を取得する
+	 * @return Condition情報String
+	 * @author m-ara
+	 * ([0]:condition名、[1]:ループインデックス名、[2]:数式ID)
+	 */
+	public Vector<String[]> getConditionInformation(){
+		return m_vecConditionInformation;
+	}
+	/**
 	 * 読み込みCellMLファイル名を習得する.
 	 * @return 読み込むCellMLのファイル名
 	 */
@@ -550,89 +370,25 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 	public String getFileNameTecML() {
 		return m_strFileNameTecML;
 	}
-
+	
 	/**
-	 * 変数テーブルを適用する.
-	 * @param pComponentTable コンポーネントテーブルインスタンス
-	 * @throws RelMLException
-	 * @throws MathException
+	 * 該当するTecML変数の対応リストを取得する
+	 * @throws MathException 
+	 * @author m-ara
 	 */
-	public void applyComponentTable(ComponentTable pComponentTable)
-	throws RelMLException, MathException {
-		Vector<String> vecVarNameL = new Vector<String>();
-//		printContents();	// debug
-		m_vecDiffVar = applyComponentTable(pComponentTable, m_vecDiffVar, vecVarNameL);
-		m_vecArithVar = applyComponentTable(pComponentTable, m_vecArithVar, vecVarNameL);
-		m_vecConstVar = applyComponentTable(pComponentTable, m_vecConstVar, vecVarNameL);
-//		printContents();	// debug
-	}
-
-	/**
-	 * 変数テーブルを適用する.
-	 * @param pComponentTable コンポーネントテーブルインスタンス
-	 * @param orgV 適用前変数テーブル
-	 * @param vecVarNameL 変数リスト
-	 * @return 適用後変数テーブル
-	 * @throws RelMLException
-	 * @throws MathException
-	 */
-	private Vector<Math_ci> applyComponentTable(ComponentTable pComponentTable,
-			Vector<Math_ci> orgV, Vector<String> vecVarNameL)
-			throws RelMLException, MathException {
-
-		//-------------------------------------------------
-		//すべての変数に変数テーブルから名前を取得させる
-		//-------------------------------------------------
-		Vector<Math_ci> newV = new Vector<Math_ci>();
-
-		for (Math_ci pVariable: orgV) {
-			/*名前の取得と分解*/
-			String strVarName = pVariable.toLegalString();
-			int nDotPos = strVarName.indexOf(".");
-			String strCompName = strVarName;
-			if (nDotPos >= 0) {
-				strCompName = strVarName.substring(0, nDotPos);
+	public Vector<MathOperand> getVecTecMLTransformation(Math_ci pVariable) throws MathException{
+		
+		/*名前の取得*/
+		String strVarName = pVariable.getName();
+		
+		
+		for(Math_ci it : m_mapTecMLVariableTransformation.keySet()){
+			if(it.toLegalString().equals(strVarName)){
+				return m_mapTecMLVariableTransformation.get(it);
 			}
-			String strLocalName = strVarName.substring(nDotPos + 1);
-			String strFullName;
-
-			/*テーブルの探索*/
-			try {
-				VariableTable pVariableTable = pComponentTable.searchTable(strCompName);
-				strFullName = pVariableTable.getFullName(strLocalName);
-			}
-			catch (TableException e) {
-				System.err.println(e.getMessage());
-				throw new RelMLException("RelMLAnalyzer","applyComponentTable",
-							 "can't apply variable table to relml variables");
-			}
-
-			/*名前の重複チェック*/
-			boolean found = false;
-			for (String it2: vecVarNameL) {
-				/*重複削除*/
-				if (it2.equals(strFullName)) {
-					found = true;
-					break;
-				}
-			}
-
-			/*見つけた場合は次の変数へ*/
-			if (found) {
-				continue;
-			}
-
-			/*変数リストに登録*/
-			vecVarNameL.add(strFullName);
-
-			/*新しいベクタに追加*/
-			Math_ci pNewVariable =
-				(Math_ci) MathFactory.createOperand(eMathOperand.MOPD_CI, strFullName);
-			newV.add(pNewVariable);
 		}
-
-		/*新しいベクタの適用*/
-		return newV;
+		return null;
+		
 	}
 
 	/**
@@ -645,21 +401,17 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		//-------------------------------------------------
 		/*ベクタ配列*/
 		ArrayList<Vector<Math_ci>> vectorArray = new ArrayList<Vector<Math_ci>>();
-		vectorArray.add(m_vecDimensionVar);
-		vectorArray.add(m_vecIndexVar);
-		vectorArray.add(m_vecDeltaVar);
-		vectorArray.add(m_vecDiffVar);
-		vectorArray.add(m_vecArithVar);
-		vectorArray.add(m_vecConstVar);
+//		vectorArray.add(m_vecRecurVar);
+//		vectorArray.add(m_vecArithVar);
+//		vectorArray.add(m_vecConstVar);
+//		vectorArray.add(m_vecPartialDiffVar);
 
 		/*表示タグ配列初期化*/
 		String[] strTag = {
-			"dimensionvar\t",
-			"indexvar\t",
-			"deltavar\t",
-			"diffvar\t",
-			"arithvar\t",
+			"Recurvar\t",
+			"Arithvar\t",
 			"constvar\t",
+			"partialdiffvar\t",
 		};
 
 		//-------------------------------------------------
@@ -669,7 +421,7 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 		System.out.println("[RelML]------------------------------------");
 
 		/*読み込みファイル名出力*/
-		System.out.println("CellML\t: " +  m_strFileNameCellML);
+		System.out.println("CellML\t: " + m_strFileNameCellML);
 		System.out.println("TecML\t: " + m_strFileNameTecML);
 
 		/*変数リスト出力*/
@@ -689,75 +441,29 @@ public class RelMLAnalyzer extends MathMLAnalyzer {
 			System.out.println("}");
 		}
 
-		System.out.println("[RelML] Boundary conditions------------------------------------");
+		/*tecml対応リスト表示*/
+		//キーを取得する
+        Set<Math_ci> keys = m_mapTecMLVariableTransformation.keySet();
 
-		/*数式出力*/
-		super.printExpressions();
-
-		/*改行*/
-		System.out.println();
+        // mapの中身をすべて表示する
+        for(Math_ci key : keys) {
+        	System.out.print(key.toLegalString() + " :"); 
+        	for(MathFactor it : m_mapTecMLVariableTransformation.get(key)){
+               System.out.print(" "+it.toLegalString());
+        	}
+        	System.out.println();
+        }
 		
 		/*数式出力*/
-		//super.printExpressions();
-
+		super.printExpressions();
+		for(String[] str: m_vecConditionInformation){
+			System.out.print("CondName:"+str[0]);
+			System.out.print(" , LoopIndex:"+str[1]);
+			System.out.println(" , Ex-ID:"+str[2]);
+		}
+		
 		/*改行*/
 		System.out.println();
 	}
 	
-	//========================================================
-	//getExpression
-	// get the mathExpression from m_vecExpression
-	//
-	//========================================================
-	/*-----解析結果表示メソッド-----*/
-	public MathExpression getExpression(int index){
-		/*数式出力*/
-		return super.getExpression(index);
-	}
-	
-	//========================================================
-	//	getDimensions
-	// 		get the dimensions of the matrix as specified in the PdesML file
-	//
-	//	@return
-	// 		int array containing dimensions [nx ny nz]
-	//
-	//========================================================
-	// 
-	public int[] getDimensions() {
-		//int[] arrDimensions = new int[m_vecDimensions.size()];
-		int[] intDimensions = new int[m_vecDimensions.size()];
-		for (int i=0; i<m_vecDimensions.size(); i++){
-			try{
-			intDimensions[i] = Integer.parseInt((m_vecDimensions.get(i)).toLegalString());
-			} catch (MathException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return intDimensions;
-	}
-
-	//========================================================
-	//	getSpacing (only for rectilinear grid)
-	// 		get the spacings for each dimension of the rectilinear grid
-	//
-	//	@return
-	// 		int array containing spacing [sx sy sz]
-	//
-	//========================================================
-	// 
-	public int[] getSpacing() {
-		//int[] arrDimensions = new int[m_vecDimensions.size()];
-		int[] intSpacing = new int[m_vecSpacing.size()];
-		for (int i=0; i<m_vecSpacing.size(); i++){
-			try{
-			intSpacing[i] = Integer.parseInt((m_vecSpacing.get(i)).toLegalString());
-			} catch (MathException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return intSpacing;
-	}
 }

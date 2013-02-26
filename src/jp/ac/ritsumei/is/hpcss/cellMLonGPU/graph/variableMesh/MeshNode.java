@@ -1,7 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.variableMesh;
 
 import java.util.ArrayList;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.Vertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.variableMesh.MeshCoordinates;

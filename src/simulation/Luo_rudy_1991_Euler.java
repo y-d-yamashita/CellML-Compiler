@@ -1,7 +1,7 @@
 package simulation;
 public class Luo_rudy_1991_Euler{
 
-
+@SuppressWarnings("unused")
 public static void main ( String args[] ) {
 
 	int __DATA_NUM = 100000;

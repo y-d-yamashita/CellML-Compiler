@@ -48,6 +48,9 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	/**登録待ちオペランド種別*/
 	protected eMathOperand m_NextOperandKind;
 
+	/**Ex-IDカウント変数*/
+	int expNum;
+	
 	/**
 	 * MathML解析インスタンスを作成する.
 	 */
@@ -57,19 +60,21 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 		m_vecMathExpression = new Vector<MathExpression>();
 		m_strSepUsedValue = "";
 		m_vecAttrList = new Vector<String[]>();
-		
+		expNum = -1;
 	}
 
 	/**
 	 * 数式を追加する.
 	 */
-	public void addNewExpression() {
+	public void addNewExpression(int ExNum) {
 		/*数式追加*/
 		MathExpression pNewExpression = new MathExpression();
 		m_vecMathExpression.add(pNewExpression);
 
 		/*現在の数式を変更*/
 		m_pCurMathExpression = pNewExpression;
+		
+		pNewExpression.setExID(ExNum);
 	}
 
 	/* ========================================================
@@ -85,6 +90,7 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	 * (非 Javadoc)
 	 * @see jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLAnalyzer#findTagStart(java.lang.String, jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.XMLAttribute)
 	 * ======================================================== */
+	@SuppressWarnings("unused")
 	public void findTagStart(String strTag, XMLAttribute pXMLAttr)
 	throws MathException, XMLException, RelMLException, CellMLException, TecMLException, RecMLException {
 		eMathMLClassification tagKind;
@@ -119,9 +125,10 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 				pXMLAttr.getValue(RecMLDefinition.RECML_ATTR_LOOP5);
 			String[] strAttr = new String[] {strAttrLoop1, strAttrLoop2, strAttrLoop3, strAttrLoop4, strAttrLoop5};
 			
-			/*SimpleRecML*/	
+			/*SimpleRecML*/
+			
 			/*属性情報リストを取得*/	
-			HashMap<String, String> SimpleRecAttrList = new HashMap<String, String>();	
+			//HashMap<String, String> SimpleRecAttrList = new HashMap<String, String>();	
 			String strAttrNum;	
 			String strAttrType = "";	
 			String strAttrCondref = "";	
@@ -138,36 +145,50 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 			
 			/*新しい計算式*/
 			if(m_pCurMathExpression==null || !m_pCurMathExpression.isConstructing()){
-				this.addNewExpression();
+				expNum++;
+				this.addNewExpression(expNum);
 				
 				/* store the MathExpression attribute values */
 				addNewAttribute(strAttr);
 				/*SimpleRecML*/	
 				/*属性情報リストを取得*/	
-					HashMap<String, String> hm = new HashMap<String, String>();
-					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_NUM, strAttrNum);
+				HashMap<String, String> hm = new HashMap<String, String>();
+				hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_NUM, strAttrNum);
 				int intAttrNum;	
 				int intAttrCondref;	
-				if("final".equals(strAttrType)){	
-					intAttrNum = Integer.parseInt(strAttrNum);	
-					intAttrLoopnum = Integer.parseInt(strLoopnum);	
-						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "final");
-						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
+				if("final".equals(strAttrType)){
+					if(strAttrNum!=null){
+						intAttrNum = Integer.parseInt(strAttrNum);
+					}
+					if(strLoopnum!=null){
+						intAttrLoopnum = Integer.parseInt(strLoopnum);	
+					}
+					
+					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "final");
+					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
 				}	
 				if("initend".equals(strAttrType)){	
-					intAttrNum = Integer.parseInt(strAttrNum);	
-					intAttrLoopnum = Integer.parseInt(strLoopnum);	
-						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "initend");
-						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
+					if(strAttrNum!=null){
+						intAttrNum = Integer.parseInt(strAttrNum);
+					}
+					if(strLoopnum!=null){
+						intAttrLoopnum = Integer.parseInt(strLoopnum);	
+					}
+					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_TYPE, "initend");
+					hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_LOOPNUM, strLoopnum);
 				}	
 				if(strAttrCondref!=null){	
-					intAttrNum = Integer.parseInt(strAttrNum);	
+					if(strAttrNum!=null){
+						intAttrNum = Integer.parseInt(strAttrNum);
+					}	
 					intAttrCondref = Integer.parseInt(strAttrCondref);	
 						hm.put(SimpleRecMLDefinition.SIMPLERECML_ATTR_CONDREF, strAttrCondref);
 				}
 				
-				intAttrNum = Integer.parseInt(strAttrNum);
-				m_pCurMathExpression.setExID(intAttrNum);
+				if(strAttrNum!=null){
+					intAttrNum = Integer.parseInt(strAttrNum);
+					m_pCurMathExpression.setExID(intAttrNum);
+				}
 				if(strAttrCondref!=null){
 					intAttrCondref = Integer.parseInt(strAttrCondref);
 					m_pCurMathExpression.setCondref(intAttrCondref);
@@ -343,6 +364,7 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	/**
 	 * 構造情報をapplyへ割り当てる
 	 */
+	@SuppressWarnings("unchecked")
 	public void assignStruAttrToApply(HashMap<Integer, HashMap<Integer, String>> AttrLists){
 		for (int i=0;i<m_vecMathExpression.size();i++) {
 			
@@ -365,8 +387,9 @@ public class MathMLAnalyzer extends XMLAnalyzer {
 	
 	/**
 	 *  condition部分を抜き取り、別数式として保存
+	 * @throws MathException 
 	 */
-	public void pickUpConditions(){
+	public void pickUpConditions() throws MathException{
 		int count = 0; /*数式番号*/
 		int condcount = 0; /*condition番号*/
 		MathExpression[] condExp = new MathExpression[10];

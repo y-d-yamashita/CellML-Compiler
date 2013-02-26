@@ -2,8 +2,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+
 
 
 
@@ -12,6 +11,7 @@ import java.util.TreeSet;
  * @author y-yamashita
  *
  */
+@SuppressWarnings("serial")
 public class List2D<V> extends ArrayList<List<V>>{
 
 	/**

@@ -11,8 +11,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.SimpleRecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLDefinition.eRecMLVarType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.GlobalLogger;
-
 /**
  * 変数テーブルクラス.
  * componentごとの変数テーブル.
@@ -142,6 +140,7 @@ public class SimpleRecMLVariableTable extends Table<SimpleRecMLVariableReference
 	 * @return 初期値
 	 * @throws TableException
 	 */
+	@SuppressWarnings("unused")
 	public String getInitValue(String strName)
 	throws TableException {
 		/*変数参照の取得*/

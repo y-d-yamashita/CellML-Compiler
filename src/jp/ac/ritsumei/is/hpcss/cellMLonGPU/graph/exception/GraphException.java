@@ -5,6 +5,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception;
  * @author y-yamashita
  *
  */
+@SuppressWarnings("serial")
 public class GraphException extends Exception{
 
 	/**

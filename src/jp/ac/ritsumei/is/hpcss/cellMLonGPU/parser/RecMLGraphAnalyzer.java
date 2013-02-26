@@ -1,15 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser;
 
-import java.awt.Dimension;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.SpringLayout;
 
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
@@ -20,11 +13,9 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.XMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.DirectedGraph;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.Graph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLGraphDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLGraphDefinition.eRecMLGraphTag;
 

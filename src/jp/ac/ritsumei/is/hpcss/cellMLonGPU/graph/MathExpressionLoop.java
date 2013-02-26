@@ -2,7 +2,6 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;

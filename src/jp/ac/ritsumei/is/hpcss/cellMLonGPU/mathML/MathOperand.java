@@ -1,6 +1,5 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.Visitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathMLClassification;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;

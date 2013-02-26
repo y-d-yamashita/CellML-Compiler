@@ -1,11 +1,8 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableReference;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;

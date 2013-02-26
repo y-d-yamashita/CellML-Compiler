@@ -10,7 +10,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.EqnDepTree.EqnDepTree;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.eqnDepTree.EqnDepTree;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RecMLException;
@@ -39,16 +39,17 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLEquationAndVariableC
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.List2D;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.Labelattr;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure.LabelAttribute;
 
 
 /**
- * CellML解析クラス
+ * SimpleRecML(漸化式集合)解析クラス
  */
 public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 
 	/*数式解析中判定*/
 	private boolean m_bMathParsing;
+	@SuppressWarnings("unused")
 	private boolean m_bAttrParsing;
 	
 	private SimpleRecMLVariableTable simpleRecMLVariableTable;
@@ -57,12 +58,6 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	public PairList<RecMLVertex,RecMLVertex> resultMaximumMatching;
 	public ArrayList<ArrayList<MathExpression>> simulEquationList;
 	
-	// loop index variable name list (initialized in constructor)
-	// just for test
-	// should be implemented as hashmap or new class
-//	private String[] indexStringList;
-	
-	// equation dependent tree root node
 	EqnDepTree root, now;
 	int type; // 0=pre, 1=init, 2=inner, 3=loopcond, 4=final, 5=post
 	
@@ -253,22 +248,13 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	public HashMap<Integer, Integer> getM_HashMapCondrefAttrLists() {
 		return m_hashcondrefAttrLists;
 	}
-	
-//	static GraphManipulator graphManipulator;
-//	static BipartiteGraph<RecMLVertex,RecMLEdge> resultTestCreateBipartiteGraph;
-	
+
 	/*-----コンストラクタ-----*/
 	public SimpleRecMLAnalyzer() {
 		m_bMathParsing = false;
 		m_bAttrParsing = false;
 		m_vecExpression = new Vector<MathExpression>();
-		// just for test
-		// should be implemented as hashmap?
-//		String[] indexList = {"tn", "tm", "to"};
-//		indexStringList = indexList;
-		
-				
-		// equation dependent tree init
+
 		root = null;
 		now = null;
 		
@@ -309,10 +295,6 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		graphAnlyzer=new RecMLGraphAnalyzer();
 		graph=null;
 		
-		
-//		graphManipulator= new GraphManipulator();
-//		resultTestCreateBipartiteGraph=null;
-
 		HashMap<Integer, HashMap<String, Integer>> NodeHashMap = new HashMap<Integer, HashMap<String, Integer>>();
 		m_HashMapNodeList = NodeHashMap;
 		HashMap<Integer, HashMap<String, Integer>> EdgeHashMap = new HashMap<Integer, HashMap<String, Integer>>();
@@ -437,34 +419,13 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 					}
 					break;
 				}
-				// loop structure tree
-//			case CTAG_POSITION:
-//				{
-//					// loop structure construction
-//					String positionname = pXMLAttr.getValue("name");
-//					if (positionname.equals(SimpleRecMLDefinition.SIMPLERECML_ATTR_PRE)) {
-//						type = 0;
-//					} else if (positionname.equals(SimpleRecMLDefinition.RECML_ATTR_INIT)) {
-//						type = 1;
-//					} else if (positionname.equals(SimpleRecMLDefinition.RECML_ATTR_INNER)) {
-//						type = 2;
-//					} else if (positionname.equals(SimpleRecMLDefinition.RECML_ATTR_LOOPCOND)) {
-//						type = 3;
-//					} else if (positionname.equals(SimpleRecMLDefinition.RECML_ATTR_FINAL)) {
-//						type = 4;
-//					} else if (positionname.equals(SimpleRecMLDefinition.RECML_ATTR_POST)) {
-//						type = 5;
-//					}
-//					break;
-//				}
-				// loop index string
+
 			case CTAG_LOOPINDEX:
 				{
 					// loop structure construction
 					String name = pXMLAttr.getValue("name");
 					int num = Integer.parseInt(pXMLAttr.getValue("num"));
-//					setIndexString(num, name);
-					
+
 					//HashMap
 					setIndexHashMap(num, name);
 					break;
@@ -660,6 +621,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	//
 	//========================================================
 	// 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ArrayList getExpressionWithAttr(String[] strAttr) {
 		ArrayList indexList = new ArrayList();
 		for (int i=0; i<m_vecAttrList.size(); i++){
@@ -1235,7 +1197,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		HashMap<Integer, Integer> condrefAttrLists = getM_HashMapCondrefAttrLists();
 		
 		
-		Labelattr lb = new Labelattr(
+		LabelAttribute lb = new LabelAttribute(
 //				LabelattrV2 lb = new LabelattrV2(
 		getM_HashMapNodeList(),
 		getM_HashMapEdgeList(),
@@ -1302,6 +1264,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 		return super.getMathmlExpressions();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ArrayList<MathExpression> kawabataRemoveCondition(){
 		HashMap<Integer, Integer> condrefAttrLists = getM_HashMapCondrefAttrLists();
 		/*数式を保管しておけるベクタが必要?*/
@@ -1324,6 +1287,7 @@ public class SimpleRecMLAnalyzer extends MathMLAnalyzer {
 	
 	private Vector<MathExpression> replaceEquOrder(SimpleRecMLAnalyzer sa) {
 		Vector<Integer> eo = sa.getEquOder();
+		@SuppressWarnings("unchecked")
 		Vector<MathExpression> clone = (Vector<MathExpression>) sa.m_vecMathExpression.clone();
 		sa.m_vecMathExpression.removeAllElements();
 		Vector<MathExpression> ve = new Vector<MathExpression>();

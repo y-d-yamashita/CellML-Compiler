@@ -10,7 +10,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_assign;
@@ -22,26 +21,16 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_cn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_fn;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_plus;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_times;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.NewtonSolver;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.solver.SimultaneousNewtonSolver;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl.eControlKind;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType.eDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxFunction;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxPreprocessor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxPreprocessor.ePreprocessorKind;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.tecML.TecMLDefinition.eTecMLVarType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.*;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxControl.eControlKind;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxDataType.eDataType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxPreprocessor.ePreprocessorKind;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator.ProgramGenerator;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.*;
 
 /**
  * Common Program Generator for ODE class 
@@ -55,7 +44,7 @@ public class CommonProgramGenerator extends ProgramGenerator {
 	//========================================================
 	//DEFINE
 	//========================================================
-	private static final String COMPROG_LOOP_INDEX_NAME1 = "__i";
+	//private static final String COMPROG_LOOP_INDEX_NAME1 = "__i";
 	private static final String COMPROG_DEFINE_DATANUM_NAME = "__DATA_NUM";
 	private static final String COMPROG_DEFINE_MAXARRAYNUM_NAME = "__MAX_ARRAY_NUM";
 
@@ -944,341 +933,9 @@ public class CommonProgramGenerator extends ProgramGenerator {
 	}
 
 	
-	/*-----関数展開・変数置換メソッド-----*/
+	
 
-	//========================================================
-	//expandDiffFunction
-	// 微分関数展開メソッド
-	//
-	//@arg
-	// MathExpression*	pExpression	: 数式インスタンス
-	// MathExpression*	pDiffExpression	: 微分式インスタンス
-	//
-	//========================================================
-	protected void expandDiffFunction(MathExpression pExpression,
-			MathExpression pDiffExpression)
-	throws MathException, TranslateException {
-		/*展開関数の検索*/
-		Vector<Math_fn> vecFunctions = new Vector<Math_fn>();
-
-		pExpression.searchFunction(m_pTecMLAnalyzer.getM_pDiffFuncVar(), vecFunctions);
-
-		/*検索結果のすべての関数を展開*/
-		int nFunctionNum = vecFunctions.size();
-
-		for (int i = 0; i < nFunctionNum; i++) {
-
-			/*置換対象の関数*/
-			Math_fn pFunction = (Math_fn)vecFunctions.get(i).createCopy();
-
-			/*関数の置換*/
-			pExpression.replace(pFunction, pDiffExpression.getRightExpression().getRootFactor());
-
-			/*関数引数型ごとのidを取得*/
-			HashMap<eTecMLVarType, Integer> ati = m_pTecMLAnalyzer.getDiffFuncArgTypeIdx();
-
-			if (ati.size() == 0) {
-				throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-			     "failed to get arguments index of differential function ");
-			}
-
-			/*変数の置換*/
-			this.replaceFunctionVariables(pExpression, pFunction, ati);
-		}
-	}
-
-	//========================================================
-	//expandDiffFunction
-	// 非微分関数展開メソッド
-	//
-	//@arg
-	// MathExpression*	pExpression			: 数式インスタンス
-	// MathExpression*	pNonDiffExpression	: 非微分式インスタンス
-	//
-	//========================================================
-	protected void expandNonDiffFunction(MathExpression pExpression,
-			MathExpression pNonDiffExpression)
-	throws MathException, TranslateException {
-		/*展開関数の検索*/
-		Vector<Math_fn> vecFunctions = new Vector<Math_fn>();
-
-		pExpression.searchFunction(m_pTecMLAnalyzer.getM_pNonDiffFuncVar(), vecFunctions);
-
-		/*検索結果のすべての関数を展開*/
-		int nFunctionNum = vecFunctions.size();
-
-		for (int i = 0; i < nFunctionNum; i++) {
-
-			/*置換対象の関数*/
-			Math_fn pFunction = (Math_fn)vecFunctions.get(i).createCopy();
-
-			/*関数の置換*/
-			pExpression.replace(pFunction, pNonDiffExpression.getRightExpression().getRootFactor());
-
-			/*関数引数型ごとのidを取得*/
-			HashMap<eTecMLVarType, Integer> ati = m_pTecMLAnalyzer.getDiffFuncArgTypeIdx();
-
-			if (ati.size() == 0) {
-				throw new TranslateException("SyntaxProgram","CommonProgramGenerator",
-			     "failed to get arguments index of differential function ");
-			}
-
-			/*変数の置換*/
-			this.replaceFunctionVariables(pExpression, pFunction, ati);
-		}
-	}
-
-	//========================================================
-	//replaceFunctionVariables
-	// 関数中変数の置換メソッド
-	//
-	//@arg
-	// MathExpression*	pExpression	: 数式インスタンス
-	// Math_fn*		pFunction		: 置換関数
-	// int			nTimeVarArgIdx	: 微分変数引数インデックス
-	// int			nTimeArgIdx		: 時間変数引数インデックス
-	// int			nVarArgIdx		: 通常変数引数インデックス
-	// int			nConstVarArgIdx	: 定数引数インデックス
-	//
-	//========================================================
-	private void replaceFunctionVariables(MathExpression pExpression, Math_fn pFunction,
-		      HashMap<eTecMLVarType, Integer> ati)
-	throws MathException {
-		/*関数引数型ごとのidを取得*/
-		int nTimeArgIdx = 0;
-		int nTimeVarArgIdx = 0;
-		int nVarArgIdx = 0;
-		int nConstVarArgIdx = 0;
-
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_TIMEVAR)) {
-			nTimeArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_TIMEVAR);
-		}
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_DIFFVAR)) {
-			nTimeVarArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_DIFFVAR);
-		}
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_ARITHVAR)) {
-			nVarArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_ARITHVAR);
-		}
-		if (ati.containsKey(eTecMLVarType.TVAR_TYPE_CONSTVAR)) {
-			nConstVarArgIdx = ati.get(eTecMLVarType.TVAR_TYPE_CONSTVAR);
-		}
-
-		/*時間変数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecTimeVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nTimeArgIdx).toLegalString());
-
-			/*配列インデックスを追加*/
-			//pArgVar->addArrayIndexToBack(i);
-			//時間にインデックスを付けず，共通の変数として扱う
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecTimeVar().get(i), pArgVar);
-		}
-
-		/*微分変数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nTimeVarArgIdx).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(i));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						COMPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecDiffVar().get(i),pArgVar);
-		}
-
-		/*通常変数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecArithVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nVarArgIdx).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(i));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecArithVar().get(i),pArgVar);
-		}
-
-		/*定数の置換*/
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecConstVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						pFunction.getArgumentsVector().get(nConstVarArgIdx).toLegalString());
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(i);
-
-			/*置換*/
-			pExpression.replace(m_pCellMLAnalyzer.getM_vecConstVar().get(i),pArgVar);
-		}
-	}
-
-	//========================================================
-	//addIndexToTecMLVariables
-	// TecML変数へのインデックス追加メソッド
-	//
-	//@arg
-	// MathExpression*	pExpression	: 数式インスタンス
-	// int	nIndex	: 付加するインデックス
-	//
-	//========================================================
-	protected void addIndexToTecMLVariables(MathExpression pExpression, int nIndex)
-	throws MathException {
-		/*微分変数の置換*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDiffVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-				   m_pTecMLAnalyzer.getM_vecDiffVar().get(i).toLegalString());
-
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(nIndex));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pTecMLAnalyzer.getM_vecDiffVar().get(i),pArgVar);
-		}
-
-		/*微係数変数の置換*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecDerivativeVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecDerivativeVar().get(i).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(nIndex));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pTecMLAnalyzer.getM_vecDerivativeVar().get(i),pArgVar);
-		}
-
-		/*通常変数の置換*/
-		for (int i = 0; i < m_pTecMLAnalyzer.getM_vecArithVar().size(); i++) {
-
-			/*引数変数のコピーを取得*/
-			Math_ci pArgVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-						m_pTecMLAnalyzer.getM_vecArithVar().get(i).toLegalString());
-
-			/*配列インデックスを作成*/
-			Math_ci pTmpIndex =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,
-								   String.valueOf(nIndex));
-			Math_ci pLoopIndexVar =
-				(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI,COMPROG_LOOP_INDEX_NAME1);
-
-			Math_times pMathTimes =
-				(Math_times)MathFactory.createOperator(eMathOperator.MOP_TIMES);
-			Math_plus pMathPlus =
-				(Math_plus)MathFactory.createOperator(eMathOperator.MOP_PLUS);
-
-			pMathTimes.addFactor(pTmpIndex);
-			pMathTimes.addFactor(m_pDefinedDataSizeVar);
-			pMathPlus.addFactor(pMathTimes);
-			pMathPlus.addFactor(pLoopIndexVar);
-
-			MathFactor pIndexFactor = pMathPlus;
-
-			/*配列インデックスを追加*/
-			pArgVar.addArrayIndexToBack(pIndexFactor);
-
-			/*置換*/
-			pExpression.replace(m_pTecMLAnalyzer.getM_vecArithVar().get(i),pArgVar);
-		}
-	}
-
+	
 	protected boolean hasInner(int LoopNumber, String[] strAttr) {
 		String[] strAttr_inner = strAttr.clone();
 		strAttr_inner[LoopNumber] = "inner";

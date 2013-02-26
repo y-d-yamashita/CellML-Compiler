@@ -2,17 +2,12 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.manipulator;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeSet;
-import java.util.Vector;
+
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
@@ -27,9 +22,8 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathOperand;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.cellML.CellMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLEquationAndVariableContainer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
@@ -209,6 +203,23 @@ public class GraphCreator {
 		return graph;
 	}
 	
+	public BipartiteGraph<RecMLVertex,RecMLEdge> createBipartiteGraph_Cell(CellMLEquationAndVariableContainer contener) throws GraphException{
+		BipartiteGraph<RecMLVertex,RecMLEdge> graph = new BipartiteGraph<RecMLVertex, RecMLEdge>();
+		
+		//Add src side vertexes
+		addCellMLVariableVertex(graph,contener);
+		
+		//Add dst side vertexes
+		addCellMLExpressionVertex(graph,contener);
+		
+		//Add edges
+		addCellMLEdges(graph,contener);
+		
+		//Remove not connected vertexes
+		removeNotConnectedVertexes(graph);
+		
+		return graph;
+	}
 
 	/**
 	 * Remove not connected vertexes
@@ -251,6 +262,19 @@ public class GraphCreator {
 	private void addSimpleRecMLEdges(
 			Graph<RecMLVertex, RecMLEdge> graph,
 			SimpleRecMLEquationAndVariableContainer contener
+			) throws GraphException {
+		for(Integer varID:contener.getVariableIDs())
+			for(Integer exprID:contener.getEqautionIDsOfVariable(varID)){
+				RecMLEdge edge = new RecMLEdge();
+				RecMLVertex src = findVarRecMLVertexes(varID, graph);
+				RecMLVertex dst = findExpRecMLVertexes(exprID, graph);
+				graph.addEdge(edge, src, dst);
+				
+			}
+	}
+	private void addCellMLEdges(
+			Graph<RecMLVertex, RecMLEdge> graph,
+			CellMLEquationAndVariableContainer contener
 			) throws GraphException {
 		for(Integer varID:contener.getVariableIDs())
 			for(Integer exprID:contener.getEqautionIDsOfVariable(varID)){
@@ -316,6 +340,17 @@ public class GraphCreator {
 		}
 		
 	}
+	private void addCellMLExpressionVertex(
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph,
+			CellMLEquationAndVariableContainer contener
+			)throws GraphException {
+		for(Integer exprID: contener.getEquationIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setExpression(exprID);
+			graph.addDestVertex(v);
+		}
+		
+	}
 	/**
 	 * Add a vertex of RecML variable
 	 * @param graph
@@ -337,6 +372,18 @@ public class GraphCreator {
 	private void addSimpleRecMLVariableVertex(
 			BipartiteGraph<RecMLVertex, RecMLEdge> graph, 
 			SimpleRecMLEquationAndVariableContainer contener
+			) throws GraphException {
+		/* Add new vertexes of recvar*/
+		for(Integer varID: contener.getVariableIDs()){
+			RecMLVertex v = new RecMLVertex();
+			v.setVariable(varID);
+			graph.addSourceVertex(v);
+		}
+	}
+	
+	private void addCellMLVariableVertex(
+			BipartiteGraph<RecMLVertex, RecMLEdge> graph, 
+			CellMLEquationAndVariableContainer contener
 			) throws GraphException {
 		/* Add new vertexes of recvar*/
 		for(Integer varID: contener.getVariableIDs()){

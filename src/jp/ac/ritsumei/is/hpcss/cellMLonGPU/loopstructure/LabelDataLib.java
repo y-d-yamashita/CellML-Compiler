@@ -70,6 +70,7 @@ public class LabelDataLib extends SimpleRecMLAnalyzer{
 	
 	ArrayList<RelationPattern> m_LoopStructure;
 	
+	@SuppressWarnings("unchecked")
 	public LabelDataLib(
 			HashMap<Integer, HashMap<String, Integer>> NodeHashMap,
 			HashMap<Integer, HashMap<String, Integer>> EdgeHashMap,

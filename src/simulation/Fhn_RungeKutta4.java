@@ -1,7 +1,7 @@
 package simulation;
 public class Fhn_RungeKutta4{
 
-
+@SuppressWarnings("unused")
 public static void main ( String args[] ) {
 
 	int __DATA_NUM = 100000;

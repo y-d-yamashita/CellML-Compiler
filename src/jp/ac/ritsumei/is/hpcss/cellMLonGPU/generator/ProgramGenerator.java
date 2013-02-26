@@ -1,12 +1,10 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.generator;
 
-import java.io.PrintWriter;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.SyntaxException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TranslateException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
@@ -26,19 +24,17 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.CellMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RelMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.RecMLAnalyzer;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.parser.TecMLAnalyzer;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxCallFunction;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxCondition;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxControl;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxDataType;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxDeclaration;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxExpression;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxFunction;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxProgram;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxControl.eControlKind;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.c.SyntaxDataType.eDataType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.java.JavaSyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCallFunction;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxCondition;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxControl.eControlKind;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDataType.eDataType;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxDeclaration;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxFunction;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.syntax.SyntaxProgram;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.ComponentTable;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.VariableTable;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.StringUtil;
 
 /**
@@ -150,113 +146,6 @@ public abstract class ProgramGenerator {
 
 	/*-----変数リスト出力メソッド-----*/
 
-	/**
-	 * 変数対応関係を出力する.
-	 * @param out 出力先
-	 * @throws MathException
-	 */
-	public void outputVarRelationList(PrintWriter out)
-	throws MathException {
-		for (Math_ci it: m_pCellMLAnalyzer.getM_vecTimeVar()) {
-			out.println(it.toLegalString() + "\t"
-					+  m_pTecMLAnalyzer.getM_pTimeVar().toLegalString());
-		}
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-			Math_ci it = m_pCellMLAnalyzer.getM_vecDiffVar().get(i);
-			out.println(it.toLegalString() + "\t"
-					+ m_pTecMLAnalyzer.getM_pInputVar().toLegalString()
-					+ "[" + i + "]");
-		}
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecArithVar().size(); i++) {
-			Math_ci it = m_pCellMLAnalyzer.getM_vecArithVar().get(i);
-			out.println(it.toLegalString() + "\t"
-					+ m_pTecMLAnalyzer.getM_vecArithVar().get(0).toLegalString()
-					+ "[" + i + "]");
-		}
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecConstVar().size(); i++) {
-			Math_ci it = m_pCellMLAnalyzer.getM_vecConstVar().get(i);
-			out.println(it.toLegalString() + "\t"
-					+  m_pTecMLAnalyzer.getM_vecConstVar().get(0).toLegalString()
-					+ "[" + i + "]");
-		}
-	}
-
-	/**
-	 * 変数初期化式を出力する.
-	 * @param out 出力先
-	 * @param pComponentTable 変数テーブル
-	 * @throws MathException
-	 */
-	public void outputInitializeList(PrintWriter out, ComponentTable pComponentTable)
-	throws MathException {
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecDiffVar().size(); i++) {
-			Math_ci it = m_pCellMLAnalyzer.getM_vecDiffVar().get(i);
-
-			/*名前の取得と分解*/
-			String strVarName = it.toLegalString();
-			int nDotPos = strVarName.indexOf(".");
-			String strCompName = strVarName.substring(0, nDotPos);
-			String strLocalName = strVarName.substring(nDotPos + 1);
-			String strInitValue;
-
-			/*テーブルの探索*/
-			try{
-				VariableTable pVariableTable = pComponentTable.searchTable(strCompName);
-				strInitValue = pVariableTable.getInitValue(strLocalName);
-			}
-			catch(TableException e){
-				System.err.println(strVarName + " " + e.getMessage());
-				continue;
-			}
-
-			out.println(m_pTecMLAnalyzer.getM_pInputVar().toLegalString()
-					+ "[" + i + "] = " + strInitValue + ";");
-		}
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecArithVar().size(); i++) {
-			Math_ci it = m_pCellMLAnalyzer.getM_vecArithVar().get(i);
-
-			/*名前の取得と分解*/
-			String strVarName = it.toLegalString();
-			int nDotPos = strVarName.indexOf(".");
-			String strCompName = strVarName.substring(0, nDotPos);
-			String strLocalName = strVarName.substring(nDotPos + 1);
-			String strInitValue;
-
-			/*テーブルの探索*/
-			try{
-				VariableTable pVariableTable = pComponentTable.searchTable(strCompName);
-				strInitValue = pVariableTable.getInitValue(strLocalName);
-			}
-			catch(TableException e){
-				continue;
-			}
-
-			out.println(m_pTecMLAnalyzer.getM_vecArithVar().get(0).toLegalString()
-					+ "[" + i + "] = " + strInitValue + ";");
-		}
-		for (int i = 0; i < m_pCellMLAnalyzer.getM_vecConstVar().size(); i++) {
-			Math_ci it = m_pCellMLAnalyzer.getM_vecConstVar().get(i);
-
-			/*名前の取得と分解*/
-			String strVarName = it.toLegalString();
-			int nDotPos = strVarName.indexOf(".");
-			String strCompName = strVarName.substring(0, nDotPos);
-			String strLocalName = strVarName.substring(nDotPos + 1);
-			String strInitValue;
-
-			/*テーブルの探索*/
-			try{
-				VariableTable pVariableTable = pComponentTable.searchTable(strCompName);
-				strInitValue = pVariableTable.getInitValue(strLocalName);
-			}
-			catch(TableException e){
-				continue;
-			}
-
-			out.println(m_pTecMLAnalyzer.getM_vecConstVar().get(0).toLegalString()
-					+ "[" + i + "] = " + strInitValue + ";");
-		}
-	}
 
 	/*-----定型構文生成メソッド-----*/
 

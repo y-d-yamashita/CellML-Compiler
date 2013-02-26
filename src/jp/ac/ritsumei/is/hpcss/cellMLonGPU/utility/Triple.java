@@ -37,6 +37,7 @@ public class Triple<FIRST,SECOND,THIRD> {
 	/**
 	 * equals method
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object obj){
 		if(obj==null){return false;}
 		if(obj instanceof Triple){

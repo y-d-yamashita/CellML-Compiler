@@ -2,6 +2,7 @@ package simulation;
 public class Fhn_BackwardEuler{
 
 
+@SuppressWarnings("unused")
 public static void main ( String args[] ) {
 
 	int __DATA_NUM = 100000;

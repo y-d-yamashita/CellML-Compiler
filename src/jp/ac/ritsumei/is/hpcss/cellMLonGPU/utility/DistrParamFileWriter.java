@@ -9,6 +9,7 @@ import java.io.Writer;
 
 public class DistrParamFileWriter {
 
+	@SuppressWarnings("unused")
 	private int maxx, maxy, maxz;
 	
 	public DistrParamFileWriter() {

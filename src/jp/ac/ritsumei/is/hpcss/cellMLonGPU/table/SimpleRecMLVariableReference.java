@@ -3,7 +3,6 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.table;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.SimpleRecMLDefinition.eRecMLVarType;
 

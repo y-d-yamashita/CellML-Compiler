@@ -5,10 +5,8 @@ import java.util.List;
 
 //import com.sun.org.apache.bcel.internal.classfile.SourceFile;
 
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.Vertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 
 
 /**

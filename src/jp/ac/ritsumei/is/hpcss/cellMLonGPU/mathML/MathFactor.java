@@ -85,6 +85,14 @@ public abstract class MathFactor {
 	}
 
 	/**
+	 * 変数名を取得する.
+	 * @return 表示用文字列
+	 * @throws MathException
+	 */
+	public String getName() throws MathException{
+		return m_strPresentText;
+	}
+	/**
 	 * Convert MathFactor to MathML string.
 	 * @return String MathML
 	 * @throws MathException

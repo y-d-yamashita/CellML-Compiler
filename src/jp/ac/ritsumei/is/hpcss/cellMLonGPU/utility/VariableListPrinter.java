@@ -11,6 +11,7 @@ public class VariableListPrinter {
 	}
 	
 	/* print the variable declaration list for RelML */
+	@SuppressWarnings("rawtypes")
 	public void printRelMLVarList(HashSet<String> pRelVarList) {
 		Iterator iter = pRelVarList.iterator();
 		/* Extract elements from iterator, may not follow the order in which they are added to HashSet. */

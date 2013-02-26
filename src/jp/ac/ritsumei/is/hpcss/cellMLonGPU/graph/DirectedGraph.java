@@ -3,18 +3,13 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.exception.GraphException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.GlobalLogger;
 
 /**

@@ -3,8 +3,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactor;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_eq;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableReference;
+
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
 
 public class CreateSimpleRecMLVariableTableVisitor implements Visitor {

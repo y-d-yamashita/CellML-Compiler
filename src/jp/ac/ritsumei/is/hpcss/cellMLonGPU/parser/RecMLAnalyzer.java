@@ -5,20 +5,16 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition.eRecMLTag;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.recML.RecMLDefinition.eRecMLVarType;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.RecMLVariableTable;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.table.SimpleRecMLVariableTable;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.utility.PairList;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.EqnDepTree.EqnDepTree;
+import jp.ac.ritsumei.is.hpcss.cellMLonGPU.eqnDepTree.EqnDepTree;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.CellMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RelMLException;
@@ -26,15 +22,11 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.RecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TableException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.TecMLException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.XMLException;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.recml.RecMLVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathExpression;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathFactory;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperand;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CreateRecMLVariableTableVisitor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.CreateSimpleRecMLVariableTableVisitor;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.visitor.SimpleRecML_SetLeftSideRightSideVariableVisitor;
-
 
 /**
  * CellML解析クラス
@@ -43,6 +35,7 @@ public class RecMLAnalyzer extends MathMLAnalyzer {
 
 	/*数式解析中判定*/
 	private boolean m_bMathParsing;
+	@SuppressWarnings("unused")
 	private boolean m_bAttrParsing;
 	
 	private RecMLVariableTable recMLVariableTable;

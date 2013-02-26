@@ -90,7 +90,7 @@ public class Math_piecewise extends MathOperator {
 		strExpression += pMathOtherWise.toLegalString();
 
 		/*piece文の閉じ括弧を追加*/
-		for (Math_piece it2: vecMathPiece) {
+		for (@SuppressWarnings("unused") Math_piece it2: vecMathPiece) {
 			strExpression += " ) ";
 		}
 
@@ -162,7 +162,7 @@ public class Math_piecewise extends MathOperator {
 		strExpression += pMathOtherWise.toLegalJavaString();
 
 		/*piece文の閉じ括弧を追加*/
-		for (Math_piece it2: vecMathPiece) {
+		for (@SuppressWarnings("unused") Math_piece it2: vecMathPiece) {
 			strExpression += " ) ";
 		}
 

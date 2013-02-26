@@ -143,7 +143,7 @@ public class MathExpression {
 		/*例外処理*/
 		if (m_stackCurOperator.empty()) {
 			throw new MathException("MathExpression","addOperand",
-						"no operator written before this operand");
+						"no operator written before this operand \"" + this.toLegalString() +"\"");
 		}
 
 		/*関数構築中の場合*/
@@ -257,11 +257,20 @@ public class MathExpression {
 			/*一致した演算子をpop-up*/
 			m_stackCurOperator.pop();
 		}
-	}
+	
+	
+		//演算子が空になればSelector内IndexのcnをIntにし、Selectorオペレータを除去する	
+		//@m-ara	
+		if(m_stackCurOperator.empty()){	
+			this.changeSelectorInteger();	
+			this.removeSelector();	
+		}		
+	}	 
 	
 	/**
-	 * Selector削除
-	 */
+	* Selector削除
+	* @author m-ara
+	*/
 	public void removeSelector(){
 		((MathOperator) m_pRootFactor).removeSelector(m_pRootFactor);
 	}
@@ -275,11 +284,19 @@ public class MathExpression {
 	}
 	
 	/**
-	 * Selector内cnをIntegerに変更
+	 * 数式情報をapplyへ割り当てる
 	 */
-	public void changeSelectorInteger(){
-		((MathOperator) m_pRootFactor).changeSelectorInteger(m_pRootFactor);
+	public void assignExpInfoToApply(HashMap<String, String> attrList){
+		((MathOperator) m_pRootFactor).assignExpInfoToApply(m_pRootFactor, attrList);
 	}
+	
+	/**
+	 * 数式情報をapplyへ追加する
+	 */
+	public void addExpInfoToApply(String name , String value){
+		((MathOperator) m_pRootFactor).addExpInfoToApply(m_pRootFactor, name, value);
+	}
+	
 	
 	/**
 	 * index内cnをIntegerに変更
@@ -288,13 +305,6 @@ public class MathExpression {
 		((MathOperator) m_pRootFactor).changeIndexInteger();
 	}
 	
-	/**
-	 *  conditionがあるかどうか検索
-	 */
-	public MathExpression searchCondition(){
-		MathExpression condExp = ((MathOperator) m_pRootFactor).searchCondition(m_pRootFactor);
-		return condExp;
-	}
 	
 	/**
 	 * conditionのreference番号を登録する
@@ -311,8 +321,9 @@ public class MathExpression {
 	}
 	
 	/**
-	 *数式内の全てのvariableを取得する (selector考慮)
+	 *数式内の全てのvariableを取得する (Index考慮)
 	 * @throws MathException 
+	 * @author m-ara
 	 */
 	public void getAllVariables(Vector<Math_ci> pVec) throws MathException{
 		((MathOperator)m_pRootFactor).getVariables(m_pRootFactor, pVec);
@@ -528,7 +539,22 @@ public class MathExpression {
 			((MathOperator)m_pRootFactor).searchFunction(pSearchOperand,pvecDstFunctions);
 		}
 	}
-
+	
+	/**
+	 * 数式が関数を含むかどうか判定
+	 * @return boolean 
+	 * @author m-ara
+	 */
+	public boolean isFunction(){
+		boolean pflag = false;
+		/*ルートが演算子の場合*/
+		if (m_pRootFactor.matches(eMathMLClassification.MML_OPERATOR)) {
+			/*検索開始*/
+			pflag = ((MathOperator)m_pRootFactor).isFunction();
+		}
+		return pflag;
+	}
+	
 	/**
 	 * 左辺式を取得する.
 	 * @return 左辺式
@@ -694,17 +720,6 @@ public class MathExpression {
 		return m_pRootFactor.toMathMLString();
 	}
 	
-	/**
-	 * 数式を展開する(Expand expression)
-	 * ex. a(x+y) -> ax + ay
-	 * @return 展開した数式 (Expanded expression)
-	 * @throws MathException
-	 */
-	public MathExpression expand(MathOperand ci) throws MathException{
-		MathExpression clone = this.toBinOperation();
-	clone.getRootFactor().expand(ci);
-		return clone;
-	}
 	
 	/**
 	 * 
@@ -892,4 +907,48 @@ public class MathExpression {
 		((MathOperator) m_pRootFactor).replaceCodeVariable(m_vecCodeVariables);
 		
 	}
+
+	
+	/**
+	 * 数式情報を取得する
+	 * @return HashMap<String, String>
+	 */
+	public String getExpInfo(String name){
+		return ((MathOperator) m_pRootFactor).getExpInfo(m_pRootFactor, name);
+	}
+	
+	/**
+	 * Selector内cnをIntegerに変更
+	 * @author m-ara
+	 */
+	public void changeSelectorInteger(){
+		((MathOperator) m_pRootFactor).changeSelectorInteger(m_pRootFactor);
+	}
+	
+	/**
+	 *  conditionがあるかどうか検索
+	 * @throws MathException 
+	 * @author m-ara
+	 */
+	public MathExpression searchCondition() throws MathException{
+		MathExpression condExp = ((MathOperator) m_pRootFactor).searchCondition(m_pRootFactor);
+		return condExp;
+	}
+	
+	/**
+	 * conditionのreference番号を登録する
+	 * @author m-ara
+	 */
+	public void setCondref(int num){
+		this.condref = num;
+	}
+	
+	/**
+	 * 数式IDを登録する
+	 * @author m-ara
+	 */
+	public void setExID(int num){
+		this.exID = num;
+	}
+	
 }

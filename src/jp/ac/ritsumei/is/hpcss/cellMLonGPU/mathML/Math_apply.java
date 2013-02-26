@@ -1,7 +1,6 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.MathMLDefinition.eMathOperator;
@@ -31,6 +30,14 @@ public class Math_apply extends MathOperator {
 		int num = Integer.parseInt(m_hashExpInfo.get("num"));
 		return num;
 	}
+	public void addExpInfo(String name, String value){
+		/*数式情報をHashMapに追加*/
+		m_hashExpInfo.put(name, value);
+	}
+	public String getExpInfo(String name){
+		return m_hashExpInfo.get(name);
+	}
+	
 	
 	/*構造情報要素*/
 	HashMap<Integer, String> m_hashAttr;

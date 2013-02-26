@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * @param <First> first element of pair
  * @param <Second> Second element of pair
  */
+@SuppressWarnings("serial")
 public class PairList<First,Second> extends ArrayList<Pair<First,Second>> {
 
 	/**

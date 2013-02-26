@@ -6,7 +6,6 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.exception.MathException;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.FieldVertexGroup;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.FieldVertexGroupList;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.MathExpressionLoop;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.field.FieldVertex;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
 
 /**
@@ -16,12 +15,12 @@ import jp.ac.ritsumei.is.hpcss.cellMLonGPU.mathML.Math_ci;
  */
 public class LoopCreator {
 
-	private final int timeIndexPosition=0;
+	//private final int timeIndexPosition=0;
 	private final int xAxisIndexPosition=1;
-	private final int yAxisIndexPosition=2;
-	private final int zAxisIndexPosition=3;
+	//private final int yAxisIndexPosition=2;
+	//private final int zAxisIndexPosition=3;
 	
-	private final Math_ci timeIndexVariable=new Math_ci("i");
+	//private final Math_ci timeIndexVariable=new Math_ci("i");
 	private final Math_ci xAxisIndexVariable=new Math_ci("j");
 	
 	

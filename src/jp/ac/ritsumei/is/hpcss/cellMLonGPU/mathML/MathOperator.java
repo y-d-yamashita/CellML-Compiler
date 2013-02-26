@@ -253,6 +253,56 @@ public abstract class MathOperator extends MathFactor {
 	public boolean isEnable() {
 		return m_bEnable;
 	}
+	
+	/**
+	 * 数式が関数を含むか判定する.
+	 * @autor m-ara
+	 */
+	public boolean isFunction(){
+		/*関数の場合*/
+		if (this.matches(eMathOperator.MOP_FN)){
+			return true;
+		}
+
+		/*その他の演算子*/
+		else{
+			/*すべての要素を調べる*/
+			for (MathFactor it: m_vecFactor) {
+				/*演算子の場合*/
+				if (it.matches(eMathMLClassification.MML_OPERATOR)) {
+
+					/*再帰呼び出し*/
+					if(((MathOperator)it).isFunction()){
+						return true;
+					}
+				
+				}
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * 数式がMath_eqを含むか判定する.
+	 * @author m-ara
+	 */
+	public boolean hasEqual(){
+			if(((MathOperator)this).matches(eMathOperator.MOP_EQ))
+				return true;
+			else{
+				/*すべての要素を調べる*/
+				for (MathFactor it: m_vecFactor) {
+					/*演算子の場合*/
+					if (it.matches(eMathMLClassification.MML_OPERATOR)) {
+						/*再帰呼び出し*/
+						if(((MathOperator)it).hasEqual())
+							return true;
+					}
+				}
+			}
+		return false;
+	}
+	
 
 	/**
 	 * 要素所持か判定する.
@@ -286,6 +336,7 @@ public abstract class MathOperator extends MathFactor {
 		}
 	}
 
+
 	/**
 	 * 数式を置換する.
 	 * @param pOldOperand 置換対象のオペランド
@@ -304,9 +355,18 @@ public abstract class MathOperator extends MathFactor {
 			/*オペランドの場合*/
 			if (it.matches(eMathMLClassification.MML_OPERAND)) {
 
-				/*オペランドの置換*/
-				if (((MathOperand)it).matches(pOldOperand)) {
-					m_vecFactor.set(i, pNewFactor);
+				/*Math_ciの置換*/
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CI)){
+					if(((Math_ci)it).equals(pOldOperand)){
+						m_vecFactor.set(i, pNewFactor);
+					}
+					
+				}
+				/*Math_cnの置換*/
+				if(((MathOperand)it).matches(eMathOperand.MOPD_CN)){
+					if (((MathOperand)it).matches(pOldOperand)) {
+						m_vecFactor.set(i, pNewFactor);
+					}
 				}
 			}
 			/*オペレータの場合*/
@@ -319,10 +379,7 @@ public abstract class MathOperator extends MathFactor {
 						m_vecFactor.set(i, pNewFactor);
 					}
 				}
-				/* Check if the operator is a differential operator */
-				else if (((MathOperator)it).matches(eMathOperator.MOP_DIFF) || ((MathOperator)it).matches(eMathOperator.MOP_PARTIALDIFF)) {
-						// do not replace differential operators
-				}
+
 				/*その他の場合*/
 				else {
 					/*再帰呼び出し*/
@@ -331,7 +388,7 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
-	
+
 	/**
 	 * Single-Step Replacement Scheme:: Replace the differential operator variables.
 	 * @param pOldOperand 置換対象のオペランド
@@ -447,6 +504,7 @@ public abstract class MathOperator extends MathFactor {
 	
 	/**
 	 *selector時apply削除用
+	 *@author m-ara
 	 */
 	public void replace(int i, MathFactor pNewFactor) {
 			m_vecFactor.set(i, pNewFactor);
@@ -454,6 +512,7 @@ public abstract class MathOperator extends MathFactor {
 	
 	/**
 	 * Selector内探索
+	 * @autor m-ara
 	 */
 	public void changeSelectorInteger(MathFactor rootFactor){
 		for (int i = 0; i < m_vecFactor.size(); i++) {
@@ -470,7 +529,8 @@ public abstract class MathOperator extends MathFactor {
 	}
 	
 	/**
-	 * Index要素のcnをIntegerに変える
+	 * changeSelectorIntegerにより使用されるメソッド
+	 * @autor m-ara
 	 * */
 	public void changeIndexInteger(){
 		/*子要素をたどる*/
@@ -488,8 +548,10 @@ public abstract class MathOperator extends MathFactor {
 	
 	/**
 	 * condition部分を抜き取る
+	 * @throws MathException 
+	 * @author m-ara
 	 */
-	public MathExpression searchCondition(MathFactor rootFactor){
+	public MathExpression searchCondition(MathFactor rootFactor) throws MathException{
 		MathExpression condExp = null;
 		for (int i = 0; i < m_vecFactor.size(); i++) {
 			MathFactor it = m_vecFactor.get(i);
@@ -497,9 +559,12 @@ public abstract class MathOperator extends MathFactor {
 				/*conditionなら*/
 				if(((MathOperator)it).matches(eMathOperator.MOP_CONDITION)){
 					/*conditionの子要素（抜き取る数式）を取り出しておく*/
-					condExp = new MathExpression();
-					/*conditionタグ以下のapplyから新しい数式とする*/
-					condExp.addOperator((MathOperator)((MathOperator)it).m_vecFactor.elementAt(0));
+					/*conditionタグ以下のOperandまたはOperatorから新しい数式とする*/
+					if(((MathOperator)it).m_vecFactor.elementAt(0).matches(eMathMLClassification.MML_OPERATOR)){
+						condExp = new MathExpression((MathOperator)((MathOperator)it).m_vecFactor.elementAt(0));
+					}else{
+						condExp = new MathExpression((MathOperand)((MathOperator)it).m_vecFactor.elementAt(0));
+					}
 					
 					/*conditionの親要素検索*/
 					MathOperator parent = findParentOperator((MathOperator)rootFactor, it);
@@ -519,6 +584,7 @@ public abstract class MathOperator extends MathFactor {
 	
 	/**
 	 * Selectorを削除する
+	 * @author m-ara
 	 */
 	public void removeSelector(MathFactor rootFactor){
 		for (int i = 0; i < m_vecFactor.size(); i++) {
@@ -549,10 +615,6 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
-	
-	
-	
-
 
 	/**
 	 * 構造情報をapplyへ割り当てる
@@ -568,7 +630,51 @@ public abstract class MathOperator extends MathFactor {
 	}
 	
 	/**
+	 * 数式情報をapplyへ割り当てる
+	 */
+	public void assignExpInfoToApply(MathFactor rootFactor, HashMap<String, String> attrList){
+		MathFactor it = rootFactor;
+		/*applyなら*/
+		if(it.matches(eMathMLClassification.MML_OPERATOR)){
+			if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+				((Math_apply)it).setExpInfo(attrList);
+			}
+		}
+	}
+
+	/**
+	 * 数式情報をapplyへ追加する
+	 */
+	public void addExpInfoToApply(MathFactor rootFactor, String name ,String value){
+		MathFactor it = rootFactor;
+		/*applyなら*/
+		if(it.matches(eMathMLClassification.MML_OPERATOR)){
+			if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+				((Math_apply)it).addExpInfo(name, value);
+			}
+		}
+	}
+
+	/**
+	 * 数式情報をapplyから取得する
+	 */
+	public String getExpInfo(MathFactor rootFactor, String name){
+		MathFactor it = rootFactor;
+		String pStr = null;
+		
+		/*applyなら*/
+		if(it.matches(eMathMLClassification.MML_OPERATOR)){
+			if(((MathOperator)it).matches(eMathOperator.MOP_APPLY)){
+				pStr = ((Math_apply)it).getExpInfo(name);
+			}
+		}
+		
+		return pStr; 
+	}
+	
+	/**
 	 * 親Operatorを探す
+	 * @author m-ara
 	 */
 	public MathOperator findParentOperator(MathOperator beforeOperator, MathFactor findOperator){
 		MathOperator parent = null;
@@ -586,8 +692,10 @@ public abstract class MathOperator extends MathFactor {
 		}
 		return parent;
 	}
+
 	/**
 	 * 指定する非演算子が何番目にあるかintを返す
+	 * @author m-ara
 	 */
 	public int findObj(MathOperator obj){
 		int number = 0;
@@ -601,7 +709,8 @@ public abstract class MathOperator extends MathFactor {
 	}
 	
 	/**
-	 * 数式中のvariablesを取得する(selectorを考慮する)
+	 * 数式中のvariablesを取得する(Indexを考慮する)
+	 * @author m-ara
 	 */
 	public void getVariables(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
 		for (int i = 0; i < m_vecFactor.size(); i++) {
@@ -631,6 +740,7 @@ public abstract class MathOperator extends MathFactor {
 			}
 		}
 	}
+
 	public void getVariablesWithSelector(MathFactor rootFactor, Vector<Math_ci> pVec) throws MathException{
 		for (int i = 0; i < m_vecFactor.size(); i++) {
 			MathFactor it = m_vecFactor.get(i);
@@ -1016,22 +1126,9 @@ public abstract class MathOperator extends MathFactor {
 	 * @throws MathException
 	 */
 	public abstract double calculate() throws MathException;
-	
-	/**
-	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
-	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
-	 * @throws MathException
-	 */
+
 	public MathFactor clone(){
-		/*髢｢謨ｰ縺ｮ蝣ｴ蜷�/
-		if(this.matches(eMathOperator.MOP_FN)){
-			return ((Math_fn)this).clone();
-		}
 
-		/*縺昴�莉悶�貍皮ｮ怜ｭ�/
-		else {
-
-			/*貍皮ｮ怜ｭ舌�隍�｣ｽ*/
 			MathOperator newOperator = null;
 			try {
 				newOperator = MathFactory.createOperator(m_operatorKind);
@@ -1040,7 +1137,6 @@ public abstract class MathOperator extends MathFactor {
 				e.printStackTrace();
 			}
 
-			/*縺吶∋縺ｦ縺ｮ蟄占ｦ∫ｴ�ｒ隍�｣ｽ*/
 			for (MathFactor it: m_vecFactor) {
 				newOperator.addFactor(it.clone());
 			}
@@ -1048,30 +1144,18 @@ public abstract class MathOperator extends MathFactor {
 			return newOperator;
 		}
 
-
-	/**
-	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
-	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
-	 * @throws MathException
-	 */
 	public MathFactor copy(){return this;}
 
-	/**
-	 * 謨ｰ蠑上ｒ隍�｣ｽ縺吶ｋ.
-	 * @return 隍�｣ｽ縺励◆謨ｰ蠑�
-	 * @throws MathException
-	 */
+
+
 	@Override
 	public MathFactor semiClone(){
-		/*髢｢謨ｰ縺ｮ蝣ｴ蜷*/
+	
 		if(this.matches(eMathOperator.MOP_FN)){
 			return ((Math_fn)this).clone();
 		}
 
-		/*縺昴�莉悶�貍皮ｮ怜ｭ*/
 		else {
-
-			/*貍皮ｮ怜ｭ舌�隍�｣ｽ*/
 			MathOperator newOperator = null;
 			try {
 				newOperator = MathFactory.createOperator(m_operatorKind);
@@ -1080,7 +1164,6 @@ public abstract class MathOperator extends MathFactor {
 				e.printStackTrace();
 			}
 
-			/*縺吶∋縺ｦ縺ｮ蟄占ｦ∫ｴ�ｒ隍�｣ｽ*/
 			for (MathFactor it: m_vecFactor) {
 				newOperator.addFactor(it.semiClone());
 			}
@@ -1088,11 +1171,6 @@ public abstract class MathOperator extends MathFactor {
 			return newOperator;
 		}
 	}
-	/**
-	 * 謨ｰ蠑上ｒ螻暮幕縺吶ｋ��
-	 * @return 螻暮幕邨先棡
-	 * @throws MathException 
-	 */
 	public MathFactor expand(MathOperand ci) throws MathException{
 		Vector<MathFactor> new_m_VecFactor = new Vector<MathFactor>();
 		for(MathFactor it:m_vecFactor){
@@ -1172,10 +1250,6 @@ public abstract class MathOperator extends MathFactor {
 			f.traverse(v);
 	}
 	
-	/**
-	 * m_vecFactor繧貞叙蠕励☆繧�
-	 * @return 髱樊ｼ皮ｮ励�繧ｯ繧ｿ
-	 */
 	public Vector<MathFactor> getFactorVector(){ 
 		return this.m_vecFactor;
 	}

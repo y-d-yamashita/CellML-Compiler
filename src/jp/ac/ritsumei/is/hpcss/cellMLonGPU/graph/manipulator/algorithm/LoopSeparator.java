@@ -2,16 +2,10 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.manipulator.algorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.DirectedGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.FieldGraph;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.FieldVertexGroup;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.FieldVertexGroupList;
-import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.field.FieldEdge;
 import jp.ac.ritsumei.is.hpcss.cellMLonGPU.graph.field.FieldVertex;
 
 public class LoopSeparator {

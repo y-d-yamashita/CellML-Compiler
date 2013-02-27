@@ -1,2 +1,0 @@
-environment.time	t
-Main.x	xi[0]

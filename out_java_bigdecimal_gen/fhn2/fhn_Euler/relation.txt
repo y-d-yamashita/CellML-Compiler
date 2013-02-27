@@ -1,8 +1,0 @@
-Main.time	t
-Main.x	xi[0]
-Main.y	xi[1]
-Main.r	y1[0]
-Main.zz	z[0]
-Main.epsilon	z[1]
-Main.beta	z[2]
-Main.gamma	z[3]

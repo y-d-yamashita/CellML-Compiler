@@ -50,6 +50,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *  C program code or Java program code
  * 
  * 
+ * Arguments Information
+ * 
+ * 1. -C or -J
+ * 2. SimpleRecML or StructuredRecML
+ * 3. Input file directory	(ex; ./model/SimpleRecML/fhn_BackwardEuler.recml)
+ * 4. Output directory 		(ex; ./model)
+ * 5. Output file name 		(ex; fhn_BackwardEulerSimulation.java)
+ * 
+ * 
  * @author n-washio
  * 
  */

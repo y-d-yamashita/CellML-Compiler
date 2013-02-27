@@ -53,7 +53,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  * input file:  
  * 	RelML or SimpleRecML or StructuredRecML
-
+ * 
  * output file:
  *  C program code or Java program code
  * 
@@ -61,7 +61,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  * Arguments Information
  * 
- * 1. -J or -C
+ * 1. -C or -J
  * 2. RelML or SimpleRecML or StructuredRecML
  * 3. Input file directory	(ex; ./model/RelML/fhn_BackwardEuler.relml)
  * 4. Output directory 		(ex; ./model)

@@ -111,7 +111,7 @@ public class CellCompilerGUI  extends JFrame {
 		bg.add(rRelmlButton);
 
 		// 出力ディレクトリ ラベル
-		outDirLabel = new JLabel("Output folder");
+		outDirLabel = new JLabel("Output Directory");
 		dim = outDirLabel.getPreferredSize();
 		outDirLabel.setPreferredSize(new Dimension(labelWidth, dim.height));
 		// 出力ディレクトリ テキストフィールド

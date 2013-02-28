@@ -1,0 +1,131 @@
+<relml>
+
+	<!--    luo_rudy_1991 Euler relml version.1  	-->
+	<!--	Last edit:   20130228  		-->
+	<!--	Author:     m-ara			-->
+
+	<tecml filename="model/TecML2.0/Euler.tecml"/>
+	<cellml name="cellml0" filename="model/CellML/simple_luo_rudy_1991.cellml"/>
+ 
+ 	<tecmlvariable name="x">
+ 		<correspondcellml file="cellml0" component="Main" name="V"/>
+ 		<correspondcellml file="cellml0" component="Main" name="m"/>
+ 		<correspondcellml file="cellml0" component="Main" name="h"/>
+ 		<correspondcellml file="cellml0" component="Main" name="j"/>
+ 		<correspondcellml file="cellml0" component="Main" name="d"/>
+ 		<correspondcellml file="cellml0" component="Main" name="f"/>
+ 		<correspondcellml file="cellml0" component="Main" name="X"/>
+ 		<correspondcellml file="cellml0" component="Main" name="Cai"/>
+	</tecmlvariable>
+	<tecmlvariable name="t">
+		<correspondcellml file="cellml0" component="Main" name="time" />
+	</tecmlvariable>
+	<tecmlvariable name="i">
+		<correspondcellml file="cellml0" component="Main" name="I_stim" />
+		<correspondcellml file="cellml0" component="Main" name="E_Na" />
+		<correspondcellml file="cellml0" component="Main" name="i_Na" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_m" />
+		<correspondcellml file="cellml0" component="Main" name="beta_m" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_h" />
+		<correspondcellml file="cellml0" component="Main" name="beta_h" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_j" />
+		<correspondcellml file="cellml0" component="Main" name="beta_j" />
+		<correspondcellml file="cellml0" component="Main" name="E_si" />
+		<correspondcellml file="cellml0" component="Main" name="i_si" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_d" />
+		<correspondcellml file="cellml0" component="Main" name="beta_d" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_f" />
+		<correspondcellml file="cellml0" component="Main" name="beta_f" />
+		<correspondcellml file="cellml0" component="Main" name="g_K" />
+		<correspondcellml file="cellml0" component="Main" name="E_K" />
+		<correspondcellml file="cellml0" component="Main" name="i_K" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_X" />
+		<correspondcellml file="cellml0" component="Main" name="beta_X" />
+		<correspondcellml file="cellml0" component="Main" name="Xi" />
+		<correspondcellml file="cellml0" component="Main" name="g_K1" />
+		<correspondcellml file="cellml0" component="Main" name="E_K1" />
+		<correspondcellml file="cellml0" component="Main" name="i_K1" />
+		<correspondcellml file="cellml0" component="Main" name="alpha_K1" />
+		<correspondcellml file="cellml0" component="Main" name="beta_K1" />
+		<correspondcellml file="cellml0" component="Main" name="K1_infinity" />
+		<correspondcellml file="cellml0" component="Main" name="E_Kp" />
+		<correspondcellml file="cellml0" component="Main" name="Kp" />
+		<correspondcellml file="cellml0" component="Main" name="i_Kp" />
+		<correspondcellml file="cellml0" component="Main" name="i_b" />
+	</tecmlvariable>
+	<tecmlvariable name="k">
+		<correspondcellml file="cellml0" component="Main" name="kV" />
+		<correspondcellml file="cellml0" component="Main" name="km" />
+		<correspondcellml file="cellml0" component="Main" name="kh" />
+		<correspondcellml file="cellml0" component="Main" name="kj" />
+		<correspondcellml file="cellml0" component="Main" name="kd" />
+		<correspondcellml file="cellml0" component="Main" name="kf" />
+		<correspondcellml file="cellml0" component="Main" name="kX" />
+		<correspondcellml file="cellml0" component="Main" name="kCai" />
+	</tecmlvariable>
+	<tecmlvariable name="xinit">
+		<correspondrelml value="-83.853"/>
+ 		<correspondrelml value="0.00187018"/>
+ 		<correspondrelml value="0.9804713"/>
+ 		<correspondrelml value="0.98767124"/>
+ 		<correspondrelml value="0.00316354"/>
+ 		<correspondrelml value="0.99427859"/>
+ 		<correspondrelml value="0.16647703"/>
+ 		<correspondrelml value="2.0E-4"/>
+	</tecmlvariable>
+	<tecmlvariable name="tinit">
+		<correspondrelml value="0.0" />
+	</tecmlvariable>
+	<tecmlvariable name="z">
+		<correspondcellml file="cellml0" component="Main" name="R" />
+		<correspondcellml file="cellml0" component="Main" name="T" />
+		<correspondcellml file="cellml0" component="Main" name="F" />
+		<correspondcellml file="cellml0" component="Main" name="C" />
+		<correspondcellml file="cellml0" component="Main" name="stim_start" />
+		<correspondcellml file="cellml0" component="Main" name="stim_end" />
+		<correspondcellml file="cellml0" component="Main" name="stim_period" />
+		<correspondcellml file="cellml0" component="Main" name="stim_duration" />
+		<correspondcellml file="cellml0" component="Main" name="stim_amplitude" />
+		<correspondcellml file="cellml0" component="Main" name="g_Na" />
+		<correspondcellml file="cellml0" component="Main" name="Nao" />
+		<correspondcellml file="cellml0" component="Main" name="Nai" />
+		<correspondcellml file="cellml0" component="Main" name="PR_NaK" />
+		<correspondcellml file="cellml0" component="Main" name="Ko" />
+		<correspondcellml file="cellml0" component="Main" name="Ki" />
+		<correspondcellml file="cellml0" component="Main" name="g_Kp" />
+		<correspondcellml file="cellml0" component="Main" name="E_b" />
+		<correspondcellml file="cellml0" component="Main" name="g_b" />
+	</tecmlvariable>
+	<tecmlvariable name="d">
+		<correspondrelml name="d"  value="0.01"/>
+	</tecmlvariable>
+	<tecmlvariable name="xend">
+		<correspondrelml name="Vend"/>
+ 		<correspondrelml name="mend"/>
+ 		<correspondrelml name="hend"/>
+ 		<correspondrelml name="jend"/>
+ 		<correspondrelml name="dend"/>
+ 		<correspondrelml name="fend"/>
+ 		<correspondrelml name="Xend"/>
+ 		<correspondrelml name="Caiend"/>
+	</tecmlvariable>
+	<tecmlvariable name="tend">
+		<correspondrelml name="tend"/>
+	</tecmlvariable>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+		
+	    <apply condname="cond" loopindex="n">
+	        <lt/>
+	        <apply>
+		        <selector/>    
+	        	<ci>Main_time_t</ci>
+	        	<ci>n</ci>
+	        </apply>
+	        <cn>600</cn>
+	    </apply>
+			
+	
+	</math>
+	
+</relml>

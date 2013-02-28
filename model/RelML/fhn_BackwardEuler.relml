@@ -1,4 +1,9 @@
 <relml>
+
+	<!--    fhn BackwardEuler relml version.1  	-->
+	<!--	Last edit:   20130228  		-->
+	<!--	Author:     m-ara			-->
+
 	<tecml filename="model/TecML2.0/BackwardEuler.tecml"/>
 	<cellml name="cellml0" filename="model/CellML/fhn.cellml"/>
  
@@ -43,7 +48,7 @@
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
 		
 	    <apply condname="cond" loopindex="n">
-	        <eq/>
+	        <lt/>
 	        <apply>
 		        <selector/>    
 	        	<ci>Main_time_t</ci>

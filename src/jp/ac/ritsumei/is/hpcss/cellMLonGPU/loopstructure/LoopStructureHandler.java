@@ -1,7 +1,7 @@
 package jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure;
 
 /**
- * LoopStructureHandler class is used "Labelattr"(@ m-Kawabata)
+ * LoopStructureHandler class is used "LabelAttribute"(@ m-Kawabata)
  *  to decide Loop Structure for Structured RecML generator.
  * 
  * @author n-washio
@@ -19,84 +19,105 @@ public class LoopStructureHandler {
 	public ArrayList<Integer[]> loop_nameList = new ArrayList<Integer[]>();
 	public ArrayList<RelationPattern> loopStructure= new ArrayList<RelationPattern>();
 	public HashMap<Integer,Integer> connectableNode = new HashMap<Integer,Integer>();
-	public ArrayList<RelationPattern>inh_set = new ArrayList<RelationPattern>();
-
-	public void add_inh(Integer root, String attribute, Integer child, ArrayList<RelationPattern> fixed_inputList) {
-		
-		
-		//継承関係追加
-		RelationPattern pattern_inh = new RelationPattern(root,child,attribute);
-		inh_set.add(pattern_inh);
-		
-		for(int i=0;i<fixed_inputList.size();i++){
-			if(child.equals(fixed_inputList.get(i).Parent_name)){
-				add_inh(root,attribute,fixed_inputList.get(i).Child_name,fixed_inputList);
-			}
-		}
-	}
-		
 		
 	
 	public boolean check_inh(ArrayList<RelationPattern> fixed_inputList,ArrayList<RelationPattern> inputList) {
 		
-		//継承関係セットを作成し、全て入力セットに含まれていれば矛盾しない構造であると見なす
-		
-		for(int i=0;i<fixed_inputList.size();i++){
-			//子要素の名前について,親になっているかを調べ,親になっていればその子要素に対して継承関係を作成する.
-			//この処理を再帰的に行う.
-			
-			Integer c_name = fixed_inputList.get(i).Child_name;
-			
-			for(int j=0;j<fixed_inputList.size();j++){
-				
-				if(i!=j){
-					if(c_name.equals(fixed_inputList.get(j).Parent_name)){
-						
-						add_inh(fixed_inputList.get(i).Parent_name,
-								fixed_inputList.get(i).Attribute_name,
-								fixed_inputList.get(i).Child_name,fixed_inputList);
+		//継承関係と直接関係を全て入力情報と比較し、不一致があれば削除
+		int loop_num = fixed_inputList.size()+1;
+	
+		ArrayList<RelationPattern> judgment_set = new ArrayList<RelationPattern>();
 
+			for(int j=0;j<loop_num-1;j++){
+
+				Integer c_name = fixed_inputList.get(j).Child_name;
+				for(int k=0;k<loop_num-1;k++){
+					if(j!=k){
+						if(c_name.equals(fixed_inputList.get(k).Parent_name)){
+							
+							Integer pa = fixed_inputList.get(j).Parent_name;
+							Integer ch =fixed_inputList.get(k).Child_name;
+							String at = new String(fixed_inputList.get(j).Attribute_name);
+							RelationPattern patternset = new RelationPattern(pa,ch,at);
+							
+							int match=0;
+							for(int y=0;y<judgment_set.size();y++){
+								if(patternset.Attribute_name.equals(judgment_set.get(y).Attribute_name)){
+									if(patternset.Child_name.equals(judgment_set.get(y).Child_name)){
+										if(patternset.Parent_name.equals(judgment_set.get(y).Parent_name)){
+											match=1;
+										}
+									}
+								}
+							}
+							if(match==0)judgment_set.add(patternset);
+						}
 					}
 				}
 			}
-		}
-		
-		int count=0;
-		
-		for(int i=0;i<inh_set.size();i++){
-			boolean flag=false;
-			for(int j=0;j<inputList.size();j++){
+			
+			if(loop_num>3){
+				for(int x=0;x<loop_num -3 ;x++){//ループ数4以上では孫以降の継承情報も必要
 				
-				if(inh_set.get(i).Parent_name.equals(inputList.get(j).Parent_name)){
-					if(inh_set.get(i).Child_name.equals(inputList.get(j).Child_name)){
+					int setSize = judgment_set.size(); //初期サイズを記録して探索に使用
+					for(int j=0;j<setSize;j++){
+						Integer c_name = judgment_set.get(j).Child_name;
+						for(int k=0;k<setSize;k++){
+							if(j!=k){
+								if(c_name.equals(judgment_set.get(k).Parent_name)){
+									
+									Integer pa = judgment_set.get(j).Parent_name;
+									Integer ch = judgment_set.get(k).Child_name;
+									String at = new String(judgment_set.get(j).Attribute_name);
+									RelationPattern patternset = new RelationPattern(pa,ch,at);
+									
+									int match=0;
+									for(int y=0;y<judgment_set.size();y++){
+										if(patternset.Attribute_name.equals(judgment_set.get(y).Attribute_name)){
+											if(patternset.Child_name.equals(judgment_set.get(y).Child_name)){
+												if(patternset.Parent_name.equals(judgment_set.get(y).Parent_name)){
+													match=1;
+												}
+											}
+										}
+									}
+									if(match==0)judgment_set.add(patternset);
+								}
+							}
+						}
+					}
+				}
+			}
 
-							if(inh_set.get(i).Attribute_name.equals(inputList.get(j).Attribute_name)){
-								count++;
-								break;
+			int count=0;
+			for(int j=0; j<judgment_set.size();j++){
+				for(int k=0;k<inputList.size();k++){
+					if(judgment_set.get(j).Parent_name.equals(inputList.get(k).Parent_name)){
+						if(judgment_set.get(j).Child_name.equals(inputList.get(k).Child_name)){
+							
+							if(judgment_set.get(j).Attribute_name.equals(inputList.get(k).Attribute_name)){
+								count++;//属性まで完全に一致でカウント
 							}
 							
 							//入力側の属性がnullの場合, 判定した子要素が他にnull以外の親を持っているか入力を探索.
-							if(inputList.get(j).Attribute_name.equals("null")){
+							if(inputList.get(k).Attribute_name.equals("null")){
 								int accept_flag=0; 
-								
 								ArrayList<RelationPattern> not_nullSet = new ArrayList<RelationPattern>();
-								
 								for(int x=0;x<inputList.size();x++){
 									//入力を探索し,null以外の関係がある親が存在しているかどうかを調べる.
-									if(inh_set.get(i).Child_name.equals(inputList.get(x).Child_name)){
+									if(judgment_set.get(j).Child_name.equals(inputList.get(x).Child_name)){
 										if(!inputList.get(x).Attribute_name.equals("null")){
 											not_nullSet.add(inputList.get(x));//not_nullSetに格納
 										}
 									}
 								}
-								
 								//null以外の関係がある場合,not_nullSetの１つがpattern_setにあるか探索
 								if(not_nullSet.size() != 0){
 									for(int x=0;x<not_nullSet.size();x++){
-										for(int y=0;y<inh_set.size();y++){
-											if(inh_set.get(y).Attribute_name.equals(not_nullSet.get(x).Attribute_name)){
-												if(inh_set.get(y).Parent_name.equals(not_nullSet.get(x).Parent_name)){
-													if(inh_set.get(y).Child_name.equals(not_nullSet.get(x).Child_name)){
+										for(int y=0;y<judgment_set.size();y++){
+											if(judgment_set.get(y).Attribute_name.equals(not_nullSet.get(x).Attribute_name)){
+												if(judgment_set.get(y).Parent_name.equals(not_nullSet.get(x).Parent_name)){
+													if(judgment_set.get(y).Child_name.equals(not_nullSet.get(x).Child_name)){
 														accept_flag=1;
 													}
 												}
@@ -107,19 +128,26 @@ public class LoopStructureHandler {
 									accept_flag=1;
 								}
 								if(accept_flag == 1){
-									if(!inh_set.get(j).Attribute_name.equals("inner")){
+									if(!judgment_set.get(j).Attribute_name.equals("inner")){
 										count++;//innerでなければcount;		
 									}
 								}								
 							}
+						}
 					}
 				}
 			}
-			if(flag)count++;
-		}
-		if(inh_set.size()==count) return true;
-		else return false;
+			
+			if(count==judgment_set.size()){
+				//全ての関係が含まれている場合、適切な構造と見なす
+			
+				loopStructure=fixed_inputList;//１つ見つかった段階で終了
+				 return true;
+			}else {
+				return false;
+			}
 
+		
 	}
 
 	public ArrayList<Integer> make_separateNodeList(ArrayList<RelationPattern> inputList, HashMap<Integer, String> m_indexList) {

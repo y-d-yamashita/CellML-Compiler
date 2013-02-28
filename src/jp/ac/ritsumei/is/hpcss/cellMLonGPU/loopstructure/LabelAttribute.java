@@ -255,7 +255,6 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 						}
 						else{
 							lsh.prepostList.clear();
-							lsh.inh_set.clear();
 						}
 					}
 		
@@ -295,7 +294,6 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	//labelAllocation
 	// 属性情報決定メソッド
 	//========================================================
-	@SuppressWarnings("unchecked")
 	public void labelAllocation(){
 
 		/*Node Listのコピーを作成*/
@@ -629,14 +627,24 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 		for(int i=0 ; i < loopSize;i++){
 			attrList.put(i, "null");
 		}
+//		attrList.put(0, "null");
+//		attrList.put(1, "null");
+//		attrList.put(2, "null");
 		
 		/*ゴールNodeのアトリビュートリストを登録する*/
 		HashMapUpAttrList.put(-2, attrList);
 			
-		/*equation oder順にアトリビュートリストを決定していく*/		
+		/*equation oder順にアｔロリビューとリストを決定していく*/		
 		for(int i = m_VecEquOder.size()-1; -1<i ;i--){
 			/*数式番号を取得する*/
 			int checkEquNum = m_VecEquOder.get(i);
+//			/*debug*/
+//			System.out.println("EquNum: " + checkEquNum);
+
+			for(int xx:HashMapUpAttrList.keySet()){
+				//System.out.print(xx+", ");
+			}
+			//System.out.println();
 			
 			ArrayList<Integer> checkDestIdList = null;
 			/*数式番号が登録されているNodeIdを取得する*/
@@ -880,7 +888,14 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	// 属性情報List出力メソッド
 	//========================================================
 	public void outputLabelSample(HashMap<Integer, HashMap<Integer, String>> AttrLists){
-		
+		for(Integer i:AttrLists.keySet()){
+			HashMap<Integer, String> hm = AttrLists.get(i);
+			//System.out.print("equNum"+ i);
+			for(Integer j:hm.keySet()){
+				//System.out.print("-" + AttrLists.get(i).get(j) + "-");
+			}
+			//System.out.println();
+		}
 	}
 	
 	//========================================================
@@ -1002,7 +1017,6 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 		}	
 	}
 	
-	@SuppressWarnings("unused")
 	private void kawabataTest1212_3(int PARENT_ID, int childID, String ATTR) {
 		// TODO Auto-generated method stub
 		kawabataTest1212_2(PARENT_ID, childID, ATTR);
@@ -1038,7 +1052,6 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	//　addConditionAttr
 	// conditionに対して属性情報を割り振る
 	//========================================================
-	@SuppressWarnings("unchecked")
 	public void addConditionAttr(HashMap<Integer, HashMap<Integer, String>> AttrLists){
 		int listSize =  m_condrefAttrEquNumLists.size();
 		int i = 0;

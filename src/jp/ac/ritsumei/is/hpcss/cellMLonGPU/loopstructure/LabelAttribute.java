@@ -129,7 +129,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 			//---------------------------------------------------
 			
 			//属性競合不可避なケースに対するnullへのpre/post割り当て
-			inputList=lsh.AssignInnerDependency(inputList, loopNameList);
+			inputList=lsh.assignInnerDependency(inputList, loopNameList);
 			
 			ArrayList<Integer> separateNodeList = new ArrayList<Integer>();
 			separateNodeList=lsh.make_separateNodeList(inputList,m_indexList);
@@ -151,112 +151,54 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 			//名前の順列を格納
 			lsh.set_nameList(0, new int [m_indexList.size()], new boolean [m_indexList.size()],  loopNameList);
 			
-			//リーフノードを格納(inner子要素)
-			ArrayList<Integer> leafList = new ArrayList<Integer>();
-			for(int a=0;a<inputList.size();a++){
-				if(inputList.get(a).Attribute_name.equals("inner")){
-					
-					boolean flag=false;
-					for(int b=0;b<leafList.size();b++){
-						if(leafList.get(b)==inputList.get(a).Child_name)flag=true;
-					}
-					if(!flag)leafList.add(inputList.get(a).Child_name);
-				}
-			}
-			
-			
 			boolean findFlag=false;
 			
 			for(int start=0;start<lsh.loop_nameList.size();start++){
 				
-
-				boolean ignore_flag = false;
-
-				//inner条件から削減可能
-				//前処理で全てチェックしてもいいが,loop数が10を超えるとメモリを多量に使ってしまうので内部で逐次処理.
-				boolean ignore = false;
-				
-				for(int j=0;j<inputList.size();j++){
-					if(inputList.get(j).Attribute_name.equals("inner")){
-						boolean child = false;
-						boolean flag = false;
-								
-						//childに対してparentが先行して配置される要素を判定
-						for(int k=0;k<lsh.loop_nameList.get(start).length;k++){
-									
-							if(lsh.loop_nameList.get(start)[k].equals(inputList.get(j).Child_name)){
-								child=true;
-							}
-							if(lsh.loop_nameList.get(start)[k].equals(inputList.get(j).Parent_name)){
-								if(!child) flag = true;break;
-							}
-						}
-								
-						if(flag){
-							ignore=true;
-							break;
-						}
-					}	
-				}
-				if(ignore){
-					ignore_flag=true;
-				}
 				
 				for(int goal=0;goal<lsh.loop_nameList.size();goal++){
 					
-					if(ignore_flag)break;
 					
-					//start順列の末尾とgoal順列の先頭(すなわちリーフノードでない部分)は一致しているという条件でも決定に十分
-					int rootFactorSize = m_indexList.size() - leafList.size();
+						
+						
+					ArrayList<Integer[]> Pair_Pattern = new ArrayList<Integer[]>();
+					Pair_Pattern.add(lsh.loop_nameList.get(start));
+					Pair_Pattern.add(lsh.loop_nameList.get(goal));
 					
-					int count=0;
-					for(int i=0;i<rootFactorSize;i++){
-						if(lsh.loop_nameList.get(goal)[i]==lsh.loop_nameList.get(start)[(m_indexList.size()-1) - i ]){
-							count++;
-						}
+					ArrayList<RelationPattern> inputList_new = new ArrayList<RelationPattern>();
+		    		
+		    		//見つかるまで削除手順を変えて繰り返す.
+					inputList_new= new ArrayList<RelationPattern>();
+					
+					//---------------------------------------------------
+					//継承関係の削除
+					//---------------------------------------------------
+					inputList_new = lsh.remove_inhPath(inputList, Pair_Pattern);
+					
+					//---------------------------------------------------
+					//双方向パスの処理
+					//---------------------------------------------------
+					
+					ArrayList<Integer> pre_num = new ArrayList<Integer>();
+					for(int j=0;j<inputList_new.size();j++){
+						if(inputList_new.get(j).Attribute_name.equals("pre")) pre_num.add(j);
 					}
 					
-					if(count==rootFactorSize){
-						
-						
-						ArrayList<Integer[]> Pair_Pattern = new ArrayList<Integer[]>();
-						Pair_Pattern.add(lsh.loop_nameList.get(start));
-						Pair_Pattern.add(lsh.loop_nameList.get(goal));
-						
-						ArrayList<RelationPattern> inputList_new = new ArrayList<RelationPattern>();
-			    		
-			    		//見つかるまで削除手順を変えて繰り返す.
-						inputList_new= new ArrayList<RelationPattern>();
-						
-						//---------------------------------------------------
-						//継承関係の削除
-						//---------------------------------------------------
-						inputList_new = lsh.remove_inhPath(inputList, Pair_Pattern);
-						
-						//---------------------------------------------------
-						//双方向パスの処理
-						//---------------------------------------------------
-						
-						ArrayList<Integer> pre_num = new ArrayList<Integer>();
-						for(int j=0;j<inputList_new.size();j++){
-							if(inputList_new.get(j).Attribute_name.equals("pre")) pre_num.add(j);
-						}
-						
-						lsh.make_prepostList(0, new Integer[pre_num.size()]);
+					lsh.make_prepostList(0, new Integer[pre_num.size()]);
 
-						inputList_new = lsh.fix_interactivePath(inputList_new,lsh.loop_nameList.size());
+					inputList_new = lsh.fix_interactivePath(inputList_new,lsh.loop_nameList.size());
+					
+					if(inputList_new!=null &&lsh.check_inh(inputList_new,inputList)){
 						
-						if(inputList_new!=null &&lsh.check_inh(inputList_new,inputList)){
-							
-							//継承判定をして矛盾しなければbreak
-							lsh.loopStructure=inputList_new;
-							findFlag=true;
-							break;
-						}
-						else{
-							lsh.prepostList.clear();
-						}
+						//継承判定をして矛盾しなければbreak
+						lsh.loopStructure=inputList_new;
+						findFlag=true;
+						break;
 					}
+					else{
+						lsh.prepostList.clear();
+					}
+					
 		
 				}
 				if(findFlag)break;
@@ -294,6 +236,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	//labelAllocation
 	// 属性情報決定メソッド
 	//========================================================
+	@SuppressWarnings("unchecked")
 	public void labelAllocation(){
 
 		/*Node Listのコピーを作成*/
@@ -610,6 +553,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	//upLabel
 	// 依存関係グラフに対してGoalからStartに向かって属性情報を決定していく
 	//========================================================
+	@SuppressWarnings("unused")
 	public HashMap<Integer, HashMap<Integer, String>> upLabel
 	(HashMap<Integer, HashMap<String, Integer>> NodeList, 
 			HashMap<Integer, HashMap<String, Integer>> EdgeList){
@@ -887,6 +831,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	//　outputLabelSample
 	// 属性情報List出力メソッド
 	//========================================================
+	@SuppressWarnings("unused")
 	public void outputLabelSample(HashMap<Integer, HashMap<Integer, String>> AttrLists){
 		for(Integer i:AttrLists.keySet()){
 			HashMap<Integer, String> hm = AttrLists.get(i);
@@ -1017,6 +962,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 		}	
 	}
 	
+	@SuppressWarnings("unused")
 	private void kawabataTest1212_3(int PARENT_ID, int childID, String ATTR) {
 		// TODO Auto-generated method stub
 		kawabataTest1212_2(PARENT_ID, childID, ATTR);
@@ -1052,6 +998,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 	//　addConditionAttr
 	// conditionに対して属性情報を割り振る
 	//========================================================
+	@SuppressWarnings("unchecked")
 	public void addConditionAttr(HashMap<Integer, HashMap<Integer, String>> AttrLists){
 		int listSize =  m_condrefAttrEquNumLists.size();
 		int i = 0;

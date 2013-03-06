@@ -346,7 +346,7 @@ public class LoopStructureHandler {
 		return inputList;
 	}
 	
-	public ArrayList<RelationPattern> AssignInnerDependency(ArrayList<RelationPattern> inputList, Integer[] loopNameList) {
+	public ArrayList<RelationPattern> assignInnerDependency(ArrayList<RelationPattern> inputList, Integer[] loopNameList) {
 		
 	
 		//innerを複数持っているノードをリスト化する.

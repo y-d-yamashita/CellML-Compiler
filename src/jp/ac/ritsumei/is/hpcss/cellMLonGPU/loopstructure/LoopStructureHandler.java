@@ -10,7 +10,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure;
 
 import java.util.*;
 
-//修正 2013/1/29 メモリ消費を抑える + スタートとゴールの選択方法を最適化
+//2013/3/7 低次のループ用に処理を変更（ループ数が少ない場合,前処理が負担になる）
 public class LoopStructureHandler {
 
 	public ArrayList<Integer> path_length;

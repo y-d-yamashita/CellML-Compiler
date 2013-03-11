@@ -98,7 +98,7 @@ public class LabelAttribute extends SimpleRecMLAnalyzer{
 			/**
 			 * To decide Loop Structure part (high-speed version). 
 			 * @author n-washio
-			 * 2013/1/31 Latest Update
+			 * 2013/3/7 Latest Update
 			 */
 
 			LoopStructureHandler lsh = new LoopStructureHandler();

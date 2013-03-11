@@ -1,0 +1,386 @@
+<!---   FHN model SimpleRecML File       --> 
+<!---     For testing algorithm in 2D    --> 
+
+<recml>
+	<loopindex num="0" name="n" />
+	<loopindex num="1" name="j" />
+	<loopindex num="1" name="l" />
+	
+	<variable name="n" type="recurvar" />
+	<variable name="j" type="recurvar" />
+	<variable name="l" type="recurvar" />
+	
+	<variable name="Main_time" type="recurvar" />
+	<variable name="Main_x1" type="recurvar" />
+	<variable name="Main_x2" type="recurvar" />
+	<variable name="Main_v" type="recurvar" />
+	<variable name="Main_w" type="recurvar" />
+	<variable name="Main_r" type="arithvar" />
+	<variable name="Main_zz" type="constvar" />
+	<variable name="Main_epsilon" type="constvar" />
+	<variable name="Main_beta" type="constvar" />
+	<variable name="Main_gamma" type="constvar" />
+	<variable name="Main_D" type="constvar" />
+	<variable name="deltat" type="constvar" />
+	<variable name="deltax1" type="constvar" />
+	<variable name="deltax2" type="constvar" />
+
+
+	
+	<math>
+	<!--- Index n=0 --> 
+
+		<apply><eq/>
+		<ci> Main_beta </ci>
+		<cn> 1.2 </cn>
+		</apply>
+		
+		<apply><eq/>
+		<ci> Main_time </ci>
+		<cn> 0 </cn>
+		</apply>
+		
+		
+		<apply><eq/>
+		<ci> Main_gamma </ci>
+		<cn> 0.3 </cn>
+		</apply>
+		
+		
+		<apply><eq/>
+			<apply><selector/>
+				<ci> Main_r </ci>
+				<ci> n </ci>
+				<cn> $id </cn>
+			</apply>
+			<apply><times/>
+				<apply><selector/>
+					<ci> Main_v </ci>
+					<ci> n </ci>
+					<cn> $id </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_v </ci>
+					<ci> n </ci>
+					<cn> $id </cn>
+				</apply>
+				<apply><selector/>
+					<ci> Main_v </ci>
+					<ci> n </ci>
+					<cn> $id </cn>
+				</apply>
+			</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> 1 </cn>
+			</apply>
+			<cn> $id </cn>
+		</apply>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><plus/>
+			<apply><minus/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+			<apply><divide/>
+			<apply><selector/>
+			<ci> Main_r </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+			<cn> 3 </cn>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> Main_w </ci>
+			
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> Main_zz </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+			<apply><times/>
+		<ci> Main_D </ci>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			<ci> n </ci>			
+			<apply><plus/>
+			<cn> $id </cn>
+			<cn> 1 </cn>
+		</apply>
+			<cn> 3 </cn>
+		</apply>
+			<apply><minus/>
+		   <apply><times/>
+		<cn> 2 </cn>
+			<apply><selector/>
+			<ci> Main_v </ci>			
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			<ci> n </ci>
+			<apply><minus/>
+			<cn> $id </cn>
+			<cn> 1 </cn>
+		</apply>
+			<cn> 3 </cn>
+		</apply>
+		</apply>
+			<apply><times/>
+		<ci> deltax1 </ci>
+			<ci> deltax1 </ci>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<ci> Main_D </ci>
+			<apply><divide/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			<ci> n </ci>
+			<apply><plus/>
+			<cn> $id </cn>
+			<cn> 1 </cn>
+		</apply>
+		</apply>
+			<apply><minus/>
+		   <apply><times/>
+		<cn> 2 </cn>
+			<apply><selector/>
+			<ci> Main_v </ci>			
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+		</apply>
+			<apply><selector/>
+			<ci> Main_v </ci>			
+			<ci> n </ci>
+			<apply><minus/>
+			<cn> $id </cn>
+			<cn> 1 </cn>
+		</apply>
+		</apply>
+		</apply>
+			<apply><times/>
+		<ci> deltax2 </ci>
+			<ci> deltax2 </ci>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		<apply><eq/>
+			<apply><divide/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> Main_w </ci>
+			<apply><plus/>
+			<ci> n </ci>	
+			<cn> 1 </cn>
+		</apply>
+			<cn> $id </cn>
+		</apply>
+			<apply><selector/>
+			<ci> Main_w </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+			<ci> deltat </ci>
+		</apply>
+			<apply><times/>
+		<apply><selector/>
+			<ci> Main_epsilon </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+			<apply><minus/>
+			<apply><plus/>
+			<apply><selector/>
+			<ci> Main_v </ci>			
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+			<ci> Main_beta </ci>
+		</apply>
+			<apply><times/>
+		<ci> Main_gamma </ci>
+			<apply><selector/>
+			<ci> Main_w </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		</apply>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		
+	<apply><eq/>
+			<apply><selector/>
+			<ci> Main_zz </ci>
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+			<piecewise>
+		   <piece>
+			<cn> 3 </cn>
+			<apply><and/>
+			   <apply><geq/>
+			<ci> Main_time </ci>
+			<cn> 10 </cn>
+		</apply>
+		   <apply><lt/>
+			<ci> Main_time </ci>
+			<cn> 12 </cn>
+		</apply>
+		   <apply><eq/>
+			<cn> 5 </cn>
+			<cn> 1 </cn>
+		</apply>
+		   <apply><eq/>
+			<cn> 3 </cn>
+			<cn> 1 </cn>
+		</apply>
+		</apply>
+		</piece><otherwise>
+			<cn> 0 </cn>
+		</otherwise>
+		</piecewise>
+		</apply>	
+	
+	
+	
+	
+	
+		
+		<apply><eq/>
+			<apply><selector/>
+			<ci> Main_epsilon </ci>
+			<cn> 0 </cn>
+			<cn> 0 </cn>
+		</apply>
+			<cn> 0.03 </cn>
+		</apply>
+		
+		
+		
+					
+		
+		
+		<apply><eq/>
+			<apply><minus/>
+			<apply><selector/>
+			<ci> Main_v </ci>
+			
+			<apply><plus/>
+			<ci> n </ci>
+			<cn> 1 </cn>
+		</apply>
+			<cn> $id </cn>
+		</apply>
+			<apply><selector/>
+			<ci> Main_v </ci>			
+			<ci> n </ci>
+			<cn> $id </cn>
+		</apply>
+		</apply>
+			<cn> 0 </cn>
+		</apply>
+		
+			
+	</math>
+</recml>

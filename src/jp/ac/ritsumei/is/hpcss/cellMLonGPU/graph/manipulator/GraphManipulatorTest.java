@@ -91,7 +91,7 @@ String xml=
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v1_yamashita.recml"
 //"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v2_yamashita.recml"
-//"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v3_4x4_yamashita.recml"
+"./model/recml/RecMLSample/FHN_FTCS_2D_simple_v3_4x4_yamashita.recml"
 
 //"./model/recml/SimpleKawabataTestSample/SimpleRecMLSample001.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_struct_v3.recml"
@@ -107,11 +107,13 @@ String xml=
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_3x3_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_5x5_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_10x10_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_8x8_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_16x16_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_30x30_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_32x32_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_64x64_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_512x512_yamashita.recml"
-"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_128x128_yamashita.recml"
+//"./model/recml/RecMLSample/LR1_FTCS_2D_simple_v7_128x128_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_SimpleRecML9x9_yamashita.recml"
 //"./model/recml/RecMLSample/LR1_FTCS_SimpleRecML9x9 (1).recml"
 //"./model/recml/RecMLSample/LR1_FTCS_SimpleRecML9x9_yamashita_2.recml"
@@ -463,8 +465,8 @@ public void testLeftHandSideTransport() throws MathException, TableException{
 		}
 			root.setMathExpressionLoopList(newLoopList);
 		
-		
 		System.out.println(root.toString());
+		//System.out.println(root.toLoopStructDeclarationString());
 		
 	}
 	

@@ -315,6 +315,39 @@ public class MathExpressionLoop{
 		return stringBuilder.toString();
 	}
 	
+	public String toLoopStructDeclarationString(){
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for(int i=0;i < this.mathExpressionLoopList.size() -1 ;i++){
+			stringBuilder.append("<loopstruct num="+i+">\n");
+			stringBuilder.append("<position name=\"post\">\n");
+		}
+		for(int i=0;i < this.mathExpressionLoopList.size() -1;i++){
+			stringBuilder.append("</position>\n");
+			stringBuilder.append("</loopstruct>\n");
+		}
+		return stringBuilder.toString();
+	}
+	
+	public String toLoopStructMathMLString(){
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for(int i=0;i < this.mathExpressionLoopList.size() -1 ;i++){
+			for(MathExpression expr:this.mathExpressionLoopList.get(i).getMathExpressionList()){
+				try {
+					expr.toMathMLString();
+				} catch (MathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			stringBuilder.append(this.mathExpressionLoopList.get(i));
+		}
+		for(int i=0;i < this.mathExpressionLoopList.size() -1;i++){
+		}
+		return stringBuilder.toString();
+	}
+
 	private void toString(StringBuilder stringBuilder,String indent){
 		stringBuilder.append(indent+"//Shortest Calculation Order:"+this.getShortestCalOrderNum()+"\n");
 		

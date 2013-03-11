@@ -10,7 +10,7 @@ package jp.ac.ritsumei.is.hpcss.cellMLonGPU.loopstructure;
 
 import java.util.*;
 
-//2013/3/7 低次のループ用に処理を変更（ループ数が少ない場合,前処理が負担になる）
+//Update 2013/3/7
 public class LoopStructureHandler {
 
 	public ArrayList<Integer> path_length;

@@ -68,6 +68,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 5. Output file name 		(ex; fhn_BackwardEulerSimulation.java)
  * 
  * 
+ * latest update 2013/3/14 @author n-washio
  */
 
 public class CellCompilerMain {
@@ -187,256 +188,251 @@ public class CellCompilerMain {
 		
 		ArrayList<String> outputRecml = new ArrayList<String>();
 		
-		/*Javaプログラムコード生成*/
-		if(args[0].equals(GENERATOR_JAVA)){
+		
+		//---------------------------------------------------
+		//入力ファイルがRelMLの場合の処理
+		//RelML->SimpleRecML->StructuredRecML->Code
+		//---------------------------------------------------
+		
+		
+		if(args[1].equals(FILETYPE_RELML)){
 			
-			if(args[1].equals(FILETYPE_RELML)){
-				
-				//---------------------------------------------------
-				//XMLパーサ初期化
-				//---------------------------------------------------
-				XMLReader parser1 = null;
-				try {
-					parser1 = XMLReaderFactory.createXMLReader(DEFAULT_PARSER_NAME);
-					// バッファサイズが小さいと ハンドラの characters() が
-					// 文字列を途中で切った値を返す。バッファサイズを大きくする
-					// デフォルトは2k
-					parser1.setProperty("http://apache.org/xml/properties/input-buffer-size",
-							new Integer(16 * 0x1000));
-				} catch (Exception e) {
-					System.err.println("error: Unable to instantiate parser ("
-							+ DEFAULT_PARSER_NAME+")");
-					System.exit(1);
-				}
+			//---------------------------------------------------
+			//XMLパーサ初期化
+			//---------------------------------------------------
+			XMLReader parser1 = null;
+			try {
+				parser1 = XMLReaderFactory.createXMLReader(DEFAULT_PARSER_NAME);
+				// バッファサイズが小さいと ハンドラの characters() が
+				// 文字列を途中で切った値を返す。バッファサイズを大きくする
+				// デフォルトは2k
+				parser1.setProperty("http://apache.org/xml/properties/input-buffer-size",
+						new Integer(16 * 0x1000));
+			} catch (Exception e) {
+				System.err.println("error: Unable to instantiate parser ("
+						+ DEFAULT_PARSER_NAME+")");
+				System.exit(1);
+			}
 
-				//---------------------------------------------------
-				//解析処理
-				//---------------------------------------------------
-				/*解析器インスタンス生成*/
-				CellMLVariableAnalyzer pCellMLVariableAnalyzer = new CellMLVariableAnalyzer();
-				CellMLAnalyzer pCellMLAnalyzer = new CellMLAnalyzer();
-				RelMLAnalyzer pRelMLAnalyzer = new RelMLAnalyzer();
-				TecMLAnalyzer pTecMLAnalyzer = new TecMLAnalyzer();
+			//---------------------------------------------------
+			//解析処理
+			//---------------------------------------------------
+			/*解析器インスタンス生成*/
+			CellMLVariableAnalyzer pCellMLVariableAnalyzer = new CellMLVariableAnalyzer();
+			CellMLAnalyzer pCellMLAnalyzer = new CellMLAnalyzer();
+			RelMLAnalyzer pRelMLAnalyzer = new RelMLAnalyzer();
+			TecMLAnalyzer pTecMLAnalyzer = new TecMLAnalyzer();
 
-				/*各ファイル名初期化*/
-				String strRelMLFileName = xml;
-				String strTecMLFileName;
-				String strCellMLFileName;
+			/*各ファイル名初期化*/
+			String strRelMLFileName = xml;
+			String strTecMLFileName;
+			String strCellMLFileName;
 
-				/*RelMLの解析*/
-				if(!parseXMLFile(strRelMLFileName, parser1, pRelMLAnalyzer)){
-					System.exit(1);
-				}
-				
-				/*読み込みファイル名取得*/
-				strTecMLFileName = pRelMLAnalyzer.getFileNameTecML();
-				strCellMLFileName = pRelMLAnalyzer.getFileNameCellML();
-				
-				
-				/*CellML変数部分の解析*/
-				if(!parseXMLFile(strCellMLFileName, parser1, pCellMLVariableAnalyzer)){
-					System.exit(1);
-				}
-					
-				/*変数テーブルをCellML解析器に渡す*/
-				pCellMLAnalyzer.setComponentTable(pCellMLVariableAnalyzer.getComponentTable());
-					
-				/*CellMLの解析*/
-				if(!parseXMLFile(strCellMLFileName, parser1, pCellMLAnalyzer)){
-						System.exit(1);
-				}
-
-				/*TecMLの解析*/
-				if(!parseXMLFile(strTecMLFileName,parser1,pTecMLAnalyzer)){
-					System.exit(1);
-				}
-
-				//---------------------------------------------------
-				//SimpleRecML生成
-				//---------------------------------------------------
-				/*SImpleRecML生成器インスタンス生成*/
-				
-				SimpleRecML pSimpleRecML = null;
-				
-				//数式展開
-				SimpleExpansion pSimpleExpansion = new SimpleExpansion(pCellMLAnalyzer, pRelMLAnalyzer,pTecMLAnalyzer);
-					
-				pSimpleRecML = pSimpleExpansion.getSimpleRecML();
-
-				//SimpleRecML生成
-				SimpleRecMLWriter pSimpleRecMLWriter = new SimpleRecMLWriter(pSimpleRecML);
-				pSimpleRecMLWriter.createSimpleRecML();
-
-				//目的プログラムファイル出力
-				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(simple_Filename)));
-				/*プログラム出力*/
-				for(String pStr : pSimpleRecMLWriter.getSimpleRecML() )
-					out.println(pStr);
-				out.close();
-				
-				
-				/*SimpleRecML*/
-				SimpleRecMLAnalyzer simpleRecMLAnalyzer = new SimpleRecMLAnalyzer();
-				XMLHandler handler = new XMLHandler(simpleRecMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(simple_Filename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				/*SimpleRecMLの情報を解析*/
-				simpleRecMLAnalyzer.analysisForOutPutStrRec(simpleRecMLAnalyzer);
-
-				/*StructuredRecMLの表示形式に変更する*/
-				StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
-				sr.createStrRecml();
-				outputRecml = sr.getStrRecml();
+			/*RelMLの解析*/
+			if(!parseXMLFile(strRelMLFileName, parser1, pRelMLAnalyzer)){
+				System.exit(1);
+			}
 			
-				/*StructuredRecMLの出力*/
-				try {
-					/*目的プログラム出力*/
-					if (outputRecml != null) {
-						PrintWriter out1 = null;
-						if (pre_programFilename == null) {
-							out1 = new PrintWriter(System.out);
-						} else {
-							out1 = new PrintWriter(
-									new BufferedWriter(new FileWriter(pre_programFilename)));
-						}
+			/*読み込みファイル名取得*/
+			strTecMLFileName = pRelMLAnalyzer.getFileNameTecML();
+			strCellMLFileName = pRelMLAnalyzer.getFileNameCellML();
+			
+			
+			/*CellML変数部分の解析*/
+			if(!parseXMLFile(strCellMLFileName, parser1, pCellMLVariableAnalyzer)){
+				System.exit(1);
+			}
+				
+			/*変数テーブルをCellML解析器に渡す*/
+			pCellMLAnalyzer.setComponentTable(pCellMLVariableAnalyzer.getComponentTable());
+				
+			/*CellMLの解析*/
+			if(!parseXMLFile(strCellMLFileName, parser1, pCellMLAnalyzer)){
+					System.exit(1);
+			}
 
-						/*プログラム出力*/
-						for(String str:outputRecml){
-							out1.println(str);
-						}
-						
-						if (pre_programFilename != null) {
-							out1.close();
-						} else {
-							out1.flush();
-						}
+			/*TecMLの解析*/
+			if(!parseXMLFile(strTecMLFileName,parser1,pTecMLAnalyzer)){
+				System.exit(1);
+			}
+
+			//---------------------------------------------------
+			//SimpleRecML生成
+			//---------------------------------------------------
+			/*SImpleRecML生成器インスタンス生成*/
+			
+			SimpleRecML pSimpleRecML = null;
+			
+			//数式展開
+			SimpleExpansion pSimpleExpansion = new SimpleExpansion(pCellMLAnalyzer, pRelMLAnalyzer,pTecMLAnalyzer);
+				
+			pSimpleRecML = pSimpleExpansion.getSimpleRecML();
+
+			//SimpleRecML生成
+			SimpleRecMLWriter pSimpleRecMLWriter = new SimpleRecMLWriter(pSimpleRecML);
+			pSimpleRecMLWriter.createSimpleRecML();
+
+			//目的プログラムファイル出力
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(simple_Filename)));
+			/*プログラム出力*/
+			for(String pStr : pSimpleRecMLWriter.getSimpleRecML() )
+				out.println(pStr);
+			out.close();
+			
+			
+			/*SimpleRecML*/
+			SimpleRecMLAnalyzer simpleRecMLAnalyzer = new SimpleRecMLAnalyzer();
+			XMLHandler handler = new XMLHandler(simpleRecMLAnalyzer);
+			parser.setContentHandler(handler);
+			try {
+				parser.parse(simple_Filename);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			/*SimpleRecMLの情報を解析*/
+			simpleRecMLAnalyzer.analysisForOutPutStrRec(simpleRecMLAnalyzer);
+
+			/*StructuredRecMLの表示形式に変更する*/
+			StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
+			sr.createStrRecml();
+			outputRecml = sr.getStrRecml();
+		
+			/*StructuredRecMLの出力*/
+			try {
+				/*目的プログラム出力*/
+				if (outputRecml != null) {
+					PrintWriter out1 = null;
+					if (pre_programFilename == null) {
+						out1 = new PrintWriter(System.out);
+					} else {
+						out1 = new PrintWriter(
+								new BufferedWriter(new FileWriter(pre_programFilename)));
 					}
 
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace(System.err);
-					System.exit(1);
-				}
-				
-				/*StructuredRecML*/
-				RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();
-				handler = new XMLHandler(recMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(pre_programFilename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-
-				
-				/*selector内cnのInteger*/
-				recMLAnalyzer.changeAllSelectorInteger();
-				/*selector削除*/
-				recMLAnalyzer.removeAllSelector();
-				
-				
-				
-				
-				
-				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst = new LeftHandSideTransposition();
-				
-				recMLAnalyzer.createVariableTable();
-				//RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
-				ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
-				
-				for(int i=0;i<pairList2.size();i++){
+					/*プログラム出力*/
+					for(String str:outputRecml){
+						out1.println(str);
+					}
 					
-					int expID = pairList2.get(i).get(0);
-					int varID = pairList2.get(i).get(1);
-					
-					
-					//数式を取得
-					MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
-					 
-					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
-					
-					//導出変数を取得
-					String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
-					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
-					
-					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
-						exp_new.setDerivedVariable(derivedVar);
-						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
+					if (pre_programFilename != null) {
+						out1.close();
+					} else {
+						out1.flush();
 					}
 				}
 
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace(System.err);
+				System.exit(1);
+			}
+			
+			/*StructuredRecML*/
+			RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();
+			handler = new XMLHandler(recMLAnalyzer);
+			parser.setContentHandler(handler);
+			try {
+				parser.parse(pre_programFilename);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/*selector内cnのInteger*/
+			recMLAnalyzer.changeAllSelectorInteger();
+			/*selector削除*/
+			recMLAnalyzer.removeAllSelector();
+
+			//数式に対する導出変数を取得し,移項処理を行う.
+			LeftHandSideTransposition lst = new LeftHandSideTransposition();
+			
+			recMLAnalyzer.createVariableTable();
+			//RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
+			ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
+			
+			for(int i=0;i<pairList2.size();i++){
 				
-				//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
+				int expID = pairList2.get(i).get(0);
+				int varID = pairList2.get(i).get(1);
+
+				//数式を取得
+				MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
+
+				//導出変数を取得
+				String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
+				Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
 				
-				for(int i=0;i<simulEquationIDList.size();i++){
+				if(exp.getExID()!=-1){
+					MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
+					exp_new.setDerivedVariable(derivedVar);
+					//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
+					//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
+					recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
+				}
+			}
+
+			
+			//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
+			HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
+			
+			for(int i=0;i<simulEquationIDList.size();i++){
+				
+				for(int j=0;j<simulEquationIDList.get(i).size();j++){
 					
-					for(int j=0;j<simulEquationIDList.get(i).size();j++){
+					Integer temp;
+					for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
 						
-						Integer temp;
-						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
-							
-							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
-								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
-									temp=simulEquationIDList.get(i).get(y);
-									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
-									simulEquationIDList.get(i).set(y-1, temp);
-								}
+						for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
+							if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
+								temp=simulEquationIDList.get(i).get(y);
+								simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
+								simulEquationIDList.get(i).set(y-1, temp);
 							}
-							
 						}
-
-					}
-					
-				}
-				
-				//連立式をベクターに格納
-				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
-				Vector<MathExpression> simulEquSetRec;
-
-				for(int i=0;i<simulEquationIDList.size();i++){
-					Vector<Integer> setID =simulEquationIDList.get(i);
-					simulEquSetRec = new Vector<MathExpression>();
-					for(int j=0;j<setID.size();j++){
 						
-						recMLAnalyzer.getExpressionFromID((long)setID.get(j)).setSimulID(i);
-						simulEquSetRec.add(recMLAnalyzer.getExpressionFromID((long)setID.get(j)));
 					}
-					simulEquationListRec.add(simulEquSetRec);
-					
+
 				}
 				
-				recMLAnalyzer.setSimulEquationList(simulEquationListRec);
-				
-				
+			}
+			
+			//連立式をベクターに格納
+			ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
+			Vector<MathExpression> simulEquSetRec;
 
+			for(int i=0;i<simulEquationIDList.size();i++){
+				Vector<Integer> idSet =simulEquationIDList.get(i);
+				simulEquSetRec = new Vector<MathExpression>();
+				for(int j=0;j<idSet.size();j++){
+					
+					recMLAnalyzer.getExpressionFromID((long)idSet.get(j)).setSimulID(i);
+					simulEquSetRec.add(recMLAnalyzer.getExpressionFromID((long)idSet.get(j)));
+				}
+				simulEquationListRec.add(simulEquSetRec);
 				
-				//---------------------------------------------------
-				//目的プログラム生成
-				//---------------------------------------------------
+			}
+			
+			recMLAnalyzer.setSimulEquationList(simulEquationListRec);
+			
+			//---------------------------------------------------
+			//目的プログラム生成
+			//---------------------------------------------------
+
+			/*Javaプログラムコード生成*/
+			if(args[0].equals(GENERATOR_JAVA)){
+			
 				/*プログラム生成器インスタンス生成*/
 				ProgramGenerator pProgramGenerator = null;
 				JavaSyntaxProgram pSynProgram = null;
-				
-				
+
 				try {
 					pProgramGenerator =
 					new JavaProgramGenerator(recMLAnalyzer,Classname);
@@ -461,9 +457,6 @@ public class CellCompilerMain {
 							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
 						}
 						/*プログラム出力*/
-						
-						
-						
 						outKST1.println(pSynProgram.toLegalJavaString());
 						
 						if (programFilename != null) {
@@ -477,174 +470,215 @@ public class CellCompilerMain {
 					e.printStackTrace(System.err);
 					System.exit(1);
 				}
-				
-				
 			}
 			
-			if(args[1].equals(FILETYPE_SIMPLE)){
+			if(args[0].equals(GENERATOR_C)){
 				
-				/*SimpleRecML*/
-				SimpleRecMLAnalyzer simpleRecMLAnalyzer = new SimpleRecMLAnalyzer();
-				XMLHandler handler = new XMLHandler(simpleRecMLAnalyzer);
-				parser.setContentHandler(handler);
+				/*プログラム生成器インスタンス生成*/
+				ProgramGenerator pProgramGenerator = null;
+				SyntaxProgram pSynProgram = null;
+
 				try {
-					parser.parse(xml);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					pProgramGenerator =
+					new CommonProgramGenerator(recMLAnalyzer);
+				} catch (MathException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
 				}
 				
-				/*SimpleRecMLの情報を解析*/
-				simpleRecMLAnalyzer.analysisForOutPutStrRec(simpleRecMLAnalyzer);
-
-				/*StructuredRecMLの表示形式に変更する*/
-				StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
-				sr.createStrRecml();
-				outputRecml = sr.getStrRecml();
-			
-				/*StructuredRecMLの出力*/
+				/*パラメータをハードコードで設定*/
+				pProgramGenerator.setElementNum(1);
+				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
+				
+				pSynProgram = pProgramGenerator.getSyntaxProgram();
+				/*プログラム構文出力*/
 				try {
 					/*目的プログラム出力*/
-					if (outputRecml != null) {
-						PrintWriter out = null;
-						if (pre_programFilename == null) {
-							out = new PrintWriter(System.out);
-						} else {
-							out = new PrintWriter(
-									new BufferedWriter(new FileWriter(pre_programFilename)));
+					if (pSynProgram != null) {
+						PrintWriter outKST1 = null;
+						if (programFilename == null) {
+							outKST1 = new PrintWriter(System.out);
+						}else{
+							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
 						}
-
 						/*プログラム出力*/
-						for(String str:outputRecml){
-							out.println(str);
-						}
+						outKST1.println(pSynProgram.toLegalString());
 						
-						if (pre_programFilename != null) {
-							out.close();
+						if (programFilename != null) {
+							outKST1.close();
 						} else {
-							out.flush();
+							outKST1.flush();
 						}
 					}
-
 				} catch (Exception e) {
 					System.err.println(e.getMessage());
 					e.printStackTrace(System.err);
 					System.exit(1);
 				}
-				
-				/*StructuredRecML*/
-				RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();
-				handler = new XMLHandler(recMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(pre_programFilename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			}
 			
+		}
+		
+		
+		
+		//---------------------------------------------------
+		//入力ファイルがSimpleRecMLの場合の処理
+		//SimpleRecML->StructuredRecML->Code
+		//---------------------------------------------------
+		
+		if(args[1].equals(FILETYPE_SIMPLE)){
+			
+			/*SimpleRecML*/
+			SimpleRecMLAnalyzer simpleRecMLAnalyzer = new SimpleRecMLAnalyzer();
+			XMLHandler handler = new XMLHandler(simpleRecMLAnalyzer);
+			parser.setContentHandler(handler);
+			try {
+				parser.parse(xml);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			/*SimpleRecMLの情報を解析*/
+			simpleRecMLAnalyzer.analysisForOutPutStrRec(simpleRecMLAnalyzer);
 
-				
-				/*selector内cnのInteger*/
-				recMLAnalyzer.changeAllSelectorInteger();
-				/*selector削除*/
-				recMLAnalyzer.removeAllSelector();
-				
-				
-				
-				
-				
-				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst = new LeftHandSideTransposition();
-				
-				recMLAnalyzer.createVariableTable();
-				//RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
-				ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
-				
-				for(int i=0;i<pairList2.size();i++){
+			/*StructuredRecMLの表示形式に変更する*/
+			StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
+			sr.createStrRecml();
+			outputRecml = sr.getStrRecml();
+		
+			/*StructuredRecMLの出力*/
+			try {
+				/*目的プログラム出力*/
+				if (outputRecml != null) {
+					PrintWriter out = null;
+					if (pre_programFilename == null) {
+						out = new PrintWriter(System.out);
+					} else {
+						out = new PrintWriter(
+								new BufferedWriter(new FileWriter(pre_programFilename)));
+					}
+
+					/*プログラム出力*/
+					for(String str:outputRecml){
+						out.println(str);
+					}
 					
-					int expID = pairList2.get(i).get(0);
-					int varID = pairList2.get(i).get(1);
-					
-					
-					//数式を取得
-					MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
-					 
-					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
-					
-					//導出変数を取得
-					String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
-					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
-					
-					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
-						exp_new.setDerivedVariable(derivedVar);
-						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
+					if (pre_programFilename != null) {
+						out.close();
+					} else {
+						out.flush();
 					}
 				}
 
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace(System.err);
+				System.exit(1);
+			}
+			
+			/*StructuredRecML*/
+			RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();
+			handler = new XMLHandler(recMLAnalyzer);
+			parser.setContentHandler(handler);
+			try {
+				parser.parse(pre_programFilename);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/*selector内cnのInteger*/
+			recMLAnalyzer.changeAllSelectorInteger();
+			/*selector削除*/
+			recMLAnalyzer.removeAllSelector();
+
+			//数式に対する導出変数を取得し,移項処理を行う.
+			LeftHandSideTransposition lst = new LeftHandSideTransposition();
+			
+			recMLAnalyzer.createVariableTable();
+			ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
+			
+			for(int i=0;i<pairList2.size();i++){
 				
-				//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
+				int expID = pairList2.get(i).get(0);
+				int varID = pairList2.get(i).get(1);
+
+				//数式を取得
+				MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
 				
-				for(int i=0;i<simulEquationIDList.size();i++){
+				//導出変数を取得
+				String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
+				Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
+				
+				if(exp.getExID()!=-1){
+					MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
+					exp_new.setDerivedVariable(derivedVar);
+					//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
+					//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
+					recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
+				}
+			}
+
+			
+			//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
+			HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
+			
+			for(int i=0;i<simulEquationIDList.size();i++){
+				
+				for(int j=0;j<simulEquationIDList.get(i).size();j++){
 					
-					for(int j=0;j<simulEquationIDList.get(i).size();j++){
+					Integer temp;
+					for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
 						
-						Integer temp;
-						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
-							
-							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
-								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
-									temp=simulEquationIDList.get(i).get(y);
-									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
-									simulEquationIDList.get(i).set(y-1, temp);
-								}
+						for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
+							if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
+								temp=simulEquationIDList.get(i).get(y);
+								simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
+								simulEquationIDList.get(i).set(y-1, temp);
 							}
-							
 						}
-
-					}
-					
-				}
-				
-				//連立式をベクターに格納
-				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
-				Vector<MathExpression> simulEquSetRec;
-
-				for(int i=0;i<simulEquationIDList.size();i++){
-					Vector<Integer> setID =simulEquationIDList.get(i);
-					simulEquSetRec = new Vector<MathExpression>();
-					for(int j=0;j<setID.size();j++){
 						
-						recMLAnalyzer.getExpressionFromID((long)setID.get(j)).setSimulID(i);
-						simulEquSetRec.add(recMLAnalyzer.getExpressionFromID((long)setID.get(j)));
 					}
-					simulEquationListRec.add(simulEquSetRec);
-					
+
 				}
 				
-				recMLAnalyzer.setSimulEquationList(simulEquationListRec);
-				
-				
+			}
+			
+			//連立式をベクターに格納
+			ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
+			Vector<MathExpression> simulEquSetRec;
 
+			for(int i=0;i<simulEquationIDList.size();i++){
+				Vector<Integer> idSet =simulEquationIDList.get(i);
+				simulEquSetRec = new Vector<MathExpression>();
+				for(int j=0;j<idSet.size();j++){
+					
+					recMLAnalyzer.getExpressionFromID((long)idSet.get(j)).setSimulID(i);
+					simulEquSetRec.add(recMLAnalyzer.getExpressionFromID((long)idSet.get(j)));
+				}
+				simulEquationListRec.add(simulEquSetRec);
 				
-				//---------------------------------------------------
-				//目的プログラム生成
-				//---------------------------------------------------
+			}
+			
+			recMLAnalyzer.setSimulEquationList(simulEquationListRec);
+
+			//---------------------------------------------------
+			//目的プログラム生成
+			//---------------------------------------------------
+			
+			/*Javaプログラムコード生成*/
+			if(args[0].equals(GENERATOR_JAVA)){
+
 				/*プログラム生成器インスタンス生成*/
 				ProgramGenerator pProgramGenerator = null;
 				JavaSyntaxProgram pSynProgram = null;
-				
-				
 				try {
 					pProgramGenerator =
 					new JavaProgramGenerator(recMLAnalyzer,Classname);
@@ -668,10 +702,7 @@ public class CellCompilerMain {
 						}else{
 							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
 						}
-						/*プログラム出力*/
-						
-						
-						
+						/*プログラム出力*/	
 						outKST1.println(pSynProgram.toLegalJavaString());
 						
 						if (programFilename != null) {
@@ -685,118 +716,163 @@ public class CellCompilerMain {
 					e.printStackTrace(System.err);
 					System.exit(1);
 				}
+			}
+			
+			if(args[0].equals(GENERATOR_C)){
+			
+				/*プログラム生成器インスタンス生成*/
+				ProgramGenerator pProgramGenerator = null;
+				SyntaxProgram pSynProgram = null;
+
+				try {
+					pProgramGenerator =
+					new CommonProgramGenerator(recMLAnalyzer);
+				} catch (MathException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
+				}
+				
+				/*パラメータをハードコードで設定*/
+				pProgramGenerator.setElementNum(1);
+				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
+				
+				pSynProgram = pProgramGenerator.getSyntaxProgram();
+				/*プログラム構文出力*/
+				try {
+					/*目的プログラム出力*/
+					if (pSynProgram != null) {
+						PrintWriter outKST1 = null;
+						if (programFilename == null) {
+							outKST1 = new PrintWriter(System.out);
+						}else{
+							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
+						}
+						/*プログラム出力*/
+						outKST1.println(pSynProgram.toLegalString());
+						
+						if (programFilename != null) {
+							outKST1.close();
+						} else {
+							outKST1.flush();
+						}
+					}
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+					e.printStackTrace(System.err);
+					System.exit(1);
+				}
+			}
+		}
+		
+		
+		//---------------------------------------------------
+		//入力ファイルがStructuredRecMLの場合の処理
+		//StructuredRecML->Code
+		//---------------------------------------------------
+		
+		
+		if(args[1].equals(FILETYPE_STRUCTURED)){
+			
+			/*StructuredRecML*/
+			RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
+			XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
+			parser.setContentHandler(handler);
+			try {
+				parser.parse(xml);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			/*selector内cnのInteger*/
+			pRecMLAnalyzer.changeAllSelectorInteger();
+			
+			/*selector削除*/
+			pRecMLAnalyzer.removeAllSelector();
+			//数式に対する導出変数を取得し,移項処理を行う.
+			LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
+			
+			pRecMLAnalyzer.createVariableTable();
+			ArrayList<Vector<Integer>> pairList2 = pRecMLAnalyzer.resultMaximumMatching;
+			
+			for(int i=0;i<pairList2.size();i++){
+				
+				int expID = pairList2.get(i).get(0);
+				int varID = pairList2.get(i).get(1);
+				//数式を取得
+				MathExpression exp = pRecMLAnalyzer.getExpressionFromID(expID);
+				//導出変数を取得
+				String derivedVarName =  pRecMLAnalyzer.variableNameMap.get(varID);
+				Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
+
+				if(exp.getExID()!=-1){
+					MathExpression exp_new = lst2.transporseExpression(exp, derivedVar);
+					exp_new.setDerivedVariable(derivedVar);
+					//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
+					//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
+					pRecMLAnalyzer.setM_vecMathExpression(pRecMLAnalyzer.getLocationFromID(expID), exp_new);
+				}
+			}
+
+			//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
+			HashMap<Integer,Vector<Integer>> simulEquationIDList = pRecMLAnalyzer.simulEquationIDList;
+			
+			for(int i=0;i<simulEquationIDList.size();i++){
+				
+				for(int j=0;j<simulEquationIDList.get(i).size();j++){
+					
+					Integer temp;
+					for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
+						
+						for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
+							if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
+								temp=simulEquationIDList.get(i).get(y);
+								simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
+								simulEquationIDList.get(i).set(y-1, temp);
+							}
+						}
+						
+					}
+
+				}
 				
 			}
 			
-			if(args[1].equals(FILETYPE_STRUCTURED)){
-				
-				/*StructuredRecML*/
-				RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
-				XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(xml);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			//連立式をベクターに格納
+			ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
+			Vector<MathExpression> simulEquSetRec;
+			
+			for(int i=0;i<simulEquationIDList.size();i++){
+				Vector<Integer> idSet =simulEquationIDList.get(i);
+				simulEquSetRec = new Vector<MathExpression>();
+				for(int j=0;j<idSet.size();j++){
+					
+					pRecMLAnalyzer.getExpressionFromID((long)idSet.get(j)).setSimulID(i);
+					simulEquSetRec.add(pRecMLAnalyzer.getExpressionFromID((long)idSet.get(j)));
 				}
+				simulEquationListRec.add(simulEquSetRec);
 				
-				/*selector内cnのInteger*/
-				pRecMLAnalyzer.changeAllSelectorInteger();
-				
-				/*selector削除*/
-				pRecMLAnalyzer.removeAllSelector();
-
-
-				
-				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
-				
-				pRecMLAnalyzer.createVariableTable();
-				ArrayList<Vector<Integer>> pairList2 = pRecMLAnalyzer.resultMaximumMatching;
-				
-				for(int i=0;i<pairList2.size();i++){
-					
-					int expID = pairList2.get(i).get(0);
-					int varID = pairList2.get(i).get(1);
-					
-					
-					//数式を取得
-					MathExpression exp = pRecMLAnalyzer.getExpressionFromID(expID);
-					 
-					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
-					
-					//導出変数を取得
-					String derivedVarName =  pRecMLAnalyzer.variableNameMap.get(varID);
-					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
-
-					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst2.transporseExpression(exp, derivedVar);
-						exp_new.setDerivedVariable(derivedVar);
-						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						pRecMLAnalyzer.setM_vecMathExpression(i, exp_new);
-					}
-				}
-
-				//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = pRecMLAnalyzer.simulEquationIDList;
-				
-				for(int i=0;i<simulEquationIDList.size();i++){
-					
-					for(int j=0;j<simulEquationIDList.get(i).size();j++){
-						
-						Integer temp;
-						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
-							
-							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
-								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
-									temp=simulEquationIDList.get(i).get(y);
-									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
-									simulEquationIDList.get(i).set(y-1, temp);
-								}
-							}
-							
-						}
-
-					}
-					
-				}
-				
-				//連立式をベクターに格納
-				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
-				Vector<MathExpression> simulEquSetRec;
-				
-				for(int i=0;i<simulEquationIDList.size();i++){
-					Vector<Integer> setID =simulEquationIDList.get(i);
-					simulEquSetRec = new Vector<MathExpression>();
-					for(int j=0;j<setID.size();j++){
-						
-						pRecMLAnalyzer.getExpressionFromID((long)setID.get(j)).setSimulID(i);
-						simulEquSetRec.add(pRecMLAnalyzer.getExpressionFromID((long)setID.get(j)));
-					}
-					simulEquationListRec.add(simulEquSetRec);
-					
-				}
-				
-				pRecMLAnalyzer.setSimulEquationList(simulEquationListRec);
-				
-				
-				//---------------------------------------------------
-				//目的プログラム生成
-				//---------------------------------------------------
+			}
+			
+			pRecMLAnalyzer.setSimulEquationList(simulEquationListRec);
+			
+			//---------------------------------------------------
+			//目的プログラム生成
+			//---------------------------------------------------
+			
+			/*Javaプログラムコード生成*/
+			if(args[0].equals(GENERATOR_JAVA)){
+			
 				/*プログラム生成器インスタンス生成*/
 				ProgramGenerator pProgramGenerator = null;
 				JavaSyntaxProgram pSynProgram = null;
-				
-				
 				try {
 					pProgramGenerator =
 					new JavaProgramGenerator(pRecMLAnalyzer,Classname);
-					} catch (MathException e1) {
+				} catch (MathException e1) {
 					// TODO 自動生成された catch ブロック
 					e1.printStackTrace();
 				}
@@ -811,9 +887,10 @@ public class CellCompilerMain {
 					/*目的プログラム出力*/
 					if (pSynProgram != null) {
 						PrintWriter outKST1 = null;
-						outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));
 						if (programFilename == null) {
 							outKST1 = new PrintWriter(System.out);
+						}else{
+							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
 						}
 						/*プログラム出力*/
 						outKST1.println(pSynProgram.toLegalJavaString());
@@ -829,622 +906,16 @@ public class CellCompilerMain {
 					e.printStackTrace(System.err);
 					System.exit(1);
 				}
-				
 			}
-
-		}
-		
-		/*Cプログラムコード生成*/
-		if(args[0].equals(GENERATOR_C)){
 			
-				if(args[1].equals(FILETYPE_RELML)){
-				
-				//---------------------------------------------------
-				//XMLパーサ初期化
-				//---------------------------------------------------
-				XMLReader parser1 = null;
-				try {
-					parser1 = XMLReaderFactory.createXMLReader(DEFAULT_PARSER_NAME);
-					// バッファサイズが小さいと ハンドラの characters() が
-					// 文字列を途中で切った値を返す。バッファサイズを大きくする
-					// デフォルトは2k
-					parser1.setProperty("http://apache.org/xml/properties/input-buffer-size",
-							new Integer(16 * 0x1000));
-				} catch (Exception e) {
-					System.err.println("error: Unable to instantiate parser ("
-							+ DEFAULT_PARSER_NAME+")");
-					System.exit(1);
-				}
-
-				//---------------------------------------------------
-				//解析処理
-				//---------------------------------------------------
-				/*解析器インスタンス生成*/
-				CellMLVariableAnalyzer pCellMLVariableAnalyzer = new CellMLVariableAnalyzer();
-				CellMLAnalyzer pCellMLAnalyzer = new CellMLAnalyzer();
-				RelMLAnalyzer pRelMLAnalyzer = new RelMLAnalyzer();
-				TecMLAnalyzer pTecMLAnalyzer = new TecMLAnalyzer();
-
-				/*各ファイル名初期化*/
-				String strRelMLFileName = xml;
-				String strTecMLFileName;
-				String strCellMLFileName;
-
-				/*RelMLの解析*/
-				if(!parseXMLFile(strRelMLFileName, parser1, pRelMLAnalyzer)){
-					System.exit(1);
-				}
-				
-				/*読み込みファイル名取得*/
-				strTecMLFileName = pRelMLAnalyzer.getFileNameTecML();
-				strCellMLFileName = pRelMLAnalyzer.getFileNameCellML();
-				
-				
-				/*CellML変数部分の解析*/
-				if(!parseXMLFile(strCellMLFileName, parser1, pCellMLVariableAnalyzer)){
-					System.exit(1);
-				}
-					
-				/*変数テーブルをCellML解析器に渡す*/
-				pCellMLAnalyzer.setComponentTable(pCellMLVariableAnalyzer.getComponentTable());
-					
-				/*CellMLの解析*/
-				if(!parseXMLFile(strCellMLFileName, parser1, pCellMLAnalyzer)){
-						System.exit(1);
-				}
-
-				/*TecMLの解析*/
-				if(!parseXMLFile(strTecMLFileName,parser1,pTecMLAnalyzer)){
-					System.exit(1);
-				}
-
-				//---------------------------------------------------
-				//SimpleRecML生成
-				//---------------------------------------------------
-				/*SImpleRecML生成器インスタンス生成*/
-				
-				SimpleRecML pSimpleRecML = null;
-				
-				//数式展開
-				SimpleExpansion pSimpleExpansion = new SimpleExpansion(pCellMLAnalyzer, pRelMLAnalyzer,pTecMLAnalyzer);
-					
-				pSimpleRecML = pSimpleExpansion.getSimpleRecML();
-				
-				//SimpleRecML生成
-				SimpleRecMLWriter pSimpleRecMLWriter = new SimpleRecMLWriter(pSimpleRecML);
-				pSimpleRecMLWriter.createSimpleRecML();
-
-				//目的プログラムファイル出力
-				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(simple_Filename)));
-				/*プログラム出力*/
-				for(String pStr : pSimpleRecMLWriter.getSimpleRecML() )
-					out.println(pStr);
-				out.close();
-				
-				
-				/*SimpleRecML*/
-				SimpleRecMLAnalyzer simpleRecMLAnalyzer = new SimpleRecMLAnalyzer();
-				XMLHandler handler = new XMLHandler(simpleRecMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(simple_Filename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				/*SimpleRecMLの情報を解析*/
-				simpleRecMLAnalyzer.analysisForOutPutStrRec(simpleRecMLAnalyzer);
-
-				/*StructuredRecMLの表示形式に変更する*/
-				StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
-				sr.createStrRecml();
-				outputRecml = sr.getStrRecml();
-			
-				/*StructuredRecMLの出力*/
-				try {
-					/*目的プログラム出力*/
-					if (outputRecml != null) {
-						PrintWriter out1 = null;
-						if (pre_programFilename == null) {
-							out1 = new PrintWriter(System.out);
-						} else {
-							out1 = new PrintWriter(
-									new BufferedWriter(new FileWriter(pre_programFilename)));
-						}
-
-						/*プログラム出力*/
-						for(String str:outputRecml){
-							out1.println(str);
-						}
-						
-						if (pre_programFilename != null) {
-							out1.close();
-						} else {
-							out1.flush();
-						}
-					}
-
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace(System.err);
-					System.exit(1);
-				}
-				
-				/*StructuredRecML*/
-				RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();
-				handler = new XMLHandler(recMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(pre_programFilename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-
-				
-				/*selector内cnのInteger*/
-				recMLAnalyzer.changeAllSelectorInteger();
-				/*selector削除*/
-				recMLAnalyzer.removeAllSelector();
-				
-				
-				
-				
-				
-				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst = new LeftHandSideTransposition();
-				
-				recMLAnalyzer.createVariableTable();
-				//RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
-				ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
-				
-				for(int i=0;i<pairList2.size();i++){
-					
-					int expID = pairList2.get(i).get(0);
-					int varID = pairList2.get(i).get(1);
-					
-					
-					//数式を取得
-					MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
-					 
-					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
-					
-					//導出変数を取得
-					String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
-					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
-					
-					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
-						exp_new.setDerivedVariable(derivedVar);
-						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
-					}
-				}
-
-				
-				//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
-				
-				for(int i=0;i<simulEquationIDList.size();i++){
-					
-					for(int j=0;j<simulEquationIDList.get(i).size();j++){
-						
-						Integer temp;
-						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
-							
-							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
-								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
-									temp=simulEquationIDList.get(i).get(y);
-									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
-									simulEquationIDList.get(i).set(y-1, temp);
-								}
-							}
-							
-						}
-
-					}
-					
-				}
-				
-				//連立式をベクターに格納
-				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
-				Vector<MathExpression> simulEquSetRec;
-
-				for(int i=0;i<simulEquationIDList.size();i++){
-					Vector<Integer> setID =simulEquationIDList.get(i);
-					simulEquSetRec = new Vector<MathExpression>();
-					for(int j=0;j<setID.size();j++){
-						
-						recMLAnalyzer.getExpressionFromID((long)setID.get(j)).setSimulID(i);
-						simulEquSetRec.add(recMLAnalyzer.getExpressionFromID((long)setID.get(j)));
-					}
-					simulEquationListRec.add(simulEquSetRec);
-					
-				}
-				
-				recMLAnalyzer.setSimulEquationList(simulEquationListRec);
-				
-				
-
-				
-				//---------------------------------------------------
-				//目的プログラム生成
-				//---------------------------------------------------
+			if(args[0].equals(GENERATOR_C)){
 				/*プログラム生成器インスタンス生成*/
 				ProgramGenerator pProgramGenerator = null;
 				SyntaxProgram pSynProgram = null;
-				
-				
-				try {
-					pProgramGenerator =
-					new CommonProgramGenerator(recMLAnalyzer);
-				} catch (MathException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
-				}
-				
-				/*パラメータをハードコードで設定*/
-				pProgramGenerator.setElementNum(1);
-				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
-				
-				pSynProgram = pProgramGenerator.getSyntaxProgram();
-				/*プログラム構文出力*/
-				try {
-					/*目的プログラム出力*/
-					if (pSynProgram != null) {
-						PrintWriter outKST1 = null;
-						if (programFilename == null) {
-							outKST1 = new PrintWriter(System.out);
-						}else{
-							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
-						}
-						/*プログラム出力*/
-						
-						
-						
-						outKST1.println(pSynProgram.toLegalString());
-						
-						if (programFilename != null) {
-							outKST1.close();
-						} else {
-							outKST1.flush();
-						}
-					}
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace(System.err);
-					System.exit(1);
-				}
-				
-				
-			}
-			
-			if(args[1].equals(FILETYPE_SIMPLE)){
-				
-				/*SimpleRecML*/
-				SimpleRecMLAnalyzer simpleRecMLAnalyzer = new SimpleRecMLAnalyzer();
-				XMLHandler handler = new XMLHandler(simpleRecMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(xml);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				/*SimpleRecMLの情報を解析*/
-				simpleRecMLAnalyzer.analysisForOutPutStrRec(simpleRecMLAnalyzer);
-
-				/*StructuredRecMLの表示形式に変更する*/
-				StructuredRecMLWiter sr = new StructuredRecMLWiter(simpleRecMLAnalyzer);
-				sr.createStrRecml();
-				outputRecml = sr.getStrRecml();
-			
-				/*StructuredRecMLの出力*/
-				try {
-					/*目的プログラム出力*/
-					if (outputRecml != null) {
-						PrintWriter out = null;
-						if (pre_programFilename == null) {
-							out = new PrintWriter(System.out);
-						} else {
-							out = new PrintWriter(
-									new BufferedWriter(new FileWriter(pre_programFilename)));
-						}
-
-						/*プログラム出力*/
-						for(String str:outputRecml){
-							out.println(str);
-						}
-						
-						if (pre_programFilename != null) {
-							out.close();
-						} else {
-							out.flush();
-						}
-					}
-
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace(System.err);
-					System.exit(1);
-				}
-				
-				/*StructuredRecML*/
-				RecMLAnalyzer recMLAnalyzer = new RecMLAnalyzer();
-				handler = new XMLHandler(recMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(pre_programFilename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-
-				
-				/*selector内cnのInteger*/
-				recMLAnalyzer.changeAllSelectorInteger();
-				/*selector削除*/
-				recMLAnalyzer.removeAllSelector();
-				
-				
-				
-				
-				
-				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst = new LeftHandSideTransposition();
-				
-				recMLAnalyzer.createVariableTable();
-				//RecMLVariableTable vartable2 = recMLAnalyzer.getRecMLVariableTable();
-				ArrayList<Vector<Integer>> pairList2 = recMLAnalyzer.resultMaximumMatching;
-				
-				for(int i=0;i<pairList2.size();i++){
-					
-					int expID = pairList2.get(i).get(0);
-					int varID = pairList2.get(i).get(1);
-					
-					
-					//数式を取得
-					MathExpression exp = recMLAnalyzer.getExpressionFromID(expID);
-					 
-					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
-					
-					//導出変数を取得
-					String derivedVarName =  recMLAnalyzer.variableNameMap.get(varID);
-					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
-					
-					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst.transporseExpression(exp, derivedVar);
-						exp_new.setDerivedVariable(derivedVar);
-						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						recMLAnalyzer.setM_vecMathExpression(recMLAnalyzer.getLocationFromID(expID), exp_new);
-					}
-				}
-
-				
-				//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = recMLAnalyzer.simulEquationIDList;
-				
-				for(int i=0;i<simulEquationIDList.size();i++){
-					
-					for(int j=0;j<simulEquationIDList.get(i).size();j++){
-						
-						Integer temp;
-						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
-							
-							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
-								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
-									temp=simulEquationIDList.get(i).get(y);
-									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
-									simulEquationIDList.get(i).set(y-1, temp);
-								}
-							}
-							
-						}
-
-					}
-					
-				}
-				
-				//連立式をベクターに格納
-				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
-				Vector<MathExpression> simulEquSetRec;
-
-				for(int i=0;i<simulEquationIDList.size();i++){
-					Vector<Integer> setID =simulEquationIDList.get(i);
-					simulEquSetRec = new Vector<MathExpression>();
-					for(int j=0;j<setID.size();j++){
-						
-						recMLAnalyzer.getExpressionFromID((long)setID.get(j)).setSimulID(i);
-						simulEquSetRec.add(recMLAnalyzer.getExpressionFromID((long)setID.get(j)));
-					}
-					simulEquationListRec.add(simulEquSetRec);
-					
-				}
-				
-				recMLAnalyzer.setSimulEquationList(simulEquationListRec);
-				
-				
-
-				
-				//---------------------------------------------------
-				//目的プログラム生成
-				//---------------------------------------------------
-				/*プログラム生成器インスタンス生成*/
-				ProgramGenerator pProgramGenerator = null;
-				SyntaxProgram pSynProgram = null;
-				
-				
-				try {
-					pProgramGenerator =
-					new CommonProgramGenerator(recMLAnalyzer);
-				} catch (MathException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
-				}
-				
-				/*パラメータをハードコードで設定*/
-				pProgramGenerator.setElementNum(1);
-				pProgramGenerator.setTimeParam(0.0,400.0,0.01);
-				
-				pSynProgram = pProgramGenerator.getSyntaxProgram();
-				
-				/*プログラム構文出力*/
-				try {
-					/*目的プログラム出力*/
-					if (pSynProgram != null) {
-						PrintWriter outKST1 = null;
-						if (programFilename == null) {
-							outKST1 = new PrintWriter(System.out);
-						}else{
-							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
-						}
-						/*プログラム出力*/
-						
-						
-						
-						outKST1.println(pSynProgram.toLegalString());
-						
-						if (programFilename != null) {
-							outKST1.close();
-						} else {
-							outKST1.flush();
-						}
-					}
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace(System.err);
-					System.exit(1);
-				}
-				
-			}
-			
-			if(args[1].equals(FILETYPE_STRUCTURED)){
-				
-				/*StructuredRecML*/
-				RecMLAnalyzer pRecMLAnalyzer = new RecMLAnalyzer();
-				XMLHandler handler = new XMLHandler(pRecMLAnalyzer);
-				parser.setContentHandler(handler);
-				try {
-					parser.parse(xml);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				/*selector内cnのInteger*/
-				pRecMLAnalyzer.changeAllSelectorInteger();
-				
-				/*selector削除*/
-				pRecMLAnalyzer.removeAllSelector();
-
-
-				
-				//数式に対する導出変数を取得し,移項処理を行う.
-				LeftHandSideTransposition lst2 = new LeftHandSideTransposition();
-				
-				pRecMLAnalyzer.createVariableTable();
-				ArrayList<Vector<Integer>> pairList2 = pRecMLAnalyzer.resultMaximumMatching;
-				
-				for(int i=0;i<pairList2.size();i++){
-					
-					int expID = pairList2.get(i).get(0);
-					int varID = pairList2.get(i).get(1);
-					
-					
-					//数式を取得
-					MathExpression exp = pRecMLAnalyzer.getExpressionFromID(expID);
-					 
-					//RecMLVariableReference derivedTable = vartable2.getVariableReference(varID);
-					
-					//導出変数を取得
-					String derivedVarName =  pRecMLAnalyzer.variableNameMap.get(varID);
-					Math_ci derivedVar=(Math_ci)MathFactory.createOperand(eMathOperand.MOPD_CI, derivedVarName);
-
-					if(exp.getExID()!=-1){
-						MathExpression exp_new = lst2.transporseExpression(exp, derivedVar);
-						exp_new.setDerivedVariable(derivedVar);
-						//数式を置換(移項処理の有無にかかわらず全て移項処理を通過させたものに置換する)
-						//非線形数式であれば非線形フラグがMathExpressionに付与される.導出変数は数式が保持する.
-						pRecMLAnalyzer.setM_vecMathExpression(i, exp_new);
-					}
-				}
-
-				//連立方程式をIDでソートする.(処理上は不要な処理であるが,数式のid順に出力するようにしている)
-				HashMap<Integer,Vector<Integer>> simulEquationIDList = pRecMLAnalyzer.simulEquationIDList;
-				
-				for(int i=0;i<simulEquationIDList.size();i++){
-					
-					for(int j=0;j<simulEquationIDList.get(i).size();j++){
-						
-						Integer temp;
-						for(int x=0;x<simulEquationIDList.get(i).size()-1;x++){
-							
-							for(int y=simulEquationIDList.get(i).size()-1;y>x;y--){
-								if(simulEquationIDList.get(i).get(y)<simulEquationIDList.get(i).get(y-1)){
-									temp=simulEquationIDList.get(i).get(y);
-									simulEquationIDList.get(i).set(y, simulEquationIDList.get(i).get(y-1));
-									simulEquationIDList.get(i).set(y-1, temp);
-								}
-							}
-							
-						}
-
-					}
-					
-				}
-				
-				//連立式をベクターに格納
-				ArrayList<Vector<MathExpression>> simulEquationListRec = new ArrayList<Vector<MathExpression>>();
-				Vector<MathExpression> simulEquSetRec;
-				
-				for(int i=0;i<simulEquationIDList.size();i++){
-					Vector<Integer> setID =simulEquationIDList.get(i);
-					simulEquSetRec = new Vector<MathExpression>();
-					for(int j=0;j<setID.size();j++){
-						
-						pRecMLAnalyzer.getExpressionFromID((long)setID.get(j)).setSimulID(i);
-						simulEquSetRec.add(pRecMLAnalyzer.getExpressionFromID((long)setID.get(j)));
-					}
-					simulEquationListRec.add(simulEquSetRec);
-					
-				}
-				
-				pRecMLAnalyzer.setSimulEquationList(simulEquationListRec);
-				
-				
-				//---------------------------------------------------
-				//目的プログラム生成
-				//---------------------------------------------------
-				/*プログラム生成器インスタンス生成*/
-				ProgramGenerator pProgramGenerator = null;
-				SyntaxProgram pSynProgram = null;
-				
-				
 				try {
 					pProgramGenerator =
 					new CommonProgramGenerator(pRecMLAnalyzer);
-					} catch (MathException e1) {
+				} catch (MathException e1) {
 					// TODO 自動生成された catch ブロック
 					e1.printStackTrace();
 				}
@@ -1459,9 +930,10 @@ public class CellCompilerMain {
 					/*目的プログラム出力*/
 					if (pSynProgram != null) {
 						PrintWriter outKST1 = null;
-						outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));
 						if (programFilename == null) {
 							outKST1 = new PrintWriter(System.out);
+						}else{
+							outKST1 = new PrintWriter(new BufferedWriter(new FileWriter(programFilename)));							
 						}
 						/*プログラム出力*/
 						outKST1.println(pSynProgram.toLegalString());
@@ -1477,13 +949,12 @@ public class CellCompilerMain {
 					e.printStackTrace(System.err);
 					System.exit(1);
 				}
-				
+
 			}
-				
-			
 		}
 
 	}
+	
 
 	//=============================================================
 	//parseXMLFile
